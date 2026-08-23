@@ -87,8 +87,8 @@ def compare(
     candidate = flatten(custom)
     differences: list[dict[str, object]] = []
     failed = 0
-    for key in sorted(reference.keys() | candidate.keys()):
-        if key not in reference or key not in candidate:
+    for key in sorted(reference.keys()):
+        if key not in candidate:
             failed += 1
             differences.append({"field": key, "status": "missing"})
             continue
@@ -110,6 +110,25 @@ def compare(
             }
         )
     return differences, failed
+
+
+def check_central_identities(custom: dict[str, object], atol: float = 2e-7) -> list[dict[str, object]]:
+    values = flatten(custom)
+    failures = []
+    for central_key, central in values.items():
+        marker = "_Central_Value"
+        if marker not in central_key:
+            continue
+        forward_key = central_key.replace(marker, "_Forward_Value")
+        backward_key = central_key.replace(marker, "_Backward_Value")
+        if forward_key not in values or backward_key not in values:
+            failures.append({"field": central_key, "status": "missing derivative partner"})
+            continue
+        expected = 0.5 * (float(values[forward_key]) + float(values[backward_key]))
+        error = abs(float(central) - expected)
+        if error > atol:
+            failures.append({"field": central_key, "absolute_error": error, "tolerance": atol})
+    return failures
 
 
 def main() -> int:
@@ -148,6 +167,8 @@ def main() -> int:
         print(f"Running {case_name}: custom", flush=True)
         custom_result = run_case(custom, mode, analysis, work / case_name / "custom", args.timeout)
         differences, failures = compare(official_result, custom_result, args.rtol, args.atol)
+        identity_failures = check_central_identities(custom_result) if analysis == "stab" else []
+        failures += len(identity_failures)
         total_failures += failures
         compared = len(differences)
         status = "PASS" if failures == 0 else "FAIL"
@@ -159,6 +180,7 @@ def main() -> int:
                 "compared": compared,
                 "failures": failures,
                 "differences": differences,
+                "central_identity_failures": identity_failures,
             }
         )
 

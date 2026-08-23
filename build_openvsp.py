@@ -41,7 +41,12 @@ def main() -> int:
     parser.add_argument("--clean", action="store_true", help="delete the build directory first")
     parser.add_argument("--build-dir", type=Path, default=DEFAULT_BUILD_DIR)
     parser.add_argument("--config", choices=("Release", "Debug"), default="Release")
-    parser.add_argument("--jobs", type=int, default=min(8, max(1, os.cpu_count() or 1)))
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=min(4, max(1, os.cpu_count() or 1)),
+        help="parallel build jobs (default: up to 4; use 1 or 2 to reduce RAM use)",
+    )
     parser.add_argument(
         "--python",
         type=Path,

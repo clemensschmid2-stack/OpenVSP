@@ -223,6 +223,19 @@ double dCMl_wrt[MAXRUNCASES];
 double dCMm_wrt[MAXRUNCASES];
 double dCMn_wrt[MAXRUNCASES];
 
+double dCFx_wrt_Backward[MAXRUNCASES], dCFx_wrt_Central[MAXRUNCASES];
+double dCFy_wrt_Backward[MAXRUNCASES], dCFy_wrt_Central[MAXRUNCASES];
+double dCFz_wrt_Backward[MAXRUNCASES], dCFz_wrt_Central[MAXRUNCASES];
+double dCMx_wrt_Backward[MAXRUNCASES], dCMx_wrt_Central[MAXRUNCASES];
+double dCMy_wrt_Backward[MAXRUNCASES], dCMy_wrt_Central[MAXRUNCASES];
+double dCMz_wrt_Backward[MAXRUNCASES], dCMz_wrt_Central[MAXRUNCASES];
+double dCL_wrt_Backward[MAXRUNCASES],  dCL_wrt_Central[MAXRUNCASES];
+double dCD_wrt_Backward[MAXRUNCASES],  dCD_wrt_Central[MAXRUNCASES];
+double dCS_wrt_Backward[MAXRUNCASES],  dCS_wrt_Central[MAXRUNCASES];
+double dCMl_wrt_Backward[MAXRUNCASES], dCMl_wrt_Central[MAXRUNCASES];
+double dCMm_wrt_Backward[MAXRUNCASES], dCMm_wrt_Central[MAXRUNCASES];
+double dCMn_wrt_Backward[MAXRUNCASES], dCMn_wrt_Central[MAXRUNCASES];
+
 FILE *StabFile;
 FILE *VorviewFlt;
 
@@ -231,6 +244,30 @@ int NumberOfRotors_                  = 0;
 int NumStabCases_                    = 7;
 int NumberOfThreads_                 = 1;
 int StabControlRun_                  = 0;
+enum STAB_DERIVATIVE_FLAG {
+    STAB_DERIV_ALPHA    = 1 << 0,
+    STAB_DERIV_BETA     = 1 << 1,
+    STAB_DERIV_MACH     = 1 << 2,
+    STAB_DERIV_P        = 1 << 3,
+    STAB_DERIV_Q        = 1 << 4,
+    STAB_DERIV_R        = 1 << 5,
+    STAB_DERIV_CONTROLS = 1 << 6,
+    STAB_DERIV_ALL      = (1 << 7) - 1
+};
+int StabDerivativeFlags_             = STAB_DERIV_ALL;
+double StabStepAlpha_                = 0.01;
+double StabStepBeta_                 = 0.01;
+double StabStepMach_                 = 0.1;
+double StabStepControl_              = 0.10;
+double StabStepP_                    = 0.01;
+double StabStepQ_                    = 0.01;
+double StabStepR_                    = 0.01;
+double StabStepPHat_                 = 0.;
+double StabStepQHat_                 = 0.;
+double StabStepRHat_                 = 0.;
+int StabStepPIsReduced_              = 0;
+int StabStepQIsReduced_              = 0;
+int StabStepRIsReduced_              = 0;
 int SetFreeStream_                   = 0;
 int SaveRestartFile_                 = 0;
 int DoRestartRun_                    = 0;
@@ -747,6 +784,17 @@ void PrintUsageHelp()
        printf("Options: \n");                  
        printf(" -omp <N>                           Use 'N' processes.\n");
        printf(" -stab                              Calculate stability derivatives.\n");
+       printf(" -stab-select <csv>                 Select alpha,beta,mach,p,q,r,controls, or all.\n");
+       printf(" -stab-step-alpha <deg>             Set the alpha perturbation.\n");
+       printf(" -stab-step-beta <deg>              Set the beta perturbation.\n");
+       printf(" -stab-step-mach <value>            Set the requested symmetric Mach perturbation.\n");
+       printf(" -stab-step-phat <value>            Set the reduced roll-rate perturbation.\n");
+       printf(" -stab-step-qhat <value>            Set the reduced pitch-rate perturbation.\n");
+       printf(" -stab-step-rhat <value>            Set the reduced yaw-rate perturbation.\n");
+       printf(" -stab-step-p <rad/Tunit>           Set the physical roll-rate perturbation.\n");
+       printf(" -stab-step-q <rad/Tunit>           Set the physical pitch-rate perturbation.\n");
+       printf(" -stab-step-r <rad/Tunit>           Set the physical yaw-rate perturbation.\n");
+       printf(" -stab-step-control <deg>           Set every control-group perturbation.\n");
        printf("\n");                                                   
        printf(" -pstab                             Calculate unsteady roll  rate stability derivative analysis.\n");
        printf(" -qstab                             Calculate unsteady pitch rate stability derivative analysis.\n");
@@ -816,6 +864,87 @@ void ParseInput(int argc, char *argv[])
           StabControlRun_ = 1;
           
        }
+
+       else if ( strcmp(argv[i],"-stab-select") == 0 ) {
+
+          char Selection[MAX_CHAR_SIZE];
+          char *Token;
+
+          StabDerivativeFlags_ = 0;
+          snprintf(Selection, sizeof(Selection), "%s", argv[++i]);
+          Token = strtok(Selection, ",");
+
+          while ( Token != NULL ) {
+
+             if      ( strcmp(Token,"alpha")    == 0 ) StabDerivativeFlags_ |= STAB_DERIV_ALPHA;
+             else if ( strcmp(Token,"beta")     == 0 ) StabDerivativeFlags_ |= STAB_DERIV_BETA;
+             else if ( strcmp(Token,"mach")     == 0 ) StabDerivativeFlags_ |= STAB_DERIV_MACH;
+             else if ( strcmp(Token,"p")        == 0 ) StabDerivativeFlags_ |= STAB_DERIV_P;
+             else if ( strcmp(Token,"q")        == 0 ) StabDerivativeFlags_ |= STAB_DERIV_Q;
+             else if ( strcmp(Token,"r")        == 0 ) StabDerivativeFlags_ |= STAB_DERIV_R;
+             else if ( strcmp(Token,"controls") == 0 ) StabDerivativeFlags_ |= STAB_DERIV_CONTROLS;
+             else if ( strcmp(Token,"all")      == 0 ) StabDerivativeFlags_ |= STAB_DERIV_ALL;
+             else {
+                printf("Unknown -stab-select derivative: %s\n", Token);
+                exit(1);
+             }
+
+             Token = strtok(NULL, ",");
+
+          }
+
+          if ( StabDerivativeFlags_ == 0 ) {
+             printf("-stab-select requires at least one derivative.\n");
+             exit(1);
+          }
+
+       }
+
+#define PARSE_POSITIVE_STAB_STEP(OPTION, TARGET) \
+       else if ( strcmp(argv[i],OPTION) == 0 ) { \
+          if ( sscanf(argv[++i],"%lf",&(TARGET)) != 1 || !((TARGET) > 0.) ) { \
+             printf("%s requires a positive number.\n",OPTION); \
+             exit(1); \
+          } \
+       }
+
+       PARSE_POSITIVE_STAB_STEP("-stab-step-alpha", StabStepAlpha_)
+       PARSE_POSITIVE_STAB_STEP("-stab-step-beta", StabStepBeta_)
+       PARSE_POSITIVE_STAB_STEP("-stab-step-mach", StabStepMach_)
+       PARSE_POSITIVE_STAB_STEP("-stab-step-control", StabStepControl_)
+
+       else if ( strcmp(argv[i],"-stab-step-phat") == 0 ) {
+          if ( StabStepPIsReduced_ == -1 ) { printf("Do not combine -stab-step-phat and -stab-step-p.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepPHat_) != 1 || !(StabStepPHat_ > 0.) ) { printf("-stab-step-phat requires a positive number.\n"); exit(1); }
+          StabStepPIsReduced_ = 1;
+       }
+       else if ( strcmp(argv[i],"-stab-step-qhat") == 0 ) {
+          if ( StabStepQIsReduced_ == -1 ) { printf("Do not combine -stab-step-qhat and -stab-step-q.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepQHat_) != 1 || !(StabStepQHat_ > 0.) ) { printf("-stab-step-qhat requires a positive number.\n"); exit(1); }
+          StabStepQIsReduced_ = 1;
+       }
+       else if ( strcmp(argv[i],"-stab-step-rhat") == 0 ) {
+          if ( StabStepRIsReduced_ == -1 ) { printf("Do not combine -stab-step-rhat and -stab-step-r.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepRHat_) != 1 || !(StabStepRHat_ > 0.) ) { printf("-stab-step-rhat requires a positive number.\n"); exit(1); }
+          StabStepRIsReduced_ = 1;
+       }
+       else if ( strcmp(argv[i],"-stab-step-p") == 0 ) {
+          if ( StabStepPIsReduced_ == 1 ) { printf("Do not combine -stab-step-p and -stab-step-phat.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepP_) != 1 || !(StabStepP_ > 0.) ) { printf("-stab-step-p requires a positive number.\n"); exit(1); }
+          StabStepPIsReduced_ = -1;
+       }
+       else if ( strcmp(argv[i],"-stab-step-q") == 0 ) {
+          if ( StabStepQIsReduced_ == 1 ) { printf("Do not combine -stab-step-q and -stab-step-qhat.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepQ_) != 1 || !(StabStepQ_ > 0.) ) { printf("-stab-step-q requires a positive number.\n"); exit(1); }
+          StabStepQIsReduced_ = -1;
+       }
+       else if ( strcmp(argv[i],"-stab-step-r") == 0 ) {
+          if ( StabStepRIsReduced_ == 1 ) { printf("Do not combine -stab-step-r and -stab-step-rhat.\n"); exit(1); }
+          if ( sscanf(argv[++i],"%lf",&StabStepR_) != 1 || !(StabStepR_ > 0.) ) { printf("-stab-step-r requires a positive number.\n"); exit(1); }
+          StabStepRIsReduced_ = -1;
+       }
+
+#undef PARSE_POSITIVE_STAB_STEP
        
        else if ( strcmp(argv[i],"-pstab") == 0 ) {
         
@@ -2844,6 +2973,25 @@ void Solve(void)
 #                                                                              #
 ##############################################################################*/
 
+void StoreStabilityCaseResults(int Case)
+{
+    CLtForCase[Case]  = VSPAERO().CLo() + VSPAERO().CLiw();
+    CDtForCase[Case]  = VSPAERO().CDo() + VSPAERO().CDiw();
+    CStForCase[Case]  = VSPAERO().CSo() + VSPAERO().CSiw();
+
+    CFtxForCase[Case] = VSPAERO().CFox() + VSPAERO().CFiwx();
+    CFtyForCase[Case] = VSPAERO().CFoy() + VSPAERO().CFiwy();
+    CFtzForCase[Case] = VSPAERO().CFoz() + VSPAERO().CFiwz();
+
+    CMtxForCase[Case] = VSPAERO().CMox() + VSPAERO().CMix();
+    CMtyForCase[Case] = VSPAERO().CMoy() + VSPAERO().CMiy();
+    CMtzForCase[Case] = VSPAERO().CMoz() + VSPAERO().CMiz();
+
+    CMtlForCase[Case] = -VSPAERO().CMox() - VSPAERO().CMix();
+    CMtmForCase[Case] =  VSPAERO().CMoy() + VSPAERO().CMiy();
+    CMtnForCase[Case] = -VSPAERO().CMoz() - VSPAERO().CMiz();
+}
+
 void FiniteDifference_StabilityAndControlSolve(void)
 {
 
@@ -2876,7 +3024,17 @@ void FiniteDifference_StabilityAndControlSolve(void)
    
     VSPAERO().ForwardGMRESConvergenceFactor() = ForwardGMRESConvergenceFactor_;
      
-    TotalCases = ( NumStabCases_ + NumberOfControlGroups_) * NumberOfMachs_ * NumberOfAoAs_ * NumberOfBetas_;
+    int SelectedDerivativeCount = 0;
+    if ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) SelectedDerivativeCount++;
+    if ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) SelectedDerivativeCount++;
+    if ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) SelectedDerivativeCount++;
+    if ( StabDerivativeFlags_ & STAB_DERIV_P     ) SelectedDerivativeCount++;
+    if ( StabDerivativeFlags_ & STAB_DERIV_Q     ) SelectedDerivativeCount++;
+    if ( StabDerivativeFlags_ & STAB_DERIV_R     ) SelectedDerivativeCount++;
+
+    TotalCases = ( 1 + 2 * SelectedDerivativeCount
+                     + ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? 2 * NumberOfControlGroups_ : 0 ) )
+                   * NumberOfMachs_ * NumberOfAoAs_ * NumberOfBetas_;
     
     Case = CaseTotal = 0;
     
@@ -2900,13 +3058,28 @@ void FiniteDifference_StabilityAndControlSolve(void)
              
              // Perform stability and control calculation for this Mach, Alpha, Beta condition
       
-             Delta_AoA_     = 0.01;
-             Delta_Beta_    = 0.01;
-             Delta_Mach_    = 0.1; if ( ABS(Mach_ + Delta_Mach_ - 1.) <= 0.01 ) Delta_Mach_ /= 2.;
-             Delta_P_       = 0.01;
-             Delta_Q_       = 0.01;
-             Delta_R_       = 0.01;
-             Delta_Control_ = 0.10;
+             Delta_AoA_     = StabStepAlpha_;
+             Delta_Beta_    = StabStepBeta_;
+             Delta_Mach_    = StabStepMach_;
+             if ( StabDerivativeFlags_ & STAB_DERIV_MACH ) {
+                if ( Mach_ <= 0. ) {
+                   printf("Cannot calculate symmetric Mach derivatives at Mach <= 0.\n");
+                   exit(1);
+                }
+                Delta_Mach_ = MIN(Delta_Mach_, Mach_);
+                while ( ABS(Mach_ + Delta_Mach_ - 1.) <= 0.01 || ABS(Mach_ - Delta_Mach_ - 1.) <= 0.01 ) Delta_Mach_ *= 0.5;
+             }
+             if ( ( StabDerivativeFlags_ & ( STAB_DERIV_P | STAB_DERIV_Q | STAB_DERIV_R ) ) && Vinf_ <= 0. ) {
+                printf("P/Q/R stability derivatives require Vinf > 0 for reduced-rate normalization.\n");
+                exit(1);
+             }
+             if ( StabStepPIsReduced_ == 1 && Bref_ <= 0. ) { printf("-stab-step-phat requires Bref > 0.\n"); exit(1); }
+             if ( StabStepQIsReduced_ == 1 && Cref_ <= 0. ) { printf("-stab-step-qhat requires Cref > 0.\n"); exit(1); }
+             if ( StabStepRIsReduced_ == 1 && Bref_ <= 0. ) { printf("-stab-step-rhat requires Bref > 0.\n"); exit(1); }
+             Delta_P_       = StabStepPIsReduced_ == 1 ? 2. * Vinf_ * StabStepPHat_ / Bref_ : StabStepP_;
+             Delta_Q_       = StabStepQIsReduced_ == 1 ? 2. * Vinf_ * StabStepQHat_ / Cref_ : StabStepQ_;
+             Delta_R_       = StabStepRIsReduced_ == 1 ? 2. * Vinf_ * StabStepRHat_ / Bref_ : StabStepR_;
+             Delta_Control_ = StabStepControl_;
          
              Case = 1;
          
@@ -2961,6 +3134,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
              printf("Calculating Stability Derivatives... \n"); 
          
              for ( Case = 1 ; Case <= NumStabCases_ ; Case++ ) {
+
+                if ( Case == 2 && !( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) ) continue;
+                if ( Case == 3 && !( StabDerivativeFlags_ & STAB_DERIV_BETA  ) ) continue;
+                if ( Case == 4 && !( StabDerivativeFlags_ & STAB_DERIV_P     ) ) continue;
+                if ( Case == 5 && !( StabDerivativeFlags_ & STAB_DERIV_Q     ) ) continue;
+                if ( Case == 6 && !( StabDerivativeFlags_ & STAB_DERIV_R     ) ) continue;
+                if ( Case == 7 && !( StabDerivativeFlags_ & STAB_DERIV_MACH  ) ) continue;
                 
                 CaseTotal++;
 
@@ -3076,7 +3256,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
              
              printf("Calculating Control Derivatives... \n"); 
           
-             for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) {
+             for ( i = 1 ; i <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumberOfControlGroups_ : 0 ) ; i++ ) {
                 
                 CaseTotal++;
                 
@@ -3221,6 +3401,96 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 ApplyControlDeflections();
              
              }
+
+             // Negative perturbations use indices after the legacy positive
+             // cases and positive control cases. Keeping the original indices
+             // preserves the established forward-derivative output.
+
+             int NegativeCase = NumStabCases_ + NumberOfControlGroups_;
+
+             for ( Deriv = 2 ; Deriv <= 7 ; Deriv++ ) {
+
+                int Enabled = ( Deriv == 2 && ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) )
+                           || ( Deriv == 3 && ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) )
+                           || ( Deriv == 4 && ( StabDerivativeFlags_ & STAB_DERIV_P     ) )
+                           || ( Deriv == 5 && ( StabDerivativeFlags_ & STAB_DERIV_Q     ) )
+                           || ( Deriv == 6 && ( StabDerivativeFlags_ & STAB_DERIV_R     ) )
+                           || ( Deriv == 7 && ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) );
+
+                if ( !Enabled ) continue;
+
+                NegativeCase++;
+                CaseTotal++;
+
+                VSPAERO().Mach()             = Mach_;
+                VSPAERO().AngleOfAttack()    = AoA_ * TORAD;
+                VSPAERO().AngleOfBeta()      = Beta_ * TORAD;
+                VSPAERO().RotationalRate_p() = 0.;
+                VSPAERO().RotationalRate_q() = 0.;
+                VSPAERO().RotationalRate_r() = 0.;
+
+                if ( Deriv == 2 ) VSPAERO().AngleOfAttack()    = ( AoA_  - Delta_AoA_  ) * TORAD;
+                if ( Deriv == 3 ) VSPAERO().AngleOfBeta()      = ( Beta_ - Delta_Beta_ ) * TORAD;
+                if ( Deriv == 4 ) VSPAERO().RotationalRate_p() = -Delta_P_;
+                if ( Deriv == 5 ) VSPAERO().RotationalRate_q() = -Delta_Q_;
+                if ( Deriv == 6 ) VSPAERO().RotationalRate_r() = -Delta_R_;
+                if ( Deriv == 7 ) VSPAERO().Mach()             = Mach_ - Delta_Mach_;
+
+                if ( Deriv == 2 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Alpha      -%5.3lf",Delta_AoA_);
+                if ( Deriv == 3 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Beta       -%5.3lf",Delta_Beta_);
+                if ( Deriv == 4 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Roll Rate  -%5.3lf",Delta_P_);
+                if ( Deriv == 5 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Pitch Rate -%5.3lf",Delta_Q_);
+                if ( Deriv == 6 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Yaw Rate   -%5.3lf",Delta_R_);
+                if ( Deriv == 7 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Mach       -%5.3lf",Delta_Mach_);
+
+                VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
+                VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
+                StoreStabilityCaseResults(NegativeCase);
+
+             }
+
+             if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
+
+                for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) {
+
+                   NegativeCase++;
+                   CaseTotal++;
+
+                   VSPAERO().Mach()             = Mach_;
+                   VSPAERO().AngleOfAttack()    = AoA_ * TORAD;
+                   VSPAERO().AngleOfBeta()      = Beta_ * TORAD;
+                   VSPAERO().RotationalRate_p() = 0.;
+                   VSPAERO().RotationalRate_q() = 0.;
+                   VSPAERO().RotationalRate_r() = 0.;
+
+                   for ( j = 1 ; j <= ControlSurfaceGroup_[i].NumberOfControlSurfaces() ; j++ ) {
+                      Found = 0;
+                      p = 1;
+                      while ( p <= VSPAERO().VSPGeom().NumberOfControlSurfaces() && !Found ) {
+                         if ( strstr(VSPAERO().VSPGeom().ControlSurface(p).Name(), ControlSurfaceGroup_[i].ControlSurface_Name(j)) != NULL ) {
+                            Found = 1;
+                            VSPAERO().VSPGeom().ControlSurface(p).DeflectionAngle() =
+                               ControlSurfaceGroup_[i].ControlSurface_DeflectionDirection(j)
+                               * ( ControlSurfaceGroup_[i].ControlSurface_DeflectionAngle() - Delta_Control_ ) * TORAD;
+                         }
+                         p++;
+                      }
+                      if ( !Found ) {
+                         printf("Could not find control surface: %s in control surface group: %s\n",
+                                ControlSurfaceGroup_[i].ControlSurface_Name(j), ControlSurfaceGroup_[i].Name());
+                         exit(1);
+                      }
+                   }
+
+                   snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Negative Control Group: %-d",i);
+                   VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
+                   VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
+                   StoreStabilityCaseResults(NegativeCase);
+                   ApplyControlDeflections();
+
+                }
+
+             }
              
              // Now calculate actual stability derivatives 
              
@@ -3255,6 +3525,25 @@ void CalculateStabilityDerivatives(void)
     char CaseType[MAX_CHAR_SIZE];
     char caseTypeFormatStr[] = "%-22s +%5.3lf %-9s";
 
+    for ( n = 0 ; n < MAXRUNCASES ; n++ ) {
+       dCFx_wrt[n] = dCFy_wrt[n] = dCFz_wrt[n] = NAN;
+       dCMx_wrt[n] = dCMy_wrt[n] = dCMz_wrt[n] = NAN;
+       dCL_wrt[n] = dCD_wrt[n] = dCS_wrt[n] = NAN;
+       dCMl_wrt[n] = dCMm_wrt[n] = dCMn_wrt[n] = NAN;
+       dCFx_wrt_Backward[n] = dCFx_wrt_Central[n] = NAN;
+       dCFy_wrt_Backward[n] = dCFy_wrt_Central[n] = NAN;
+       dCFz_wrt_Backward[n] = dCFz_wrt_Central[n] = NAN;
+       dCMx_wrt_Backward[n] = dCMx_wrt_Central[n] = NAN;
+       dCMy_wrt_Backward[n] = dCMy_wrt_Central[n] = NAN;
+       dCMz_wrt_Backward[n] = dCMz_wrt_Central[n] = NAN;
+       dCL_wrt_Backward[n] = dCL_wrt_Central[n] = NAN;
+       dCD_wrt_Backward[n] = dCD_wrt_Central[n] = NAN;
+       dCS_wrt_Backward[n] = dCS_wrt_Central[n] = NAN;
+       dCMl_wrt_Backward[n] = dCMl_wrt_Central[n] = NAN;
+       dCMm_wrt_Backward[n] = dCMm_wrt_Central[n] = NAN;
+       dCMn_wrt_Backward[n] = dCMn_wrt_Central[n] = NAN;
+    }
+
     // Set free stream conditions
 
     VSPAERO().Mach()          = Mach_;
@@ -3268,6 +3557,32 @@ void CalculateStabilityDerivatives(void)
     // Write out generic header file
         
     VSPAERO().WriteCaseHeader(StabFile);
+
+    fprintf(StabFile,"#\n# Stability derivative configuration\n");
+    fprintf(StabFile,"# Selected: alpha=%d beta=%d mach=%d p=%d q=%d r=%d controls=%d\n",
+            !!(StabDerivativeFlags_ & STAB_DERIV_ALPHA), !!(StabDerivativeFlags_ & STAB_DERIV_BETA),
+            !!(StabDerivativeFlags_ & STAB_DERIV_MACH), !!(StabDerivativeFlags_ & STAB_DERIV_P),
+            !!(StabDerivativeFlags_ & STAB_DERIV_Q), !!(StabDerivativeFlags_ & STAB_DERIV_R),
+            !!(StabDerivativeFlags_ & STAB_DERIV_CONTROLS));
+    fprintf(StabFile,"# Operating point: Alpha=%0.12g deg Beta=%0.12g deg Mach=%0.12g Vinf=%0.12g Lunit/Tunit ReCref=%0.12g\n",
+            AoA_, Beta_, Mach_, Vinf_, ReCref_);
+    fprintf(StabFile,"# References: Sref=%0.12g Lunit^2 Cref=%0.12g Lunit Bref=%0.12g Lunit CG=(%0.12g,%0.12g,%0.12g) Lunit\n",
+            Sref_, Cref_, Bref_, Xcg_, Ycg_, Zcg_);
+    fprintf(StabFile,"# Requested steps: Alpha=%0.12g deg Beta=%0.12g deg Mach=%0.12g Control=%0.12g deg\n",
+            StabStepAlpha_, StabStepBeta_, StabStepMach_, StabStepControl_);
+    fprintf(StabFile,"# Resolved steps: Alpha=%0.12g deg Beta=%0.12g deg Mach=%0.12g Control=%0.12g deg\n",
+            Delta_AoA_, Delta_Beta_, Delta_Mach_, Delta_Control_);
+    fprintf(StabFile,"# Rate steps: p=%0.12g rad/Tunit phat=%0.12g q=%0.12g rad/Tunit qhat=%0.12g r=%0.12g rad/Tunit rhat=%0.12g\n",
+            Delta_P_, Delta_P_ * Bref_ * 0.5 / Vinf_, Delta_Q_, Delta_Q_ * Cref_ * 0.5 / Vinf_,
+            Delta_R_, Delta_R_ * Bref_ * 0.5 / Vinf_);
+    fprintf(StabFile,"# Rate step sources: p=%s q=%s r=%s\n",
+            StabStepPIsReduced_ == 1 ? "reduced" : (StabStepPIsReduced_ == -1 ? "physical" : "legacy_physical_default"),
+            StabStepQIsReduced_ == 1 ? "reduced" : (StabStepQIsReduced_ == -1 ? "physical" : "legacy_physical_default"),
+            StabStepRIsReduced_ == 1 ? "reduced" : (StabStepRIsReduced_ == -1 ? "physical" : "legacy_physical_default"));
+    for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+       fprintf(StabFile,"# Control group %d: name=%s base_deflection=%0.12g deg\n", n,
+               ControlSurfaceGroup_[n].Name(), ControlSurfaceGroup_[n].ControlSurface_DeflectionAngle());
+    }
     
     // Write out column labels
     
@@ -3279,6 +3594,14 @@ void CalculateStabilityDerivatives(void)
     fprintf(StabFile,"#\n");
 
     for ( n = 1 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) {
+
+       if ( n == 2 && !( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) ) continue;
+       if ( n == 3 && !( StabDerivativeFlags_ & STAB_DERIV_BETA  ) ) continue;
+       if ( n == 4 && !( StabDerivativeFlags_ & STAB_DERIV_P     ) ) continue;
+       if ( n == 5 && !( StabDerivativeFlags_ & STAB_DERIV_Q     ) ) continue;
+       if ( n == 6 && !( StabDerivativeFlags_ & STAB_DERIV_R     ) ) continue;
+       if ( n == 7 && !( StabDerivativeFlags_ & STAB_DERIV_MACH  ) ) continue;
+       if ( n  > 7 && !( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ) continue;
        
        // Stability derivative cases
                                      //12345678901234567890123456789
@@ -3321,6 +3644,13 @@ void CalculateStabilityDerivatives(void)
     // Calculate the stability derivatives and write them out
 
     for ( n = 2 ; n <= NumStabCases_ ; n++ ) {
+
+       if ( n == 2 && !( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) ) continue;
+       if ( n == 3 && !( StabDerivativeFlags_ & STAB_DERIV_BETA  ) ) continue;
+       if ( n == 4 && !( StabDerivativeFlags_ & STAB_DERIV_P     ) ) continue;
+       if ( n == 5 && !( StabDerivativeFlags_ & STAB_DERIV_Q     ) ) continue;
+       if ( n == 6 && !( StabDerivativeFlags_ & STAB_DERIV_R     ) ) continue;
+       if ( n == 7 && !( StabDerivativeFlags_ & STAB_DERIV_MACH  ) ) continue;
     
        if ( n == 2  ) Delta =  Delta_AoA_  * TORAD;            // wrt Alpha
        if ( n == 3  ) Delta =  Delta_Beta_ * TORAD;            // wrt Beta
@@ -3347,25 +3677,25 @@ void CalculateStabilityDerivatives(void)
 
     }
 
-    dCFx_wrt[8] = MachList_[1] * dCFx_wrt[7];
-    dCFy_wrt[8] = MachList_[1] * dCFy_wrt[7];
-    dCFz_wrt[8] = MachList_[1] * dCFz_wrt[7];
+    dCFx_wrt[8] = Mach_ * dCFx_wrt[7];
+    dCFy_wrt[8] = Mach_ * dCFy_wrt[7];
+    dCFz_wrt[8] = Mach_ * dCFz_wrt[7];
 
-    dCMx_wrt[8] = MachList_[1] * dCMx_wrt[7];
-    dCMy_wrt[8] = MachList_[1] * dCMy_wrt[7];
-    dCMz_wrt[8] = MachList_[1] * dCMz_wrt[7];
+    dCMx_wrt[8] = Mach_ * dCMx_wrt[7];
+    dCMy_wrt[8] = Mach_ * dCMy_wrt[7];
+    dCMz_wrt[8] = Mach_ * dCMz_wrt[7];
 
-    dCL_wrt[8]  = MachList_[1] * dCL_wrt[7];
-    dCD_wrt[8]  = MachList_[1] * dCD_wrt[7];
-    dCS_wrt[8]  = MachList_[1] * dCS_wrt[7];
+    dCL_wrt[8]  = Mach_ * dCL_wrt[7];
+    dCD_wrt[8]  = Mach_ * dCD_wrt[7];
+    dCS_wrt[8]  = Mach_ * dCS_wrt[7];
     
-    dCMl_wrt[8] = MachList_[1] * dCMl_wrt[7];
-    dCMm_wrt[8] = MachList_[1] * dCMm_wrt[7];
-    dCMn_wrt[8] = MachList_[1] * dCMn_wrt[7];    
+    dCMl_wrt[8] = Mach_ * dCMl_wrt[7];
+    dCMm_wrt[8] = Mach_ * dCMm_wrt[7];
+    dCMn_wrt[8] = Mach_ * dCMn_wrt[7];
     
     // Calculate the control derivatives and write them out
 
-    for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) {
+    for ( n = 8 ; n <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumStabCases_ + NumberOfControlGroups_ : 7 ) ; n++ ) {
     
        Delta = Delta_Control_ * TORAD; // wrt control group deflection
 
@@ -3385,7 +3715,107 @@ void CalculateStabilityDerivatives(void)
        dCMm_wrt[n+1] = ( CMtmForCase[n] - CMtmForCase[1] )/Delta;
        dCMn_wrt[n+1] = ( CMtnForCase[n] - CMtnForCase[1] )/Delta;       
 
-    }    
+    }
+
+    int NegativeOutputCase = NumStabCases_ + NumberOfControlGroups_;
+    for ( n = 2 ; n <= 7 ; n++ ) {
+       int Enabled = ( n == 2 && ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) )
+                  || ( n == 3 && ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) )
+                  || ( n == 4 && ( StabDerivativeFlags_ & STAB_DERIV_P     ) )
+                  || ( n == 5 && ( StabDerivativeFlags_ & STAB_DERIV_Q     ) )
+                  || ( n == 6 && ( StabDerivativeFlags_ & STAB_DERIV_R     ) )
+                  || ( n == 7 && ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) );
+       if ( !Enabled ) continue;
+       NegativeOutputCase++;
+       if ( n == 2 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Alpha",Delta_AoA_,"deg");
+       if ( n == 3 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Beta",Delta_Beta_,"deg");
+       if ( n == 4 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Roll__Rate",Delta_P_,"rad/Tunit");
+       if ( n == 5 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Pitch_Rate",Delta_Q_,"rad/Tunit");
+       if ( n == 6 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Yaw___Rate",Delta_R_,"rad/Tunit");
+       if ( n == 7 ) snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s","Mach",Delta_Mach_,"no_unit");
+       fprintf(StabFile,"%-39s %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f \n",
+               CaseType, CFtxForCase[NegativeOutputCase], CFtyForCase[NegativeOutputCase], CFtzForCase[NegativeOutputCase],
+               CMtxForCase[NegativeOutputCase], CMtyForCase[NegativeOutputCase], CMtzForCase[NegativeOutputCase],
+               CLtForCase[NegativeOutputCase], CDtForCase[NegativeOutputCase], CStForCase[NegativeOutputCase],
+               CMtlForCase[NegativeOutputCase], CMtmForCase[NegativeOutputCase], CMtnForCase[NegativeOutputCase]);
+    }
+    if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
+       for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          NegativeOutputCase++;
+          snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s",ControlSurfaceGroup_[n].Name(),Delta_Control_,"deg");
+          fprintf(StabFile,"%-39s %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f \n",
+                  CaseType, CFtxForCase[NegativeOutputCase], CFtyForCase[NegativeOutputCase], CFtzForCase[NegativeOutputCase],
+                  CMtxForCase[NegativeOutputCase], CMtyForCase[NegativeOutputCase], CMtzForCase[NegativeOutputCase],
+                  CLtForCase[NegativeOutputCase], CDtForCase[NegativeOutputCase], CStForCase[NegativeOutputCase],
+                  CMtlForCase[NegativeOutputCase], CMtmForCase[NegativeOutputCase], CMtnForCase[NegativeOutputCase]);
+       }
+    }
+
+    // Backward and central differences. Negative cases were stored compactly
+    // after the legacy positive cases and positive control cases.
+
+    int NegativeCase = NumStabCases_ + NumberOfControlGroups_;
+
+#define CALCULATE_SYMMETRIC_DERIVATIVES(POS, NEG, OUT, DELTA, VALUES, BACKWARD, CENTRAL) \
+    BACKWARD[OUT] = ( VALUES[1] - VALUES[NEG] ) / (DELTA); \
+    CENTRAL[OUT]  = ( VALUES[POS] - VALUES[NEG] ) / (2. * (DELTA))
+
+#define CALCULATE_ALL_SYMMETRIC(POS, NEG, OUT, DELTA) \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CFtxForCase,dCFx_wrt_Backward,dCFx_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CFtyForCase,dCFy_wrt_Backward,dCFy_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CFtzForCase,dCFz_wrt_Backward,dCFz_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtxForCase,dCMx_wrt_Backward,dCMx_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtyForCase,dCMy_wrt_Backward,dCMy_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtzForCase,dCMz_wrt_Backward,dCMz_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CLtForCase,dCL_wrt_Backward,dCL_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CDtForCase,dCD_wrt_Backward,dCD_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CStForCase,dCS_wrt_Backward,dCS_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtlForCase,dCMl_wrt_Backward,dCMl_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtmForCase,dCMm_wrt_Backward,dCMm_wrt_Central); \
+    CALCULATE_SYMMETRIC_DERIVATIVES(POS,NEG,OUT,DELTA,CMtnForCase,dCMn_wrt_Backward,dCMn_wrt_Central)
+
+    for ( n = 2 ; n <= 7 ; n++ ) {
+       int Enabled = ( n == 2 && ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) )
+                  || ( n == 3 && ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) )
+                  || ( n == 4 && ( StabDerivativeFlags_ & STAB_DERIV_P     ) )
+                  || ( n == 5 && ( StabDerivativeFlags_ & STAB_DERIV_Q     ) )
+                  || ( n == 6 && ( StabDerivativeFlags_ & STAB_DERIV_R     ) )
+                  || ( n == 7 && ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) );
+       if ( !Enabled ) continue;
+       NegativeCase++;
+       if ( n == 2 ) Delta = Delta_AoA_ * TORAD;
+       if ( n == 3 ) Delta = Delta_Beta_ * TORAD;
+       if ( n == 4 ) Delta = Delta_P_ * Bref_ * 0.5 / Vinf_;
+       if ( n == 5 ) Delta = Delta_Q_ * Cref_ * 0.5 / Vinf_;
+       if ( n == 6 ) Delta = Delta_R_ * Bref_ * 0.5 / Vinf_;
+       if ( n == 7 ) Delta = Delta_Mach_;
+       CALCULATE_ALL_SYMMETRIC(n, NegativeCase, n, Delta);
+    }
+
+    if ( StabDerivativeFlags_ & STAB_DERIV_MACH ) {
+       dCFx_wrt_Backward[8] = Mach_ * dCFx_wrt_Backward[7]; dCFx_wrt_Central[8] = Mach_ * dCFx_wrt_Central[7];
+       dCFy_wrt_Backward[8] = Mach_ * dCFy_wrt_Backward[7]; dCFy_wrt_Central[8] = Mach_ * dCFy_wrt_Central[7];
+       dCFz_wrt_Backward[8] = Mach_ * dCFz_wrt_Backward[7]; dCFz_wrt_Central[8] = Mach_ * dCFz_wrt_Central[7];
+       dCMx_wrt_Backward[8] = Mach_ * dCMx_wrt_Backward[7]; dCMx_wrt_Central[8] = Mach_ * dCMx_wrt_Central[7];
+       dCMy_wrt_Backward[8] = Mach_ * dCMy_wrt_Backward[7]; dCMy_wrt_Central[8] = Mach_ * dCMy_wrt_Central[7];
+       dCMz_wrt_Backward[8] = Mach_ * dCMz_wrt_Backward[7]; dCMz_wrt_Central[8] = Mach_ * dCMz_wrt_Central[7];
+       dCL_wrt_Backward[8]  = Mach_ * dCL_wrt_Backward[7];  dCL_wrt_Central[8]  = Mach_ * dCL_wrt_Central[7];
+       dCD_wrt_Backward[8]  = Mach_ * dCD_wrt_Backward[7];  dCD_wrt_Central[8]  = Mach_ * dCD_wrt_Central[7];
+       dCS_wrt_Backward[8]  = Mach_ * dCS_wrt_Backward[7];  dCS_wrt_Central[8]  = Mach_ * dCS_wrt_Central[7];
+       dCMl_wrt_Backward[8] = Mach_ * dCMl_wrt_Backward[7]; dCMl_wrt_Central[8] = Mach_ * dCMl_wrt_Central[7];
+       dCMm_wrt_Backward[8] = Mach_ * dCMm_wrt_Backward[7]; dCMm_wrt_Central[8] = Mach_ * dCMm_wrt_Central[7];
+       dCMn_wrt_Backward[8] = Mach_ * dCMn_wrt_Backward[7]; dCMn_wrt_Central[8] = Mach_ * dCMn_wrt_Central[7];
+    }
+
+    if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
+       for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          NegativeCase++;
+          CALCULATE_ALL_SYMMETRIC(NumStabCases_ + n, NegativeCase, 8 + n, Delta_Control_ * TORAD);
+       }
+    }
+
+#undef CALCULATE_ALL_SYMMETRIC
+#undef CALCULATE_SYMMETRIC_DERIVATIVES
 
     fprintf(StabFile,"#\n");
     
@@ -3413,6 +3843,33 @@ void CalculateStabilityDerivatives(void)
     fprintf(StabFile,"CMl    "); fprintf(StabFile,"%12.7f ",CMtlForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMl_wrt[n]); }; fprintf(StabFile,"\n");
     fprintf(StabFile,"CMm    "); fprintf(StabFile,"%12.7f ",CMtmForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMm_wrt[n]); }; fprintf(StabFile,"\n");
     fprintf(StabFile,"CMn    "); fprintf(StabFile,"%12.7f ",CMtnForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMn_wrt[n]); }; fprintf(StabFile,"\n");
+
+    fprintf(StabFile,"#\n# Explicit finite-difference results. Legacy names above are forward derivatives.\n");
+    fprintf(StabFile,"Derivative Value Units\n");
+
+#define WRITE_EXPLICIT_DERIVATIVES(COEF, FORWARD, BACKWARD, CENTRAL) \
+    if ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) { fprintf(StabFile,#COEF "_Alpha_Forward %12.7f per_rad\n",FORWARD[2]); fprintf(StabFile,#COEF "_Alpha_Backward %12.7f per_rad\n",BACKWARD[2]); fprintf(StabFile,#COEF "_Alpha_Central %12.7f per_rad\n",CENTRAL[2]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) { fprintf(StabFile,#COEF "_Beta_Forward %12.7f per_rad\n",FORWARD[3]); fprintf(StabFile,#COEF "_Beta_Backward %12.7f per_rad\n",BACKWARD[3]); fprintf(StabFile,#COEF "_Beta_Central %12.7f per_rad\n",CENTRAL[3]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_P     ) { fprintf(StabFile,#COEF "_p_Forward %12.7f per_reduced_rate\n",FORWARD[4]); fprintf(StabFile,#COEF "_p_Backward %12.7f per_reduced_rate\n",BACKWARD[4]); fprintf(StabFile,#COEF "_p_Central %12.7f per_reduced_rate\n",CENTRAL[4]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_Q     ) { fprintf(StabFile,#COEF "_q_Forward %12.7f per_reduced_rate\n",FORWARD[5]); fprintf(StabFile,#COEF "_q_Backward %12.7f per_reduced_rate\n",BACKWARD[5]); fprintf(StabFile,#COEF "_q_Central %12.7f per_reduced_rate\n",CENTRAL[5]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_R     ) { fprintf(StabFile,#COEF "_r_Forward %12.7f per_reduced_rate\n",FORWARD[6]); fprintf(StabFile,#COEF "_r_Backward %12.7f per_reduced_rate\n",BACKWARD[6]); fprintf(StabFile,#COEF "_r_Central %12.7f per_reduced_rate\n",CENTRAL[6]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) { fprintf(StabFile,#COEF "_Mach_Forward %12.7f per_Mach\n",FORWARD[7]); fprintf(StabFile,#COEF "_Mach_Backward %12.7f per_Mach\n",BACKWARD[7]); fprintf(StabFile,#COEF "_Mach_Central %12.7f per_Mach\n",CENTRAL[7]); fprintf(StabFile,#COEF "_U_Forward %12.7f per_u\n",FORWARD[8]); fprintf(StabFile,#COEF "_U_Backward %12.7f per_u\n",BACKWARD[8]); fprintf(StabFile,#COEF "_U_Central %12.7f per_u\n",CENTRAL[8]); } \
+    if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) { for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) { fprintf(StabFile,#COEF "_ConGrp_%d_Forward %12.7f per_rad\n",n,FORWARD[8+n]); fprintf(StabFile,#COEF "_ConGrp_%d_Backward %12.7f per_rad\n",n,BACKWARD[8+n]); fprintf(StabFile,#COEF "_ConGrp_%d_Central %12.7f per_rad\n",n,CENTRAL[8+n]); } }
+
+    WRITE_EXPLICIT_DERIVATIVES(CFx,dCFx_wrt,dCFx_wrt_Backward,dCFx_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CFy,dCFy_wrt,dCFy_wrt_Backward,dCFy_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CFz,dCFz_wrt,dCFz_wrt_Backward,dCFz_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMx,dCMx_wrt,dCMx_wrt_Backward,dCMx_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMy,dCMy_wrt,dCMy_wrt_Backward,dCMy_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMz,dCMz_wrt,dCMz_wrt_Backward,dCMz_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CL,dCL_wrt,dCL_wrt_Backward,dCL_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CD,dCD_wrt,dCD_wrt_Backward,dCD_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CS,dCS_wrt,dCS_wrt_Backward,dCS_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMl,dCMl_wrt,dCMl_wrt_Backward,dCMl_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMm,dCMm_wrt,dCMm_wrt_Backward,dCMm_wrt_Central);
+    WRITE_EXPLICIT_DERIVATIVES(CMn,dCMn_wrt,dCMn_wrt_Backward,dCMn_wrt_Central);
+
+#undef WRITE_EXPLICIT_DERIVATIVES
 
     fprintf(StabFile,"#\n");
     fprintf(StabFile,"#\n");

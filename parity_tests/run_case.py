@@ -66,7 +66,9 @@ def main() -> None:
     vsp.SetParmVal(wing_id, "Dihedral", "XSec_1", 3.0)
     vsp.SetParmVal(wing_id, "Twist", "XSec_1", -2.0)
     vsp.SetParmVal(wing_id, "Tess_W", "Shape", 25)
+    vsp.AddSubSurf(wing_id, vsp.SS_CONTROL, 0)
     vsp.Update()
+    vsp.AutoGroupVSPAEROControlSurfaces()
     vsp.SetVSPAERORefWingID(wing_id)
     vsp.WriteVSPFile("parity_wing.vsp3", vsp.SET_ALL)
 

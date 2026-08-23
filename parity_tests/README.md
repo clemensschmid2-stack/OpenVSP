@@ -21,5 +21,8 @@ Use `--rtol` and `--atol` to change the tolerances. The detailed result is
 written to `parity_report.json`. Pass `--keep-work` to retain solver inputs,
 outputs, and logs under `_work` for diagnosis.
 
+The report, `_work` directory, and generated parity-wing solver files are
+ignored by Git. They are reproducible test artifacts and must not be committed.
+
 These are build-parity tests, not validation against experimental or
 analytical aerodynamic data.

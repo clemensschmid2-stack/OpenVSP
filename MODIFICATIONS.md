@@ -22,6 +22,15 @@ This fork is derived from NASA's OpenVSP project.
   under `reference_builds` as a behavioral parity baseline.
 - Added `build_openvsp.py` and its batch launcher for a reproducible full
   Visual Studio 2022 x64 build, including the GUI, VSPAERO, tools, docs, and
-  Python API wrapper.
+  Python API wrapper. Limited the default parallel build to four jobs to reduce
+  peak RAM use; `--jobs` remains available for explicit tuning.
 - Added black-box parity tests comparing official and local VSPAERO thin/thick
   base and stability results with configurable floating-point tolerances.
+- Extended `vspaero -stab` with symmetric positive/negative perturbations and
+  forward, backward, and central derivative output. Added `-stab-select` for
+  choosing any combination of alpha, beta, Mach, P, Q, R, and all control
+  groups, with symmetric nonnegative Mach-step handling. Reynolds derivatives
+  remain intentionally unsupported. Added configurable alpha, beta, Mach,
+  control, physical-rate, and reduced-rate perturbation steps. The `.stab`
+  output records the resolved operating point, references, and physical and
+  reduced rate steps. See `STABILITY_DERIVATIVES.md`.

@@ -223,6 +223,19 @@ extern double dCMl_wrt[MAXRUNCASES];
 extern double dCMm_wrt[MAXRUNCASES];
 extern double dCMn_wrt[MAXRUNCASES];
 
+extern double dCFx_wrt_Backward[MAXRUNCASES], dCFx_wrt_Central[MAXRUNCASES];
+extern double dCFy_wrt_Backward[MAXRUNCASES], dCFy_wrt_Central[MAXRUNCASES];
+extern double dCFz_wrt_Backward[MAXRUNCASES], dCFz_wrt_Central[MAXRUNCASES];
+extern double dCMx_wrt_Backward[MAXRUNCASES], dCMx_wrt_Central[MAXRUNCASES];
+extern double dCMy_wrt_Backward[MAXRUNCASES], dCMy_wrt_Central[MAXRUNCASES];
+extern double dCMz_wrt_Backward[MAXRUNCASES], dCMz_wrt_Central[MAXRUNCASES];
+extern double dCL_wrt_Backward[MAXRUNCASES],  dCL_wrt_Central[MAXRUNCASES];
+extern double dCD_wrt_Backward[MAXRUNCASES],  dCD_wrt_Central[MAXRUNCASES];
+extern double dCS_wrt_Backward[MAXRUNCASES],  dCS_wrt_Central[MAXRUNCASES];
+extern double dCMl_wrt_Backward[MAXRUNCASES], dCMl_wrt_Central[MAXRUNCASES];
+extern double dCMm_wrt_Backward[MAXRUNCASES], dCMm_wrt_Central[MAXRUNCASES];
+extern double dCMn_wrt_Backward[MAXRUNCASES], dCMn_wrt_Central[MAXRUNCASES];
+
 //FILE *StabFile;
 //FILE *VorviewFlt;
 

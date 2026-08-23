@@ -4,6 +4,7 @@ build-msvc/
 build-msvc-full/
 parity_tests/_work/
 parity_tests/parity_report.json
+/parity_wing*
 buildlibs/
 inst/
 *.bak
