@@ -20,3 +20,8 @@ This fork is derived from NASA's OpenVSP project.
 - Ignored the local `build-msvc` and `build-msvc-full` output directories.
 - Added the unmodified official OpenVSP 3.51.2 Windows/Python 3.13 distribution
   under `reference_builds` as a behavioral parity baseline.
+- Added `build_openvsp.py` and its batch launcher for a reproducible full
+  Visual Studio 2022 x64 build, including the GUI, VSPAERO, tools, docs, and
+  Python API wrapper.
+- Added black-box parity tests comparing official and local VSPAERO thin/thick
+  base and stability results with configurable floating-point tolerances.
