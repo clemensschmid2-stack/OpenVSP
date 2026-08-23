@@ -18,3 +18,5 @@ This fork is derived from NASA's OpenVSP project.
 - Forwarded an explicitly selected SWIG executable from the superproject to the
   OpenVSP build so API wrappers are not silently skipped.
 - Ignored the local `build-msvc` and `build-msvc-full` output directories.
+- Added the unmodified official OpenVSP 3.51.2 Windows/Python 3.13 distribution
+  under `reference_builds` as a behavioral parity baseline.
