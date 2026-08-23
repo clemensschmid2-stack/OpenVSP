@@ -1,6 +1,7 @@
 .DS_Store
 build/
 build-msvc/
+build-msvc-full/
 buildlibs/
 inst/
 *.bak

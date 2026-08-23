@@ -15,4 +15,6 @@ This fork is derived from NASA's OpenVSP project.
   output, preventing malformed version headers on non-English Windows systems.
 - Propagated the active configuration to the superproject's install and package
   steps so Visual Studio Release builds do not fall back to Debug.
-- Ignored the local `build-msvc` output directory.
+- Forwarded an explicitly selected SWIG executable from the superproject to the
+  OpenVSP build so API wrappers are not silently skipped.
+- Ignored the local `build-msvc` and `build-msvc-full` output directories.
