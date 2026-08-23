@@ -1,1 +1,2 @@
 * text=auto
+reference_builds/** -text
