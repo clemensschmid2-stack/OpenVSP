@@ -6,7 +6,11 @@ set(libxml2_install "${CMAKE_BINARY_DIR}/LIBXML2-prefix")
 if(WIN32)
   get_filename_component(_self_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-  file(TO_NATIVE_PATH ${libxml2_install} libxml2_install_win)
+  file(TO_NATIVE_PATH "${libxml2_install}" libxml2_install_win)
+  # Escape native separators for the generated CMake script. The libxml batch
+  # installer requires backslashes, while unescaped backslashes are parsed by
+  # CMake as sequences such as \r and \t.
+  string(REPLACE "\\" "\\\\" libxml2_install_win "${libxml2_install_win}")
 
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_config.cmake "
 execute_process(

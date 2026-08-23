@@ -1,6 +1,14 @@
 SET( CMIN_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lm -fPIC" )
 SET( CMIN_CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm -fPIC" )
 
+# CMAKE_BUILD_TYPE is empty with multi-config generators such as Visual Studio.
+# CMinpack's configure step assumes it is non-empty, so give the dependency a
+# concrete configuration in that case.
+SET( CMIN_BUILD_TYPE "${CMAKE_BUILD_TYPE}" )
+IF( NOT CMIN_BUILD_TYPE )
+    SET( CMIN_BUILD_TYPE Release )
+ENDIF()
+
 ExternalProject_Add( CMINPACK
     URL ${CMAKE_CURRENT_SOURCE_DIR}/cminpack-1.3.11.zip
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
@@ -9,7 +17,7 @@ ExternalProject_Add( CMINPACK
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
         -DCMAKE_CXX_FLAGS=${CMIN_CMAKE_CXX_FLAGS}
         -DCMAKE_C_FLAGS=${CMIN_CMAKE_C_FLAGS}
-        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_BUILD_TYPE=${CMIN_BUILD_TYPE}
         -DCMINPACK_PRECISION=d
         -DUSE_BLAS=OFF
 )

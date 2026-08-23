@@ -64,12 +64,12 @@ ExternalProject_Add( OpenVSP
 		-DPYTHON_INCLUDE_PATH=${PYTHON_INCLUDE_PATH}
 		-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
 		-DVSP_INSTALL_API_TEST=${VSP_INSTALL_API_TEST}
-	INSTALL_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --target install
+	INSTALL_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config $<CONFIG> --target install
 	DEPENDS Libraries
 )
 EP_ForceBuild( OpenVSP )
 
 ExternalProject_Add_Step( OpenVSP package
-    COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --target package
+    COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config $<CONFIG> --target package
     DEPENDEES build
 )
