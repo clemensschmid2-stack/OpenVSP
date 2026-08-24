@@ -4,6 +4,19 @@ This fork is derived from NASA's OpenVSP project.
 
 ## 2026-08-24 — Clemens Schmid
 
+- Added an isolated native VSPAERO `-state-sweep` mode in
+  `src/vsp_aero/Solver/vspaero.C`. It lazily evaluates the Cartesian product of
+  the existing Mach/Reynolds/alpha/beta axes with physical or reduced P/Q/R
+  axes and control-group deflections. Integrated results stream to bounded CSV
+  chunks with a manifest and resumable 64-bit checkpoint; the mode does not
+  retain the expanded grid in memory or emit per-case ADB solution records.
+  Existing steady and `-stab` paths are unchanged. See `STATE_SWEEP.md`.
+- Added repeatable `-state-design <name> <value>` metadata to State Sweep. The
+  values are included in its configuration hash, manifest, and CSV rows so
+  externally regenerated OpenVSP design states remain self-describing.
+- Extended the black-box parity suite with cross-mode State Sweep checks:
+  zero-rate output is compared with the official steady sweep, and positive
+  P/Q/R and control states with official `-stab` perturbation cases.
 - Changed native `vspaero -stab` output generation in
   `src/vsp_aero/Solver/vspaero.C`, inside `CalculateStabilityDerivatives()`.
   Replaced the legacy forward-only derivative matrix and vertical explicit

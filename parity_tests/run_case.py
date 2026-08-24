@@ -50,6 +50,15 @@ def main() -> None:
     vsp.SetVSPAEROPath(str(distribution))
     vsp.VSPRenew()
 
+    # Cp slicing is unrelated to coefficient parity and launches vsploads.exe.
+    # Disable it so the test exercises only geometry generation and VSPAERO;
+    # some OpenVSP 3.51.2 Windows builds crash in the slicer after processing.
+    settings_id = vsp.FindContainer("VSPAEROSettings", 0)
+    cp_slice_id = vsp.FindParm(settings_id, "CpSliceFlag", "VSPAERO")
+    if not cp_slice_id:
+        raise RuntimeError("Could not find the VSPAERO CpSliceFlag parameter")
+    vsp.SetParmVal(cp_slice_id, 0.0)
+
     wing_id = vsp.AddGeom("WING", "")
     vsp.SetGeomName(wing_id, "ParityWing")
     vsp.SetDriverGroup(
@@ -102,7 +111,9 @@ def main() -> None:
     if args.analysis == "base":
         set_double(vsp, sweep, "AlphaStart", -2.0)
         set_double(vsp, sweep, "AlphaEnd", 8.0)
-        set_int(vsp, sweep, "AlphaNpts", 4)
+        # Include alpha=4 exactly so State Sweep's zero-rate state can also be
+        # checked against this independent normal-sweep result.
+        set_int(vsp, sweep, "AlphaNpts", 6)
     else:
         set_double(vsp, sweep, "AlphaStart", 4.0)
         set_double(vsp, sweep, "AlphaEnd", 4.0)

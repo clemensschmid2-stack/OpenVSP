@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
 import os
@@ -19,6 +20,7 @@ DEFAULT_OFFICIAL = ROOT / "reference_builds" / "OpenVSP-3.51.2-win64"
 DEFAULT_CUSTOM = ROOT / "build-msvc-full" / "install"
 CASES = (("thin", "base"), ("thin", "stab"), ("thick", "base"), ("thick", "stab"))
 VOLATILE_FIELDS = {"Wall_Time", "WallTime"}
+COEFFICIENTS = ("CFx", "CFy", "CFz", "CMx", "CMy", "CMz", "CL", "CD", "CS", "CMl", "CMm", "CMn")
 
 
 def python_package(distribution: Path) -> Path:
@@ -131,12 +133,123 @@ def check_central_identities(custom: dict[str, object], atol: float = 2e-7) -> l
     return failures
 
 
+def final_value(result: dict[str, object], name: str) -> float:
+    values = result[name]
+    if not isinstance(values, list) or not values:
+        raise ValueError(f"Missing result value: {name}")
+    return float(values[-1])
+
+
+def normal_sweep_coefficients(history: dict[str, object]) -> dict[str, float]:
+    return {
+        "CFx": final_value(history, "CFxo") + final_value(history, "CFxiw"),
+        "CFy": final_value(history, "CFyo") + final_value(history, "CFyiw"),
+        "CFz": final_value(history, "CFzo") + final_value(history, "CFziw"),
+        "CMx": final_value(history, "CMxo") + final_value(history, "CMxi"),
+        "CMy": final_value(history, "CMyo") + final_value(history, "CMyi"),
+        "CMz": final_value(history, "CMzo") + final_value(history, "CMzi"),
+        "CL": final_value(history, "CLo") + final_value(history, "CLiw"),
+        "CD": final_value(history, "CDo") + final_value(history, "CDiw"),
+        "CS": final_value(history, "CSo") + final_value(history, "CSiw"),
+        "CMl": -(final_value(history, "CMxo") + final_value(history, "CMxi")),
+        "CMm": final_value(history, "CMyo") + final_value(history, "CMyi"),
+        "CMn": -(final_value(history, "CMzo") + final_value(history, "CMzi")),
+    }
+
+
+def compare_coefficients(
+    name: str,
+    expected: dict[str, float],
+    actual: dict[str, str],
+    rtol: float,
+    atol: float,
+) -> tuple[dict[str, object], int]:
+    differences = []
+    failures = 0
+    for coefficient in COEFFICIENTS:
+        reference = expected[coefficient]
+        candidate = float(actual[coefficient])
+        tolerance = atol + rtol * abs(reference)
+        error = abs(candidate - reference)
+        passed = math.isfinite(error) and error <= tolerance
+        failures += not passed
+        differences.append({
+            "field": coefficient,
+            "official": reference,
+            "state_sweep": candidate,
+            "absolute_error": error,
+            "tolerance": tolerance,
+            "status": "pass" if passed else "fail",
+        })
+    return {"name": name, "status": "PASS" if failures == 0 else "FAIL", "differences": differences}, failures
+
+
+def run_state_sweep_cross_checks(
+    custom: Path,
+    work: Path,
+    official_base: dict[str, object],
+    official_stab: dict[str, object],
+    timeout: int,
+    rtol: float,
+    atol: float,
+) -> tuple[list[dict[str, object]], int]:
+    source = work / "thin_stab" / "custom"
+    output = work / "state_sweep_crosscheck"
+    output.mkdir(parents=True, exist_ok=True)
+    for pattern in ("parity_wing.vspgeom", "parity_wing.vspaero", "parity_wing.vkey", "parity_wing.csf",
+                    "parity_wing*.taglist", "parity_wing*.tag"):
+        for path in source.glob(pattern):
+            shutil.copy2(path, output / path.name)
+
+    command = [
+        str(custom / "vspaero.exe"), "-omp", "1", "-state-sweep",
+        "-state-p", "-0.01,0,0.01", "-state-q", "-0.01,0,0.01",
+        "-state-r", "-0.01,0,0.01", "-state-control", "1", "0,0.1",
+        "-state-chunk-size", "100", "parity_wing",
+    ]
+    with (output / "run.log").open("w", encoding="utf-8") as log:
+        subprocess.run(command, cwd=output, stdout=log, stderr=subprocess.STDOUT,
+                       check=True, timeout=timeout, env={**os.environ, "OMP_NUM_THREADS": "1"})
+    with (output / "parity_wing.state_sweep" / "part-000000.csv").open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream))
+
+    def select(p: float, q: float, r: float, control: float) -> dict[str, str]:
+        for row in rows:
+            state = tuple(float(row[key]) for key in
+                          ("p_rad_per_tunit", "q_rad_per_tunit", "r_rad_per_tunit", "ctrl_001_deg"))
+            if all(math.isclose(value, target, abs_tol=1e-12)
+                   for value, target in zip(state, (p, q, r, control))):
+                return row
+        raise ValueError(f"State Sweep did not emit state {(p, q, r, control)}")
+
+    checks: list[dict[str, object]] = []
+    failures = 0
+    base_history = min(official_base["history"], key=lambda item: abs(final_value(item, "Alpha") - 4.0))
+    check, count = compare_coefficients("normal_sweep_base", normal_sweep_coefficients(base_history),
+                                        select(0, 0, 0, 0), rtol, atol)
+    checks.append(check); failures += count
+
+    stab = official_stab["stability"][0]
+    for name, state, prefix in (
+        ("stab_roll_positive", (0.01, 0, 0, 0), "Roll__Rate_"),
+        ("stab_pitch_positive", (0, 0.01, 0, 0), "Pitch_Rate_"),
+        ("stab_yaw_positive", (0, 0, 0.01, 0), "Yaw___Rate_"),
+        ("stab_control_positive", (0, 0, 0, 0.1), "ParityWing_SS_CONT_0_"),
+    ):
+        expected = {coefficient: final_value(stab, prefix + coefficient) for coefficient in COEFFICIENTS}
+        check, count = compare_coefficients(name, expected, select(*state), rtol, atol)
+        checks.append(check); failures += count
+    return checks, failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--official", type=Path, default=DEFAULT_OFFICIAL)
     parser.add_argument("--custom", type=Path, default=DEFAULT_CUSTOM)
     parser.add_argument("--rtol", type=float, default=1e-6)
     parser.add_argument("--atol", type=float, default=1e-8)
+    parser.add_argument("--state-rtol", type=float, default=1e-4)
+    parser.add_argument("--state-atol", type=float, default=5e-4)
     parser.add_argument("--timeout", type=int, default=600, help="seconds allowed per run")
     parser.add_argument("--keep-work", action="store_true")
     args = parser.parse_args()
@@ -159,6 +272,7 @@ def main() -> int:
         "cases": [],
     }
     total_failures = 0
+    completed: dict[str, tuple[dict[str, object], dict[str, object]]] = {}
 
     for mode, analysis in CASES:
         case_name = f"{mode}_{analysis}"
@@ -166,6 +280,7 @@ def main() -> int:
         official_result = run_case(official, mode, analysis, work / case_name / "official", args.timeout)
         print(f"Running {case_name}: custom", flush=True)
         custom_result = run_case(custom, mode, analysis, work / case_name / "custom", args.timeout)
+        completed[case_name] = (official_result, custom_result)
         differences, failures = compare(official_result, custom_result, args.rtol, args.atol)
         identity_failures = check_central_identities(custom_result) if analysis == "stab" else []
         failures += len(identity_failures)
@@ -183,6 +298,16 @@ def main() -> int:
                 "central_identity_failures": identity_failures,
             }
         )
+
+    print("Running State Sweep cross-mode checks", flush=True)
+    state_checks, state_failures = run_state_sweep_cross_checks(
+        custom, work, completed["thin_base"][0], completed["thin_stab"][0],
+        args.timeout, args.state_rtol, args.state_atol,
+    )
+    total_failures += state_failures
+    report["state_sweep_cross_checks"] = state_checks
+    report["state_sweep_tolerances"] = {"rtol": args.state_rtol, "atol": args.state_atol}
+    print(f"  {'PASS' if state_failures == 0 else 'FAIL'}: {state_failures} coefficient mismatches")
 
     report["status"] = "PASS" if total_failures == 0 else "FAIL"
     report["failures"] = total_failures

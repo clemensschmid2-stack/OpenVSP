@@ -23,6 +23,16 @@ outputs, and logs under `_work` for diagnosis.
 
 The report, `_work` directory, and generated parity-wing solver files are
 ignored by Git. They are reproducible test artifacts and must not be committed.
+Cp slicing is explicitly disabled because it is unrelated to coefficient
+parity and would otherwise launch the separate `vsploads` postprocessor.
 
 These are build-parity tests, not validation against experimental or
 analytical aerodynamic data.
+
+The suite also runs the custom `-state-sweep` mode and performs cross-mode
+checks against official-build results. Zero-rate states are compared with the
+official normal sweep, while positive P/Q/R and control states are compared
+with the corresponding official `-stab` perturbation cases. These checks use
+`--state-atol` (default `5e-4`) and `--state-rtol` (default `1e-4`) because a
+different case order can produce small wake-convergence differences even when
+the solver implementation is equivalent.
