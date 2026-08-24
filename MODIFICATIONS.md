@@ -34,3 +34,7 @@ This fork is derived from NASA's OpenVSP project.
   control, physical-rate, and reduced-rate perturbation steps. The `.stab`
   output records the resolved operating point, references, and physical and
   reduced rate steps. See `STABILITY_DERIVATIVES.md`.
+- Replaced the legacy forward-only derivative matrix and vertical explicit
+  derivative list with three aligned, complete matrices for forward, backward,
+  and central finite differences. Each matrix repeats the unperturbed total
+  coefficient so it can be read independently.

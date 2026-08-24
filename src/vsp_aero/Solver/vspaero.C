@@ -3817,59 +3817,31 @@ void CalculateStabilityDerivatives(void)
 #undef CALCULATE_ALL_SYMMETRIC
 #undef CALCULATE_SYMMETRIC_DERIVATIVES
 
-    fprintf(StabFile,"#\n");
-    
-    //                        123456789012 123456789012 123456789012 123456789012 123456789012 123456789012 123456789012 123456789012           
-    fprintf(StabFile,"#             Base    Derivative:                                                                               "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"             ");     fprintf(StabFile,"\n");
-    fprintf(StabFile,"#             Aero         wrt          wrt          wrt          wrt          wrt          wrt          wrt    "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      wrt    ");     fprintf(StabFile,"\n");
-    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"  ConGrp_%-3d ",n-7); fprintf(StabFile,"\n");
-    fprintf(StabFile,"#              -           per          per          per          per          per          per          per    "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      per    ");     fprintf(StabFile,"\n");
-    fprintf(StabFile,"#              -           rad          rad          rad          rad          rad          M            u      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      rad    ");     fprintf(StabFile,"\n");
-   
-    fprintf(StabFile,"#\n");
-    
-    fprintf(StabFile,"CFx    "); fprintf(StabFile,"%12.7f ",CFtxForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCFx_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CFy    "); fprintf(StabFile,"%12.7f ",CFtyForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCFy_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CFz    "); fprintf(StabFile,"%12.7f ",CFtzForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCFz_wrt[n]); }; fprintf(StabFile,"\n");
-                                                             
-    fprintf(StabFile,"CMx    "); fprintf(StabFile,"%12.7f ",CMtxForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMx_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CMy    "); fprintf(StabFile,"%12.7f ",CMtyForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMy_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CMz    "); fprintf(StabFile,"%12.7f ",CMtzForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMz_wrt[n]); }; fprintf(StabFile,"\n");
-                                                             
-    fprintf(StabFile,"CL     "); fprintf(StabFile,"%12.7f ",CLtForCase[1]);  for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCL_wrt[n]); };  fprintf(StabFile,"\n");
-    fprintf(StabFile,"CD     "); fprintf(StabFile,"%12.7f ",CDtForCase[1]);  for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCD_wrt[n]); };  fprintf(StabFile,"\n");
-    fprintf(StabFile,"CS     "); fprintf(StabFile,"%12.7f ",CStForCase[1]);  for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCS_wrt[n]); };  fprintf(StabFile,"\n");
-                                                            
-    fprintf(StabFile,"CMl    "); fprintf(StabFile,"%12.7f ",CMtlForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMl_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CMm    "); fprintf(StabFile,"%12.7f ",CMtmForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMm_wrt[n]); }; fprintf(StabFile,"\n");
-    fprintf(StabFile,"CMn    "); fprintf(StabFile,"%12.7f ",CMtnForCase[1]); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) { fprintf(StabFile,"%12.7f ",dCMn_wrt[n]); }; fprintf(StabFile,"\n");
+    // Present each finite-difference method as a complete, independently
+    // readable table. The repeated Total column is the unperturbed base value.
+#define WRITE_STABILITY_HEADER(METHOD) \
+    fprintf(StabFile,"#\n# %s finite-difference derivatives\n",METHOD); \
+    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"  ConGrp_%-3d ",n-7); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"#              -           rad          rad   reduced_rate reduced_rate reduced_rate      Mach          u      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      rad    "); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"#\n")
 
-    fprintf(StabFile,"#\n# Explicit finite-difference results. Legacy names above are forward derivatives.\n");
-    fprintf(StabFile,"Derivative Value Units\n");
+#define WRITE_STABILITY_ROW(NAME, TOTAL, VALUES) \
+    fprintf(StabFile,"%-6s ",NAME); fprintf(StabFile,"%12.7f ",TOTAL); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) fprintf(StabFile,"%12.7f ",VALUES[n]); fprintf(StabFile,"\n")
 
-#define WRITE_EXPLICIT_DERIVATIVES(COEF, FORWARD, BACKWARD, CENTRAL) \
-    if ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) { fprintf(StabFile,#COEF "_Alpha_Forward %12.7f per_rad\n",FORWARD[2]); fprintf(StabFile,#COEF "_Alpha_Backward %12.7f per_rad\n",BACKWARD[2]); fprintf(StabFile,#COEF "_Alpha_Central %12.7f per_rad\n",CENTRAL[2]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) { fprintf(StabFile,#COEF "_Beta_Forward %12.7f per_rad\n",FORWARD[3]); fprintf(StabFile,#COEF "_Beta_Backward %12.7f per_rad\n",BACKWARD[3]); fprintf(StabFile,#COEF "_Beta_Central %12.7f per_rad\n",CENTRAL[3]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_P     ) { fprintf(StabFile,#COEF "_p_Forward %12.7f per_reduced_rate\n",FORWARD[4]); fprintf(StabFile,#COEF "_p_Backward %12.7f per_reduced_rate\n",BACKWARD[4]); fprintf(StabFile,#COEF "_p_Central %12.7f per_reduced_rate\n",CENTRAL[4]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_Q     ) { fprintf(StabFile,#COEF "_q_Forward %12.7f per_reduced_rate\n",FORWARD[5]); fprintf(StabFile,#COEF "_q_Backward %12.7f per_reduced_rate\n",BACKWARD[5]); fprintf(StabFile,#COEF "_q_Central %12.7f per_reduced_rate\n",CENTRAL[5]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_R     ) { fprintf(StabFile,#COEF "_r_Forward %12.7f per_reduced_rate\n",FORWARD[6]); fprintf(StabFile,#COEF "_r_Backward %12.7f per_reduced_rate\n",BACKWARD[6]); fprintf(StabFile,#COEF "_r_Central %12.7f per_reduced_rate\n",CENTRAL[6]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) { fprintf(StabFile,#COEF "_Mach_Forward %12.7f per_Mach\n",FORWARD[7]); fprintf(StabFile,#COEF "_Mach_Backward %12.7f per_Mach\n",BACKWARD[7]); fprintf(StabFile,#COEF "_Mach_Central %12.7f per_Mach\n",CENTRAL[7]); fprintf(StabFile,#COEF "_U_Forward %12.7f per_u\n",FORWARD[8]); fprintf(StabFile,#COEF "_U_Backward %12.7f per_u\n",BACKWARD[8]); fprintf(StabFile,#COEF "_U_Central %12.7f per_u\n",CENTRAL[8]); } \
-    if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) { for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) { fprintf(StabFile,#COEF "_ConGrp_%d_Forward %12.7f per_rad\n",n,FORWARD[8+n]); fprintf(StabFile,#COEF "_ConGrp_%d_Backward %12.7f per_rad\n",n,BACKWARD[8+n]); fprintf(StabFile,#COEF "_ConGrp_%d_Central %12.7f per_rad\n",n,CENTRAL[8+n]); } }
+#define WRITE_STABILITY_TABLE(METHOD, X, Y, Z, MX, MY, MZ, L, D, S, ML, MM, MN) \
+    WRITE_STABILITY_HEADER(METHOD); \
+    WRITE_STABILITY_ROW("CFx",CFtxForCase[1],X); WRITE_STABILITY_ROW("CFy",CFtyForCase[1],Y); WRITE_STABILITY_ROW("CFz",CFtzForCase[1],Z); \
+    WRITE_STABILITY_ROW("CMx",CMtxForCase[1],MX); WRITE_STABILITY_ROW("CMy",CMtyForCase[1],MY); WRITE_STABILITY_ROW("CMz",CMtzForCase[1],MZ); \
+    WRITE_STABILITY_ROW("CL",CLtForCase[1],L); WRITE_STABILITY_ROW("CD",CDtForCase[1],D); WRITE_STABILITY_ROW("CS",CStForCase[1],S); \
+    WRITE_STABILITY_ROW("CMl",CMtlForCase[1],ML); WRITE_STABILITY_ROW("CMm",CMtmForCase[1],MM); WRITE_STABILITY_ROW("CMn",CMtnForCase[1],MN)
 
-    WRITE_EXPLICIT_DERIVATIVES(CFx,dCFx_wrt,dCFx_wrt_Backward,dCFx_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CFy,dCFy_wrt,dCFy_wrt_Backward,dCFy_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CFz,dCFz_wrt,dCFz_wrt_Backward,dCFz_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMx,dCMx_wrt,dCMx_wrt_Backward,dCMx_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMy,dCMy_wrt,dCMy_wrt_Backward,dCMy_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMz,dCMz_wrt,dCMz_wrt_Backward,dCMz_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CL,dCL_wrt,dCL_wrt_Backward,dCL_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CD,dCD_wrt,dCD_wrt_Backward,dCD_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CS,dCS_wrt,dCS_wrt_Backward,dCS_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMl,dCMl_wrt,dCMl_wrt_Backward,dCMl_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMm,dCMm_wrt,dCMm_wrt_Backward,dCMm_wrt_Central);
-    WRITE_EXPLICIT_DERIVATIVES(CMn,dCMn_wrt,dCMn_wrt_Backward,dCMn_wrt_Central);
+    WRITE_STABILITY_TABLE("Forward",dCFx_wrt,dCFy_wrt,dCFz_wrt,dCMx_wrt,dCMy_wrt,dCMz_wrt,dCL_wrt,dCD_wrt,dCS_wrt,dCMl_wrt,dCMm_wrt,dCMn_wrt);
+    WRITE_STABILITY_TABLE("Backward",dCFx_wrt_Backward,dCFy_wrt_Backward,dCFz_wrt_Backward,dCMx_wrt_Backward,dCMy_wrt_Backward,dCMz_wrt_Backward,dCL_wrt_Backward,dCD_wrt_Backward,dCS_wrt_Backward,dCMl_wrt_Backward,dCMm_wrt_Backward,dCMn_wrt_Backward);
+    WRITE_STABILITY_TABLE("Central",dCFx_wrt_Central,dCFy_wrt_Central,dCFz_wrt_Central,dCMx_wrt_Central,dCMy_wrt_Central,dCMz_wrt_Central,dCL_wrt_Central,dCD_wrt_Central,dCS_wrt_Central,dCMl_wrt_Central,dCMm_wrt_Central,dCMn_wrt_Central);
 
-#undef WRITE_EXPLICIT_DERIVATIVES
+#undef WRITE_STABILITY_TABLE
+#undef WRITE_STABILITY_ROW
+#undef WRITE_STABILITY_HEADER
 
     fprintf(StabFile,"#\n");
     fprintf(StabFile,"#\n");
