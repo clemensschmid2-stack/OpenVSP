@@ -4,7 +4,9 @@ This fork is derived from NASA's OpenVSP project.
 
 ## 2026-08-24 — Clemens Schmid
 
-- Replaced the legacy forward-only derivative matrix and vertical explicit
+- Changed native `vspaero -stab` output generation in
+  `src/vsp_aero/Solver/vspaero.C`, inside `CalculateStabilityDerivatives()`.
+  Replaced the legacy forward-only derivative matrix and vertical explicit
   derivative list with three aligned, complete matrices for forward, backward,
   and central finite differences. Each matrix repeats the unperturbed total
   coefficient so it can be read independently.
