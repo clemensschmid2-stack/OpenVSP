@@ -2,6 +2,14 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-25 — Clemens Schmid
+
+- Added isolated `-state-range <start> <count>` execution for parallel State
+  Sweep workers. Ranged workers retain global case IDs, use independent output
+  directories/checkpoints, and record both their range hash and the compatible
+  unranged configuration hash. Existing sequential sweeps and checkpoints are
+  unchanged.
+
 ## 2026-08-24 — Clemens Schmid
 
 - Added an isolated native VSPAERO `-state-sweep` mode in
@@ -14,6 +22,18 @@ This fork is derived from NASA's OpenVSP project.
 - Added repeatable `-state-design <name> <value>` metadata to State Sweep. The
   values are included in its configuration hash, manifest, and CSV rows so
   externally regenerated OpenVSP design states remain self-describing.
+- Added `-state-process-cases <count>` to stop a State Sweep cleanly after a
+  bounded number of aerodynamic solves. The checkpoint remains resumable and
+  the execution-only batch size does not alter the aerodynamic configuration
+  hash, allowing automation to relaunch VSPAERO periodically and release all
+  process-owned solver memory.
+- Made Windows checkpoint publication use an atomic replace with retries, so a
+  transient indexer or antivirus file lock does not terminate a long sweep.
+- Added optional per-physical-wing pressure/viscous `CFxyz` and `CMxyz` output
+  about caller-supplied OpenVSP rotation centers, plus pressure hinge-moment
+  coefficients for every physical control surface. Symmetry copies use their
+  own surface loops and hinge definitions and are never inferred by mirroring
+  another copy's loads.
 - Extended the black-box parity suite with cross-mode State Sweep checks:
   zero-rate output is compared with the official steady sweep, and positive
   P/Q/R and control states with official `-stab` perturbation cases.

@@ -9,7 +9,7 @@ normal `.vspaero` case file. The command line adds physical or reduced body-rate
 axes and optional control-group axes:
 
 ```text
-vspaero -state-sweep -state-phat "-0.05,0,0.05" -state-qhat "-0.03,0,0.03" -state-rhat "-0.05,0,0.05" -state-control 1 "-10,0,10" -state-chunk-size 25000 model
+vspaero -state-sweep -state-phat "-0.05,0,0.05" -state-qhat "-0.03,0,0.03" -state-rhat "-0.05,0,0.05" -state-control 1 "-10,0,10" -state-chunk-size 25000 -state-process-cases 500 model
 ```
 
 Physical rate options are `-state-p`, `-state-q`, and `-state-r`, in radians
@@ -53,7 +53,38 @@ configuration hash rejects changed axes, references, counts, rate conventions,
 or chunk size. Starting without `-state-resume` refuses to overwrite an
 existing sweep. Keep the model and `.vspaero` input unchanged while resuming.
 
-The output is intentionally limited to integrated coefficients. Surface loads,
+`-state-process-cases <count>` limits one process to that many aerodynamic
+solves and then closes native output files and exits successfully. Relaunch
+with `-state-resume` to continue. This execution limit is deliberately excluded
+from the configuration hash, so it may be changed between launches without
+invalidating the checkpoint. The repository automation defaults to 500 solves
+per process and preserves each launch's standard `.history` and `.lod` files
+under `native_batches/` before starting the next process.
+Checkpoint publication uses a temporary file and atomic replacement. On
+Windows, transient sharing violations are retried before the solver reports an
+error.
+
+For independent parallel workers, `-state-range <start> <count>` restricts a
+process to a contiguous range of global aerodynamic-case IDs. Its CSV rows keep
+the original global `case_id`. Ranged workers must use isolated working/output
+directories; their manifests record `range_start`, `range_count`, and the
+unranged `base_configuration_hash` used when merging. Omitting `-state-range`
+preserves the original sequential behavior and checkpoint hash.
+
+## Optional physical-surface loads
+
+`-state-wing-load <surface> <name> <x> <y> <z>` may be repeated to append
+`CFx/CFy/CFz` and `CMx/CMy/CMz` for individual physical wing surfaces. Moments
+use the supplied OpenVSP rotation center and standard `Bref/Cref/Bref`
+normalization. Pressure and VSPAERO's strip-wise viscous wing loads are
+included. Symmetry copies are passed as separate surfaces and are accumulated
+from their own solved loops; loads are never mirrored from another copy.
+
+`-state-hinge-loads` appends one pressure hinge-moment coefficient per physical
+control surface. Every surface uses its own loop list, hinge origin, and hinge
+direction, keeping symmetric controls separate. `Ch` is normalized by
+`q*Sref*Cref`. The manifest records wing centers and hinge-column names.
+
 ADB state storage, unsteady analysis, trim, adjoint analysis, stability
 derivatives, explicit coupled-state lists, and distributed sharding are not
 part of this mode.

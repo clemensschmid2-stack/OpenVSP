@@ -18,6 +18,7 @@
 
 #ifdef WIN32
 #include <direct.h>
+#include <windows.h>
 #else
 #include <sys/stat.h>
 #endif
@@ -331,6 +332,10 @@ int TrimNumberOfIterations_          = 10;
 int StateSweep_                      = 0;
 int StateSweepResume_                = 0;
 uint64_t StateSweepChunkSize_        = 25000;
+uint64_t StateSweepProcessCases_     = 0;
+uint64_t StateSweepRangeStart_       = 0;
+uint64_t StateSweepRangeCount_       = 0;
+std::string StateSweepOutputDirectory_;
 std::vector<double> StateSweepP_(1,0.);
 std::vector<double> StateSweepQ_(1,0.);
 std::vector<double> StateSweepR_(1,0.);
@@ -340,6 +345,13 @@ int StateSweepRIsReduced_            = -1;
 std::vector< std::vector<double> > StateSweepControls_;
 std::vector<std::string> StateSweepDesignNames_;
 std::vector<double> StateSweepDesignValues_;
+int StateSweepHingeLoads_              = 0;
+struct STATE_SWEEP_WING_LOAD {
+    int Surface;
+    std::string Name;
+    double Center[3];
+};
+std::vector<STATE_SWEEP_WING_LOAD> StateSweepWingLoads_;
 
 double TrimTolerance_                = 0.01;
 double TrimCLRequired_               = 0.0;
@@ -831,7 +843,11 @@ void PrintUsageHelp()
        printf(" -state-r|-state-rhat <csv>         Set physical [rad/Tunit] or reduced yaw-rate states.\n");
        printf(" -state-control <index> <csv>       Set one control-group deflection axis [deg].\n");
        printf(" -state-design <name> <value>       Record one externally applied design state.\n");
+       printf(" -state-wing-load <surface> <name> <x> <y> <z>  Output pressure CF/CM for one wing instance.\n");
+       printf(" -state-hinge-loads                Output pressure hinge-moment coefficients per physical control surface.\n");
        printf(" -state-chunk-size <rows>           Set rows per output CSV part (default 25000).\n");
+       printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
+       printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
        printf(" -state-resume                      Continue from the state-sweep checkpoint.\n");
        printf(" -stab-step-phat <value>            Set the reduced roll-rate perturbation.\n");
        printf(" -stab-step-qhat <value>            Set the reduced pitch-rate perturbation.\n");
@@ -966,6 +982,41 @@ void ParseInput(int argc, char *argv[])
 
        }
 
+       else if ( strcmp(argv[i],"-state-process-cases") == 0 ) {
+
+          char *End;
+          unsigned long long Cases = strtoull(argv[++i],&End,10);
+          if ( End == argv[i] || *End != '\0' || Cases == 0 ) {
+             printf("-state-process-cases requires a positive integer.\n");
+             exit(1);
+          }
+          StateSweepProcessCases_ = (uint64_t)Cases;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-range") == 0 ) {
+
+          char *EndStart, *EndCount;
+          unsigned long long Start = strtoull(argv[++i],&EndStart,10);
+          unsigned long long Count = strtoull(argv[++i],&EndCount,10);
+          if ( EndStart == argv[i-1] || *EndStart != '\0' ||
+               EndCount == argv[i] || *EndCount != '\0' || Count == 0 ) {
+             printf("-state-range requires a nonnegative start and positive count.\n"); exit(1);
+          }
+          StateSweepRangeStart_ = (uint64_t)Start;
+          StateSweepRangeCount_ = (uint64_t)Count;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-output-dir") == 0 ) {
+
+          StateSweepOutputDirectory_ = argv[++i];
+          if ( StateSweepOutputDirectory_.empty() ) {
+             printf("-state-output-dir requires a path.\n"); exit(1);
+          }
+
+       }
+
 #define PARSE_STATE_RATE(PHYSICAL, REDUCED, VALUES, MODE) \
        else if ( strcmp(argv[i],PHYSICAL) == 0 ) { \
           if ( MODE == 1 ) { printf("Do not combine %s and %s.\n",PHYSICAL,REDUCED); exit(1); } \
@@ -1006,6 +1057,32 @@ void ParseInput(int argc, char *argv[])
           }
           StateSweepDesignNames_.push_back(Name);
           StateSweepDesignValues_.push_back(Value);
+
+       }
+
+       else if ( strcmp(argv[i],"-state-wing-load") == 0 ) {
+
+          STATE_SWEEP_WING_LOAD Wing;
+          Wing.Surface = atoi(argv[++i]);
+          Wing.Name = argv[++i];
+          if ( Wing.Surface < 1 || Wing.Name.empty() ||
+               Wing.Name.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-") != std::string::npos ) {
+             printf("-state-wing-load requires a positive surface and a safe output name.\n"); exit(1);
+          }
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) {
+             char *End;
+             Wing.Center[Axis] = strtod(argv[++i],&End);
+             if ( End == argv[i] || *End != '\0' || !isfinite(Wing.Center[Axis]) ) {
+                printf("-state-wing-load center coordinates must be finite.\n"); exit(1);
+             }
+          }
+          StateSweepWingLoads_.push_back(Wing);
+
+       }
+
+       else if ( strcmp(argv[i],"-state-hinge-loads") == 0 ) {
+
+          StateSweepHingeLoads_ = 1;
 
        }
 
@@ -2761,6 +2838,19 @@ static uint64_t StateSweepConfigurationHash(void)
        Hash = StateSweepHashBytes(Hash,StateSweepDesignNames_[i].c_str(),StateSweepDesignNames_[i].size());
        HASH_VALUE(StateSweepDesignValues_[i]);
     }
+    // Preserve the pre-optional-load hash when neither output is requested so
+    // sweeps created by an earlier executable remain resumable.
+    if ( StateSweepHingeLoads_ || !StateSweepWingLoads_.empty() ) {
+       HASH_VALUE(StateSweepHingeLoads_);
+       for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
+          HASH_VALUE(StateSweepWingLoads_[i].Surface);
+          Hash = StateSweepHashBytes(Hash,StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.size());
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) HASH_VALUE(StateSweepWingLoads_[i].Center[Axis]);
+       }
+    }
+    if ( StateSweepRangeCount_ > 0 ) {
+       HASH_VALUE(StateSweepRangeStart_); HASH_VALUE(StateSweepRangeCount_);
+    }
     char InputPath[MAX_CHAR_SIZE];
     snprintf(InputPath,sizeof(InputPath),"%s.vspaero",FileName); Hash = StateSweepHashFile(Hash,InputPath);
     snprintf(InputPath,sizeof(InputPath),"%s.vspgeom",FileName); Hash = StateSweepHashFile(Hash,InputPath);
@@ -2779,8 +2869,23 @@ static void StateSweepWriteCheckpoint(const char *Path, uint64_t Hash, uint64_t 
             (unsigned long long)Next,(unsigned long long)Total);
     fflush(File);
     fclose(File);
-    remove(Path);
-    if ( rename(Temporary,Path) != 0 ) { printf("Could not publish State Sweep checkpoint: %s\n",Path); exit(1); }
+#ifdef WIN32
+    // Indexers and virus scanners can briefly hold the destination open on
+    // Windows.  Replace atomically and retry transient sharing violations.
+    int Published = 0;
+    for ( int Attempt = 0 ; Attempt < 40 && !Published ; Attempt++ ) {
+       Published = MoveFileExA(Temporary,Path,MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) != 0;
+       if ( !Published ) Sleep(50);
+    }
+    if ( !Published ) {
+       printf("Could not publish State Sweep checkpoint: %s (Windows error %lu)\n",Path,(unsigned long)GetLastError());
+       exit(1);
+    }
+#else
+    if ( rename(Temporary,Path) != 0 ) {
+       printf("Could not publish State Sweep checkpoint: %s (errno %d)\n",Path,errno); exit(1);
+    }
+#endif
 }
 
 static void StateSweepWriteCsvHeader(FILE *File)
@@ -2788,7 +2893,78 @@ static void StateSweepWriteCsvHeader(FILE *File)
     fprintf(File,"case_id,mach,reynolds,vinf,alpha_deg,beta_deg,p_hat,q_hat,r_hat,p_rad_per_tunit,q_rad_per_tunit,r_rad_per_tunit");
     for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) fprintf(File,",ctrl_%03d_deg",Control);
     for ( size_t i = 0 ; i < StateSweepDesignNames_.size() ; i++ ) fprintf(File,",design_%03d",(int)i + 1);
-    fprintf(File,",CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,CMl,CMm,CMn,stall_factor\n");
+    fprintf(File,",CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,CMl,CMm,CMn,stall_factor");
+    for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
+       fprintf(File,",%s_CFx,%s_CFy,%s_CFz,%s_CMx,%s_CMy,%s_CMz",
+               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str(),
+               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str(),
+               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str());
+    }
+    if ( StateSweepHingeLoads_ ) {
+       for ( int i = 1 ; i <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; i++ ) {
+          fprintf(File,",hinge_%03d_Ch",i);
+       }
+    }
+    fprintf(File,"\n");
+}
+
+static void StateSweepPressureLoadForLoops(const std::vector<int> &Loops, const double Center[3], double Load[6])
+{
+    for ( int i = 0 ; i < 6 ; i++ ) Load[i] = 0.;
+    for ( size_t j = 0 ; j < Loops.size() ; j++ ) {
+       int i = Loops[j];
+       // Control-surface loop lists and the final prolonged pressure field use
+       // the finest geometry grid (level zero).
+       VSP_LOOP &Loop = VSPAERO().VSPGeom().Grid(0).LoopList(i);
+       double Scale = -Loop.dCp() * Loop.Area() / Sref_;
+       double Fx = Scale * Loop.Nx(), Fy = Scale * Loop.Ny(), Fz = Scale * Loop.Nz();
+       double X = Loop.Xc() - Center[0], Y = Loop.Yc() - Center[1], Z = Loop.Zc() - Center[2];
+       Load[0] += Fx; Load[1] += Fy; Load[2] += Fz;
+       Load[3] += (Y*Fz - Z*Fy) / Bref_;
+       Load[4] += (Z*Fx - X*Fz) / Cref_;
+       Load[5] += (X*Fy - Y*Fx) / Bref_;
+    }
+}
+
+static void StateSweepWriteOptionalLoads(FILE *File)
+{
+    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+       std::vector<int> Loops;
+       for ( int i = 1 ; i <= VSPAERO().VSPGeom().Grid(0).NumberOfLoops() ; i++ ) {
+          if ( VSPAERO().VSPGeom().Grid(0).LoopList(i).SurfaceID() == StateSweepWingLoads_[Wing].Surface ) Loops.push_back(i);
+       }
+       double Load[6]; StateSweepPressureLoadForLoops(Loops,StateSweepWingLoads_[Wing].Center,Load);
+       // Add VSPAERO's strip-wise viscous force for this physical lifting
+       // surface.  Hinge moments intentionally remain pressure-only.
+       for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
+          if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
+          for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
+             VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
+             double AreaScale = Trail.LocalSpan()*Trail.LocalChord()/Sref_;
+             double Fx = Trail.CFox()*AreaScale, Fy = Trail.CFoy()*AreaScale, Fz = Trail.CFoz()*AreaScale;
+             int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());
+             double X = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Xc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Xc())-StateSweepWingLoads_[Wing].Center[0];
+             double Y = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Yc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Yc())-StateSweepWingLoads_[Wing].Center[1];
+             double Z = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Zc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Zc())-StateSweepWingLoads_[Wing].Center[2];
+             Load[0] += Fx; Load[1] += Fy; Load[2] += Fz;
+             Load[3] += (Y*Fz-Z*Fy)/Bref_; Load[4] += (Z*Fx-X*Fz)/Cref_; Load[5] += (X*Fy-Y*Fx)/Bref_;
+          }
+       }
+       for ( int i = 0 ; i < 6 ; i++ ) fprintf(File,",%.17g",Load[i]);
+    }
+    if ( StateSweepHingeLoads_ ) {
+       for ( int Control = 1 ; Control <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; Control++ ) {
+          CONTROL_SURFACE &Surface = VSPAERO().VSPGeom().ControlSurface(Control);
+          std::vector<int> Loops;
+          for ( int i = 1 ; i <= Surface.NumberOfLoops() ; i++ ) Loops.push_back(Surface.LoopList(i));
+          double Center[3] = { Surface.HingeNode_1(0), Surface.HingeNode_1(1), Surface.HingeNode_1(2) };
+          double Load[6]; StateSweepPressureLoadForLoops(Loops,Center,Load);
+          double Hinge = Load[3]*Bref_*Surface.HingeVec(0)/Cref_
+                       + Load[4]*Surface.HingeVec(1)
+                       + Load[5]*Bref_*Surface.HingeVec(2)/Cref_;
+          fprintf(File,",%.17g",Hinge);
+       }
+    }
 }
 
 void StateSweepSolve(void)
@@ -2818,8 +2994,21 @@ void StateSweepSolve(void)
        printf("Reduced Q State Sweep axes require Cref > 0.\n"); exit(1);
     }
 
+    uint64_t RangeStart = StateSweepRangeCount_ > 0 ? StateSweepRangeStart_ : 0;
+    uint64_t RangeEnd = AerodynamicCases;
+    if ( StateSweepRangeCount_ > 0 ) {
+       if ( RangeStart >= AerodynamicCases ) {
+          printf("State Sweep range starts beyond the aerodynamic case count.\n"); exit(1);
+       }
+       RangeEnd = StateSweepRangeCount_ > AerodynamicCases - RangeStart
+                ? AerodynamicCases : RangeStart + StateSweepRangeCount_;
+    }
+    uint64_t RangeStartRow = StateSweepMultiply(RangeStart,(uint64_t)NumberOfReCrefs_,"range start");
+    uint64_t RangeEndRow = StateSweepMultiply(RangeEnd,(uint64_t)NumberOfReCrefs_,"range end");
+
     char Directory[MAX_CHAR_SIZE], ManifestPath[MAX_CHAR_SIZE], CheckpointPath[MAX_CHAR_SIZE];
-    snprintf(Directory,sizeof(Directory),"%s.state_sweep",FileName);
+    if ( StateSweepOutputDirectory_.empty() ) snprintf(Directory,sizeof(Directory),"%s.state_sweep",FileName);
+    else snprintf(Directory,sizeof(Directory),"%s",StateSweepOutputDirectory_.c_str());
     snprintf(ManifestPath,sizeof(ManifestPath),"%s/manifest.json",Directory);
     snprintf(CheckpointPath,sizeof(CheckpointPath),"%s/checkpoint.txt",Directory);
 #ifdef WIN32
@@ -2829,7 +3018,13 @@ void StateSweepSolve(void)
 #endif
     if ( DirectoryResult != 0 && errno != EEXIST ) { printf("Could not create State Sweep directory: %s\n",Directory); exit(1); }
 
-    uint64_t Hash = StateSweepConfigurationHash(), NextRow = 0;
+    uint64_t Hash = StateSweepConfigurationHash(), BaseHash = Hash, NextRow = RangeStartRow;
+    if ( StateSweepRangeCount_ > 0 ) {
+       uint64_t SavedRangeStart = StateSweepRangeStart_, SavedRangeCount = StateSweepRangeCount_;
+       StateSweepRangeStart_ = StateSweepRangeCount_ = 0;
+       BaseHash = StateSweepConfigurationHash();
+       StateSweepRangeStart_ = SavedRangeStart; StateSweepRangeCount_ = SavedRangeCount;
+    }
     FILE *Checkpoint = fopen(CheckpointPath,"r");
     if ( StateSweepResume_ ) {
        unsigned long long SavedHash, SavedNext, SavedTotal;
@@ -2842,7 +3037,9 @@ void StateSweepSolve(void)
           printf("Cannot resume: State Sweep configuration does not match the checkpoint.\n"); exit(1);
        }
        NextRow = (uint64_t)SavedNext;
-       if ( NextRow > TotalRows ) { printf("Cannot resume: invalid checkpoint row.\n"); exit(1); }
+       if ( NextRow < RangeStartRow || NextRow > RangeEndRow ) {
+          printf("Cannot resume: checkpoint row is outside the requested range.\n"); exit(1);
+       }
     }
     else {
        if ( Checkpoint != NULL ) {
@@ -2857,15 +3054,18 @@ void StateSweepSolve(void)
           printf("State Sweep output exists without a checkpoint. Move or remove %s before starting a new run.\n",Directory);
           exit(1);
        }
-       StateSweepWriteCheckpoint(CheckpointPath,Hash,0,TotalRows);
+       StateSweepWriteCheckpoint(CheckpointPath,Hash,RangeStartRow,TotalRows);
     }
 
     FILE *Manifest = fopen(ManifestPath,"w");
     if ( Manifest == NULL ) { printf("Could not write State Sweep manifest: %s\n",ManifestPath); exit(1); }
     fprintf(Manifest,"{\n  \"format\": \"vspaero-state-sweep\",\n  \"format_version\": 1,\n");
     fprintf(Manifest,"  \"configuration_hash\": \"%016llx\",\n",(unsigned long long)Hash);
-    fprintf(Manifest,"  \"total_rows\": %llu,\n  \"aerodynamic_solves\": %llu,\n  \"chunk_size\": %llu,\n",
-            (unsigned long long)TotalRows,(unsigned long long)AerodynamicCases,(unsigned long long)StateSweepChunkSize_);
+    fprintf(Manifest,"  \"base_configuration_hash\": \"%016llx\",\n",(unsigned long long)BaseHash);
+    fprintf(Manifest,"  \"total_rows\": %llu,\n  \"aerodynamic_solves\": %llu,\n  \"chunk_size\": %llu,\n  \"process_cases\": %llu,\n  \"range_start\": %llu,\n  \"range_count\": %llu,\n",
+            (unsigned long long)TotalRows,(unsigned long long)AerodynamicCases,
+            (unsigned long long)StateSweepChunkSize_,(unsigned long long)StateSweepProcessCases_,
+            (unsigned long long)RangeStart,(unsigned long long)(RangeEnd - RangeStart));
     fprintf(Manifest,"  \"rate_axes\": {\"p\": \"%s\", \"q\": \"%s\", \"r\": \"%s\"},\n",
             StateSweepPIsReduced_ == 1 ? "reduced" : "physical",
             StateSweepQIsReduced_ == 1 ? "reduced" : "physical",
@@ -2879,12 +3079,25 @@ void StateSweepSolve(void)
        fprintf(Manifest,"%s{\"name\": \"%s\", \"column\": \"design_%03d\", \"value\": %.17g}",
                i == 0 ? "" : ", ",StateSweepDesignNames_[i].c_str(),(int)i + 1,StateSweepDesignValues_[i]);
     }
+    fprintf(Manifest,"],\n  \"wing_pressure_loads\": [");
+    for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
+       fprintf(Manifest,"%s{\"name\": \"%s\", \"surface\": %d, \"rotation_center\": [%.17g, %.17g, %.17g]}",
+               i == 0 ? "" : ", ",StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Surface,
+               StateSweepWingLoads_[i].Center[0],StateSweepWingLoads_[i].Center[1],StateSweepWingLoads_[i].Center[2]);
+    }
+    fprintf(Manifest,"],\n  \"hinge_pressure_loads\": [");
+    if ( StateSweepHingeLoads_ ) {
+       for ( int i = 1 ; i <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; i++ ) {
+          fprintf(Manifest,"%s{\"index\": %d, \"name\": \"%s\", \"column\": \"hinge_%03d_Ch\"}",
+                  i == 1 ? "" : ", ",i,VSPAERO().VSPGeom().ControlSurface(i).Name(),i);
+       }
+    }
     fprintf(Manifest,"]\n}\n");
     fclose(Manifest);
 
     printf("State Sweep: %llu aerodynamic solves, %llu output rows, chunk size %llu.\n",
            (unsigned long long)AerodynamicCases,(unsigned long long)TotalRows,(unsigned long long)StateSweepChunkSize_);
-    if ( NextRow == TotalRows ) { printf("State Sweep is already complete.\n"); return; }
+    if ( NextRow == RangeEndRow ) { printf("State Sweep range is already complete.\n"); return; }
 
     // State Sweep owns the compact CSV output. Avoid a potentially enormous ADB
     // solution stream while preserving the legacy output behavior of other modes.
@@ -2893,7 +3106,14 @@ void StateSweepSolve(void)
     FILE *Csv = NULL;
     uint64_t OpenChunk = UINT64_MAX;
     uint64_t StartAerodynamicCase = NextRow / (uint64_t)NumberOfReCrefs_;
-    for ( uint64_t AeroCase = StartAerodynamicCase ; AeroCase < AerodynamicCases ; AeroCase++ ) {
+    uint64_t EndAerodynamicCase = RangeEnd;
+    if ( StateSweepProcessCases_ > 0 && StateSweepProcessCases_ < RangeEnd - StartAerodynamicCase ) {
+       EndAerodynamicCase = StartAerodynamicCase + StateSweepProcessCases_;
+    }
+    printf("State Sweep process batch: aerodynamic cases %llu through %llu.\n",
+           (unsigned long long)StartAerodynamicCase,
+           (unsigned long long)(EndAerodynamicCase > 0 ? EndAerodynamicCase - 1 : 0));
+    for ( uint64_t AeroCase = StartAerodynamicCase ; AeroCase < EndAerodynamicCase ; AeroCase++ ) {
        uint64_t Decoder = AeroCase;
        std::vector<size_t> ControlIndex(NumberOfControlGroups_ + 1,0);
        for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
@@ -2930,7 +3150,9 @@ void StateSweepSolve(void)
        // process, including when a sweep resumes in the middle of its grid.
        uint64_t RunCase = AeroCase - StartAerodynamicCase + 1;
        int SolverCase = (int)((RunCase - 1) % (uint64_t)(INT_MAX - 1)) + 1;
-       if ( AeroCase + 1 == AerodynamicCases ) SolverCase = -SolverCase;
+       // A negative case closes files that were opened by case 1.  A singleton
+       // process must therefore remain case +1; process exit flushes/closes it.
+       if ( AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
        VSPAERO().Solve(SolverCase);
 
        for ( int ReynoldsIndex = 1 ; ReynoldsIndex <= NumberOfReCrefs_ ; ReynoldsIndex++ ) {
@@ -2965,8 +3187,10 @@ void StateSweepSolve(void)
           double CL = VSPAERO().CLo() + VSPAERO().CLiw();
           double CD = VSPAERO().CDo() + VSPAERO().CDiw();
           double CS = VSPAERO().CSo() + VSPAERO().CSiw();
-          fprintf(Csv,",%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g\n",
+          fprintf(Csv,",%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
                   CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,-CMx,CMy,-CMz,VSPAERO().MinStallFactor());
+          StateSweepWriteOptionalLoads(Csv);
+          fprintf(Csv,"\n");
           fflush(Csv);
           NextRow = Row + 1;
           StateSweepWriteCheckpoint(CheckpointPath,Hash,NextRow,TotalRows);
@@ -2976,6 +3200,10 @@ void StateSweepSolve(void)
        }
     }
     if ( Csv != NULL ) fclose(Csv);
+    if ( NextRow < RangeEndRow ) {
+       printf("State Sweep process batch complete at row %llu / %llu for this range; resume to continue.\n",
+              (unsigned long long)NextRow,(unsigned long long)RangeEndRow);
+    }
 }
 
 /*##############################################################################
