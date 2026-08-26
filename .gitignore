@@ -3,7 +3,10 @@ build/
 build-msvc/
 build-msvc-full/
 parity_tests/_work/
+parity_tests/_state_sweep_regression_work/
 parity_tests/parity_report.json
+parity_tests/baselines/
+parity_tests/state_sweep_regression_report.json
 /parity_wing*
 buildlibs/
 inst/

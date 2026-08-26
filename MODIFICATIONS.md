@@ -2,6 +2,17 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-26 — Clemens Schmid
+
+- Corrected State Sweep total body-axis `CFy` and `CFz` output to use the
+  wake-induced force components (`CFiwy`, `CFiwz`), matching the official
+  normal sweep. The previous implementation used surface-inviscid components
+  and produced a visible `CFz` discrepancy for thick/panel geometry.
+- Expanded official-build parity to cover State Sweep in thin and thick modes,
+  added mass-property parity, and added stable-main State Sweep regression for
+  operating axes, physical/reduced rates, controls, batching/resume, and ranged
+  execution.
+
 ## 2026-08-25 — Clemens Schmid
 
 - Added isolated `-state-range <start> <count>` execution for parallel State

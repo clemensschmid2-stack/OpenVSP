@@ -31,6 +31,11 @@ def extract_numeric_results(vsp, result_name: str) -> list[dict[str, object]]:
                 values[name] = list(vsp.GetDoubleResults(result_id, name))
             elif result_type == vsp.INT_DATA:
                 values[name] = list(vsp.GetIntResults(result_id, name))
+            elif result_type == vsp.VEC3D_DATA:
+                values[name] = [
+                    [float(value.x()), float(value.y()), float(value.z())]
+                    for value in vsp.GetVec3dResults(result_id, name)
+                ]
         output.append(values)
     return output
 
@@ -38,6 +43,7 @@ def extract_numeric_results(vsp, result_name: str) -> list[dict[str, object]]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--distribution", type=Path, required=True)
+    parser.add_argument("--vspaero-directory", type=Path)
     parser.add_argument("--mode", choices=("thin", "thick"), required=True)
     parser.add_argument("--analysis", choices=("base", "stab"), required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -47,7 +53,9 @@ def main() -> None:
     os.add_dll_directory(str(distribution))
     import openvsp as vsp
 
-    vsp.SetVSPAEROPath(str(distribution))
+    vsp.SetVSPAEROPath(str(
+        args.vspaero_directory.resolve() if args.vspaero_directory else distribution
+    ))
     vsp.VSPRenew()
 
     # Cp slicing is unrelated to coefficient parity and launches vsploads.exe.
@@ -80,6 +88,14 @@ def main() -> None:
     vsp.AutoGroupVSPAEROControlSurfaces()
     vsp.SetVSPAERORefWingID(wing_id)
     vsp.WriteVSPFile("parity_wing.vsp3", vsp.SET_ALL)
+
+    mass_analysis = "MassProp"
+    vsp.SetAnalysisInputDefaults(mass_analysis)
+    set_int(vsp, mass_analysis, "Set", vsp.SET_ALL)
+    set_int(vsp, mass_analysis, "NumMassSlices", 81)
+    mass_id = vsp.ExecAnalysis(mass_analysis)
+    if not mass_id:
+        raise RuntimeError("MassProp returned no result")
 
     geometry = "VSPAEROComputeGeometry"
     vsp.SetAnalysisInputDefaults(geometry)
@@ -128,11 +144,14 @@ def main() -> None:
     payload = {
         "mode": args.mode,
         "analysis": args.analysis,
+        "mass_properties": extract_numeric_results(vsp, "Mass_Properties"),
         "history": extract_numeric_results(vsp, "VSPAERO_History"),
         "stability": extract_numeric_results(vsp, "VSPAERO_Stab"),
     }
     if not payload["history"]:
         raise RuntimeError("VSPAERO produced no history results")
+    if not payload["mass_properties"]:
+        raise RuntimeError("MassProp produced no mass-property results")
     if args.analysis == "stab" and not payload["stability"]:
         raise RuntimeError("VSPAERO produced no stability results")
 

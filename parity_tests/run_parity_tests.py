@@ -19,7 +19,7 @@ ROOT = HERE.parent
 DEFAULT_OFFICIAL = ROOT / "reference_builds" / "OpenVSP-3.51.2-win64"
 DEFAULT_CUSTOM = ROOT / "build-msvc-full" / "install"
 CASES = (("thin", "base"), ("thin", "stab"), ("thick", "base"), ("thick", "stab"))
-VOLATILE_FIELDS = {"Wall_Time", "WallTime"}
+VOLATILE_FIELDS = {"Wall_Time", "WallTime", "Analysis_Duration_Sec"}
 COEFFICIENTS = ("CFx", "CFy", "CFz", "CMx", "CMy", "CMz", "CL", "CD", "CS", "CMl", "CMm", "CMn")
 
 
@@ -36,6 +36,7 @@ def run_case(
     analysis: str,
     output_dir: Path,
     timeout: int,
+    vspaero_directory: Path | None = None,
 ) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     result_file = output_dir / "results.json"
@@ -51,6 +52,8 @@ def run_case(
         "--analysis", analysis,
         "--output", str(result_file),
     ]
+    if vspaero_directory is not None:
+        command.extend(("--vspaero-directory", str(vspaero_directory)))
     with log_file.open("w", encoding="utf-8") as log:
         subprocess.run(
             command,
@@ -187,14 +190,15 @@ def compare_coefficients(
 def run_state_sweep_cross_checks(
     custom: Path,
     work: Path,
+    mode: str,
     official_base: dict[str, object],
     official_stab: dict[str, object],
     timeout: int,
     rtol: float,
     atol: float,
 ) -> tuple[list[dict[str, object]], int]:
-    source = work / "thin_stab" / "custom"
-    output = work / "state_sweep_crosscheck"
+    source = work / f"{mode}_stab" / "custom"
+    output = work / f"state_sweep_crosscheck_{mode}"
     output.mkdir(parents=True, exist_ok=True)
     for pattern in ("parity_wing.vspgeom", "parity_wing.vspaero", "parity_wing.vkey", "parity_wing.csf",
                     "parity_wing*.taglist", "parity_wing*.tag"):
@@ -246,6 +250,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--official", type=Path, default=DEFAULT_OFFICIAL)
     parser.add_argument("--custom", type=Path, default=DEFAULT_CUSTOM)
+    parser.add_argument(
+        "--custom-vspaero", type=Path,
+        help="Candidate vspaero.exe; use custom distribution for the Python API",
+    )
     parser.add_argument("--rtol", type=float, default=1e-6)
     parser.add_argument("--atol", type=float, default=1e-8)
     parser.add_argument("--state-rtol", type=float, default=1e-4)
@@ -256,10 +264,16 @@ def main() -> int:
 
     official = args.official.resolve()
     custom = args.custom.resolve()
+    custom_vspaero = (
+        args.custom_vspaero.resolve() if args.custom_vspaero
+        else custom / "vspaero.exe"
+    )
     for distribution in (official, custom):
         if not (distribution / "vspaero.exe").is_file():
             parser.error(f"vspaero.exe not found in {distribution}")
         python_package(distribution)
+    if not custom_vspaero.is_file():
+        parser.error(f"candidate vspaero.exe not found: {custom_vspaero}")
 
     work = HERE / "_work"
     if work.exists():
@@ -279,7 +293,10 @@ def main() -> int:
         print(f"Running {case_name}: official", flush=True)
         official_result = run_case(official, mode, analysis, work / case_name / "official", args.timeout)
         print(f"Running {case_name}: custom", flush=True)
-        custom_result = run_case(custom, mode, analysis, work / case_name / "custom", args.timeout)
+        custom_result = run_case(
+            custom, mode, analysis, work / case_name / "custom", args.timeout,
+            custom_vspaero.parent,
+        )
         completed[case_name] = (official_result, custom_result)
         differences, failures = compare(official_result, custom_result, args.rtol, args.atol)
         identity_failures = check_central_identities(custom_result) if analysis == "stab" else []
@@ -299,13 +316,21 @@ def main() -> int:
             }
         )
 
-    print("Running State Sweep cross-mode checks", flush=True)
-    state_checks, state_failures = run_state_sweep_cross_checks(
-        custom, work, completed["thin_base"][0], completed["thin_stab"][0],
-        args.timeout, args.state_rtol, args.state_atol,
-    )
+    all_state_checks = []
+    state_failures = 0
+    for mode in ("thin", "thick"):
+        print(f"Running State Sweep cross-mode checks: {mode}", flush=True)
+        mode_checks, mode_failures = run_state_sweep_cross_checks(
+            custom_vspaero.parent, work, mode,
+            completed[f"{mode}_base"][0], completed[f"{mode}_stab"][0],
+            args.timeout, args.state_rtol, args.state_atol,
+        )
+        for check in mode_checks:
+            check["geometry_mode"] = mode
+        all_state_checks.extend(mode_checks)
+        state_failures += mode_failures
     total_failures += state_failures
-    report["state_sweep_cross_checks"] = state_checks
+    report["state_sweep_cross_checks"] = all_state_checks
     report["state_sweep_tolerances"] = {"rtol": args.state_rtol, "atol": args.state_atol}
     print(f"  {'PASS' if state_failures == 0 else 'FAIL'}: {state_failures} coefficient mismatches")
 

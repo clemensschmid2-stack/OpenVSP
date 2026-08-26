@@ -3179,8 +3179,8 @@ void StateSweepSolve(void)
           }
           for ( size_t i = 0 ; i < StateSweepDesignValues_.size() ; i++ ) fprintf(Csv,",%.17g",StateSweepDesignValues_[i]);
           double CFx = VSPAERO().CFox() + VSPAERO().CFiwx();
-          double CFy = VSPAERO().CFoy() + VSPAERO().CFiy();
-          double CFz = VSPAERO().CFoz() + VSPAERO().CFiz();
+          double CFy = VSPAERO().CFoy() + VSPAERO().CFiwy();
+          double CFz = VSPAERO().CFoz() + VSPAERO().CFiwz();
           double CMx = VSPAERO().CMox() + VSPAERO().CMix();
           double CMy = VSPAERO().CMoy() + VSPAERO().CMiy();
           double CMz = VSPAERO().CMoz() + VSPAERO().CMiz();
