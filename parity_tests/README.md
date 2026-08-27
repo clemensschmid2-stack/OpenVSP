@@ -86,3 +86,16 @@ batch/resume/range invariance continues to compare `CFy/CFz` normally.
 `run_native_regression.bat` is the mandatory combined gate and runs official
 parity first, followed by stable-main State Sweep regression. The batch launchers
 prefer the active Conda environment's Python executable when available.
+
+## Experimental continuation regression
+
+`run_state_continuation_regression.py` is the dedicated acceptance harness for
+circulation warm starts, wake warm starts, and convergence-based early wake
+termination. Its test rationale, proposed CLI contract, tolerances, profiling
+requirements, and merge gates are defined in
+[`CONTINUATION_VALIDATION.md`](CONTINUATION_VALIDATION.md).
+
+Before the native feature is implemented, run `--plan-only` to emit and inspect
+the test matrix. Once implementation begins, `--require-feature` makes missing
+CLI support or profiling fields a test failure. This suite supplements rather
+than replaces official parity and `run_state_sweep_regression.py`.

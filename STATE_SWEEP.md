@@ -111,3 +111,8 @@ direction, keeping symmetric controls separate. `Ch` is normalized by
 ADB state storage, unsteady analysis, trim, adjoint analysis, stability
 derivatives, explicit coupled-state lists, and distributed sharding are not
 part of this mode.
+
+The proposed circulation/wake continuation and early-convergence mode is not
+yet implemented. Its reserved CLI contract, correctness tolerances, mandatory
+test matrix, and merge gates are documented in
+[`parity_tests/CONTINUATION_VALIDATION.md`](parity_tests/CONTINUATION_VALIDATION.md).

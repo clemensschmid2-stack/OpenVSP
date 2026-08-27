@@ -18,6 +18,10 @@ This fork is derived from NASA's OpenVSP project.
 - Added regression coverage comparing fast-order results by physical state
   against canonical traversal, in addition to official-build parity and the
   existing batching/range invariance checks.
+- Added a pre-implementation continuation validation harness and acceptance
+  specification covering traversal dependence, repetition, process boundaries,
+  forced interruption/resume, difficult states, incompatible-state fallback,
+  optional physical-side loads, and profiling/iteration accounting.
 
 ## 2026-08-26 — Clemens Schmid
 
