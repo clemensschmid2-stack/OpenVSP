@@ -6,7 +6,15 @@
 
 #include "VSP_Solver.H"
 
+#include <chrono>
+
 #include "START_NAME_SPACE.H"
+
+static double StateSweepProfileClock(void)
+{
+    using Clock = std::chrono::steady_clock;
+    return std::chrono::duration<double>(Clock::now().time_since_epoch()).count();
+}
 
 /*##############################################################################
 #                                                                              #
@@ -43,6 +51,12 @@ void VSP_SOLVER::init(void)
     int i;
 
     Verbose_ = 0;
+
+    StateSweepProfiling_ = 0;
+    StateSweepReuseInitialInteractionList_ = 0;
+    StateSweepReusePreconditioner_ = 0;
+    StateSweepReuseWakeInteractionLists_ = 0;
+    ResetStateSweepProfile();
     
     FirstTimeSetup_ = 1;
     
@@ -2693,6 +2707,7 @@ void VSP_SOLVER::Solve(int Case)
     char StatusFileName[MAX_CHAR_SIZE], LoadFileName[MAX_CHAR_SIZE], ADBFileName[MAX_CHAR_SIZE];
     char GroupFileName[MAX_CHAR_SIZE], RotorFileName[MAX_CHAR_SIZE], SurveyFileName[MAX_CHAR_SIZE];
     char QUADTREEFileName[MAX_CHAR_SIZE];
+    double ProfileStart = 0.;
     
     // Zero out solution
 
@@ -2725,6 +2740,8 @@ void VSP_SOLVER::Solve(int Case)
     // Initialize wakes
     
     if ( !RestartFromPreviousSolve_ ) {
+
+       if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
        
        // Mark any wakes coming off rotors
        
@@ -2737,6 +2754,8 @@ void VSP_SOLVER::Solve(int Case)
        // Initialize the wake trailing vortices
    
        InitializeTrailingVortices();
+
+       if ( StateSweepProfiling_ ) ProfileWakeInitializationSeconds_ += StateSweepProfileClock() - ProfileStart;
        
     }
            
@@ -2751,7 +2770,9 @@ void VSP_SOLVER::Solve(int Case)
        double Mem1 = mymemory();
 #endif             
  
-       CreateSurfaceVorticesInteractionList();
+       if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
+       if ( !StateSweepReuseInitialInteractionList_ ) CreateSurfaceVorticesInteractionList();
+       if ( StateSweepProfiling_ ) ProfileInteractionListSeconds_ += StateSweepProfileClock() - ProfileStart;
 
 #ifdef MYMEMORY    
        
@@ -2775,9 +2796,11 @@ void VSP_SOLVER::Solve(int Case)
 
 #endif    
 
-    if ( !DumpGeom_ && Preconditioner_ != MATCON ) CalculateDiagonal();       
+    if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
+    if ( !DumpGeom_ && Preconditioner_ != MATCON && !StateSweepReusePreconditioner_ ) CalculateDiagonal();
     
-    if ( !DumpGeom_ && Preconditioner_ == MATCON ) CreateMatrixPreconditioners();
+    if ( !DumpGeom_ && Preconditioner_ == MATCON && !StateSweepReusePreconditioner_ ) CreateMatrixPreconditioners();
+    if ( StateSweepProfiling_ ) ProfilePreconditionerSeconds_ += StateSweepProfileClock() - ProfileStart;
        
 #ifdef MYMEMORY    
 
@@ -3178,11 +3201,17 @@ void VSP_SOLVER::Solve(int Case)
           
        Converged = 0;
        
+       double ProfileIterationStart = StateSweepProfiling_ ? StateSweepProfileClock() : 0.;
        while ( CurrentWakeIteration_ <= WakeIterations_ && !Converged ) {
 
           // Update the vortex interaction lists
 
-          if ( ( CurrentWakeIteration_ > 1 && CurrentWakeIteration_ <= FreezeMultiPoleAtIteration_ && VSPGeom().NumberOfVortexSheets() > 0 ) && !TimeAccurate_ ) CreateSurfaceVorticesInteractionList();
+          if ( ( CurrentWakeIteration_ > 1 && CurrentWakeIteration_ <= FreezeMultiPoleAtIteration_ && VSPGeom().NumberOfVortexSheets() > 0 ) &&
+               !TimeAccurate_ && !StateSweepReuseWakeInteractionLists_ ) {
+             if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
+             CreateSurfaceVorticesInteractionList();
+             if ( StateSweepProfiling_ ) ProfileInteractionListSeconds_ += StateSweepProfileClock() - ProfileStart;
+          }
 
           // Freeze the wake 
           
@@ -3194,7 +3223,9 @@ void VSP_SOLVER::Solve(int Case)
 
           // Solve the linear system
 
+          if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
           SolveForwardLinearSystem();
+          if ( StateSweepProfiling_ ) ProfileLinearSolveSeconds_ += StateSweepProfileClock() - ProfileStart;
 
           // Update residual if this is the last iteration
                    
@@ -3212,7 +3243,9 @@ void VSP_SOLVER::Solve(int Case)
    
           // Calculate forces
             
+          if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
           CalculateForces();
+          if ( StateSweepProfiling_ ) ProfileForceSeconds_ += StateSweepProfileClock() - ProfileStart;
 
           // Output status
 
@@ -3257,6 +3290,8 @@ void VSP_SOLVER::Solve(int Case)
           CurrentWakeIteration_++;
              
        }
+
+       if ( StateSweepProfiling_ ) ProfileIterationSeconds_ += StateSweepProfileClock() - ProfileIterationStart;
 
        if ( TimeAccurate_ ) { OutputStatusFile(1); }
        

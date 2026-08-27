@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include <errno.h>
+#include <chrono>
 
 #ifdef WIN32
 #include <direct.h>
@@ -331,6 +332,8 @@ int TrimNumberOfIterations_          = 10;
 // product is never materialized in memory.
 int StateSweep_                      = 0;
 int StateSweepResume_                = 0;
+int StateSweepProfile_               = 0;
+int StateSweepFastOrder_             = 0;
 uint64_t StateSweepChunkSize_        = 25000;
 uint64_t StateSweepProcessCases_     = 0;
 uint64_t StateSweepRangeStart_       = 0;
@@ -849,6 +852,8 @@ void PrintUsageHelp()
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
        printf(" -state-resume                      Continue from the state-sweep checkpoint.\n");
+       printf(" -state-profile                     Write aggregated State Sweep phase timings.\n");
+       printf(" -state-fast-order                  Group Mach/control states and reuse invariant setup.\n");
        printf(" -stab-step-phat <value>            Set the reduced roll-rate perturbation.\n");
        printf(" -stab-step-qhat <value>            Set the reduced pitch-rate perturbation.\n");
        printf(" -stab-step-rhat <value>            Set the reduced yaw-rate perturbation.\n");
@@ -967,6 +972,18 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-resume") == 0 ) {
 
           StateSweepResume_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-profile") == 0 ) {
+
+          StateSweepProfile_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-fast-order") == 0 ) {
+
+          StateSweepFastOrder_ = 1;
 
        }
 
@@ -2781,6 +2798,12 @@ void ApplyControlDeflections()
 #                                                                              #
 ##############################################################################*/
 
+static double StateSweepProfileClock(void)
+{
+    using Clock = std::chrono::steady_clock;
+    return std::chrono::duration<double>(Clock::now().time_since_epoch()).count();
+}
+
 static uint64_t StateSweepMultiply(uint64_t Left, uint64_t Right, const char *Axis)
 {
     if ( Right != 0 && Left > UINT64_MAX / Right ) {
@@ -2820,6 +2843,9 @@ static uint64_t StateSweepConfigurationHash(void)
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);
     HASH_VALUE(Xcg_); HASH_VALUE(Ycg_); HASH_VALUE(Zcg_); HASH_VALUE(Vinf_);
     HASH_VALUE(StateSweepChunkSize_);
+    // Preserve hashes from builds predating fast ordering when it is omitted,
+    // so existing canonical checkpoints remain resumable.
+    if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
     HASH_VALUE(NumberOfMachs_); HASH_VALUE(NumberOfAoAs_);
     HASH_VALUE(NumberOfBetas_); HASH_VALUE(NumberOfReCrefs_);
     HASH_VALUE(NumberOfControlGroups_);
@@ -3062,6 +3088,7 @@ void StateSweepSolve(void)
     fprintf(Manifest,"{\n  \"format\": \"vspaero-state-sweep\",\n  \"format_version\": 1,\n");
     fprintf(Manifest,"  \"configuration_hash\": \"%016llx\",\n",(unsigned long long)Hash);
     fprintf(Manifest,"  \"base_configuration_hash\": \"%016llx\",\n",(unsigned long long)BaseHash);
+    fprintf(Manifest,"  \"case_order\": \"%s\",\n",StateSweepFastOrder_ ? "mach_control_grouped" : "canonical");
     fprintf(Manifest,"  \"total_rows\": %llu,\n  \"aerodynamic_solves\": %llu,\n  \"chunk_size\": %llu,\n  \"process_cases\": %llu,\n  \"range_start\": %llu,\n  \"range_count\": %llu,\n",
             (unsigned long long)TotalRows,(unsigned long long)AerodynamicCases,
             (unsigned long long)StateSweepChunkSize_,(unsigned long long)StateSweepProcessCases_,
@@ -3113,19 +3140,46 @@ void StateSweepSolve(void)
     printf("State Sweep process batch: aerodynamic cases %llu through %llu.\n",
            (unsigned long long)StartAerodynamicCase,
            (unsigned long long)(EndAerodynamicCase > 0 ? EndAerodynamicCase - 1 : 0));
+    double ProfileProcessStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
+    double ProfileSolveSeconds = 0.;
+    double ProfileReynoldsSeconds = 0.;
+    double ProfileOutputSeconds = 0.;
+    uint64_t ReusedInvariantCases = 0;
+    VSPAERO().StateSweepProfiling() = StateSweepProfile_;
+    if ( StateSweepProfile_ ) VSPAERO().ResetStateSweepProfile();
+    int PreviousMachIndex = -1;
+    std::vector<size_t> PreviousControlIndex;
     for ( uint64_t AeroCase = StartAerodynamicCase ; AeroCase < EndAerodynamicCase ; AeroCase++ ) {
        uint64_t Decoder = AeroCase;
        std::vector<size_t> ControlIndex(NumberOfControlGroups_ + 1,0);
-       for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
-          ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
-          Decoder /= (uint64_t)StateSweepControls_[Control].size();
+       size_t RIndex, QIndex, PIndex;
+       int AlphaIndex, MachIndex, BetaIndex;
+       if ( StateSweepFastOrder_ ) {
+          // Keep the aerodynamic matrix invariants together: rates vary fastest,
+          // followed by incidence, while Mach and control state vary slowest.
+          RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
+          QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
+          PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
+          AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
+          BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1; Decoder /= (uint64_t)NumberOfBetas_;
+          MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
+          for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
+             ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
+             Decoder /= (uint64_t)StateSweepControls_[Control].size();
+          }
        }
-       size_t RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
-       size_t QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
-       size_t PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
-       int AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
-       int MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
-       int BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1;
+       else {
+          for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
+             ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
+             Decoder /= (uint64_t)StateSweepControls_[Control].size();
+          }
+          RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
+          QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
+          PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
+          AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
+          MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
+          BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1;
+       }
 
        double PInput = StateSweepP_[PIndex], QInput = StateSweepQ_[QIndex], RInput = StateSweepR_[RIndex];
        double P = StateSweepPIsReduced_ == 1 ? 2. * Vinf_ * PInput / Bref_ : PInput;
@@ -3143,6 +3197,14 @@ void StateSweepSolve(void)
           ControlSurfaceGroup_[Control].ControlSurface_DeflectionAngle() = StateSweepControls_[Control][ControlIndex[Control]];
        }
        ApplyControlDeflections();
+       int ReuseInvariantSetup = StateSweepFastOrder_ && PreviousMachIndex == MachIndex &&
+                                 PreviousControlIndex == ControlIndex;
+       VSPAERO().StateSweepReuseInitialInteractionList() = ReuseInvariantSetup;
+       VSPAERO().StateSweepReusePreconditioner() = ReuseInvariantSetup;
+       VSPAERO().StateSweepReuseWakeInteractionLists() = StateSweepFastOrder_;
+       if ( ReuseInvariantSetup ) ReusedInvariantCases++;
+       PreviousMachIndex = MachIndex;
+       PreviousControlIndex = ControlIndex;
        VSPAERO().ReCref() = ReCrefList_[1];
        VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
        snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE,"State Sweep: %llu",(unsigned long long)AeroCase);
@@ -3153,13 +3215,20 @@ void StateSweepSolve(void)
        // A negative case closes files that were opened by case 1.  A singleton
        // process must therefore remain case +1; process exit flushes/closes it.
        if ( AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
+       double ProfileStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
        VSPAERO().Solve(SolverCase);
+       if ( StateSweepProfile_ ) ProfileSolveSeconds += StateSweepProfileClock() - ProfileStart;
 
        for ( int ReynoldsIndex = 1 ; ReynoldsIndex <= NumberOfReCrefs_ ; ReynoldsIndex++ ) {
           uint64_t Row = AeroCase * (uint64_t)NumberOfReCrefs_ + (uint64_t)(ReynoldsIndex - 1);
           VSPAERO().ReCref() = ReCrefList_[ReynoldsIndex];
-          if ( ReynoldsIndex > 1 ) VSPAERO().ReCalculateForces();
+          if ( ReynoldsIndex > 1 ) {
+             if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
+             VSPAERO().ReCalculateForces();
+             if ( StateSweepProfile_ ) ProfileReynoldsSeconds += StateSweepProfileClock() - ProfileStart;
+          }
           if ( Row < NextRow ) continue;
+          if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
           uint64_t Chunk = Row / StateSweepChunkSize_;
           if ( Csv == NULL || Chunk != OpenChunk ) {
              if ( Csv != NULL ) fclose(Csv);
@@ -3194,12 +3263,42 @@ void StateSweepSolve(void)
           fflush(Csv);
           NextRow = Row + 1;
           StateSweepWriteCheckpoint(CheckpointPath,Hash,NextRow,TotalRows);
+          if ( StateSweepProfile_ ) ProfileOutputSeconds += StateSweepProfileClock() - ProfileStart;
           if ( NextRow % 100 == 0 || NextRow == TotalRows ) {
              printf("State Sweep progress: %llu / %llu rows.\n",(unsigned long long)NextRow,(unsigned long long)TotalRows);
           }
        }
     }
     if ( Csv != NULL ) fclose(Csv);
+    if ( StateSweepProfile_ ) {
+       double ProfileProcessSeconds = StateSweepProfileClock() - ProfileProcessStart;
+       char ProfilePath[MAX_CHAR_SIZE];
+       snprintf(ProfilePath,sizeof(ProfilePath),"%s/profile.json",Directory);
+       FILE *Profile = fopen(ProfilePath,"w");
+       if ( Profile == NULL ) { printf("Could not write State Sweep profile: %s\n",ProfilePath); exit(1); }
+       fprintf(Profile,"{\n");
+       fprintf(Profile,"  \"format\": \"vspaero-state-sweep-profile\",\n  \"format_version\": 1,\n");
+       fprintf(Profile,"  \"aerodynamic_cases\": %llu,\n",
+               (unsigned long long)(EndAerodynamicCase - StartAerodynamicCase));
+       fprintf(Profile,"  \"output_rows\": %llu,\n",
+               (unsigned long long)((EndAerodynamicCase - StartAerodynamicCase) * (uint64_t)NumberOfReCrefs_));
+       fprintf(Profile,"  \"threads\": %d,\n",NumberOfThreads_);
+       fprintf(Profile,"  \"reused_invariant_setup_cases\": %llu,\n",(unsigned long long)ReusedInvariantCases);
+       fprintf(Profile,"  \"seconds\": {\n");
+       fprintf(Profile,"    \"process_total\": %.17g,\n",ProfileProcessSeconds);
+       fprintf(Profile,"    \"solver_calls\": %.17g,\n",ProfileSolveSeconds);
+       fprintf(Profile,"    \"wake_initialization\": %.17g,\n",VSPAERO().StateSweepProfileWakeInitialization());
+       fprintf(Profile,"    \"interaction_lists\": %.17g,\n",VSPAERO().StateSweepProfileInteractionLists());
+       fprintf(Profile,"    \"preconditioner\": %.17g,\n",VSPAERO().StateSweepProfilePreconditioner());
+       fprintf(Profile,"    \"wake_iterations\": %.17g,\n",VSPAERO().StateSweepProfileIterations());
+       fprintf(Profile,"    \"linear_solve_with_wake_update\": %.17g,\n",VSPAERO().StateSweepProfileLinearSolve());
+       fprintf(Profile,"    \"force_integration\": %.17g,\n",VSPAERO().StateSweepProfileForces());
+       fprintf(Profile,"    \"additional_reynolds_force_recalculation\": %.17g,\n",ProfileReynoldsSeconds);
+       fprintf(Profile,"    \"csv_and_checkpoint_output\": %.17g\n",ProfileOutputSeconds);
+       fprintf(Profile,"  }\n}\n");
+       fclose(Profile);
+       printf("State Sweep profile: %s\n",ProfilePath);
+    }
     if ( NextRow < RangeEndRow ) {
        printf("State Sweep process batch complete at row %llu / %llu for this range; resume to continue.\n",
               (unsigned long long)NextRow,(unsigned long long)RangeEndRow);

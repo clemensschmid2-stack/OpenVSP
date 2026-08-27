@@ -2,8 +2,28 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-27 - Clemens Schmid
+
+- Added opt-in `-state-fast-order` execution for native State Sweep. It makes
+  P/Q/R the innermost axes and keeps Mach/control combinations contiguous, then
+  reuses the initial surface interaction list and matrix preconditioner while
+  those invariant inputs are unchanged. Alpha, beta, and rates remain fully
+  solved states; wake initialization, wake relaxation, and force integration
+  still run independently for every case.
+- Retained the fixed-surface interaction list through steady wake-relaxation
+  iterations in fast-order State Sweep. The list is a function of surface
+  geometry, Mach, and `FarAway`; wake-node locations are not inputs to its
+  construction. Wake geometry, induced velocities, circulation, and loads are
+  still updated and solved on every iteration.
+- Added regression coverage comparing fast-order results by physical state
+  against canonical traversal, in addition to official-build parity and the
+  existing batching/range invariance checks.
+
 ## 2026-08-26 — Clemens Schmid
 
+- Added opt-in `-state-profile` aggregated native phase timing for State Sweep.
+  The JSON report separates solver setup, wake iterations, force work, and
+  streamed-output costs without changing case execution or numerical results.
 - Corrected State Sweep total body-axis `CFy` and `CFz` output to use the
   wake-induced force components (`CFiwy`, `CFiwz`), matching the official
   normal sweep. The previous implementation used surface-inviscid components

@@ -64,12 +64,35 @@ Checkpoint publication uses a temporary file and atomic replacement. On
 Windows, transient sharing violations are retried before the solver reports an
 error.
 
+`-state-profile` writes an aggregated `profile.json` beside the streamed CSV
+parts. It records process/solver time plus wake initialization, interaction-list
+construction, preconditioner construction, wake iterations, linear solves,
+force integration, additional Reynolds force recalculation, and CSV/checkpoint
+output. Profiling is opt-in and is excluded from the aerodynamic configuration
+hash, so it can be enabled for a resumed run without invalidating results.
+
+`-state-fast-order` enables a performance-oriented case mapping. P/Q/R and
+incidence states vary inside each contiguous Mach/control block. Within that
+block, VSPAERO reuses the initial surface interaction list and matrix
+preconditioner because geometry, control deflection, and Mach are unchanged.
+Every case still performs its own free-stream/wake initialization, wake
+iterations, linear solution, and force integration; this is not a warm start.
+During each steady solve, the fixed-surface interaction list is also retained
+across wake iterations. Relaxed wake locations do not participate in building
+that list; wake geometry and the aerodynamic solution continue to update every
+iteration.
+The option is included in the configuration hash because it changes the mapping
+between `case_id` and physical state. Therefore it may not be enabled or
+disabled while resuming an existing sweep. Older checkpoints remain compatible
+when the option is omitted.
+
 For independent parallel workers, `-state-range <start> <count>` restricts a
 process to a contiguous range of global aerodynamic-case IDs. Its CSV rows keep
 the original global `case_id`. Ranged workers must use isolated working/output
 directories; their manifests record `range_start`, `range_count`, and the
 unranged `base_configuration_hash` used when merging. Omitting `-state-range`
-preserves the original sequential behavior and checkpoint hash.
+preserves the original sequential behavior and checkpoint hash. With
+`-state-fast-order`, global range IDs refer to the fast-order mapping.
 
 ## Optional physical-surface loads
 
