@@ -89,6 +89,13 @@ private:
     int StateSweepReuseInitialInteractionList_;
     int StateSweepReusePreconditioner_;
     int StateSweepReuseWakeInteractionLists_;
+    int StateSweepContinuationEnabled_;
+    int StateSweepContinuationMinWakeIterations_;
+    int StateSweepContinuationWakeIterationsThisSolve_;
+    int StateSweepContinuationFailedThisSolve_;
+    double StateSweepContinuationCirculationTolerance_;
+    double StateSweepContinuationWakeTolerance_;
+    double StateSweepContinuationLoadTolerance_;
     double ProfileWakeInitializationSeconds_;
     double ProfileInteractionListSeconds_;
     double ProfilePreconditionerSeconds_;
@@ -1244,6 +1251,13 @@ public:
     int &StateSweepReuseInitialInteractionList(void) { return StateSweepReuseInitialInteractionList_; };
     int &StateSweepReusePreconditioner(void) { return StateSweepReusePreconditioner_; };
     int &StateSweepReuseWakeInteractionLists(void) { return StateSweepReuseWakeInteractionLists_; };
+    int &StateSweepContinuationEnabled(void) { return StateSweepContinuationEnabled_; };
+    int &StateSweepContinuationMinWakeIterations(void) { return StateSweepContinuationMinWakeIterations_; };
+    int StateSweepContinuationWakeIterationsThisSolve(void) { return StateSweepContinuationWakeIterationsThisSolve_; };
+    int StateSweepContinuationFailedThisSolve(void) { return StateSweepContinuationFailedThisSolve_; };
+    double &StateSweepContinuationCirculationTolerance(void) { return StateSweepContinuationCirculationTolerance_; };
+    double &StateSweepContinuationWakeTolerance(void) { return StateSweepContinuationWakeTolerance_; };
+    double &StateSweepContinuationLoadTolerance(void) { return StateSweepContinuationLoadTolerance_; };
     double StateSweepProfileWakeInitialization(void) { return ProfileWakeInitializationSeconds_; };
     double StateSweepProfileInteractionLists(void) { return ProfileInteractionListSeconds_; };
     double StateSweepProfilePreconditioner(void) { return ProfilePreconditionerSeconds_; };

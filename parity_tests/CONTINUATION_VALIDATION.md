@@ -29,12 +29,21 @@ The regression runner reserves these options:
 counters in `profile.json`: attempts, accepted warm starts, cold starts,
 fallbacks, and total wake iterations.
 
+The experimental defaults are 4 minimum iterations, `0.005` relative
+circulation change, `0.2` maximum wake residual, and `0.0005` absolute integrated
+load change. These values are acceptance-tested defaults, not universal
+physical constants; difficult geometries may require tighter settings.
+Continuation automatically starts cold after an alpha or beta jump greater
+than 10 degrees; the difficult-state cases exercise this path-dependence guard.
+
 ## Mandatory comparisons
 
 `run_state_continuation_regression.py` generates deterministic thin and thick
-wing cases and compares results by physical state rather than `case_id`.
+wing cases and compares results by physical state rather than `case_id`. These
+are candidate cold-versus-continuation correctness comparisons, not parity.
+Parity always uses the official OpenVSP 3.51.2 reference distribution.
 
-- **Cold reference:** fixed maximum wake iterations, no continuation.
+- **Candidate cold control:** fixed maximum wake iterations, no continuation.
 - **Forward continuation:** normal P/Q/R/control traversal.
 - **Reverse traversal:** reversed rate/control values; catches path dependence.
 - **Repeated execution:** identical continuation run repeated; characterizes
@@ -53,7 +62,7 @@ wing cases and compares results by physical state rather than `case_id`.
 
 ## Acceptance gates
 
-- Existing official parity and stable-main regression: zero failures.
+- Official OpenVSP 3.51.2 reference-build parity: zero failures.
 - No missing or duplicate physical states; all values finite.
 - Integrated and optional-load values satisfy
   `abs(candidate-reference) <= 5e-4 + 1e-4*abs(reference)`.
@@ -72,3 +81,14 @@ Use `--plan-only` before the native feature exists to validate paths, emit the
 machine-readable test matrix, and check that the candidate advertises the
 reserved CLI contract. Use `--require-feature` in mandatory gates so a missing
 or renamed feature fails rather than silently skipping tests.
+
+## 2026-08-27 acceptance result
+
+All mandatory continuation scenarios and official OpenVSP 3.51.2 parity
+passed. The optional historical stable-main regression also passed but was not
+used as parity. On the deterministic 16-state acceptance case, continuation
+reduced wake iterations from 192 to 70. Process time changed
+from 4.56 s to 1.93 s for the thin model and from 15.23 s to 6.26 s for the
+thick model (about 2.4x faster on this machine). The difficult-state maximum
+absolute coefficient differences were `3.76e-4` thin and `4.97e-4` thick,
+within the documented mixed tolerance.

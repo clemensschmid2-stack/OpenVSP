@@ -24,12 +24,13 @@ from run_state_sweep_regression import (
 )
 
 
+DEFAULT_MIN_WAKE_ITERATIONS = 4
 CONTINUATION_OPTIONS = [
     "-state-continuation",
-    "-state-continuation-min-wake-iters", "2",
-    "-state-continuation-circulation-tol", "1e-5",
-    "-state-continuation-wake-tol", "1e-4",
-    "-state-continuation-load-tol", "1e-5",
+    "-state-continuation-min-wake-iters", str(DEFAULT_MIN_WAKE_ITERATIONS),
+    "-state-continuation-circulation-tol", "0.005",
+    "-state-continuation-wake-tol", "0.2",
+    "-state-continuation-load-tol", "0.0005",
 ]
 BASE_AXES = [
     "-state-p", "-0.01,0.01",
@@ -119,9 +120,10 @@ def validate_profile(path: Path) -> dict[str, object]:
             failures.append({"kind": "invalid_attempt_accounting"})
         cases = int(profile.get("aerodynamic_cases", 0))
         iterations = int(profile.get("total_wake_iterations", 0))
-        if cases > 0 and not 2 * cases <= iterations <= 12 * cases:
+        if cases > 0 and not DEFAULT_MIN_WAKE_ITERATIONS * cases <= iterations <= 12 * cases:
             failures.append({"kind": "wake_iteration_bounds", "cases": cases,
-                             "iterations": iterations, "minimum": 2 * cases,
+                             "iterations": iterations,
+                             "minimum": DEFAULT_MIN_WAKE_ITERATIONS * cases,
                              "maximum": 12 * cases})
     except (OSError, ValueError, TypeError) as exc:
         failures.append({"kind": "invalid_profile", "error": str(exc)})

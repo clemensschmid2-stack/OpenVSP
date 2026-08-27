@@ -334,6 +334,11 @@ int StateSweep_                      = 0;
 int StateSweepResume_                = 0;
 int StateSweepProfile_               = 0;
 int StateSweepFastOrder_             = 0;
+int StateSweepContinuation_          = 0;
+int StateSweepContinuationMinWakeIterations_ = 4;
+double StateSweepContinuationCirculationTolerance_ = 5.e-3;
+double StateSweepContinuationWakeTolerance_ = 2.e-1;
+double StateSweepContinuationLoadTolerance_ = 5.e-4;
 uint64_t StateSweepChunkSize_        = 25000;
 uint64_t StateSweepProcessCases_     = 0;
 uint64_t StateSweepRangeStart_       = 0;
@@ -854,6 +859,11 @@ void PrintUsageHelp()
        printf(" -state-resume                      Continue from the state-sweep checkpoint.\n");
        printf(" -state-profile                     Write aggregated State Sweep phase timings.\n");
        printf(" -state-fast-order                  Group Mach/control states and reuse invariant setup.\n");
+       printf(" -state-continuation                Warm-start circulation/wake and stop after convergence.\n");
+       printf(" -state-continuation-min-wake-iters <N>  Require at least N wake iterations.\n");
+       printf(" -state-continuation-circulation-tol <value>  Relative circulation-change tolerance.\n");
+       printf(" -state-continuation-wake-tol <value>  Wake-displacement tolerance.\n");
+       printf(" -state-continuation-load-tol <value>  Absolute CF/CM-change tolerance.\n");
        printf(" -stab-step-phat <value>            Set the reduced roll-rate perturbation.\n");
        printf(" -stab-step-qhat <value>            Set the reduced pitch-rate perturbation.\n");
        printf(" -stab-step-rhat <value>            Set the reduced yaw-rate perturbation.\n");
@@ -984,6 +994,52 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-fast-order") == 0 ) {
 
           StateSweepFastOrder_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation") == 0 ) {
+
+          StateSweepContinuation_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-min-wake-iters") == 0 ) {
+
+          StateSweepContinuationMinWakeIterations_ = atoi(argv[++i]);
+          if ( StateSweepContinuationMinWakeIterations_ < 1 ) {
+             printf("-state-continuation-min-wake-iters requires a positive integer.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-circulation-tol") == 0 ) {
+
+          StateSweepContinuationCirculationTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationCirculationTolerance_ <= 0. ) {
+             printf("-state-continuation-circulation-tol requires a positive value.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-wake-tol") == 0 ) {
+
+          StateSweepContinuationWakeTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationWakeTolerance_ <= 0. ) {
+             printf("-state-continuation-wake-tol requires a positive value.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-load-tol") == 0 ) {
+
+          StateSweepContinuationLoadTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationLoadTolerance_ <= 0. ) {
+             printf("-state-continuation-load-tol requires a positive value.\n");
+             exit(1);
+          }
 
        }
 
@@ -2846,6 +2902,13 @@ static uint64_t StateSweepConfigurationHash(void)
     // Preserve hashes from builds predating fast ordering when it is omitted,
     // so existing canonical checkpoints remain resumable.
     if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
+    if ( StateSweepContinuation_ ) {
+       HASH_VALUE(StateSweepContinuation_);
+       HASH_VALUE(StateSweepContinuationMinWakeIterations_);
+       HASH_VALUE(StateSweepContinuationCirculationTolerance_);
+       HASH_VALUE(StateSweepContinuationWakeTolerance_);
+       HASH_VALUE(StateSweepContinuationLoadTolerance_);
+    }
     HASH_VALUE(NumberOfMachs_); HASH_VALUE(NumberOfAoAs_);
     HASH_VALUE(NumberOfBetas_); HASH_VALUE(NumberOfReCrefs_);
     HASH_VALUE(NumberOfControlGroups_);
@@ -3089,6 +3152,11 @@ void StateSweepSolve(void)
     fprintf(Manifest,"  \"configuration_hash\": \"%016llx\",\n",(unsigned long long)Hash);
     fprintf(Manifest,"  \"base_configuration_hash\": \"%016llx\",\n",(unsigned long long)BaseHash);
     fprintf(Manifest,"  \"case_order\": \"%s\",\n",StateSweepFastOrder_ ? "mach_control_grouped" : "canonical");
+    fprintf(Manifest,"  \"continuation\": {\"enabled\": %s, \"minimum_wake_iterations\": %d, "
+                     "\"circulation_tolerance\": %.17g, \"wake_tolerance\": %.17g, \"load_tolerance\": %.17g},\n",
+            StateSweepContinuation_ ? "true" : "false",StateSweepContinuationMinWakeIterations_,
+            StateSweepContinuationCirculationTolerance_,StateSweepContinuationWakeTolerance_,
+            StateSweepContinuationLoadTolerance_);
     fprintf(Manifest,"  \"total_rows\": %llu,\n  \"aerodynamic_solves\": %llu,\n  \"chunk_size\": %llu,\n  \"process_cases\": %llu,\n  \"range_start\": %llu,\n  \"range_count\": %llu,\n",
             (unsigned long long)TotalRows,(unsigned long long)AerodynamicCases,
             (unsigned long long)StateSweepChunkSize_,(unsigned long long)StateSweepProcessCases_,
@@ -3145,9 +3213,16 @@ void StateSweepSolve(void)
     double ProfileReynoldsSeconds = 0.;
     double ProfileOutputSeconds = 0.;
     uint64_t ReusedInvariantCases = 0;
+    uint64_t ContinuationAttempts = 0;
+    uint64_t ContinuationAccepted = 0;
+    uint64_t ContinuationColdStarts = 0;
+    uint64_t ContinuationFallbacks = 0;
+    uint64_t ContinuationWakeIterations = 0;
     VSPAERO().StateSweepProfiling() = StateSweepProfile_;
     if ( StateSweepProfile_ ) VSPAERO().ResetStateSweepProfile();
     int PreviousMachIndex = -1;
+    int PreviousAlphaIndex = -1;
+    int PreviousBetaIndex = -1;
     std::vector<size_t> PreviousControlIndex;
     for ( uint64_t AeroCase = StartAerodynamicCase ; AeroCase < EndAerodynamicCase ; AeroCase++ ) {
        uint64_t Decoder = AeroCase;
@@ -3202,8 +3277,35 @@ void StateSweepSolve(void)
        VSPAERO().StateSweepReuseInitialInteractionList() = ReuseInvariantSetup;
        VSPAERO().StateSweepReusePreconditioner() = ReuseInvariantSetup;
        VSPAERO().StateSweepReuseWakeInteractionLists() = StateSweepFastOrder_;
+       // A relaxed wake is only a useful initial condition for a nearby flow
+       // direction. Large incidence jumps can converge to a path-dependent
+       // wake within the configured iteration cap, so start those blocks cold.
+       int NearbyFlowDirection = PreviousAlphaIndex > 0 && PreviousBetaIndex > 0 &&
+                                 fabs(AoAList_[AlphaIndex] - AoAList_[PreviousAlphaIndex]) <= 10. &&
+                                 fabs(BetaList_[BetaIndex] - BetaList_[PreviousBetaIndex]) <= 10.;
+       int ContinuePreviousState = StateSweepContinuation_ &&
+                                   PreviousMachIndex == MachIndex &&
+                                   PreviousControlIndex == ControlIndex &&
+                                   NearbyFlowDirection;
+       VSPAERO().StateSweepContinuationEnabled() = StateSweepContinuation_;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+       VSPAERO().RestartFromPreviousSolve() = ContinuePreviousState;
+       if ( StateSweepContinuation_ ) {
+          if ( ContinuePreviousState ) {
+             ContinuationAttempts++;
+             ContinuationAccepted++;
+          }
+          else {
+             ContinuationColdStarts++;
+          }
+       }
        if ( ReuseInvariantSetup ) ReusedInvariantCases++;
        PreviousMachIndex = MachIndex;
+       PreviousAlphaIndex = AlphaIndex;
+       PreviousBetaIndex = BetaIndex;
        PreviousControlIndex = ControlIndex;
        VSPAERO().ReCref() = ReCrefList_[1];
        VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
@@ -3214,9 +3316,22 @@ void StateSweepSolve(void)
        int SolverCase = (int)((RunCase - 1) % (uint64_t)(INT_MAX - 1)) + 1;
        // A negative case closes files that were opened by case 1.  A singleton
        // process must therefore remain case +1; process exit flushes/closes it.
-       if ( AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
+       if ( !StateSweepContinuation_ && AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
        double ProfileStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
        VSPAERO().Solve(SolverCase);
+       if ( StateSweepContinuation_ ) {
+          ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
+          if ( ContinuePreviousState && VSPAERO().StateSweepContinuationFailedThisSolve() ) {
+             printf("State Sweep continuation failed for case %llu; retrying cold.\n",
+                    (unsigned long long)AeroCase);
+             ContinuationFallbacks++;
+             ContinuationAccepted--;
+             ContinuationColdStarts++;
+             VSPAERO().RestartFromPreviousSolve() = 0;
+             VSPAERO().Solve(SolverCase);
+             ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
+          }
+       }
        if ( StateSweepProfile_ ) ProfileSolveSeconds += StateSweepProfileClock() - ProfileStart;
 
        for ( int ReynoldsIndex = 1 ; ReynoldsIndex <= NumberOfReCrefs_ ; ReynoldsIndex++ ) {
@@ -3284,6 +3399,11 @@ void StateSweepSolve(void)
                (unsigned long long)((EndAerodynamicCase - StartAerodynamicCase) * (uint64_t)NumberOfReCrefs_));
        fprintf(Profile,"  \"threads\": %d,\n",NumberOfThreads_);
        fprintf(Profile,"  \"reused_invariant_setup_cases\": %llu,\n",(unsigned long long)ReusedInvariantCases);
+       fprintf(Profile,"  \"continuation_attempts\": %llu,\n",(unsigned long long)ContinuationAttempts);
+       fprintf(Profile,"  \"continuation_accepted\": %llu,\n",(unsigned long long)ContinuationAccepted);
+       fprintf(Profile,"  \"continuation_cold_starts\": %llu,\n",(unsigned long long)ContinuationColdStarts);
+       fprintf(Profile,"  \"continuation_fallbacks\": %llu,\n",(unsigned long long)ContinuationFallbacks);
+       fprintf(Profile,"  \"total_wake_iterations\": %llu,\n",(unsigned long long)ContinuationWakeIterations);
        fprintf(Profile,"  \"seconds\": {\n");
        fprintf(Profile,"    \"process_total\": %.17g,\n",ProfileProcessSeconds);
        fprintf(Profile,"    \"solver_calls\": %.17g,\n",ProfileSolveSeconds);

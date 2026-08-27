@@ -86,6 +86,63 @@ between `case_id` and physical state. Therefore it may not be enabled or
 disabled while resuming an existing sweep. Older checkpoints remain compatible
 when the option is omitted.
 
+`-state-continuation` additionally preserves converged circulation and relaxed
+wake geometry between adjacent cases whose Mach and control state are
+unchanged. Alpha, beta, and physical/reduced rates may change; the free stream
+and local rotational velocities are reinitialized for every case. The first
+case of each process, every changed Mach/control block, every alpha or beta
+jump greater than 10 degrees, and every resumed process starts cold. The
+flow-direction guard prevents a relaxed wake from crossing a large incidence
+change where limited wake iterations can otherwise produce path dependence.
+
+The exact warm-start decision is made independently inside each process:
+
+- continuation must be enabled;
+- a previous case must exist in that process;
+- the Mach index and every control-state index must match the previous case;
+- both `abs(alpha - previous_alpha)` and `abs(beta - previous_beta)` must be at
+  most 10 degrees.
+
+P/Q/R differences do not reject a warm start because the new physical rates
+are applied when local velocities are refreshed. Reynolds values do not select
+separate aerodynamic solves: as in the regular sweep, additional Reynolds rows
+reuse the solved state and recalculate viscous forces. Independent range
+workers cannot share continuation state. Likewise, automation-level Vinf and
+design-variable cases launch separate native processes and therefore start
+cold.
+
+Continuation also enables convergence-based wake termination. `WakeIters` is
+the hard maximum and the following options control the early-exit gate:
+
+```text
+-state-continuation-min-wake-iters <count>
+-state-continuation-circulation-tol <relative-change>
+-state-continuation-wake-tol <wake-residual>
+-state-continuation-load-tol <absolute-CF/CM-change>
+```
+
+All three changes must satisfy their tolerances after the minimum number of
+iterations. The implemented convergence quantities are:
+
+```text
+circulation_change = max_i(abs(Gamma_i[k] - Gamma_i[k-1]) / max(1, abs(Gamma_i[k])))
+wake_residual      = abs(MaxResidual)
+load_change        = max(abs(delta CFx/y/z), abs(delta CMx/y/z))
+```
+
+Defaults are 4, `0.005`, `0.2`, and `0.0005`, respectively. `WakeIters` remains
+the maximum; if the minimum is greater than or equal to that maximum, early
+termination provides no iteration saving. Before an early return, velocities
+and forces are recalculated for the final wake/circulation state. A criterion
+that has not converged simply continues to `WakeIters`. A non-finite warm
+solution is discarded and that same case is retried cold.
+
+The configuration hash includes continuation and its tolerances, so they
+cannot change while resuming an existing output. Continuation cache state is
+not serialized: completed CSV rows are resumable, but the first unfinished
+case in every new process starts cold. `profile.json` records attempts,
+accepted warm starts, cold starts, fallbacks, and total wake iterations.
+
 For independent parallel workers, `-state-range <start> <count>` restricts a
 process to a contiguous range of global aerodynamic-case IDs. Its CSV rows keep
 the original global `case_id`. Ranged workers must use isolated working/output
@@ -112,7 +169,6 @@ ADB state storage, unsteady analysis, trim, adjoint analysis, stability
 derivatives, explicit coupled-state lists, and distributed sharding are not
 part of this mode.
 
-The proposed circulation/wake continuation and early-convergence mode is not
-yet implemented. Its reserved CLI contract, correctness tolerances, mandatory
-test matrix, and merge gates are documented in
+The continuation correctness tolerances, mandatory test matrix, and merge
+gates are documented in
 [`parity_tests/CONTINUATION_VALIDATION.md`](parity_tests/CONTINUATION_VALIDATION.md).

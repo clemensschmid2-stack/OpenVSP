@@ -1,8 +1,7 @@
 @echo off
 setlocal
-if defined CONDA_PREFIX (
-  "%CONDA_PREFIX%\python.exe" "%~dp0run_state_continuation_regression.py" --require-feature %*
-) else (
-  python "%~dp0run_state_continuation_regression.py" --require-feature %*
-)
-exit /b %ERRORLEVEL%
+set "PYTHON_EXE=python"
+if defined CONDA_PREFIX if exist "%CONDA_PREFIX%\python.exe" set "PYTHON_EXE=%CONDA_PREFIX%\python.exe"
+"%PYTHON_EXE%" "%~dp0run_state_continuation_regression.py" --require-feature %*
+set "TEST_EXIT=%ERRORLEVEL%"
+exit /b %TEST_EXIT%

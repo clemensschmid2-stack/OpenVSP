@@ -248,7 +248,6 @@ def run_state_sweep_cross_checks(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--official", type=Path, default=DEFAULT_OFFICIAL)
     parser.add_argument("--custom", type=Path, default=DEFAULT_CUSTOM)
     parser.add_argument(
         "--custom-vspaero", type=Path,
@@ -262,7 +261,9 @@ def main() -> int:
     parser.add_argument("--keep-work", action="store_true")
     args = parser.parse_args()
 
-    official = args.official.resolve()
+    # Parity has exactly one authority: the packaged, unmodified official
+    # distribution. Do not allow a branch/custom binary to be substituted.
+    official = DEFAULT_OFFICIAL.resolve()
     custom = args.custom.resolve()
     custom_vspaero = (
         args.custom_vspaero.resolve() if args.custom_vspaero

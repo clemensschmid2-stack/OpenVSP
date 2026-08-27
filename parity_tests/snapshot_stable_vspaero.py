@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Snapshot the tested stable-main VSPAERO binary for optimization regression."""
+"""Snapshot a custom VSPAERO binary for optional historical regression.
+
+The snapshot is not an official parity reference.
+"""
 
 from __future__ import annotations
 

@@ -7,6 +7,7 @@
 #include "VSP_Solver.H"
 
 #include <chrono>
+#include <vector>
 
 #include "START_NAME_SPACE.H"
 
@@ -56,6 +57,13 @@ void VSP_SOLVER::init(void)
     StateSweepReuseInitialInteractionList_ = 0;
     StateSweepReusePreconditioner_ = 0;
     StateSweepReuseWakeInteractionLists_ = 0;
+    StateSweepContinuationEnabled_ = 0;
+    StateSweepContinuationMinWakeIterations_ = 4;
+    StateSweepContinuationWakeIterationsThisSolve_ = 0;
+    StateSweepContinuationFailedThisSolve_ = 0;
+    StateSweepContinuationCirculationTolerance_ = 5.e-3;
+    StateSweepContinuationWakeTolerance_ = 2.e-1;
+    StateSweepContinuationLoadTolerance_ = 5.e-4;
     ResetStateSweepProfile();
     
     FirstTimeSetup_ = 1;
@@ -2708,6 +2716,16 @@ void VSP_SOLVER::Solve(int Case)
     char GroupFileName[MAX_CHAR_SIZE], RotorFileName[MAX_CHAR_SIZE], SurveyFileName[MAX_CHAR_SIZE];
     char QUADTREEFileName[MAX_CHAR_SIZE];
     double ProfileStart = 0.;
+    std::vector<double> ContinuationPreviousGamma;
+    double ContinuationPreviousLoads[6] = { 0., 0., 0., 0., 0., 0. };
+    int ContinuationHasPreviousLoads = 0;
+
+    StateSweepContinuationWakeIterationsThisSolve_ = 0;
+    StateSweepContinuationFailedThisSolve_ = 0;
+
+    if ( StateSweepContinuationEnabled_ ) {
+       ContinuationPreviousGamma.resize(VSPGeom().Grid(MGLevel_).NumberOfSurfaceLoops() + 1,0.);
+    }
     
     // Zero out solution
 
@@ -2758,6 +2776,14 @@ void VSP_SOLVER::Solve(int Case)
        if ( StateSweepProfiling_ ) ProfileWakeInitializationSeconds_ += StateSweepProfileClock() - ProfileStart;
        
     }
+    else if ( StateSweepContinuationEnabled_ ) {
+
+       // A continued wake and circulation are retained, but the free stream
+       // must reflect this case's alpha, beta, and rotational rates.
+
+       InitializeFreeStream();
+
+    }
            
     // Recalculate interaction lists
 
@@ -2786,7 +2812,7 @@ void VSP_SOLVER::Solve(int Case)
 
     LastMach_ = Mach_;
 
-    if ( !DumpGeom_ ) ZeroVortexState();
+    if ( !DumpGeom_ && !RestartFromPreviousSolve_ ) ZeroVortexState();
 
     // Create matrix preconditioners
 
@@ -3204,6 +3230,12 @@ void VSP_SOLVER::Solve(int Case)
        double ProfileIterationStart = StateSweepProfiling_ ? StateSweepProfileClock() : 0.;
        while ( CurrentWakeIteration_ <= WakeIterations_ && !Converged ) {
 
+          if ( StateSweepContinuationEnabled_ ) {
+             for ( i = 1 ; i <= VSPGeom().Grid(MGLevel_).NumberOfSurfaceLoops() ; i++ ) {
+                ContinuationPreviousGamma[i] = Gamma(i);
+             }
+          }
+
           // Update the vortex interaction lists
 
           if ( ( CurrentWakeIteration_ > 1 && CurrentWakeIteration_ <= FreezeMultiPoleAtIteration_ && VSPGeom().NumberOfVortexSheets() > 0 ) &&
@@ -3247,6 +3279,47 @@ void VSP_SOLVER::Solve(int Case)
           CalculateForces();
           if ( StateSweepProfiling_ ) ProfileForceSeconds_ += StateSweepProfileClock() - ProfileStart;
 
+          StateSweepContinuationWakeIterationsThisSolve_++;
+
+          if ( StateSweepContinuationEnabled_ ) {
+             double CirculationChange = 0.;
+             double CurrentLoads[6] = {
+                CFox() + CFiwx(), CFoy() + CFiwy(), CFoz() + CFiwz(),
+                CMox() + CMix(), CMoy() + CMiy(), CMoz() + CMiz()
+             };
+             for ( i = 1 ; i <= VSPGeom().Grid(MGLevel_).NumberOfSurfaceLoops() ; i++ ) {
+                double Scale = MAX(1.,ABS(Gamma(i)));
+                CirculationChange = MAX(CirculationChange,
+                                        ABS(Gamma(i) - ContinuationPreviousGamma[i])/Scale);
+             }
+             double LoadChange = 0.;
+             if ( ContinuationHasPreviousLoads ) {
+                for ( i = 0 ; i < 6 ; i++ ) {
+                   LoadChange = MAX(LoadChange,ABS(CurrentLoads[i] - ContinuationPreviousLoads[i]));
+                }
+             }
+             if ( CurrentWakeIteration_ >= StateSweepContinuationMinWakeIterations_ &&
+                  ContinuationHasPreviousLoads &&
+                  isfinite(CirculationChange) && isfinite(MaxResidual_) && isfinite(LoadChange) &&
+                  CirculationChange <= StateSweepContinuationCirculationTolerance_ &&
+                  ABS(MaxResidual_) <= StateSweepContinuationWakeTolerance_ &&
+                  LoadChange <= StateSweepContinuationLoadTolerance_ ) {
+                Converged = 1;
+                // The legacy path performs this final velocity update only at
+                // the configured iteration limit. Do it here for an early exit.
+                if ( CurrentWakeIteration_ < WakeIterations_ ) {
+                   CalculateVelocities(ALL_WAKE_GAMMAS);
+                   CalculateForces();
+                }
+             }
+             if ( !isfinite(CirculationChange) || !isfinite(MaxResidual_) || !isfinite(LoadChange) ) {
+                StateSweepContinuationFailedThisSolve_ = 1;
+                Converged = 1;
+             }
+             for ( i = 0 ; i < 6 ; i++ ) ContinuationPreviousLoads[i] = CurrentLoads[i];
+             ContinuationHasPreviousLoads = 1;
+          }
+
           // Output status
 
           OutputStatusFile(0);
@@ -3255,7 +3328,9 @@ void VSP_SOLVER::Solve(int Case)
      
           if ( !TimeAccurate_ && !DumpGeom_ ) OutputForcesAndMomentsForGroup(0);   
 
-          if ( log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) || ( TimeAccurate_ && log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) ) ) Converged = 1;
+          if ( !StateSweepContinuationEnabled_ &&
+               ( log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) ||
+                 ( TimeAccurate_ && log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) ) ) ) Converged = 1;
 
           // Some time accurate FD debug code
           

@@ -16,12 +16,39 @@ This fork is derived from NASA's OpenVSP project.
   construction. Wake geometry, induced velocities, circulation, and loads are
   still updated and solved on every iteration.
 - Added regression coverage comparing fast-order results by physical state
-  against canonical traversal, in addition to official-build parity and the
-  existing batching/range invariance checks.
+  against canonical traversal, in addition to official-reference parity and
+  the existing batching/range invariance checks. Numerical parity is defined
+  exclusively against the packaged official OpenVSP 3.51.2 reference build;
+  frozen custom binaries are retained only for optional historical regression.
 - Added a pre-implementation continuation validation harness and acceptance
   specification covering traversal dependence, repetition, process boundaries,
   forced interruption/resume, difficult states, incompatible-state fallback,
   optional physical-side loads, and profiling/iteration accounting.
+- Added opt-in State Sweep continuation: compatible adjacent cases warm-start
+  both circulation and relaxed wake geometry, while refreshing the free stream
+  for each alpha/beta/rate state. Added a three-part early wake-convergence gate
+  with configurable minimum iterations and circulation, wake-residual, and
+  integrated-load tolerances, plus non-finite warm-state cold fallback and
+  profiling counters. A validated 10-degree alpha/beta proximity guard starts
+  large flow-direction transitions cold to avoid wake path dependence within a
+  finite iteration cap.
+- Defined compatibility conservatively: Mach and every control-state index must
+  match, alpha and beta may each move by at most 10 degrees, and P/Q/R may vary
+  because physical local velocities are refreshed. Every process/range/resume
+  boundary starts cold because continuation cache state is intentionally not
+  serialized.
+- Added configurable continuation defaults of four minimum wake iterations,
+  `0.005` relative circulation change, `0.2` maximum wake residual, and
+  `0.0005` maximum absolute integrated CF/CM change. `WakeIters` remains the
+  maximum, and final velocities/forces are recalculated before an early exit.
+- Added continuation settings to the State Sweep configuration hash and
+  manifest, plus profile counters for attempts, accepted warm starts, cold
+  starts, fallbacks, and total wake iterations.
+- Validated continuation with forward/reverse traversal, repeated execution,
+  process batching/resume, ranged workers, forced interruption, difficult
+  thin/thick states, incompatible-state handling, and optional wing/hinge load
+  columns. The 16-state acceptance case reduced wake iterations from 192 to 70
+  and ran about 2.4x faster on the test machine.
 
 ## 2026-08-26 — Clemens Schmid
 
@@ -32,10 +59,10 @@ This fork is derived from NASA's OpenVSP project.
   wake-induced force components (`CFiwy`, `CFiwz`), matching the official
   normal sweep. The previous implementation used surface-inviscid components
   and produced a visible `CFz` discrepancy for thick/panel geometry.
-- Expanded official-build parity to cover State Sweep in thin and thick modes,
-  added mass-property parity, and added stable-main State Sweep regression for
-  operating axes, physical/reduced rates, controls, batching/resume, and ranged
-  execution.
+- Expanded official-build parity to cover State Sweep in thin and thick modes
+  and added mass-property parity. Separately added an optional historical
+  stable-main State Sweep regression for operating axes, physical/reduced
+  rates, controls, batching/resume, and ranged execution.
 
 ## 2026-08-25 — Clemens Schmid
 

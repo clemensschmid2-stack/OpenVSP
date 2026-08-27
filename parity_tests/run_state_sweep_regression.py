@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Compare optimized State Sweep output with a frozen stable-main VSPAERO."""
+"""Optional historical regression against a frozen custom VSPAERO.
+
+This is not an official-reference parity test and is not a mandatory gate.
+"""
 
 from __future__ import annotations
 
