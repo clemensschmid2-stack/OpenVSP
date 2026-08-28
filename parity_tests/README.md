@@ -18,6 +18,19 @@ OpenMP thread for repeatability.
 Runtime fields such as `Analysis_Duration_Sec` are excluded from numerical
 comparison.
 
+After every thin/thick official-reference steady and stability comparison,
+the suite reruns the identical generated case with `-steady-optimize` or
+`-stab-optimize`. Numeric `.polar`/`.stab` values are compared with the custom
+baseline that just passed the official check. Optimization parity is therefore
+anchored transitively to the packaged official build while also exercising the
+new command-line path.
+
+Each thin/thick stability case also reruns only control group 1 through
+`-stab-control-select 1`. Its Forward, Backward, and Central control derivative
+columns must match the all-control baseline already validated against the
+packaged official build, and the log must contain exactly three aerodynamic
+solves: base, positive control, and negative control.
+
 Run from a Python 3.13 environment compatible with the packaged OpenVSP API:
 
 ```bat

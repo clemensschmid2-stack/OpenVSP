@@ -16,6 +16,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <chrono>
+#include <algorithm>
 
 #ifdef WIN32
 #include <direct.h>
@@ -335,6 +336,10 @@ int StateSweepResume_                = 0;
 int StateSweepProfile_               = 0;
 int StateSweepFastOrder_             = 0;
 int StateSweepContinuation_          = 0;
+int SteadyOptimization_              = 0;
+int StabilityOptimization_           = 0;
+int SolverOptimizationProfile_       = 0;
+std::vector<int> StabSelectedControlGroups_;
 int StateSweepContinuationMinWakeIterations_ = 4;
 double StateSweepContinuationCirculationTolerance_ = 5.e-3;
 double StateSweepContinuationWakeTolerance_ = 2.e-1;
@@ -432,6 +437,13 @@ int SearchForFloatVariable(FILE *File, const char *VariableName, double &Value);
 int SearchForFloatVariableList(FILE *File, const char *VariableName, double *Value, int &NumberOfEntries);
 int SearchForIntVariableList(FILE *File, const char *VariableName, int *Value, int &NumberOfEntries);
 std::vector<double> ParseStateSweepList(const char *Text, const char *Option);
+
+static int StabControlGroupSelected(int Group)
+{
+    if ( StabSelectedControlGroups_.empty() ) return 1;
+    return std::find(StabSelectedControlGroups_.begin(),StabSelectedControlGroups_.end(),Group)
+           != StabSelectedControlGroups_.end();
+}
 
 VSP_SOLVER VSPAERO_;
 VSP_SOLVER &VSPAERO(void) { return VSPAERO_; };
@@ -842,6 +854,10 @@ void PrintUsageHelp()
        printf(" -omp <N>                           Use 'N' processes.\n");
        printf(" -stab                              Calculate stability derivatives.\n");
        printf(" -stab-select <csv>                 Select alpha,beta,mach,p,q,r,controls, or all.\n");
+       printf(" -stab-control-select <csv>         Calculate only listed one-based control groups.\n");
+       printf(" -steady-optimize                   Enable tolerance-controlled early convergence for steady cases.\n");
+       printf(" -stab-optimize                     Enable tolerance-controlled early convergence for -stab cases.\n");
+       printf(" -solver-opt-profile                Print native phase timings for optimized steady/-stab runs.\n");
        printf(" -stab-step-alpha <deg>             Set the alpha perturbation.\n");
        printf(" -stab-step-beta <deg>              Set the beta perturbation.\n");
        printf(" -stab-step-mach <value>            Set the requested symmetric Mach perturbation.\n");
@@ -1000,6 +1016,24 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-continuation") == 0 ) {
 
           StateSweepContinuation_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-steady-optimize") == 0 ) {
+
+          SteadyOptimization_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-stab-optimize") == 0 ) {
+
+          StabilityOptimization_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-solver-opt-profile") == 0 ) {
+
+          SolverOptimizationProfile_ = 1;
 
        }
 
@@ -1189,6 +1223,31 @@ void ParseInput(int argc, char *argv[])
 
           if ( StabDerivativeFlags_ == 0 ) {
              printf("-stab-select requires at least one derivative.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-stab-control-select") == 0 ) {
+
+          char Selection[MAX_CHAR_SIZE];
+          char *Token;
+          StabSelectedControlGroups_.clear();
+          snprintf(Selection,sizeof(Selection),"%s",argv[++i]);
+          Token = strtok(Selection,",");
+          while ( Token != NULL ) {
+             char *End;
+             long Group = strtol(Token,&End,10);
+             if ( End == Token || *End != '\0' || Group < 1 || Group > INT_MAX ) {
+                printf("-stab-control-select requires comma-separated positive group indices.\n");
+                exit(1);
+             }
+             if ( std::find(StabSelectedControlGroups_.begin(),StabSelectedControlGroups_.end(),(int)Group)
+                  == StabSelectedControlGroups_.end() ) StabSelectedControlGroups_.push_back((int)Group);
+             Token = strtok(NULL,",");
+          }
+          if ( StabSelectedControlGroups_.empty() ) {
+             printf("-stab-control-select requires at least one group index.\n");
              exit(1);
           }
 
@@ -3243,6 +3302,7 @@ void StateSweepSolve(void)
              Decoder /= (uint64_t)StateSweepControls_[Control].size();
           }
        }
+
        else {
           for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
              ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
@@ -3439,6 +3499,16 @@ void Solve(void)
     char PolarFileName[MAX_CHAR_SIZE];
     FILE *PolarFile;
 
+    if ( SteadyOptimization_ ) {
+       VSPAERO().ResetStateSweepProfile();
+       VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
+       VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+    }
+
     ApplyControlDeflections();
     
     NumCases = NumberOfBetas_ * NumberOfMachs_ * NumberOfAoAs_ * NumberOfReCrefs_;
@@ -3486,6 +3556,17 @@ void Solve(void)
              VSPAERO().RotationalRate_p() = 0.;
              VSPAERO().RotationalRate_q() = 0.;
              VSPAERO().RotationalRate_r() = 0.;
+
+             if ( SteadyOptimization_ ) {
+                // Keep each public steady-sweep state cold. Carrying a relaxed wake
+                // between incidence points introduces measurable path dependence when
+                // WakeIters is small. Cross-case setup caches are also disabled because
+                // their small coefficient changes failed strict official-reference parity.
+                VSPAERO().RestartFromPreviousSolve() = 0;
+                VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                VSPAERO().StateSweepReusePreconditioner() = 0;
+                VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+             }
 
              // Set a comment line
              
@@ -3844,6 +3925,12 @@ void Solve(void)
        
     }
     
+    if ( SteadyOptimization_ && SolverOptimizationProfile_ ) {
+       printf("VSPAERO_OPT_PROFILE mode=steady wake_init=%.6f interaction=%.6f preconditioner=%.6f iterations=%.6f linear=%.6f forces=%.6f\n",
+              VSPAERO().StateSweepProfileWakeInitialization(), VSPAERO().StateSweepProfileInteractionLists(),
+              VSPAERO().StateSweepProfilePreconditioner(), VSPAERO().StateSweepProfileIterations(),
+              VSPAERO().StateSweepProfileLinearSolve(), VSPAERO().StateSweepProfileForces());
+    }
     fclose(PolarFile);
 
 }
@@ -3904,8 +3991,27 @@ void FiniteDifference_StabilityAndControlSolve(void)
     }
    
     VSPAERO().ForwardGMRESConvergenceFactor() = ForwardGMRESConvergenceFactor_;
+
+    if ( StabilityOptimization_ ) {
+       VSPAERO().ResetStateSweepProfile();
+       VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
+       VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+    }
      
     int SelectedDerivativeCount = 0;
+    int SelectedControlCount = 0;
+    for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) if ( StabControlGroupSelected(i) ) SelectedControlCount++;
+    for ( size_t Selected = 0 ; Selected < StabSelectedControlGroups_.size() ; Selected++ ) {
+       if ( StabSelectedControlGroups_[Selected] > NumberOfControlGroups_ ) {
+          printf("Selected stability control group %d is unavailable; model has %d groups.\n",
+                 StabSelectedControlGroups_[Selected],NumberOfControlGroups_);
+          exit(1);
+       }
+    }
     if ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) SelectedDerivativeCount++;
     if ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) SelectedDerivativeCount++;
     if ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) SelectedDerivativeCount++;
@@ -3914,7 +4020,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
     if ( StabDerivativeFlags_ & STAB_DERIV_R     ) SelectedDerivativeCount++;
 
     TotalCases = ( 1 + 2 * SelectedDerivativeCount
-                     + ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? 2 * NumberOfControlGroups_ : 0 ) )
+                     + ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? 2 * SelectedControlCount : 0 ) )
                    * NumberOfMachs_ * NumberOfAoAs_ * NumberOfBetas_;
     
     Case = CaseTotal = 0;
@@ -4025,7 +4131,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 
                 CaseTotal++;
 
-                printf("Calculating stability derivative case: %d of %d \n",Case,NumStabCases_);
+                printf("Calculating stability derivative solve: %d of %d \n",CaseTotal,TotalCases);
                 
                 // Set free stream conditions
                 
@@ -4036,6 +4142,16 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 VSPAERO().RotationalRate_p() = RotationalRate_pList_[Case];
                 VSPAERO().RotationalRate_q() = RotationalRate_qList_[Case];
                 VSPAERO().RotationalRate_r() = RotationalRate_rList_[Case];
+
+                if ( StabilityOptimization_ ) {
+                   // Stability perturbations remain cold and independent so positive and
+                   // negative derivatives cannot depend on traversal order.  Alpha, beta,
+                   // and rate cases may still reuse Mach/geometry-invariant setup.
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
                 
                 // Set a comment line
 
@@ -4138,10 +4254,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
              printf("Calculating Control Derivatives... \n"); 
           
              for ( i = 1 ; i <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumberOfControlGroups_ : 0 ) ; i++ ) {
+
+                if ( !StabControlGroupSelected(i) ) continue;
                 
                 CaseTotal++;
                 
-                printf("Calculating control derivative case: %d of %d \n",i,NumberOfControlGroups_);
+                printf("Calculating control derivative solve: %d of %d (group %d) \n",
+                       CaseTotal,TotalCases,i);
                 
                 // Initialize to unperturbed free stream conditions
                 
@@ -4155,7 +4274,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
              
                 // Perturb controls
              
-                Case++;
+                Case = NumStabCases_ + i;
                 
                 k = 1;
                 
@@ -4200,6 +4319,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Deflecting Control Group: %-d",i);
                
                 // Now solve
+
+                if ( StabilityOptimization_ ) {
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
                
                 if ( CaseTotal < TotalCases ) {
                    
@@ -4317,6 +4443,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 if ( Deriv == 6 ) VSPAERO().RotationalRate_r() = -Delta_R_;
                 if ( Deriv == 7 ) VSPAERO().Mach()             = Mach_ - Delta_Mach_;
 
+                if ( StabilityOptimization_ ) {
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
+
                 if ( Deriv == 2 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Alpha      -%5.3lf",Delta_AoA_);
                 if ( Deriv == 3 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Beta       -%5.3lf",Delta_Beta_);
                 if ( Deriv == 4 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Roll Rate  -%5.3lf",Delta_P_);
@@ -4333,6 +4466,8 @@ void FiniteDifference_StabilityAndControlSolve(void)
              if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
 
                 for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) {
+
+                   if ( !StabControlGroupSelected(i) ) continue;
 
                    NegativeCase++;
                    CaseTotal++;
@@ -4364,6 +4499,12 @@ void FiniteDifference_StabilityAndControlSolve(void)
                    }
 
                    snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Negative Control Group: %-d",i);
+                   if ( StabilityOptimization_ ) {
+                      VSPAERO().RestartFromPreviousSolve() = 0;
+                      VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                      VSPAERO().StateSweepReusePreconditioner() = 0;
+                      VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                   }
                    VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
                    VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
                    StoreStabilityCaseResults(NegativeCase);
@@ -4387,6 +4528,12 @@ void FiniteDifference_StabilityAndControlSolve(void)
        
     }
                    
+    if ( StabilityOptimization_ && SolverOptimizationProfile_ ) {
+       printf("VSPAERO_OPT_PROFILE mode=stability wake_init=%.6f interaction=%.6f preconditioner=%.6f iterations=%.6f linear=%.6f forces=%.6f\n",
+              VSPAERO().StateSweepProfileWakeInitialization(), VSPAERO().StateSweepProfileInteractionLists(),
+              VSPAERO().StateSweepProfilePreconditioner(), VSPAERO().StateSweepProfileIterations(),
+              VSPAERO().StateSweepProfileLinearSolve(), VSPAERO().StateSweepProfileForces());
+    }
     fclose(StabFile);
     fclose(VorviewFlt);
     
@@ -4461,8 +4608,9 @@ void CalculateStabilityDerivatives(void)
             StabStepQIsReduced_ == 1 ? "reduced" : (StabStepQIsReduced_ == -1 ? "physical" : "legacy_physical_default"),
             StabStepRIsReduced_ == 1 ? "reduced" : (StabStepRIsReduced_ == -1 ? "physical" : "legacy_physical_default"));
     for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
-       fprintf(StabFile,"# Control group %d: name=%s base_deflection=%0.12g deg\n", n,
-               ControlSurfaceGroup_[n].Name(), ControlSurfaceGroup_[n].ControlSurface_DeflectionAngle());
+       fprintf(StabFile,"# Control group %d: name=%s base_deflection=%0.12g deg selected=%s\n", n,
+               ControlSurfaceGroup_[n].Name(), ControlSurfaceGroup_[n].ControlSurface_DeflectionAngle(),
+               StabControlGroupSelected(n) ? "yes" : "no");
     }
     
     // Write out column labels
@@ -4483,6 +4631,7 @@ void CalculateStabilityDerivatives(void)
        if ( n == 6 && !( StabDerivativeFlags_ & STAB_DERIV_R     ) ) continue;
        if ( n == 7 && !( StabDerivativeFlags_ & STAB_DERIV_MACH  ) ) continue;
        if ( n  > 7 && !( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ) continue;
+       if ( n  > 7 && !StabControlGroupSelected(n - NumStabCases_) ) continue;
        
        // Stability derivative cases
                                      //12345678901234567890123456789
@@ -4577,6 +4726,8 @@ void CalculateStabilityDerivatives(void)
     // Calculate the control derivatives and write them out
 
     for ( n = 8 ; n <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumStabCases_ + NumberOfControlGroups_ : 7 ) ; n++ ) {
+
+       if ( !StabControlGroupSelected(n - NumStabCases_) ) continue;
     
        Delta = Delta_Control_ * TORAD; // wrt control group deflection
 
@@ -4622,6 +4773,7 @@ void CalculateStabilityDerivatives(void)
     }
     if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
        for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          if ( !StabControlGroupSelected(n) ) continue;
           NegativeOutputCase++;
           snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s",ControlSurfaceGroup_[n].Name(),Delta_Control_,"deg");
           fprintf(StabFile,"%-39s %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f \n",
@@ -4690,6 +4842,7 @@ void CalculateStabilityDerivatives(void)
 
     if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
        for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          if ( !StabControlGroupSelected(n) ) continue;
           NegativeCase++;
           CALCULATE_ALL_SYMMETRIC(NumStabCases_ + n, NegativeCase, 8 + n, Delta_Control_ * TORAD);
        }
@@ -4702,12 +4855,12 @@ void CalculateStabilityDerivatives(void)
     // readable table. The repeated Total column is the unperturbed base value.
 #define WRITE_STABILITY_HEADER(METHOD) \
     fprintf(StabFile,"#\n# %s finite-difference derivatives\n",METHOD); \
-    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"  ConGrp_%-3d ",n-7); fprintf(StabFile,"\n"); \
-    fprintf(StabFile,"#              -           rad          rad   reduced_rate reduced_rate reduced_rate      Mach          u      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      rad    "); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"  ConGrp_%-3d ",n); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"#              -           rad          rad   reduced_rate reduced_rate reduced_rate      Mach          u      "); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"      rad    "); fprintf(StabFile,"\n"); \
     fprintf(StabFile,"#\n")
 
 #define WRITE_STABILITY_ROW(NAME, TOTAL, VALUES) \
-    fprintf(StabFile,"%-6s ",NAME); fprintf(StabFile,"%12.7f ",TOTAL); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) fprintf(StabFile,"%12.7f ",VALUES[n]); fprintf(StabFile,"\n")
+    fprintf(StabFile,"%-6s ",NAME); fprintf(StabFile,"%12.7f ",TOTAL); for ( n = 2 ; n <= 8 ; n++ ) fprintf(StabFile,"%12.7f ",VALUES[n]); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"%12.7f ",VALUES[8+n]); fprintf(StabFile,"\n")
 
 #define WRITE_STABILITY_TABLE(METHOD, X, Y, Z, MX, MY, MZ, L, D, S, ML, MM, MN) \
     WRITE_STABILITY_HEADER(METHOD); \

@@ -172,3 +172,49 @@ part of this mode.
 The continuation correctness tolerances, mandatory test matrix, and merge
 gates are documented in
 [`parity_tests/CONTINUATION_VALIDATION.md`](parity_tests/CONTINUATION_VALIDATION.md).
+
+## Optional optimization of existing analysis modes
+
+The same convergence measurements can be enabled for the existing steady and
+stability modes without selecting State Sweep:
+
+```text
+vspaero -steady-optimize [convergence options] model
+vspaero -stab -stab-optimize [convergence options] model
+```
+
+`-steady-optimize` keeps every operating point cold-started and enables the
+three-part early-convergence gate. Tested wake continuation and cross-case
+interaction-list/preconditioner caches were deliberately rejected: at strict
+official-reference tolerances they introduced measurable coefficient changes,
+especially with small `WakeIters`.
+
+`-stab-optimize` enables only the early-convergence gate. Positive, negative,
+Mach, rate, and control perturbations remain independent cold solves and do
+not share interaction lists or preconditioners. Reuse across perturbations was
+tested and rejected because small coefficient changes were amplified by the
+finite-difference division. This preserves forward/backward/central derivative
+parity when early termination does not trigger.
+
+Both modes accept the four `-state-continuation-*-tol`/minimum-iteration options
+listed above. `-solver-opt-profile` prints a `VSPAERO_OPT_PROFILE` timing line;
+it does not change the solution. When early termination triggers, the result is
+an explicitly tolerance-controlled approximation to running every configured
+wake iteration; strict official-reference parity is expected only when the
+gate does not terminate early. All new behavior is opt-in.
+
+### Selecting stability control groups
+
+The modified stability mode can restrict control perturbations to explicit
+one-based group indices:
+
+```text
+vspaero -stab -stab-select p,q,r,controls -stab-control-select 1,3 model
+```
+
+The base case and selected non-control derivatives are unchanged. Only groups
+1 and 3 receive positive and negative control-deflection solves. The explicit
+Forward, Backward, and Central tables contain only `ConGrp_1` and `ConGrp_3`;
+the metadata still lists every model group and marks whether it was selected.
+An unavailable or non-positive index is rejected. Omitting
+`-stab-control-select` preserves the existing all-control-groups behavior.

@@ -2,8 +2,38 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-28 - Clemens Schmid
+
+- Added `-stab-control-select <csv>` for selecting one-based VSPAERO control
+  groups during `-stab`. Only selected groups receive positive and negative
+  perturbation solves and appear as control columns in the explicit Forward,
+  Backward, and Central derivative tables. Per-group metadata records
+  `selected=yes/no`; omitting the option retains the official all-groups
+  behavior.
+- Added official-reference-anchored parity coverage for the selective-control
+  path. The selected group's three derivative tables must match the all-control
+  baseline that has already passed the packaged official build, and a
+  one-operating-point/one-group run must execute exactly base, positive, and
+  negative solver cases.
+
 ## 2026-08-27 - Clemens Schmid
 
+- Added opt-in `-steady-optimize` and `-stab-optimize` modes using the validated
+  State Sweep early-convergence criteria. Regular sweep cases and stability
+  perturbations remain entirely independent because tested cross-case and cross-perturbation
+  interaction-list/preconditioner reuse amplified small coefficient changes in
+  the finite-difference derivatives. An experimental regular-sweep wake warm
+  start was likewise rejected after showing incidence-traversal dependence at
+  low wake-iteration counts. Strict optimized-mode tests against baselines
+  already passing the packaged official build enforce this decision.
+- Added `-solver-opt-profile` timing output for optimized regular and stability
+  runs. Default steady and `-stab` execution remains unchanged.
+- Added optimized-mode parity checks to the mandatory official-reference suite.
+  Thin/thick steady and stability reruns pass exactly when early termination
+  does not trigger. A thin 12-iteration smoke case stopped after 7 iterations
+  with the documented default tolerances and reduced reported solve time from
+  0.334 s to 0.239 s on the test machine; this early-exit result is intentionally
+  tolerance-controlled rather than strict full-iteration parity.
 - Added opt-in `-state-fast-order` execution for native State Sweep. It makes
   P/Q/R the innermost axes and keeps Mach/control combinations contiguous, then
   reuses the initial surface interaction list and matrix preconditioner while

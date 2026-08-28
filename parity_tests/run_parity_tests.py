@@ -9,6 +9,7 @@ import json
 import math
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -246,6 +247,117 @@ def run_state_sweep_cross_checks(
     return checks, failures
 
 
+def run_optimized_mode_check(
+    executable: Path, case_dir: Path, analysis: str, timeout: int,
+    rtol: float, atol: float,
+) -> tuple[dict[str, object], int]:
+    """Compare an opt-in optimized rerun with the official-parity custom baseline."""
+    suffix = ".stab" if analysis == "stab" else ".polar"
+    result_path = case_dir / f"parity_wing{suffix}"
+    baseline = result_path.read_text(encoding="utf-8", errors="replace")
+    mode_arguments = ["-stab", "-stab-optimize"] if analysis == "stab" else ["-steady-optimize"]
+    command = [
+        str(executable), "-omp", "1", *mode_arguments,
+        "-state-continuation-min-wake-iters", "4",
+        "-state-continuation-circulation-tol", "0.005",
+        "-state-continuation-wake-tol", "0.2",
+        "-state-continuation-load-tol", "0.0005",
+        "-solver-opt-profile", "parity_wing",
+    ]
+    with (case_dir / "optimized_run.log").open("w", encoding="utf-8") as log:
+        subprocess.run(command, cwd=case_dir, stdout=log, stderr=subprocess.STDOUT,
+                       check=True, timeout=timeout, env={**os.environ, "OMP_NUM_THREADS": "1"})
+    optimized = result_path.read_text(encoding="utf-8", errors="replace")
+    number = re.compile(r"(?<![A-Za-z_])[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[Ee][-+]?\d+)?")
+    expected = [float(value) for value in number.findall(baseline)]
+    actual = [float(value) for value in number.findall(optimized)]
+    failures = abs(len(expected) - len(actual))
+    maximum_error = 0.0
+    for reference, candidate in zip(expected, actual):
+        error = abs(candidate - reference)
+        maximum_error = max(maximum_error, error)
+        if not math.isfinite(error) or error > atol + rtol * abs(reference):
+            failures += 1
+    return {
+        "analysis": analysis,
+        "status": "PASS" if failures == 0 else "FAIL",
+        "values": min(len(expected), len(actual)),
+        "failures": failures,
+        "maximum_absolute_error": maximum_error,
+        "reference_authority": "custom baseline already compared with packaged official build",
+    }, failures
+
+
+def finite_difference_column(path: Path, column: str) -> dict[str, dict[str, float]]:
+    """Read one column from the explicit forward/backward/central .stab tables."""
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    tables: dict[str, dict[str, float]] = {}
+    for method in ("Forward", "Backward", "Central"):
+        heading = f"# {method} finite-difference derivatives"
+        start = lines.index(heading)
+        headers = lines[start + 1].split()[1:]
+        if column not in headers:
+            raise ValueError(f"Missing {column} in {method} derivative table: {path}")
+        value_index = headers.index(column) + 1
+        values: dict[str, float] = {}
+        for line in lines[start + 4:]:
+            fields = line.split()
+            if not fields or fields[0] not in COEFFICIENTS:
+                if values:
+                    break
+                continue
+            values[fields[0]] = float(fields[value_index])
+        if set(values) != set(COEFFICIENTS):
+            raise ValueError(f"Incomplete {method} derivative table: {path}")
+        tables[method] = values
+    return tables
+
+
+def run_selective_control_check(
+    executable: Path, case_dir: Path, timeout: int,
+    rtol: float, atol: float,
+) -> tuple[dict[str, object], int]:
+    """Verify selected controls match the all-control official-parity baseline."""
+    stab_path = case_dir / "parity_wing.stab"
+    baseline = finite_difference_column(stab_path, "ConGrp_1")
+    command = [
+        str(executable), "-omp", "1", "-stab", "-stab-select", "controls",
+        "-stab-control-select", "1", "parity_wing",
+    ]
+    log_path = case_dir / "selective_control_run.log"
+    with log_path.open("w", encoding="utf-8") as log:
+        subprocess.run(command, cwd=case_dir, stdout=log, stderr=subprocess.STDOUT,
+                       check=True, timeout=timeout,
+                       env={**os.environ, "OMP_NUM_THREADS": "1"})
+    selected = finite_difference_column(stab_path, "ConGrp_1")
+    failures = 0
+    maximum_error = 0.0
+    for method in baseline:
+        for coefficient, reference in baseline[method].items():
+            candidate = selected[method][coefficient]
+            error = abs(candidate - reference)
+            maximum_error = max(maximum_error, error)
+            if not math.isfinite(error) or error > atol + rtol * abs(reference):
+                failures += 1
+    solve_count = sum(
+        line.startswith("Solving...")
+        for line in log_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    )
+    if solve_count != 3:
+        failures += 1
+    output = stab_path.read_text(encoding="utf-8", errors="replace")
+    if "# Control group 1:" not in output or "selected=yes" not in output:
+        failures += 1
+    return {
+        "status": "PASS" if failures == 0 else "FAIL",
+        "values": 3 * len(COEFFICIENTS),
+        "failures": failures,
+        "maximum_absolute_error": maximum_error,
+        "solver_cases": solve_count,
+        "reference_authority": "all-control baseline already compared with packaged official build",
+    }, failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--custom", type=Path, default=DEFAULT_CUSTOM)
@@ -288,6 +400,8 @@ def main() -> int:
     }
     total_failures = 0
     completed: dict[str, tuple[dict[str, object], dict[str, object]]] = {}
+    optimized_checks: list[dict[str, object]] = []
+    selective_control_checks: list[dict[str, object]] = []
 
     for mode, analysis in CASES:
         case_name = f"{mode}_{analysis}"
@@ -316,6 +430,34 @@ def main() -> int:
                 "central_identity_failures": identity_failures,
             }
         )
+        print(f"Running {case_name}: optimized mode", flush=True)
+        optimized_check, optimized_failures = run_optimized_mode_check(
+            custom_vspaero, work / case_name / "custom", analysis,
+            args.timeout, args.rtol, args.atol,
+        )
+        optimized_check["geometry_mode"] = mode
+        optimized_checks.append(optimized_check)
+        total_failures += optimized_failures
+        print(
+            f"  {optimized_check['status']}: {optimized_check['values'] - optimized_failures}/"
+            f"{optimized_check['values']} optimized values within tolerance"
+        )
+        if analysis == "stab":
+            print(f"Running {case_name}: selective control group", flush=True)
+            selective_check, selective_failures = run_selective_control_check(
+                custom_vspaero, work / case_name / "custom",
+                args.timeout, args.rtol, args.atol,
+            )
+            selective_check["geometry_mode"] = mode
+            selective_control_checks.append(selective_check)
+            total_failures += selective_failures
+            print(
+                f"  {selective_check['status']}: {selective_check['solver_cases']} solver cases, "
+                f"{selective_check['failures']} derivative mismatches"
+            )
+
+    report["optimized_mode_checks"] = optimized_checks
+    report["selective_control_checks"] = selective_control_checks
 
     all_state_checks = []
     state_failures = 0
