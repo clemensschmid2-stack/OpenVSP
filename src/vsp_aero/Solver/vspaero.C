@@ -267,7 +267,8 @@ enum STAB_DERIVATIVE_FLAG {
     STAB_DERIV_Q        = 1 << 4,
     STAB_DERIV_R        = 1 << 5,
     STAB_DERIV_CONTROLS = 1 << 6,
-    STAB_DERIV_ALL      = (1 << 7) - 1
+    STAB_DERIV_REYNOLDS = 1 << 7,
+    STAB_DERIV_ALL      = (1 << 8) - 1
 };
 int StabDerivativeFlags_             = STAB_DERIV_ALL;
 double StabStepAlpha_                = 0.01;
@@ -280,6 +281,7 @@ double StabStepR_                    = 0.01;
 double StabStepPHat_                 = 0.;
 double StabStepQHat_                 = 0.;
 double StabStepRHat_                 = 0.;
+double StabStepReynoldsFraction_     = 0.05;
 int StabStepPIsReduced_              = 0;
 int StabStepQIsReduced_              = 0;
 int StabStepRIsReduced_              = 0;
@@ -339,6 +341,7 @@ int StateSweepFastOrder_             = 0;
 int StateSweepContinuation_          = 0;
 int SteadyOptimization_              = 0;
 int StabilityOptimization_           = 0;
+int StabilityMapCsv_                 = 0;
 int SolverOptimizationProfile_       = 0;
 std::vector<int> StabSelectedControlGroups_;
 int StateSweepContinuationMinWakeIterations_ = 4;
@@ -854,7 +857,8 @@ void PrintUsageHelp()
        printf("Options: \n");                  
        printf(" -omp <N>                           Use 'N' processes.\n");
        printf(" -stab                              Calculate stability derivatives.\n");
-       printf(" -stab-select <csv>                 Select alpha,beta,mach,p,q,r,controls, or all.\n");
+       printf(" -stab-select <csv>                 Select alpha,beta,mach,reynolds,p,q,r,controls, or all.\n");
+       printf(" -stab-map-csv                     Write raw per-perturbation CSV rows for Stability Map assembly.\n");
        printf(" -stab-control-select <csv>         Calculate only listed one-based control groups.\n");
        printf(" -steady-optimize                   Enable tolerance-controlled early convergence for steady cases.\n");
        printf(" -stab-optimize                     Enable tolerance-controlled early convergence for -stab cases.\n");
@@ -862,6 +866,7 @@ void PrintUsageHelp()
        printf(" -stab-step-alpha <deg>             Set the alpha perturbation.\n");
        printf(" -stab-step-beta <deg>              Set the beta perturbation.\n");
        printf(" -stab-step-mach <value>            Set the requested symmetric Mach perturbation.\n");
+       printf(" -stab-step-reynolds <fraction>     Set the symmetric relative Reynolds perturbation (default 0.05).\n");
        printf(" -state-sweep                       Stream a finite P/Q/R/control Cartesian state sweep.\n");
        printf(" -state-p|-state-phat <csv>         Set physical [rad/Tunit] or reduced roll-rate states.\n");
        printf(" -state-q|-state-qhat <csv>         Set physical [rad/Tunit] or reduced pitch-rate states.\n");
@@ -988,6 +993,12 @@ void ParseInput(int argc, char *argv[])
         
           StabControlRun_ = 1;
           
+       }
+
+       else if ( strcmp(argv[i],"-stab-map-csv") == 0 ) {
+
+          StabilityMapCsv_ = 1;
+
        }
 
        else if ( strcmp(argv[i],"-state-sweep") == 0 || strcmp(argv[i],"-states") == 0 ) {
@@ -1212,6 +1223,7 @@ void ParseInput(int argc, char *argv[])
              else if ( strcmp(Token,"q")        == 0 ) StabDerivativeFlags_ |= STAB_DERIV_Q;
              else if ( strcmp(Token,"r")        == 0 ) StabDerivativeFlags_ |= STAB_DERIV_R;
              else if ( strcmp(Token,"controls") == 0 ) StabDerivativeFlags_ |= STAB_DERIV_CONTROLS;
+             else if ( strcmp(Token,"reynolds") == 0 ) StabDerivativeFlags_ |= STAB_DERIV_REYNOLDS;
              else if ( strcmp(Token,"all")      == 0 ) StabDerivativeFlags_ |= STAB_DERIV_ALL;
              else {
                 printf("Unknown -stab-select derivative: %s\n", Token);
@@ -1224,6 +1236,16 @@ void ParseInput(int argc, char *argv[])
 
           if ( StabDerivativeFlags_ == 0 ) {
              printf("-stab-select requires at least one derivative.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-stab-step-reynolds") == 0 ) {
+
+          StabStepReynoldsFraction_ = atof(argv[++i]);
+          if ( StabStepReynoldsFraction_ <= 0. || StabStepReynoldsFraction_ >= 1. ) {
+             printf("-stab-step-reynolds requires a fraction greater than zero and less than one.\n");
              exit(1);
           }
 
@@ -3136,7 +3158,7 @@ static void StateSweepWriteWingLoadHeader(FILE *File, const std::string &Name)
     for ( int i = 0 ; i < 24 ; i++ ) fprintf(File,",%s_%s",Columns[i],Name.c_str());
 }
 
-static void StateSweepWriteCsvHeader(FILE *File)
+static void StateSweepWriteCsvHeaderFields(FILE *File)
 {
     fprintf(File,"case_id,mach,reynolds,vinf_m_per_s,alpha_deg,beta_deg,p_hat,q_hat,r_hat,p_rad_per_tunit,q_rad_per_tunit,r_rad_per_tunit");
     for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) fprintf(File,",%s",StateSweepControlColumn(Control).c_str());
@@ -3150,6 +3172,11 @@ static void StateSweepWriteCsvHeader(FILE *File)
           fprintf(File,",%s",HingeColumns[i].c_str());
        }
     }
+}
+
+static void StateSweepWriteCsvHeader(FILE *File)
+{
+    StateSweepWriteCsvHeaderFields(File);
     fprintf(File,"\n");
 }
 
@@ -3377,6 +3404,52 @@ static void StateSweepWriteOptionalLoads(FILE *File)
           fprintf(File,",%.17g",Hinge);
        }
     }
+}
+
+static void StabilityMapWriteRawHeader(FILE *File)
+{
+    fprintf(File,"map_point_id,derivative,direction,coordinate,");
+    StateSweepWriteCsvHeaderFields(File);
+    fprintf(File,"\n");
+}
+
+static void StabilityMapWriteRawRow(
+    FILE *File, uint64_t Point, const char *Derivative, const char *Direction,
+    double Coordinate, int PerturbedControl, double ControlDelta)
+{
+    double P = VSPAERO().RotationalRate_p();
+    double Q = VSPAERO().RotationalRate_q();
+    double R = VSPAERO().RotationalRate_r();
+    double PHat = Vinf_ > 0. ? P * Bref_ / (2. * Vinf_) : NAN;
+    double QHat = Vinf_ > 0. ? Q * Cref_ / (2. * Vinf_) : NAN;
+    double RHat = Vinf_ > 0. ? R * Bref_ / (2. * Vinf_) : NAN;
+    fprintf(File,"%llu,%s,%s,%.17g,%llu,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
+            (unsigned long long)Point,Derivative,Direction,Coordinate,
+            (unsigned long long)Point,VSPAERO().Mach(),VSPAERO().ReCref(),Vinf_,
+            VSPAERO().AngleOfAttack()/TORAD,VSPAERO().AngleOfBeta()/TORAD,
+            PHat,QHat,RHat,P,Q,R);
+    for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) {
+       double Deflection = ControlSurfaceGroup_[Control].ControlSurface_DeflectionAngle();
+       if ( Control == PerturbedControl ) Deflection += ControlDelta;
+       fprintf(File,",%.17g",Deflection);
+    }
+    for ( size_t i = 0 ; i < StateSweepDesignValues_.size() ; i++ ) {
+       fprintf(File,",%.17g",StateSweepDesignValues_[i]);
+    }
+    double CFx = VSPAERO().CFox() + VSPAERO().CFiwx();
+    double CFy = VSPAERO().CFoy() + VSPAERO().CFiwy();
+    double CFz = VSPAERO().CFoz() + VSPAERO().CFiwz();
+    double CMx = VSPAERO().CMox() + VSPAERO().CMix();
+    double CMy = VSPAERO().CMoy() + VSPAERO().CMiy();
+    double CMz = VSPAERO().CMoz() + VSPAERO().CMiz();
+    double CL = VSPAERO().CLo() + VSPAERO().CLiw();
+    double CD = VSPAERO().CDo() + VSPAERO().CDiw();
+    double CS = VSPAERO().CSo() + VSPAERO().CSiw();
+    fprintf(File,",%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
+            CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,-CMx,CMy,-CMz,VSPAERO().MinStallFactor());
+    StateSweepWriteOptionalLoads(File);
+    fprintf(File,"\n");
+    fflush(File);
 }
 
 void StateSweepSolve(void)
@@ -4253,6 +4326,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
 
     int i, j, k, p, ic, jc, kc, Found, Case, Case0, Deriv, TotalCases, CaseTotal;
     char StabFileName[MAX_CHAR_SIZE], VorviewFltFileName[MAX_CHAR_SIZE];
+    FILE *StabilityMapFile = NULL;
     
     // Open the stability and control output file
     
@@ -4276,6 +4350,17 @@ void FiniteDifference_StabilityAndControlSolve(void)
 
        exit(1);
 
+    }
+
+    if ( StabilityMapCsv_ ) {
+       char StabilityMapFileName[MAX_CHAR_SIZE];
+       snprintf(StabilityMapFileName,sizeof(StabilityMapFileName),"%s.stability_cases.csv",FileName);
+       StabilityMapFile = fopen(StabilityMapFileName,"w");
+       if ( StabilityMapFile == NULL ) {
+          printf("Could not open the Stability Map case CSV for output!\n");
+          exit(1);
+       }
+       StabilityMapWriteRawHeader(StabilityMapFile);
     }
    
     VSPAERO().ForwardGMRESConvergenceFactor() = ForwardGMRESConvergenceFactor_;
@@ -4312,6 +4397,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
                    * NumberOfMachs_ * NumberOfAoAs_ * NumberOfBetas_;
     
     Case = CaseTotal = 0;
+    uint64_t StabilityMapPoint = 0;
     
     for ( ic = 1 ; ic <= NumberOfBetas_ ; ic++ ) {
        
@@ -4326,6 +4412,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
              Beta_ = BetaList_[ic];
              Mach_ = MachList_[jc];  
              AoA_  =  AoAList_[kc];
+             uint64_t CurrentStabilityMapPoint = StabilityMapPoint++;
 
              // Set Control surface group deflection to un-perturbed control surface deflections
 
@@ -4530,6 +4617,50 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 CMtlForCase[Case] = -VSPAERO().CMox() - VSPAERO().CMix();           
                 CMtmForCase[Case] =  VSPAERO().CMoy() + VSPAERO().CMiy();           
                 CMtnForCase[Case] = -VSPAERO().CMoz() - VSPAERO().CMiz();         
+
+                if ( StabilityMapFile != NULL ) {
+                   const char *DerivativeName = "base";
+                   double Coordinate = 0.;
+                   if ( Case == 2 ) { DerivativeName = "alpha_rad"; Coordinate = Delta_AoA_ * TORAD; }
+                   if ( Case == 3 ) { DerivativeName = "beta_rad"; Coordinate = Delta_Beta_ * TORAD; }
+                   if ( Case == 4 ) {
+                      DerivativeName = StabStepPIsReduced_ == 1 ? "p_hat" : "p_rad_per_tunit";
+                      Coordinate = StabStepPIsReduced_ == 1 ? StabStepPHat_ : Delta_P_;
+                   }
+                   if ( Case == 5 ) {
+                      DerivativeName = StabStepQIsReduced_ == 1 ? "q_hat" : "q_rad_per_tunit";
+                      Coordinate = StabStepQIsReduced_ == 1 ? StabStepQHat_ : Delta_Q_;
+                   }
+                   if ( Case == 6 ) {
+                      DerivativeName = StabStepRIsReduced_ == 1 ? "r_hat" : "r_rad_per_tunit";
+                      Coordinate = StabStepRIsReduced_ == 1 ? StabStepRHat_ : Delta_R_;
+                   }
+                   if ( Case == 7 ) { DerivativeName = "mach"; Coordinate = Delta_Mach_; }
+                   StabilityMapWriteRawRow(
+                      StabilityMapFile,CurrentStabilityMapPoint,DerivativeName,
+                      Case == 1 ? "base" : "positive",Coordinate,0,0.);
+
+                   // Reynolds only affects force reconstruction for an already
+                   // solved circulation field. Capture multiplicative +/- rows
+                   // without launching two additional aerodynamic solves.
+                   if ( Case == 1 && ( StabDerivativeFlags_ & STAB_DERIV_REYNOLDS ) ) {
+                      double BaseReynolds = VSPAERO().ReCref();
+                      double PositiveReynolds = BaseReynolds * (1. + StabStepReynoldsFraction_);
+                      double NegativeReynolds = BaseReynolds * (1. - StabStepReynoldsFraction_);
+                      VSPAERO().ReCref() = PositiveReynolds;
+                      VSPAERO().ReCalculateForces();
+                      StabilityMapWriteRawRow(
+                         StabilityMapFile,CurrentStabilityMapPoint,"ln_reynolds","positive",
+                         log(PositiveReynolds/BaseReynolds),0,0.);
+                      VSPAERO().ReCref() = NegativeReynolds;
+                      VSPAERO().ReCalculateForces();
+                      StabilityMapWriteRawRow(
+                         StabilityMapFile,CurrentStabilityMapPoint,"ln_reynolds","negative",
+                         log(NegativeReynolds/BaseReynolds),0,0.);
+                      VSPAERO().ReCref() = BaseReynolds;
+                      VSPAERO().ReCalculateForces();
+                   }
+                }
              
                 printf("\n");
          
@@ -4691,6 +4822,14 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 CMtmForCase[Case] =  VSPAERO().CMoy() + VSPAERO().CMiy();           
                 CMtnForCase[Case] = -VSPAERO().CMoz() - VSPAERO().CMiz();                               
 
+                if ( StabilityMapFile != NULL ) {
+                   std::string DerivativeName = StateSweepSafeColumnToken(
+                      ControlSurfaceGroup_[i].Name()) + "_per_deg";
+                   StabilityMapWriteRawRow(
+                      StabilityMapFile,CurrentStabilityMapPoint,DerivativeName.c_str(),
+                      "positive",Delta_Control_,i,Delta_Control_);
+                }
+
                 // Reset Control surface group deflection to un-perturbed control surface deflections
              
                 ApplyControlDeflections();
@@ -4749,6 +4888,29 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
                 StoreStabilityCaseResults(NegativeCase);
 
+                if ( StabilityMapFile != NULL ) {
+                   const char *DerivativeName = "unknown";
+                   double Coordinate = 0.;
+                   if ( Deriv == 2 ) { DerivativeName = "alpha_rad"; Coordinate = -Delta_AoA_ * TORAD; }
+                   if ( Deriv == 3 ) { DerivativeName = "beta_rad"; Coordinate = -Delta_Beta_ * TORAD; }
+                   if ( Deriv == 4 ) {
+                      DerivativeName = StabStepPIsReduced_ == 1 ? "p_hat" : "p_rad_per_tunit";
+                      Coordinate = -(StabStepPIsReduced_ == 1 ? StabStepPHat_ : Delta_P_);
+                   }
+                   if ( Deriv == 5 ) {
+                      DerivativeName = StabStepQIsReduced_ == 1 ? "q_hat" : "q_rad_per_tunit";
+                      Coordinate = -(StabStepQIsReduced_ == 1 ? StabStepQHat_ : Delta_Q_);
+                   }
+                   if ( Deriv == 6 ) {
+                      DerivativeName = StabStepRIsReduced_ == 1 ? "r_hat" : "r_rad_per_tunit";
+                      Coordinate = -(StabStepRIsReduced_ == 1 ? StabStepRHat_ : Delta_R_);
+                   }
+                   if ( Deriv == 7 ) { DerivativeName = "mach"; Coordinate = -Delta_Mach_; }
+                   StabilityMapWriteRawRow(
+                      StabilityMapFile,CurrentStabilityMapPoint,DerivativeName,
+                      "negative",Coordinate,0,0.);
+                }
+
              }
 
              if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
@@ -4796,6 +4958,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
                    VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
                    VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
                    StoreStabilityCaseResults(NegativeCase);
+                   if ( StabilityMapFile != NULL ) {
+                      std::string DerivativeName = StateSweepSafeColumnToken(
+                         ControlSurfaceGroup_[i].Name()) + "_per_deg";
+                      StabilityMapWriteRawRow(
+                         StabilityMapFile,CurrentStabilityMapPoint,DerivativeName.c_str(),
+                         "negative",-Delta_Control_,i,-Delta_Control_);
+                   }
                    ApplyControlDeflections();
 
                 }
@@ -4824,6 +4993,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
     }
     fclose(StabFile);
     fclose(VorviewFlt);
+    if ( StabilityMapFile != NULL ) fclose(StabilityMapFile);
     
 }
 

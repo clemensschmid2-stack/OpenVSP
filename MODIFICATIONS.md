@@ -4,6 +4,21 @@ This fork is derived from NASA's OpenVSP project.
 
 ## 2026-08-29 - Clemens Schmid
 
+- Fixed physical `-stab-step-p/q/r` raw Stability Map metadata. Physical mode
+  is represented internally by `-1`; CSV output now tests explicitly for the
+  reduced-mode value `1` instead of treating both nonzero modes as reduced.
+  Physical perturbations are therefore labelled `*_rad_per_tunit` and record
+  their actual nonzero signed coordinates. Aerodynamic solves and legacy
+  `.stab` calculations are unchanged.
+- Added optional `-stab-map-csv` raw perturbation output. It records the same
+  whole-vehicle, physical-wing, wing-center, symmetry-side, and pressure-hinge
+  columns as State Sweep after each already-required base/positive/negative
+  stability solve. This is an output extension; it does not alter the solved
+  aerodynamic state or the established `.stab` derivative calculations.
+- Added selectable Reynolds sensitivity to `-stab-select` and
+  `-stab-step-reynolds <fraction>`. Reynolds samples use `Re*(1+epsilon)` and
+  `Re*(1-epsilon)` and call the existing force recalculation on the solved
+  circulation field; they do not launch additional aerodynamic solves.
 - Extended custom State Sweep component metadata with area-weighted physical
   wing chord/span/normal frames and physical hinge ownership, origins, and
   axes. Aerodynamic solutions and standard VSPAERO output are unchanged.
