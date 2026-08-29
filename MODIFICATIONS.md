@@ -4,6 +4,19 @@ This fork is derived from NASA's OpenVSP project.
 
 ## 2026-08-29 - Clemens Schmid
 
+- Fixed physical-side wing geometry, viscous-load, and stall-load partitioning
+  for symmetric wings. `VortexSheet::WingSurface()` identifies a continuous
+  wake sheet and can span both mirrored physical surfaces; State Sweep now
+  assigns every strip by its trailing-edge `SurfaceID`. This prevents one side
+  from receiving the complete wing area/load while the other reports zero,
+  without changing whole-vehicle force or moment accumulation.
+- Hardened the mandatory official-reference parity gate. It now parses the
+  explicit `.stab` Forward/Backward/Central tables directly, rejects all
+  non-finite operands, requires the central identity, cross-checks positive and
+  negative P/Q/R/control raw Stability Map cases against State Sweep, and
+  validates finite physical-wing geometry/load/center-translation and mirrored
+  pressure-hinge identities. Added focused solver-independent harness tests for
+  missing negative cases and NaN/Inf rejection.
 - Fixed physical `-stab-step-p/q/r` raw Stability Map metadata. Physical mode
   is represented internally by `-1`; CSV output now tests explicitly for the
   reduced-mode value `1` instead of treating both nonzero modes as reduced.

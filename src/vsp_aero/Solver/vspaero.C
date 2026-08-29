@@ -3211,12 +3211,15 @@ static void StateSweepWingPlanformGeometry(
     int Level = 1;
     for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
        for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
-          if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
           for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
              VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
              int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());
              VSP_EDGE &LeadingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(LE);
              VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(TE);
+             // WingSurface() identifies a continuous vortex sheet, which can
+             // span several physical symmetry instances.  The edge SurfaceID
+             // is the physical instance requested by -state-wing-load.
+             if ( TrailingEdge.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
              int Node1 = TrailingEdge.Node1(), Node2 = TrailingEdge.Node2();
              double ChordVector[3] = {
                 TrailingEdge.Xc()-LeadingEdge.Xc(),
@@ -3303,10 +3306,10 @@ static void StateSweepWriteOptionalLoads(FILE *File)
        // ordinary non-trailing-edge force accumulation.
        if ( VSPAERO().StallModelIsOn() ) {
           for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
-             if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
              for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
                 VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
                 VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(ABS(Trail.TE_Edge()));
+                if ( TrailingEdge.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
                 double StallFactor = 1.-Trail.StallFactor();
                 double Fx = StallFactor*TrailingEdge.Fx()/ForceScale;
                 double Fy = StallFactor*TrailingEdge.Fy()/ForceScale;
@@ -3325,9 +3328,10 @@ static void StateSweepWriteOptionalLoads(FILE *File)
        // surface. All moments use the common vehicle reference supplied by
        // the automation. Hinge moments intentionally remain pressure-only.
        for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
-          if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
           for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
              VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
+             VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(ABS(Trail.TE_Edge()));
+             if ( TrailingEdge.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
              double AreaScale = Trail.LocalSpan()*Trail.LocalChord()/Sref_;
              double Fx = Trail.CFox()*AreaScale, Fy = Trail.CFoy()*AreaScale, Fz = Trail.CFoz()*AreaScale;
              int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());

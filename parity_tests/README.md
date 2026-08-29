@@ -31,6 +31,13 @@ columns must match the all-control baseline already validated against the
 packaged official build, and the log must contain exactly three aerodynamic
 solves: base, positive control, and negative control.
 
+The explicit Forward, Backward, and Central tables in every custom `.stab`
+file are mandatory test inputs. Every table entry must be finite, and every
+Central entry must equal `(Forward + Backward) / 2` within the printed-output
+tolerance. This check reads the solver file directly; OpenVSP 3.51.2 result
+objects expose only the legacy forward fields and cannot prove that the new
+tables exist.
+
 Run from a Python 3.13 environment compatible with the packaged OpenVSP API:
 
 ```bat
@@ -61,10 +68,30 @@ analytical aerodynamic data.
 The suite also runs the custom `-state-sweep` mode in both thin and thick modes
 and performs cross-mode checks against official-build results. Zero-rate states
 are compared with the official normal sweep, while positive P/Q/R and control
-states are compared with the corresponding official `-stab` perturbation cases. These checks use
+states are compared with the corresponding official `-stab` perturbation cases.
+The custom solver is also rerun with `-stab-map-csv`: its base and both positive
+and negative P/Q/R/control raw solutions must match State Sweep across every
+shared vehicle, physical-wing, wing-center, and pressure-hinge output column.
+This makes missing or stale negative perturbations a mandatory failure while
+retaining the packaged official build as the authority for the established
+positive solutions.
+
+State Sweep output contracts additionally require finite values, positive and
+mirror-consistent physical-side geometry, orthonormal wing frames, exact
+viscous/inviscid/total and side-to-parent identities, correct moment translation
+to each planform center, parent-to-vehicle totals, and one finite mirrored hinge
+coefficient per physical control surface. The symmetric zero-rate/control row
+must obey the expected polar-vector force and axial-vector moment reflection
+relations. These checks use
 `--state-atol` (default `5e-4`) and `--state-rtol` (default `1e-4`) because a
 different case order can produce small wake-convergence differences even when
 the solver implementation is equivalent.
+
+The small, solver-independent harness checks can be run with:
+
+```bat
+python -m unittest discover -s parity_tests -p "test_*harness.py" -v
+```
 
 ## Optional historical State Sweep regression
 
