@@ -2,7 +2,33 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-29 - Clemens Schmid
+
+- Extended custom State Sweep component metadata with area-weighted physical
+  wing chord/span/normal frames and physical hinge ownership, origins, and
+  axes. Aerodynamic solutions and standard VSPAERO output are unchanged.
+- Added `CM_x_center_<wing>`, `CM_y_center_<wing>`, and
+  `CM_z_center_<wing>` State Sweep columns. Each physical symmetry side uses
+  its own geometric planform-area centroid; combined parents use the
+  area-weighted centroid of all physical sides. The translation uses the
+  near-field total force `CFo+CFi`, consistent with `CM=CMo+CMi`.
+- Added physical-wing `planform_area` and `planform_center` metadata to the
+  State Sweep manifest, bumped the optional wing-load checkpoint schema, and
+  extended official-reference parity tests with center-translation identities.
+
 ## 2026-08-28 - Clemens Schmid
+
+- Updated State Sweep output columns to use real control-group names plus
+  `_deg`; externally supplied design names are used directly so automation
+  aliases and unit suffixes survive.
+  Optional hinge columns use physical control-surface names, the `Cm_hinge`
+  quantity, and compact symmetry-side suffixes such as `ypos/yneg`.
+  Whole-vehicle coefficients retain standard unprefixed VSPAERO names.
+  Per-wing `CFxyz/CMxyz` integration remains
+  about the caller-supplied physical rotation center. This development-stage
+  format intentionally has no schema-version compatibility layer.
+  Updated official-reference State Sweep parity checks to discover the control
+  column through the manifest instead of assuming the retired numbered name.
 
 - Added `-stab-control-select <csv>` for selecting one-based VSPAERO control
   groups during `-stab`. Only selected groups receive positive and negative
@@ -168,3 +194,20 @@ This fork is derived from NASA's OpenVSP project.
   control, physical-rate, and reduced-rate perturbation steps. The `.stab`
   output records the resolved operating point, references, and physical and
   reduced rate steps. See `STABILITY_DERIVATIVES.md`.
+# 2026-08-29: Decomposed physical and symmetric-parent wing loads
+
+- Expanded optional State Sweep wing output into separate empirical viscous,
+  surface-integrated inviscid, total, and diagnostic Trefftz/wake force
+  components.
+- Referenced every wing moment to the common vehicle aerodynamic reference
+  point supplied by the automation.
+- Added parent-wing columns that exactly sum physical symmetry instances while
+  retaining independent `ypos`/`yneg` (and other symmetry-axis) columns.
+- Matched VSPAERO's native vehicle convention: total wing forces use empirical
+  viscous plus Trefftz/wake inviscid force, while total wing moments use
+  empirical viscous plus near-field inviscid moment.
+- Integrated near-field and Trefftz forces on the solver's active multigrid
+  level so physical-wing sums reconcile with the native vehicle totals.
+- Standardized optional output on quantity-first column names:
+  `CFo_x_<wing>`, `CFi_x_<wing>`, `CFiw_x_<wing>`, `CF_x_<wing>`, equivalent
+  moment forms, and `Cm_hinge_<control>`.

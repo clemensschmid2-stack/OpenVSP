@@ -23,21 +23,26 @@ r_hat = r * Bref / (2 * Vinf)
 ```
 
 `-state-design <name> <value>` records an externally applied design state in
-the manifest and every CSV row. It is metadata: VSPAERO does not regenerate
+the manifest and every CSV row, using `name` directly as its CSV column. The
+automation supplies the OpenVSP parameter name or configured alias plus its
+unit suffix (for example, `Y_Rel_Rotation_deg`). It is metadata: VSPAERO does not regenerate
 OpenVSP geometry. The repository automation performs that regeneration and
 launches one native State Sweep per design-variable combination.
 
 Only one physical/reduced form may be supplied for each axis. An omitted rate
 axis contains zero. An omitted control axis contains the control group's case
 file deflection. `-state-control` uses the one-based control-group index from
-the `.vspaero` case file and takes deflections in degrees.
+the `.vspaero` case file and takes deflections in degrees. Its CSV column uses
+the sanitized control-group name followed by `_deflection_deg`.
 
 ## Output and memory behavior
 
 Results are streamed to `<model>.state_sweep/`:
 
 - `manifest.json` records the format, case counts, rate conventions, control
-  columns, chunk size, and configuration hash.
+  columns, chunk size, and configuration hash. With component loads enabled it
+  also records each physical wing's center and representative chord/span/normal
+  frame, and each physical hinge's owning wing, origin, and direction.
 - `checkpoint.txt` records the next output row and is replaced atomically.
 - `part-000000.csv`, `part-000001.csv`, ... contain integrated coefficients.
 
@@ -153,17 +158,47 @@ preserves the original sequential behavior and checkpoint hash. With
 
 ## Optional physical-surface loads
 
-`-state-wing-load <surface> <name> <x> <y> <z>` may be repeated to append
-`CFx/CFy/CFz` and `CMx/CMy/CMz` for individual physical wing surfaces. Moments
-use the supplied OpenVSP rotation center and standard `Bref/Cref/Bref`
-normalization. Pressure and VSPAERO's strip-wise viscous wing loads are
-included. Symmetry copies are passed as separate surfaces and are accumulated
-from their own solved loops; loads are never mirrored from another copy.
+`-state-wing-load <surface> <name> <x> <y> <z>` may be repeated to append a
+decomposed load for every physical wing surface. The supplied point is the
+common vehicle aerodynamic reference point; moments use this point and the
+standard `Bref/Cref/Bref` normalization. Each wing emits `CFo*`/`CMo*`
+(empirical viscous/profile), `CFi*`/`CMi*` (near-field inviscid), and `CFiw*`
+(Trefftz/wake inviscid force). The total columns follow VSPAERO's vehicle
+convention exactly: `CF* = CFo* + CFiw*`, while
+`CM* = CMo* + CMi*` because VSPAERO has no corresponding far-field moment.
+Component columns use quantity-first names such as `CFo_x_wing_ypos`,
+`CFiw_z_elevator`, and `CM_y_mast`.
+
+Each wing additionally emits `CM_x_center_*`, `CM_y_center_*`, and
+`CM_z_center_*` about its geometric planform-area centroid. The centroid is the
+area-weighted mean of VSPAERO strip centers, using each strip's leading/trailing
+edge midpoint and planform area. Translation uses `CFo+CFi`, matching the
+near-field total `CMo+CMi`, and the standard `Bref/Cref/Bref` normalization.
+The manifest records `planform_area` and `planform_center` for every physical
+surface.
+
+Symmetry copies are passed as separate surfaces and accumulated from their own
+solved loops; loads are never mirrored from another copy. When two or more
+physical names share a compact side suffix (`ypos`, `yneg`, `xpos`, `xneg`,
+`zpos`, or `zneg`), an additional parent-wing set of columns is emitted as the
+exact sum of those physical instances. Because every moment has the same
+reference point, parent force and moment coefficients are directly additive.
+For an all-lifting-surface model, summing all parent-wing totals reproduces the
+vehicle `CFx/y/z` and `CMx/y/z` columns. Non-lifting components remain outside
+this optional wing-only partition.
+Physical symmetry sides each retain their own center-moment columns. The
+parent center moment is evaluated about the area-weighted center of all sides;
+unlike moments about the shared vehicle reference point, it is not the direct
+sum of moments taken about the separate side centers.
 
 `-state-hinge-loads` appends one pressure hinge-moment coefficient per physical
 control surface. Every surface uses its own loop list, hinge origin, and hinge
-direction, keeping symmetric controls separate. `Ch` is normalized by
-`q*Sref*Cref`. The manifest records wing centers and hinge-column names.
+direction, keeping symmetric controls separate. `Cm_hinge` is normalized by
+`q*Sref*Cref`. Columns use the control-surface name and append the compact side
+token `ypos`, `yneg`, `xpos`, `xneg`, `zpos`, or `zneg` for
+symmetric copies. The manifest records wing centers and
+hinge-column names. Hinge columns are also quantity-first, for example
+`Cm_hinge_aileron_ypos`.
 
 ADB state storage, unsteady analysis, trim, adjoint analysis, stability
 derivatives, explicit coupled-state lists, and distributed sharding are not

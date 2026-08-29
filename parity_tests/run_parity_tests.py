@@ -188,6 +188,16 @@ def compare_coefficients(
     return {"name": name, "status": "PASS" if failures == 0 else "FAIL", "differences": differences}, failures
 
 
+def wing_load_column(name: str, quantity_and_axis: str) -> str:
+    """Return the quantity-first State Sweep wing column name."""
+    return f"{quantity_and_axis[:-1]}_{quantity_and_axis[-1]}_{name}"
+
+
+def wing_center_moment_column(name: str, axis: str) -> str:
+    """Return a State Sweep moment-about-planform-center column name."""
+    return f"CM_{axis}_center_{name}"
+
+
 def run_state_sweep_cross_checks(
     custom: Path,
     work: Path,
@@ -210,6 +220,8 @@ def run_state_sweep_cross_checks(
         str(custom / "vspaero.exe"), "-omp", "1", "-state-sweep",
         "-state-p", "-0.01,0,0.01", "-state-q", "-0.01,0,0.01",
         "-state-r", "-0.01,0,0.01", "-state-control", "1", "0,0.1",
+        "-state-wing-load", "1", "paritywing_ypos", "0", "0", "0",
+        "-state-wing-load", "2", "paritywing_yneg", "0", "0", "0",
         "-state-chunk-size", "100", "parity_wing",
     ]
     with (output / "run.log").open("w", encoding="utf-8") as log:
@@ -217,11 +229,22 @@ def run_state_sweep_cross_checks(
                        check=True, timeout=timeout, env={**os.environ, "OMP_NUM_THREADS": "1"})
     with (output / "parity_wing.state_sweep" / "part-000000.csv").open(newline="", encoding="utf-8") as stream:
         rows = list(csv.DictReader(stream))
+    manifest = json.loads(
+        (output / "parity_wing.state_sweep" / "manifest.json").read_text(encoding="utf-8")
+    )
+    setup_text = (output / "parity_wing.vspaero").read_text(encoding="utf-8", errors="replace")
+    def setup_value(name: str) -> float:
+        match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*([-+0-9.eE]+)", setup_text)
+        if not match:
+            raise ValueError(f"State Sweep parity setup has no {name} value")
+        return float(match.group(1))
+    bref, cref = setup_value("Bref"), setup_value("Cref")
+    control_column = manifest["control_groups"][0]["column"]
 
     def select(p: float, q: float, r: float, control: float) -> dict[str, str]:
         for row in rows:
             state = tuple(float(row[key]) for key in
-                          ("p_rad_per_tunit", "q_rad_per_tunit", "r_rad_per_tunit", "ctrl_001_deg"))
+                          ("p_rad_per_tunit", "q_rad_per_tunit", "r_rad_per_tunit", control_column))
             if all(math.isclose(value, target, abs_tol=1e-12)
                    for value, target in zip(state, (p, q, r, control))):
                 return row
@@ -229,6 +252,92 @@ def run_state_sweep_cross_checks(
 
     checks: list[dict[str, object]] = []
     failures = 0
+
+    # The optional physical-instance output must remain algebraically exact:
+    # total = viscous + surface inviscid, and the parent wing is the sum of
+    # its independently solved symmetry instances. Wake/Trefftz force is an
+    # alternative inviscid diagnostic and is checked only for side summation.
+    identity_differences = []
+    identity_failures = 0
+    physical_geometry = {item["name"]: item for item in manifest["wing_loads"]}
+    parent_area = sum(float(physical_geometry[name]["planform_area"])
+                      for name in ("paritywing_ypos", "paritywing_yneg"))
+    parent_center = [
+        sum(float(physical_geometry[name]["planform_area"])
+            * float(physical_geometry[name]["planform_center"][axis])
+            for name in ("paritywing_ypos", "paritywing_yneg")) / parent_area
+        for axis in range(3)
+    ]
+    output_geometry = {
+        name: (physical_geometry[name]["planform_center"], physical_geometry[name]["reference_point"])
+        for name in ("paritywing_ypos", "paritywing_yneg")
+    }
+    output_geometry["paritywing"] = (parent_center, physical_geometry["paritywing_ypos"]["reference_point"])
+    for row_index, row in enumerate(rows):
+        for side in ("paritywing_ypos", "paritywing_yneg", "paritywing"):
+            for axis in "xyz":
+                for kind, viscous, inviscid in (
+                    ("CF", f"CFo{axis}", f"CFiw{axis}"),
+                    ("CM", f"CMo{axis}", f"CMi{axis}"),
+                ):
+                    total_column = wing_load_column(side, f"{kind}{axis}")
+                    expected = float(row[wing_load_column(side, viscous)]) + float(
+                        row[wing_load_column(side, inviscid)]
+                    )
+                    error = abs(float(row[total_column]) - expected)
+                    if error > 1e-12:
+                        identity_failures += 1
+                        identity_differences.append({"row": row_index, "field": total_column, "error": error})
+            center, reference = output_geometry[side]
+            dx, dy, dz = (float(center[index]) - float(reference[index]) for index in range(3))
+            fx = float(row[wing_load_column(side, "CFox")]) + float(row[wing_load_column(side, "CFix")])
+            fy = float(row[wing_load_column(side, "CFoy")]) + float(row[wing_load_column(side, "CFiy")])
+            fz = float(row[wing_load_column(side, "CFoz")]) + float(row[wing_load_column(side, "CFiz")])
+            expected_center_moments = {
+                "x": float(row[wing_load_column(side, "CMx")]) - (dy*fz-dz*fy)/bref,
+                "y": float(row[wing_load_column(side, "CMy")]) - (dz*fx-dx*fz)/cref,
+                "z": float(row[wing_load_column(side, "CMz")]) - (dx*fy-dy*fx)/bref,
+            }
+            for axis, expected in expected_center_moments.items():
+                column = wing_center_moment_column(side, axis)
+                error = abs(float(row[column])-expected)
+                if error > 1e-12:
+                    identity_failures += 1
+                    identity_differences.append({"row": row_index, "field": column, "error": error})
+        for suffix in (
+            "CFox", "CFoy", "CFoz", "CFix", "CFiy", "CFiz", "CFx", "CFy", "CFz",
+            "CMox", "CMoy", "CMoz", "CMix", "CMiy", "CMiz", "CMx", "CMy", "CMz",
+            "CFiwx", "CFiwy", "CFiwz",
+        ):
+            expected = float(row[wing_load_column("paritywing_ypos", suffix)]) + float(
+                row[wing_load_column("paritywing_yneg", suffix)]
+            )
+            parent_column = wing_load_column("paritywing", suffix)
+            error = abs(float(row[parent_column]) - expected)
+            if error > 1e-12:
+                identity_failures += 1
+                identity_differences.append({"row": row_index, "field": parent_column, "error": error})
+        for suffix in ("CFx", "CFy", "CFz", "CMx", "CMy", "CMz"):
+            error = abs(float(row[wing_load_column("paritywing", suffix)]) - float(row[suffix]))
+            # The partition changes floating-point summation order relative to
+            # the monolithic vehicle accumulator. Require coefficient agreement
+            # well below solver parity tolerances without demanding bit identity.
+            if error > 1e-7:
+                identity_failures += 1
+                identity_differences.append({
+                    "row": row_index,
+                    "field": f"all_wings_{suffix}_vs_vehicle",
+                    "error": error,
+                })
+    checks.append({
+        "name": "wing_side_parent_identities",
+        "status": "PASS" if identity_failures == 0 else "FAIL",
+        "rows": len(rows),
+        "failures": identity_failures,
+        "differences": identity_differences[:100],
+    })
+    failures += identity_failures
+
     base_history = min(official_base["history"], key=lambda item: abs(final_value(item, "Alpha") - 4.0))
     check, count = compare_coefficients("normal_sweep_base", normal_sweep_coefficients(base_history),
                                         select(0, 0, 0, 0), rtol, atol)
