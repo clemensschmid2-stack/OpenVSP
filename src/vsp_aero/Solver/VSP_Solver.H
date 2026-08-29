@@ -85,6 +85,24 @@ private:
     double StartTime_;
     double StartSolveTime_;
 
+    int StateSweepProfiling_;
+    int StateSweepReuseInitialInteractionList_;
+    int StateSweepReusePreconditioner_;
+    int StateSweepReuseWakeInteractionLists_;
+    int StateSweepContinuationEnabled_;
+    int StateSweepContinuationMinWakeIterations_;
+    int StateSweepContinuationWakeIterationsThisSolve_;
+    int StateSweepContinuationFailedThisSolve_;
+    double StateSweepContinuationCirculationTolerance_;
+    double StateSweepContinuationWakeTolerance_;
+    double StateSweepContinuationLoadTolerance_;
+    double ProfileWakeInitializationSeconds_;
+    double ProfileInteractionListSeconds_;
+    double ProfilePreconditionerSeconds_;
+    double ProfileIterationSeconds_;
+    double ProfileLinearSolveSeconds_;
+    double ProfileForceSeconds_;
+
     // Filename
     
     char FileName_[MAX_CHAR_SIZE];
@@ -1220,6 +1238,32 @@ public:
     /* Use previous solution as initial guess ... don't use this if the geometry has changed, eg in an optimization run **/
     
     int &RestartFromPreviousSolve(void) { return RestartFromPreviousSolve_; };
+
+    void ResetStateSweepProfile(void) {
+       ProfileWakeInitializationSeconds_ = 0.;
+       ProfileInteractionListSeconds_ = 0.;
+       ProfilePreconditionerSeconds_ = 0.;
+       ProfileIterationSeconds_ = 0.;
+       ProfileLinearSolveSeconds_ = 0.;
+       ProfileForceSeconds_ = 0.;
+    };
+    int &StateSweepProfiling(void) { return StateSweepProfiling_; };
+    int &StateSweepReuseInitialInteractionList(void) { return StateSweepReuseInitialInteractionList_; };
+    int &StateSweepReusePreconditioner(void) { return StateSweepReusePreconditioner_; };
+    int &StateSweepReuseWakeInteractionLists(void) { return StateSweepReuseWakeInteractionLists_; };
+    int &StateSweepContinuationEnabled(void) { return StateSweepContinuationEnabled_; };
+    int &StateSweepContinuationMinWakeIterations(void) { return StateSweepContinuationMinWakeIterations_; };
+    int StateSweepContinuationWakeIterationsThisSolve(void) { return StateSweepContinuationWakeIterationsThisSolve_; };
+    int StateSweepContinuationFailedThisSolve(void) { return StateSweepContinuationFailedThisSolve_; };
+    double &StateSweepContinuationCirculationTolerance(void) { return StateSweepContinuationCirculationTolerance_; };
+    double &StateSweepContinuationWakeTolerance(void) { return StateSweepContinuationWakeTolerance_; };
+    double &StateSweepContinuationLoadTolerance(void) { return StateSweepContinuationLoadTolerance_; };
+    double StateSweepProfileWakeInitialization(void) { return ProfileWakeInitializationSeconds_; };
+    double StateSweepProfileInteractionLists(void) { return ProfileInteractionListSeconds_; };
+    double StateSweepProfilePreconditioner(void) { return ProfilePreconditionerSeconds_; };
+    double StateSweepProfileIterations(void) { return ProfileIterationSeconds_; };
+    double StateSweepProfileLinearSolve(void) { return ProfileLinearSolveSeconds_; };
+    double StateSweepProfileForces(void) { return ProfileForceSeconds_; };
  
     /** Set angle of attack **/
     

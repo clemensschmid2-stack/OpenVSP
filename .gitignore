@@ -7,6 +7,9 @@ parity_tests/_state_sweep_regression_work/
 parity_tests/parity_report.json
 parity_tests/baselines/
 parity_tests/state_sweep_regression_report.json
+parity_tests/_state_continuation_work/
+parity_tests/state_continuation_regression_report.json
+parity_tests/state_continuation_test_plan.json
 /parity_wing*
 buildlibs/
 inst/

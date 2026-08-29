@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Compare optimized State Sweep output with a frozen stable-main VSPAERO."""
+"""Optional historical regression against a frozen custom VSPAERO.
+
+This is not an official-reference parity test and is not a mandatory gate.
+"""
 
 from __future__ import annotations
 
@@ -66,6 +69,7 @@ def run_sweep(
     *, process_cases: int = 0, resume: bool = False,
     range_start: int | None = None, range_count: int | None = None,
     output_name: str = "parity_wing.state_sweep",
+    profile: bool = False, fast_order: bool = False,
 ) -> None:
     command = [str(executable), "-omp", "1", "-state-sweep", *options,
                "-state-chunk-size", "100", "-state-output-dir", output_name]
@@ -73,6 +77,10 @@ def run_sweep(
         command.extend(("-state-process-cases", str(process_cases)))
     if resume:
         command.append("-state-resume")
+    if profile:
+        command.append("-state-profile")
+    if fast_order:
+        command.append("-state-fast-order")
     if range_start is not None and range_count is not None:
         command.extend(("-state-range", str(range_start), str(range_count)))
     command.append("parity_wing")
@@ -132,6 +140,24 @@ def compare_rows(
     return {"status": "PASS" if not failures else "FAIL", "rows": len(actual_rows),
             "ignored_columns": sorted(ignore_columns),
             "maximum_absolute_error": maximum_error, "failures": failures}
+
+
+def rekey_by_state(
+    result: tuple[list[str], dict[int, list[float]]],
+) -> tuple[list[str], dict[tuple[float, ...], list[float]]]:
+    """Ignore case numbering when comparing two valid traversal orders."""
+    header, rows = result
+    try:
+        coefficient_start = header.index("CFx") - 1
+    except ValueError as exc:
+        raise ValueError("State Sweep output has no CFx column") from exc
+    keyed: dict[tuple[float, ...], list[float]] = {}
+    for values in rows.values():
+        key = tuple(values[:coefficient_start])
+        if key in keyed:
+            raise ValueError(f"Duplicate physical State Sweep state: {key}")
+        keyed[key] = values
+    return header, keyed
 
 
 def checkpoint_counts(path: Path) -> tuple[int, int]:
@@ -215,8 +241,44 @@ def main() -> int:
     invariant = work / "execution_invariance"
     canonical_dir = invariant / "canonical"
     copy_inputs(source, canonical_dir)
-    run_sweep(candidate, canonical_dir, options, args.timeout)
+    run_sweep(candidate, canonical_dir, options, args.timeout, profile=True)
     canonical = read_rows(canonical_dir / "parity_wing.state_sweep")
+    profile_path = canonical_dir / "parity_wing.state_sweep" / "profile.json"
+    profile_failures = []
+    required_profile_fields = {
+        "process_total", "solver_calls", "wake_initialization", "interaction_lists",
+        "preconditioner", "wake_iterations", "linear_solve_with_wake_update",
+        "force_integration", "additional_reynolds_force_recalculation",
+        "csv_and_checkpoint_output",
+    }
+    try:
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+        missing = sorted(required_profile_fields - profile.get("seconds", {}).keys())
+        if missing:
+            profile_failures.append({"kind": "missing_profile_fields", "fields": missing})
+        if any(float(value) < 0.0 for value in profile.get("seconds", {}).values()):
+            profile_failures.append({"kind": "negative_profile_time"})
+    except (OSError, ValueError, TypeError) as exc:
+        profile_failures.append({"kind": "invalid_profile", "error": str(exc)})
+    profile_check = {
+        "mode": "thin", "scenario": "profile_schema",
+        "status": "PASS" if not profile_failures else "FAIL",
+        "failures": profile_failures,
+    }
+    report["cases"].append(profile_check)
+    total_failures += profile_check["status"] != "PASS"
+
+    fast_dir = invariant / "fast_order"
+    copy_inputs(source, fast_dir)
+    run_sweep(candidate, fast_dir, options, args.timeout, profile=True, fast_order=True)
+    fast_comparison = compare_rows(
+        rekey_by_state(canonical),
+        rekey_by_state(read_rows(fast_dir / "parity_wing.state_sweep")),
+        args.invariance_rtol, args.invariance_atol,
+    )
+    fast_comparison.update({"mode": "thin", "scenario": "fast_order_invariance"})
+    report["cases"].append(fast_comparison)
+    total_failures += fast_comparison["status"] != "PASS"
     batched_dir = invariant / "batched"
     copy_inputs(source, batched_dir)
     run_to_completion(candidate, batched_dir, options, args.timeout, 3, "batched.state_sweep")

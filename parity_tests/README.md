@@ -1,4 +1,13 @@
-# OpenVSP/VSPAERO parity tests
+# OpenVSP/VSPAERO validation
+
+## Official-reference parity policy
+
+Every test described as **parity** compares the custom build with the official
+OpenVSP 3.51.2 distribution under
+`reference_builds/OpenVSP-3.51.2-win64`. A binary copied from `main`, another
+branch, or a previous custom build is never a parity reference. The parity
+runner intentionally provides no command-line option for replacing the
+official reference path.
 
 This suite creates a deterministic NACA 0012-style wing and compares the
 official OpenVSP 3.51.2 distribution with the local full build. It runs thin
@@ -8,6 +17,19 @@ mass, center of gravity, and inertia results. VSPAERO is restricted to one
 OpenMP thread for repeatability.
 Runtime fields such as `Analysis_Duration_Sec` are excluded from numerical
 comparison.
+
+After every thin/thick official-reference steady and stability comparison,
+the suite reruns the identical generated case with `-steady-optimize` or
+`-stab-optimize`. Numeric `.polar`/`.stab` values are compared with the custom
+baseline that just passed the official check. Optimization parity is therefore
+anchored transitively to the packaged official build while also exercising the
+new command-line path.
+
+Each thin/thick stability case also reruns only control group 1 through
+`-stab-control-select 1`. Its Forward, Backward, and Central control derivative
+columns must match the all-control baseline already validated against the
+packaged official build, and the log must contain exactly three aerodynamic
+solves: base, positive control, and negative control.
 
 Run from a Python 3.13 environment compatible with the packaged OpenVSP API:
 
@@ -44,16 +66,23 @@ states are compared with the corresponding official `-stab` perturbation cases. 
 different case order can produce small wake-convergence differences even when
 the solver implementation is equivalent.
 
-## State Sweep optimization regression
+## Optional historical State Sweep regression
 
-Before changing native State Sweep behavior, snapshot the tested stable-main
-executable. The snapshot and its SHA-256 metadata are local ignored artifacts:
+The official executable predates the custom `-state-sweep` CLI. Consequently,
+the separate State Sweep regression can optionally compare custom-only CSV
+behavior with a frozen, previously tested executable. This is a historical
+regression—not parity, not an authoritative numerical reference, and not a
+mandatory acceptance gate.
+
+To use it, snapshot the chosen historical executable. The snapshot and its
+SHA-256 metadata are local ignored artifacts:
 
 ```bat
 python snapshot_stable_vspaero.py
 ```
 
-Then run the optimization regression after every native solver change:
+Run this additional diagnostic when a comparison with historical custom
+behavior is useful:
 
 ```bat
 run_state_sweep_regression.bat
@@ -73,9 +102,8 @@ Override them explicitly only when a documented numerical change requires it.
 subset, and `--keep-work` retains all inputs, CSV files, checkpoints, and logs.
 The detailed result is written to `state_sweep_regression_report.json`.
 
-The stable snapshot protects custom functionality that the official executable
-cannot run. It complements rather than replaces `run_parity_tests.bat`: native
-changes must pass both suites.
+The historical snapshot can reveal accidental changes in custom-only output,
+but it never replaces or qualifies official-reference parity.
 
 Stable main's State Sweep used surface-inviscid rather than wake-induced
 components for total `CFy/CFz`. Those two columns are therefore excluded only
@@ -83,6 +111,30 @@ from stable-snapshot comparison and are instead checked against the official
 normal sweep and `-stab` results in both thin and thick modes. Candidate-only
 batch/resume/range invariance continues to compare `CFy/CFz` normally.
 
-`run_native_regression.bat` is the mandatory combined gate and runs official
-parity first, followed by stable-main State Sweep regression. The batch launchers
-prefer the active Conda environment's Python executable when available.
+`run_native_regression.bat` is the mandatory combined gate. It runs official
+3.51.2 parity first and continuation correctness second; it does not invoke the
+historical stable-main regression. With no argument it uses the installed custom
+distribution. To validate an incremental executable without installing it,
+pass its path as the sole argument:
+
+```bat
+run_native_regression.bat C:\path\to\vspaero.exe
+```
+
+The batch launchers prefer the active Conda environment's Python executable
+when available.
+
+## Experimental continuation regression
+
+`run_state_continuation_regression.py` is the dedicated acceptance harness for
+circulation warm starts, wake warm starts, and convergence-based early wake
+termination. Its test rationale, proposed CLI contract, tolerances, profiling
+requirements, and merge gates are defined in
+[`CONTINUATION_VALIDATION.md`](CONTINUATION_VALIDATION.md).
+
+Before the native feature is implemented, run `--plan-only` to emit and inspect
+the test matrix. Once implementation begins, `--require-feature` makes missing
+CLI support or profiling fields a test failure. This suite compares the
+candidate's continuation results with cold results from the same candidate, so
+it is a correctness test rather than parity. It supplements—but never
+replaces—the official-reference parity suite.

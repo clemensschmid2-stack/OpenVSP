@@ -15,6 +15,9 @@
 #include <stdint.h>
 #include <limits.h>
 #include <errno.h>
+#include <chrono>
+#include <algorithm>
+#include <cctype>
 
 #ifdef WIN32
 #include <direct.h>
@@ -331,6 +334,17 @@ int TrimNumberOfIterations_          = 10;
 // product is never materialized in memory.
 int StateSweep_                      = 0;
 int StateSweepResume_                = 0;
+int StateSweepProfile_               = 0;
+int StateSweepFastOrder_             = 0;
+int StateSweepContinuation_          = 0;
+int SteadyOptimization_              = 0;
+int StabilityOptimization_           = 0;
+int SolverOptimizationProfile_       = 0;
+std::vector<int> StabSelectedControlGroups_;
+int StateSweepContinuationMinWakeIterations_ = 4;
+double StateSweepContinuationCirculationTolerance_ = 5.e-3;
+double StateSweepContinuationWakeTolerance_ = 2.e-1;
+double StateSweepContinuationLoadTolerance_ = 5.e-4;
 uint64_t StateSweepChunkSize_        = 25000;
 uint64_t StateSweepProcessCases_     = 0;
 uint64_t StateSweepRangeStart_       = 0;
@@ -424,6 +438,13 @@ int SearchForFloatVariable(FILE *File, const char *VariableName, double &Value);
 int SearchForFloatVariableList(FILE *File, const char *VariableName, double *Value, int &NumberOfEntries);
 int SearchForIntVariableList(FILE *File, const char *VariableName, int *Value, int &NumberOfEntries);
 std::vector<double> ParseStateSweepList(const char *Text, const char *Option);
+
+static int StabControlGroupSelected(int Group)
+{
+    if ( StabSelectedControlGroups_.empty() ) return 1;
+    return std::find(StabSelectedControlGroups_.begin(),StabSelectedControlGroups_.end(),Group)
+           != StabSelectedControlGroups_.end();
+}
 
 VSP_SOLVER VSPAERO_;
 VSP_SOLVER &VSPAERO(void) { return VSPAERO_; };
@@ -834,6 +855,10 @@ void PrintUsageHelp()
        printf(" -omp <N>                           Use 'N' processes.\n");
        printf(" -stab                              Calculate stability derivatives.\n");
        printf(" -stab-select <csv>                 Select alpha,beta,mach,p,q,r,controls, or all.\n");
+       printf(" -stab-control-select <csv>         Calculate only listed one-based control groups.\n");
+       printf(" -steady-optimize                   Enable tolerance-controlled early convergence for steady cases.\n");
+       printf(" -stab-optimize                     Enable tolerance-controlled early convergence for -stab cases.\n");
+       printf(" -solver-opt-profile                Print native phase timings for optimized steady/-stab runs.\n");
        printf(" -stab-step-alpha <deg>             Set the alpha perturbation.\n");
        printf(" -stab-step-beta <deg>              Set the beta perturbation.\n");
        printf(" -stab-step-mach <value>            Set the requested symmetric Mach perturbation.\n");
@@ -843,12 +868,19 @@ void PrintUsageHelp()
        printf(" -state-r|-state-rhat <csv>         Set physical [rad/Tunit] or reduced yaw-rate states.\n");
        printf(" -state-control <index> <csv>       Set one control-group deflection axis [deg].\n");
        printf(" -state-design <name> <value>       Record one externally applied design state.\n");
-       printf(" -state-wing-load <surface> <name> <x> <y> <z>  Output pressure CF/CM for one wing instance.\n");
+       printf(" -state-wing-load <surface> <name> <x> <y> <z>  Output decomposed CF/CM for one wing instance about the vehicle reference point.\n");
        printf(" -state-hinge-loads                Output pressure hinge-moment coefficients per physical control surface.\n");
        printf(" -state-chunk-size <rows>           Set rows per output CSV part (default 25000).\n");
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
        printf(" -state-resume                      Continue from the state-sweep checkpoint.\n");
+       printf(" -state-profile                     Write aggregated State Sweep phase timings.\n");
+       printf(" -state-fast-order                  Group Mach/control states and reuse invariant setup.\n");
+       printf(" -state-continuation                Warm-start circulation/wake and stop after convergence.\n");
+       printf(" -state-continuation-min-wake-iters <N>  Require at least N wake iterations.\n");
+       printf(" -state-continuation-circulation-tol <value>  Relative circulation-change tolerance.\n");
+       printf(" -state-continuation-wake-tol <value>  Wake-displacement tolerance.\n");
+       printf(" -state-continuation-load-tol <value>  Absolute CF/CM-change tolerance.\n");
        printf(" -stab-step-phat <value>            Set the reduced roll-rate perturbation.\n");
        printf(" -stab-step-qhat <value>            Set the reduced pitch-rate perturbation.\n");
        printf(" -stab-step-rhat <value>            Set the reduced yaw-rate perturbation.\n");
@@ -967,6 +999,82 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-resume") == 0 ) {
 
           StateSweepResume_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-profile") == 0 ) {
+
+          StateSweepProfile_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-fast-order") == 0 ) {
+
+          StateSweepFastOrder_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation") == 0 ) {
+
+          StateSweepContinuation_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-steady-optimize") == 0 ) {
+
+          SteadyOptimization_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-stab-optimize") == 0 ) {
+
+          StabilityOptimization_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-solver-opt-profile") == 0 ) {
+
+          SolverOptimizationProfile_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-min-wake-iters") == 0 ) {
+
+          StateSweepContinuationMinWakeIterations_ = atoi(argv[++i]);
+          if ( StateSweepContinuationMinWakeIterations_ < 1 ) {
+             printf("-state-continuation-min-wake-iters requires a positive integer.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-circulation-tol") == 0 ) {
+
+          StateSweepContinuationCirculationTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationCirculationTolerance_ <= 0. ) {
+             printf("-state-continuation-circulation-tol requires a positive value.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-wake-tol") == 0 ) {
+
+          StateSweepContinuationWakeTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationWakeTolerance_ <= 0. ) {
+             printf("-state-continuation-wake-tol requires a positive value.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-state-continuation-load-tol") == 0 ) {
+
+          StateSweepContinuationLoadTolerance_ = atof(argv[++i]);
+          if ( StateSweepContinuationLoadTolerance_ <= 0. ) {
+             printf("-state-continuation-load-tol requires a positive value.\n");
+             exit(1);
+          }
 
        }
 
@@ -1116,6 +1224,31 @@ void ParseInput(int argc, char *argv[])
 
           if ( StabDerivativeFlags_ == 0 ) {
              printf("-stab-select requires at least one derivative.\n");
+             exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-stab-control-select") == 0 ) {
+
+          char Selection[MAX_CHAR_SIZE];
+          char *Token;
+          StabSelectedControlGroups_.clear();
+          snprintf(Selection,sizeof(Selection),"%s",argv[++i]);
+          Token = strtok(Selection,",");
+          while ( Token != NULL ) {
+             char *End;
+             long Group = strtol(Token,&End,10);
+             if ( End == Token || *End != '\0' || Group < 1 || Group > INT_MAX ) {
+                printf("-stab-control-select requires comma-separated positive group indices.\n");
+                exit(1);
+             }
+             if ( std::find(StabSelectedControlGroups_.begin(),StabSelectedControlGroups_.end(),(int)Group)
+                  == StabSelectedControlGroups_.end() ) StabSelectedControlGroups_.push_back((int)Group);
+             Token = strtok(NULL,",");
+          }
+          if ( StabSelectedControlGroups_.empty() ) {
+             printf("-stab-control-select requires at least one group index.\n");
              exit(1);
           }
 
@@ -2781,6 +2914,12 @@ void ApplyControlDeflections()
 #                                                                              #
 ##############################################################################*/
 
+static double StateSweepProfileClock(void)
+{
+    using Clock = std::chrono::steady_clock;
+    return std::chrono::duration<double>(Clock::now().time_since_epoch()).count();
+}
+
 static uint64_t StateSweepMultiply(uint64_t Left, uint64_t Right, const char *Axis)
 {
     if ( Right != 0 && Left > UINT64_MAX / Right ) {
@@ -2820,6 +2959,16 @@ static uint64_t StateSweepConfigurationHash(void)
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);
     HASH_VALUE(Xcg_); HASH_VALUE(Ycg_); HASH_VALUE(Zcg_); HASH_VALUE(Vinf_);
     HASH_VALUE(StateSweepChunkSize_);
+    // Preserve hashes from builds predating fast ordering when it is omitted,
+    // so existing canonical checkpoints remain resumable.
+    if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
+    if ( StateSweepContinuation_ ) {
+       HASH_VALUE(StateSweepContinuation_);
+       HASH_VALUE(StateSweepContinuationMinWakeIterations_);
+       HASH_VALUE(StateSweepContinuationCirculationTolerance_);
+       HASH_VALUE(StateSweepContinuationWakeTolerance_);
+       HASH_VALUE(StateSweepContinuationLoadTolerance_);
+    }
     HASH_VALUE(NumberOfMachs_); HASH_VALUE(NumberOfAoAs_);
     HASH_VALUE(NumberOfBetas_); HASH_VALUE(NumberOfReCrefs_);
     HASH_VALUE(NumberOfControlGroups_);
@@ -2842,6 +2991,8 @@ static uint64_t StateSweepConfigurationHash(void)
     // sweeps created by an earlier executable remain resumable.
     if ( StateSweepHingeLoads_ || !StateSweepWingLoads_.empty() ) {
        HASH_VALUE(StateSweepHingeLoads_);
+       const uint64_t WingLoadSchema = UINT64_C(5);
+       if ( !StateSweepWingLoads_.empty() ) HASH_VALUE(WingLoadSchema);
        for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
           HASH_VALUE(StateSweepWingLoads_[i].Surface);
           Hash = StateSweepHashBytes(Hash,StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.size());
@@ -2888,21 +3039,115 @@ static void StateSweepWriteCheckpoint(const char *Path, uint64_t Hash, uint64_t 
 #endif
 }
 
+static std::string StateSweepSafeColumnToken(const char *Name)
+{
+    std::string Token;
+    for ( const unsigned char *p = (const unsigned char *)Name ; *p ; p++ ) {
+       char Character = (char)tolower(*p);
+       Token.push_back(isalnum(*p) || Character == '-' ? Character : '_');
+    }
+    while ( !Token.empty() && Token[Token.size()-1] == '_' ) Token.erase(Token.size()-1);
+    return Token.empty() ? "unnamed" : Token;
+}
+
+static std::string StateSweepControlColumn(int Control)
+{
+    return StateSweepSafeColumnToken(ControlSurfaceGroup_[Control].Name()) + "_deflection_deg";
+}
+
+static std::vector<std::string> StateSweepHingeColumns(void)
+{
+    std::vector<std::string> Columns(1);
+    for ( int i = 1 ; i <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; i++ ) {
+       CONTROL_SURFACE &Control = VSPAERO().VSPGeom().ControlSurface(i);
+       std::string Raw(Control.Name());
+       size_t Separator = Raw.find_last_of('_');
+       std::string Name = StateSweepSafeColumnToken(
+          Separator == std::string::npos ? Raw.c_str() : Raw.substr(Separator + 1).c_str());
+       int Surface = Control.NumberOfLoops() > 0
+                   ? VSPAERO().VSPGeom().Grid(0).LoopList(Control.LoopList(1)).SurfaceID() : 0;
+       for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+          if ( StateSweepWingLoads_[Wing].Surface != Surface ) continue;
+          const std::string &WingName = StateSweepWingLoads_[Wing].Name;
+          const char *Sides[] = { "_ypos", "_yneg", "_xpos", "_xneg", "_zpos", "_zneg" };
+          bool HasSide = false;
+          for ( int Side = 0 ; Side < 6 ; Side++ ) {
+             size_t Length = strlen(Sides[Side]);
+             if ( WingName.size() >= Length && WingName.compare(WingName.size()-Length,Length,Sides[Side]) == 0 ) {
+                Name += Sides[Side]; HasSide = true; break;
+             }
+          }
+          if ( !HasSide ) {
+             std::string Parent = WingName;
+             size_t Copy = Parent.find("_copy_");
+             if ( Copy != std::string::npos ) Parent.erase(Copy);
+             Name = Parent + "_" + Name;
+          }
+          break;
+       }
+       std::string Candidate = "Cm_hinge_" + Name;
+       int Duplicate = 1;
+       for ( int Prior = 1 ; Prior < i ; Prior++ ) if ( Columns[Prior] == Candidate ) Duplicate++;
+       if ( Duplicate > 1 ) {
+          char Suffix[24]; snprintf(Suffix,sizeof(Suffix),"_%03d",Duplicate);
+          Candidate = "Cm_hinge_" + Name + Suffix;
+       }
+       Columns.push_back(Candidate);
+    }
+    return Columns;
+}
+
+static std::string StateSweepWingParentName(const std::string &Name)
+{
+    const char *Sides[] = { "_ypos", "_yneg", "_xpos", "_xneg", "_zpos", "_zneg" };
+    for ( int Side = 0 ; Side < 6 ; Side++ ) {
+       size_t Length = strlen(Sides[Side]);
+       if ( Name.size() >= Length && Name.compare(Name.size()-Length,Length,Sides[Side]) == 0 ) {
+          return Name.substr(0,Name.size()-Length);
+       }
+    }
+    size_t Copy = Name.find("_copy_");
+    return Copy == std::string::npos ? Name : Name.substr(0,Copy);
+}
+
+static std::vector<std::string> StateSweepWingOutputNames(void)
+{
+    std::vector<std::string> Names;
+    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) Names.push_back(StateSweepWingLoads_[Wing].Name);
+    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+       std::string Parent = StateSweepWingParentName(StateSweepWingLoads_[Wing].Name);
+       int Count = 0;
+       for ( size_t Other = 0 ; Other < StateSweepWingLoads_.size() ; Other++ ) {
+          if ( StateSweepWingParentName(StateSweepWingLoads_[Other].Name) == Parent ) Count++;
+       }
+       if ( Count < 2 ) continue;
+       if ( std::find(Names.begin(),Names.end(),Parent) == Names.end() ) Names.push_back(Parent);
+    }
+    return Names;
+}
+
+static void StateSweepWriteWingLoadHeader(FILE *File, const std::string &Name)
+{
+    const char *Columns[] = {
+       "CFo_x", "CFo_y", "CFo_z", "CFi_x", "CFi_y", "CFi_z", "CF_x", "CF_y", "CF_z",
+       "CMo_x", "CMo_y", "CMo_z", "CMi_x", "CMi_y", "CMi_z", "CM_x", "CM_y", "CM_z",
+       "CFiw_x", "CFiw_y", "CFiw_z", "CM_x_center", "CM_y_center", "CM_z_center"
+    };
+    for ( int i = 0 ; i < 24 ; i++ ) fprintf(File,",%s_%s",Columns[i],Name.c_str());
+}
+
 static void StateSweepWriteCsvHeader(FILE *File)
 {
-    fprintf(File,"case_id,mach,reynolds,vinf,alpha_deg,beta_deg,p_hat,q_hat,r_hat,p_rad_per_tunit,q_rad_per_tunit,r_rad_per_tunit");
-    for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) fprintf(File,",ctrl_%03d_deg",Control);
-    for ( size_t i = 0 ; i < StateSweepDesignNames_.size() ; i++ ) fprintf(File,",design_%03d",(int)i + 1);
+    fprintf(File,"case_id,mach,reynolds,vinf_m_per_s,alpha_deg,beta_deg,p_hat,q_hat,r_hat,p_rad_per_tunit,q_rad_per_tunit,r_rad_per_tunit");
+    for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) fprintf(File,",%s",StateSweepControlColumn(Control).c_str());
+    for ( size_t i = 0 ; i < StateSweepDesignNames_.size() ; i++ ) fprintf(File,",%s",StateSweepDesignNames_[i].c_str());
     fprintf(File,",CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,CMl,CMm,CMn,stall_factor");
-    for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
-       fprintf(File,",%s_CFx,%s_CFy,%s_CFz,%s_CMx,%s_CMy,%s_CMz",
-               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str(),
-               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str(),
-               StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Name.c_str());
-    }
+    std::vector<std::string> WingNames = StateSweepWingOutputNames();
+    for ( size_t i = 0 ; i < WingNames.size() ; i++ ) StateSweepWriteWingLoadHeader(File,WingNames[i]);
     if ( StateSweepHingeLoads_ ) {
+       std::vector<std::string> HingeColumns = StateSweepHingeColumns();
        for ( int i = 1 ; i <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; i++ ) {
-          fprintf(File,",hinge_%03d_Ch",i);
+          fprintf(File,",%s",HingeColumns[i].c_str());
        }
     }
     fprintf(File,"\n");
@@ -2926,16 +3171,132 @@ static void StateSweepPressureLoadForLoops(const std::vector<int> &Loops, const 
     }
 }
 
+static void StateSweepWingPlanformGeometry(
+    std::vector<double> &Areas, std::vector< std::vector<double> > &Centers,
+    std::vector< std::vector<double> > &Frames)
+{
+    Areas.assign(StateSweepWingLoads_.size(),0.);
+    Centers.assign(StateSweepWingLoads_.size(),std::vector<double>(3,0.));
+    Frames.assign(StateSweepWingLoads_.size(),std::vector<double>(9,0.));
+    // Vortex-sheet LE/TE edge indices and strip geometry are defined on the
+    // first aerodynamic grid.  Keep this geometric reference independent of
+    // whichever multigrid level is active before or after a solve.
+    int Level = 1;
+    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+       for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
+          if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
+          for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
+             VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
+             int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());
+             VSP_EDGE &LeadingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(LE);
+             VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(TE);
+             int Node1 = TrailingEdge.Node1(), Node2 = TrailingEdge.Node2();
+             double ChordVector[3] = {
+                TrailingEdge.Xc()-LeadingEdge.Xc(),
+                TrailingEdge.Yc()-LeadingEdge.Yc(),
+                TrailingEdge.Zc()-LeadingEdge.Zc()
+             };
+             double SpanVector[3] = {
+                VSPAERO().VSPGeom().Grid(Level).NodeList(Node2).x()-VSPAERO().VSPGeom().Grid(Level).NodeList(Node1).x(),
+                VSPAERO().VSPGeom().Grid(Level).NodeList(Node2).y()-VSPAERO().VSPGeom().Grid(Level).NodeList(Node1).y(),
+                VSPAERO().VSPGeom().Grid(Level).NodeList(Node2).z()-VSPAERO().VSPGeom().Grid(Level).NodeList(Node1).z()
+             };
+             double AreaVector[3]; vector_cross(ChordVector,SpanVector,AreaVector);
+             double StripArea = sqrt(vector_dot(AreaVector,AreaVector));
+             double ChordMagnitude = sqrt(vector_dot(ChordVector,ChordVector));
+             double SpanMagnitude = sqrt(vector_dot(SpanVector,SpanVector));
+             double StripCenter[3] = {
+                0.5*(LeadingEdge.Xc()+TrailingEdge.Xc()),
+                0.5*(LeadingEdge.Yc()+TrailingEdge.Yc()),
+                0.5*(LeadingEdge.Zc()+TrailingEdge.Zc())
+             };
+             Areas[Wing] += StripArea;
+             for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Centers[Wing][Axis] += StripArea*StripCenter[Axis];
+             if ( ChordMagnitude > 0. && SpanMagnitude > 0. ) {
+                for ( int Axis = 0 ; Axis < 3 ; Axis++ ) {
+                   Frames[Wing][Axis] += StripArea*ChordVector[Axis]/ChordMagnitude;
+                   Frames[Wing][3+Axis] += StripArea*SpanVector[Axis]/SpanMagnitude;
+                }
+             }
+          }
+       }
+       if ( Areas[Wing] > 0. ) {
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Centers[Wing][Axis] /= Areas[Wing];
+       }
+       else {
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Centers[Wing][Axis] = StateSweepWingLoads_[Wing].Center[Axis];
+       }
+       double *Chord = &Frames[Wing][0], *Span = &Frames[Wing][3], *Normal = &Frames[Wing][6];
+       double ChordMagnitude = sqrt(vector_dot(Chord,Chord));
+       if ( ChordMagnitude > 0. ) for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Chord[Axis] /= ChordMagnitude;
+       double Projection = vector_dot(Span,Chord);
+       for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Span[Axis] -= Projection*Chord[Axis];
+       double SpanMagnitude = sqrt(vector_dot(Span,Span));
+       if ( SpanMagnitude > 0. ) for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Span[Axis] /= SpanMagnitude;
+       vector_cross(Chord,Span,Normal);
+    }
+}
+
 static void StateSweepWriteOptionalLoads(FILE *File)
 {
+    std::vector< std::vector<double> > PhysicalLoads(StateSweepWingLoads_.size(),std::vector<double>(24,0.));
+    std::vector<double> PhysicalAreas;
+    std::vector< std::vector<double> > PhysicalCenters;
+    std::vector< std::vector<double> > PhysicalFrames;
+    StateSweepWingPlanformGeometry(PhysicalAreas,PhysicalCenters,PhysicalFrames);
+    int Level = VSPAERO().VSPGeom().SolveOnMGLevel();
+    double ForceScale = 0.5*Sref_*Vref_*Vref_;
     for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
-       std::vector<int> Loops;
-       for ( int i = 1 ; i <= VSPAERO().VSPGeom().Grid(0).NumberOfLoops() ; i++ ) {
-          if ( VSPAERO().VSPGeom().Grid(0).LoopList(i).SurfaceID() == StateSweepWingLoads_[Wing].Surface ) Loops.push_back(i);
+       double Inviscid[6] = { 0., 0., 0., 0., 0., 0. };
+       double Viscous[6] = { 0., 0., 0., 0., 0., 0. };
+       double Wake[3] = { 0., 0., 0. };
+       // Use the same active-grid edge forces as VSP_Solver::CalculateForces.
+       // This preserves native near-field accounting and its moment reference.
+       for ( int Edge = 1 ; Edge <= VSPAERO().VSPGeom().Grid(Level).NumberOfSurfaceEdges() ; Edge++ ) {
+          VSP_EDGE &SurfaceEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(Edge);
+          if ( SurfaceEdge.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
+          if ( SurfaceEdge.IsTrailingEdge() ) {
+             Wake[0] += SurfaceEdge.Trefftz_Fx()/ForceScale;
+             Wake[1] += SurfaceEdge.Trefftz_Fy()/ForceScale;
+             Wake[2] += SurfaceEdge.Trefftz_Fz()/ForceScale;
+             continue;
+          }
+          double Fx = SurfaceEdge.Fx()/ForceScale;
+          double Fy = SurfaceEdge.Fy()/ForceScale;
+          double Fz = SurfaceEdge.Fz()/ForceScale;
+          double X = SurfaceEdge.Xc()-StateSweepWingLoads_[Wing].Center[0];
+          double Y = SurfaceEdge.Yc()-StateSweepWingLoads_[Wing].Center[1];
+          double Z = SurfaceEdge.Zc()-StateSweepWingLoads_[Wing].Center[2];
+          Inviscid[0] += Fx; Inviscid[1] += Fy; Inviscid[2] += Fz;
+          Inviscid[3] += (Y*Fz-Z*Fy)/Bref_;
+          Inviscid[4] += (Z*Fx-X*Fz)/Cref_;
+          Inviscid[5] += (X*Fy-Y*Fx)/Bref_;
        }
-       double Load[6]; StateSweepPressureLoadForLoops(Loops,StateSweepWingLoads_[Wing].Center,Load);
+       // Match the native post-stall additions, which are applied after the
+       // ordinary non-trailing-edge force accumulation.
+       if ( VSPAERO().StallModelIsOn() ) {
+          for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
+             if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
+             for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
+                VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
+                VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(ABS(Trail.TE_Edge()));
+                double StallFactor = 1.-Trail.StallFactor();
+                double Fx = StallFactor*TrailingEdge.Fx()/ForceScale;
+                double Fy = StallFactor*TrailingEdge.Fy()/ForceScale;
+                double Fz = StallFactor*TrailingEdge.Fz()/ForceScale;
+                double X = TrailingEdge.Xc()-StateSweepWingLoads_[Wing].Center[0];
+                double Y = TrailingEdge.Yc()-StateSweepWingLoads_[Wing].Center[1];
+                double Z = TrailingEdge.Zc()-StateSweepWingLoads_[Wing].Center[2];
+                Inviscid[0] += Fx; Inviscid[1] += Fy; Inviscid[2] += Fz;
+                Inviscid[3] += (Y*Fz-Z*Fy)/Bref_;
+                Inviscid[4] += (Z*Fx-X*Fz)/Cref_;
+                Inviscid[5] += (X*Fy-Y*Fx)/Bref_;
+             }
+          }
+       }
        // Add VSPAERO's strip-wise viscous force for this physical lifting
-       // surface.  Hinge moments intentionally remain pressure-only.
+       // surface. All moments use the common vehicle reference supplied by
+       // the automation. Hinge moments intentionally remain pressure-only.
        for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
           if ( VSPAERO().VSPGeom().VortexSheet(Sheet).WingSurface() != StateSweepWingLoads_[Wing].Surface ) continue;
           for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
@@ -2943,14 +3304,65 @@ static void StateSweepWriteOptionalLoads(FILE *File)
              double AreaScale = Trail.LocalSpan()*Trail.LocalChord()/Sref_;
              double Fx = Trail.CFox()*AreaScale, Fy = Trail.CFoy()*AreaScale, Fz = Trail.CFoz()*AreaScale;
              int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());
-             double X = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Xc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Xc())-StateSweepWingLoads_[Wing].Center[0];
-             double Y = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Yc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Yc())-StateSweepWingLoads_[Wing].Center[1];
-             double Z = 0.5*(VSPAERO().VSPGeom().Grid(1).EdgeList(LE).Zc()+VSPAERO().VSPGeom().Grid(1).EdgeList(TE).Zc())-StateSweepWingLoads_[Wing].Center[2];
-             Load[0] += Fx; Load[1] += Fy; Load[2] += Fz;
-             Load[3] += (Y*Fz-Z*Fy)/Bref_; Load[4] += (Z*Fx-X*Fz)/Cref_; Load[5] += (X*Fy-Y*Fx)/Bref_;
+             double StripCenter[3] = {
+                0.5*(VSPAERO().VSPGeom().Grid(Level).EdgeList(LE).Xc()+VSPAERO().VSPGeom().Grid(Level).EdgeList(TE).Xc()),
+                0.5*(VSPAERO().VSPGeom().Grid(Level).EdgeList(LE).Yc()+VSPAERO().VSPGeom().Grid(Level).EdgeList(TE).Yc()),
+                0.5*(VSPAERO().VSPGeom().Grid(Level).EdgeList(LE).Zc()+VSPAERO().VSPGeom().Grid(Level).EdgeList(TE).Zc())
+             };
+             double X = StripCenter[0]-StateSweepWingLoads_[Wing].Center[0];
+             double Y = StripCenter[1]-StateSweepWingLoads_[Wing].Center[1];
+             double Z = StripCenter[2]-StateSweepWingLoads_[Wing].Center[2];
+             Viscous[0] += Fx; Viscous[1] += Fy; Viscous[2] += Fz;
+             Viscous[3] += (Y*Fz-Z*Fy)/Bref_; Viscous[4] += (Z*Fx-X*Fz)/Cref_; Viscous[5] += (X*Fy-Y*Fx)/Bref_;
           }
        }
-       for ( int i = 0 ; i < 6 ; i++ ) fprintf(File,",%.17g",Load[i]);
+       std::vector<double> &Load = PhysicalLoads[Wing];
+       for ( int i = 0 ; i < 3 ; i++ ) {
+          // Match the vehicle CSV convention: force totals use the far-field
+          // wake evaluation, while moment totals use near-field moments.
+          Load[i] = Viscous[i]; Load[3+i] = Inviscid[i]; Load[6+i] = Viscous[i] + Wake[i];
+          Load[9+i] = Viscous[3+i]; Load[12+i] = Inviscid[3+i]; Load[15+i] = Viscous[3+i] + Inviscid[3+i];
+          Load[18+i] = Wake[i];
+       }
+    }
+    std::vector<std::string> OutputNames = StateSweepWingOutputNames();
+    for ( size_t Output = 0 ; Output < OutputNames.size() ; Output++ ) {
+       std::vector<double> Load(24,0.);
+       double Area = 0.;
+       double Center[3] = { 0., 0., 0. };
+       double Reference[3] = { 0., 0., 0. };
+       bool HaveReference = false;
+       for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+          bool Physical = OutputNames[Output] == StateSweepWingLoads_[Wing].Name;
+          bool Parent = OutputNames[Output] == StateSweepWingParentName(StateSweepWingLoads_[Wing].Name)
+                     && OutputNames[Output] != StateSweepWingLoads_[Wing].Name;
+          if ( !Physical && !Parent ) continue;
+          if ( !HaveReference ) {
+             for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Reference[Axis] = StateSweepWingLoads_[Wing].Center[Axis];
+             HaveReference = true;
+          }
+          for ( int i = 0 ; i < 21 ; i++ ) Load[i] += PhysicalLoads[Wing][i];
+          Area += PhysicalAreas[Wing];
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Center[Axis] += PhysicalAreas[Wing]*PhysicalCenters[Wing][Axis];
+       }
+       if ( Area > 0. ) {
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Center[Axis] /= Area;
+       }
+       else {
+          for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Center[Axis] = Reference[Axis];
+       }
+       // Translate the near-field total moment from the common vehicle
+       // reference to the physical wing's planform-area centroid.  Moment
+       // totals use CFo+CFi for translation because CM=CMo+CMi; CFiw is a
+       // far-field force evaluation and has no corresponding moment.
+       double Dx = Center[0]-Reference[0];
+       double Dy = Center[1]-Reference[1];
+       double Dz = Center[2]-Reference[2];
+       double Fx = Load[0]+Load[3], Fy = Load[1]+Load[4], Fz = Load[2]+Load[5];
+       Load[21] = Load[15]-(Dy*Fz-Dz*Fy)/Bref_;
+       Load[22] = Load[16]-(Dz*Fx-Dx*Fz)/Cref_;
+       Load[23] = Load[17]-(Dx*Fy-Dy*Fx)/Bref_;
+       for ( int i = 0 ; i < 24 ; i++ ) fprintf(File,",%.17g",Load[i]);
     }
     if ( StateSweepHingeLoads_ ) {
        for ( int Control = 1 ; Control <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; Control++ ) {
@@ -3059,9 +3471,15 @@ void StateSweepSolve(void)
 
     FILE *Manifest = fopen(ManifestPath,"w");
     if ( Manifest == NULL ) { printf("Could not write State Sweep manifest: %s\n",ManifestPath); exit(1); }
-    fprintf(Manifest,"{\n  \"format\": \"vspaero-state-sweep\",\n  \"format_version\": 1,\n");
+    fprintf(Manifest,"{\n  \"format\": \"vspaero-state-sweep\",\n");
     fprintf(Manifest,"  \"configuration_hash\": \"%016llx\",\n",(unsigned long long)Hash);
     fprintf(Manifest,"  \"base_configuration_hash\": \"%016llx\",\n",(unsigned long long)BaseHash);
+    fprintf(Manifest,"  \"case_order\": \"%s\",\n",StateSweepFastOrder_ ? "mach_control_grouped" : "canonical");
+    fprintf(Manifest,"  \"continuation\": {\"enabled\": %s, \"minimum_wake_iterations\": %d, "
+                     "\"circulation_tolerance\": %.17g, \"wake_tolerance\": %.17g, \"load_tolerance\": %.17g},\n",
+            StateSweepContinuation_ ? "true" : "false",StateSweepContinuationMinWakeIterations_,
+            StateSweepContinuationCirculationTolerance_,StateSweepContinuationWakeTolerance_,
+            StateSweepContinuationLoadTolerance_);
     fprintf(Manifest,"  \"total_rows\": %llu,\n  \"aerodynamic_solves\": %llu,\n  \"chunk_size\": %llu,\n  \"process_cases\": %llu,\n  \"range_start\": %llu,\n  \"range_count\": %llu,\n",
             (unsigned long long)TotalRows,(unsigned long long)AerodynamicCases,
             (unsigned long long)StateSweepChunkSize_,(unsigned long long)StateSweepProcessCases_,
@@ -3072,24 +3490,48 @@ void StateSweepSolve(void)
             StateSweepRIsReduced_ == 1 ? "reduced" : "physical");
     fprintf(Manifest,"  \"control_groups\": [");
     for ( int Control = 1 ; Control <= NumberOfControlGroups_ ; Control++ ) {
-       fprintf(Manifest,"%s{\"index\": %d, \"column\": \"ctrl_%03d_deg\"}",Control == 1 ? "" : ", ",Control,Control);
+       fprintf(Manifest,"%s{\"index\": %d, \"name\": \"%s\", \"column\": \"%s\"}",Control == 1 ? "" : ", ",
+               Control,StateSweepSafeColumnToken(ControlSurfaceGroup_[Control].Name()).c_str(),StateSweepControlColumn(Control).c_str());
     }
     fprintf(Manifest,"],\n  \"design_states\": [");
     for ( size_t i = 0 ; i < StateSweepDesignNames_.size() ; i++ ) {
-       fprintf(Manifest,"%s{\"name\": \"%s\", \"column\": \"design_%03d\", \"value\": %.17g}",
-               i == 0 ? "" : ", ",StateSweepDesignNames_[i].c_str(),(int)i + 1,StateSweepDesignValues_[i]);
+       fprintf(Manifest,"%s{\"name\": \"%s\", \"column\": \"%s\", \"value\": %.17g}",
+               i == 0 ? "" : ", ",StateSweepDesignNames_[i].c_str(),StateSweepDesignNames_[i].c_str(),StateSweepDesignValues_[i]);
     }
-    fprintf(Manifest,"],\n  \"wing_pressure_loads\": [");
+    fprintf(Manifest,"],\n  \"wing_loads\": [");
+    std::vector<double> ManifestWingAreas;
+    std::vector< std::vector<double> > ManifestWingCenters;
+    std::vector< std::vector<double> > ManifestWingFrames;
+    StateSweepWingPlanformGeometry(ManifestWingAreas,ManifestWingCenters,ManifestWingFrames);
     for ( size_t i = 0 ; i < StateSweepWingLoads_.size() ; i++ ) {
-       fprintf(Manifest,"%s{\"name\": \"%s\", \"surface\": %d, \"rotation_center\": [%.17g, %.17g, %.17g]}",
+       fprintf(Manifest,"%s{\"name\": \"%s\", \"surface\": %d, \"reference_point\": [%.17g, %.17g, %.17g], \"planform_area\": %.17g, \"planform_center\": [%.17g, %.17g, %.17g], \"frame\": {\"chord\": [%.17g, %.17g, %.17g], \"span\": [%.17g, %.17g, %.17g], \"normal\": [%.17g, %.17g, %.17g]}, \"components\": [\"viscous\", \"surface_inviscid\", \"total\", \"wake_inviscid\", \"moment_about_planform_center\"]}",
                i == 0 ? "" : ", ",StateSweepWingLoads_[i].Name.c_str(),StateSweepWingLoads_[i].Surface,
-               StateSweepWingLoads_[i].Center[0],StateSweepWingLoads_[i].Center[1],StateSweepWingLoads_[i].Center[2]);
+               StateSweepWingLoads_[i].Center[0],StateSweepWingLoads_[i].Center[1],StateSweepWingLoads_[i].Center[2],
+               ManifestWingAreas[i],ManifestWingCenters[i][0],ManifestWingCenters[i][1],ManifestWingCenters[i][2],
+               ManifestWingFrames[i][0],ManifestWingFrames[i][1],ManifestWingFrames[i][2],
+               ManifestWingFrames[i][3],ManifestWingFrames[i][4],ManifestWingFrames[i][5],
+               ManifestWingFrames[i][6],ManifestWingFrames[i][7],ManifestWingFrames[i][8]);
+    }
+    fprintf(Manifest,"],\n  \"combined_wings\": [");
+    std::vector<std::string> ManifestWingNames = StateSweepWingOutputNames();
+    for ( size_t i = StateSweepWingLoads_.size() ; i < ManifestWingNames.size() ; i++ ) {
+       fprintf(Manifest,"%s\"%s\"",i == StateSweepWingLoads_.size() ? "" : ", ",ManifestWingNames[i].c_str());
     }
     fprintf(Manifest,"],\n  \"hinge_pressure_loads\": [");
     if ( StateSweepHingeLoads_ ) {
+       std::vector<std::string> HingeColumns = StateSweepHingeColumns();
        for ( int i = 1 ; i <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; i++ ) {
-          fprintf(Manifest,"%s{\"index\": %d, \"name\": \"%s\", \"column\": \"hinge_%03d_Ch\"}",
-                  i == 1 ? "" : ", ",i,VSPAERO().VSPGeom().ControlSurface(i).Name(),i);
+          CONTROL_SURFACE &Surface = VSPAERO().VSPGeom().ControlSurface(i);
+          int SurfaceID = Surface.NumberOfLoops() > 0
+                        ? VSPAERO().VSPGeom().Grid(0).LoopList(Surface.LoopList(1)).SurfaceID() : 0;
+          const char *WingName = "";
+          for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+             if ( StateSweepWingLoads_[Wing].Surface == SurfaceID ) { WingName = StateSweepWingLoads_[Wing].Name.c_str(); break; }
+          }
+          fprintf(Manifest,"%s{\"index\": %d, \"name\": \"%s\", \"column\": \"%s\", \"wing\": \"%s\", \"origin\": [%.17g, %.17g, %.17g], \"direction\": [%.17g, %.17g, %.17g]}",
+                  i == 1 ? "" : ", ",i,Surface.Name(),HingeColumns[i].c_str(),WingName,
+                  Surface.HingeNode_1(0),Surface.HingeNode_1(1),Surface.HingeNode_1(2),
+                  Surface.HingeVec(0),Surface.HingeVec(1),Surface.HingeVec(2));
        }
     }
     fprintf(Manifest,"]\n}\n");
@@ -3113,19 +3555,54 @@ void StateSweepSolve(void)
     printf("State Sweep process batch: aerodynamic cases %llu through %llu.\n",
            (unsigned long long)StartAerodynamicCase,
            (unsigned long long)(EndAerodynamicCase > 0 ? EndAerodynamicCase - 1 : 0));
+    double ProfileProcessStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
+    double ProfileSolveSeconds = 0.;
+    double ProfileReynoldsSeconds = 0.;
+    double ProfileOutputSeconds = 0.;
+    uint64_t ReusedInvariantCases = 0;
+    uint64_t ContinuationAttempts = 0;
+    uint64_t ContinuationAccepted = 0;
+    uint64_t ContinuationColdStarts = 0;
+    uint64_t ContinuationFallbacks = 0;
+    uint64_t ContinuationWakeIterations = 0;
+    VSPAERO().StateSweepProfiling() = StateSweepProfile_;
+    if ( StateSweepProfile_ ) VSPAERO().ResetStateSweepProfile();
+    int PreviousMachIndex = -1;
+    int PreviousAlphaIndex = -1;
+    int PreviousBetaIndex = -1;
+    std::vector<size_t> PreviousControlIndex;
     for ( uint64_t AeroCase = StartAerodynamicCase ; AeroCase < EndAerodynamicCase ; AeroCase++ ) {
        uint64_t Decoder = AeroCase;
        std::vector<size_t> ControlIndex(NumberOfControlGroups_ + 1,0);
-       for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
-          ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
-          Decoder /= (uint64_t)StateSweepControls_[Control].size();
+       size_t RIndex, QIndex, PIndex;
+       int AlphaIndex, MachIndex, BetaIndex;
+       if ( StateSweepFastOrder_ ) {
+          // Keep the aerodynamic matrix invariants together: rates vary fastest,
+          // followed by incidence, while Mach and control state vary slowest.
+          RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
+          QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
+          PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
+          AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
+          BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1; Decoder /= (uint64_t)NumberOfBetas_;
+          MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
+          for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
+             ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
+             Decoder /= (uint64_t)StateSweepControls_[Control].size();
+          }
        }
-       size_t RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
-       size_t QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
-       size_t PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
-       int AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
-       int MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
-       int BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1;
+
+       else {
+          for ( int Control = NumberOfControlGroups_ ; Control >= 1 ; Control-- ) {
+             ControlIndex[Control] = (size_t)(Decoder % StateSweepControls_[Control].size());
+             Decoder /= (uint64_t)StateSweepControls_[Control].size();
+          }
+          RIndex = (size_t)(Decoder % StateSweepR_.size()); Decoder /= (uint64_t)StateSweepR_.size();
+          QIndex = (size_t)(Decoder % StateSweepQ_.size()); Decoder /= (uint64_t)StateSweepQ_.size();
+          PIndex = (size_t)(Decoder % StateSweepP_.size()); Decoder /= (uint64_t)StateSweepP_.size();
+          AlphaIndex = (int)(Decoder % (uint64_t)NumberOfAoAs_) + 1; Decoder /= (uint64_t)NumberOfAoAs_;
+          MachIndex = (int)(Decoder % (uint64_t)NumberOfMachs_) + 1; Decoder /= (uint64_t)NumberOfMachs_;
+          BetaIndex = (int)(Decoder % (uint64_t)NumberOfBetas_) + 1;
+       }
 
        double PInput = StateSweepP_[PIndex], QInput = StateSweepQ_[QIndex], RInput = StateSweepR_[RIndex];
        double P = StateSweepPIsReduced_ == 1 ? 2. * Vinf_ * PInput / Bref_ : PInput;
@@ -3143,6 +3620,41 @@ void StateSweepSolve(void)
           ControlSurfaceGroup_[Control].ControlSurface_DeflectionAngle() = StateSweepControls_[Control][ControlIndex[Control]];
        }
        ApplyControlDeflections();
+       int ReuseInvariantSetup = StateSweepFastOrder_ && PreviousMachIndex == MachIndex &&
+                                 PreviousControlIndex == ControlIndex;
+       VSPAERO().StateSweepReuseInitialInteractionList() = ReuseInvariantSetup;
+       VSPAERO().StateSweepReusePreconditioner() = ReuseInvariantSetup;
+       VSPAERO().StateSweepReuseWakeInteractionLists() = StateSweepFastOrder_;
+       // A relaxed wake is only a useful initial condition for a nearby flow
+       // direction. Large incidence jumps can converge to a path-dependent
+       // wake within the configured iteration cap, so start those blocks cold.
+       int NearbyFlowDirection = PreviousAlphaIndex > 0 && PreviousBetaIndex > 0 &&
+                                 fabs(AoAList_[AlphaIndex] - AoAList_[PreviousAlphaIndex]) <= 10. &&
+                                 fabs(BetaList_[BetaIndex] - BetaList_[PreviousBetaIndex]) <= 10.;
+       int ContinuePreviousState = StateSweepContinuation_ &&
+                                   PreviousMachIndex == MachIndex &&
+                                   PreviousControlIndex == ControlIndex &&
+                                   NearbyFlowDirection;
+       VSPAERO().StateSweepContinuationEnabled() = StateSweepContinuation_;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+       VSPAERO().RestartFromPreviousSolve() = ContinuePreviousState;
+       if ( StateSweepContinuation_ ) {
+          if ( ContinuePreviousState ) {
+             ContinuationAttempts++;
+             ContinuationAccepted++;
+          }
+          else {
+             ContinuationColdStarts++;
+          }
+       }
+       if ( ReuseInvariantSetup ) ReusedInvariantCases++;
+       PreviousMachIndex = MachIndex;
+       PreviousAlphaIndex = AlphaIndex;
+       PreviousBetaIndex = BetaIndex;
+       PreviousControlIndex = ControlIndex;
        VSPAERO().ReCref() = ReCrefList_[1];
        VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
        snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE,"State Sweep: %llu",(unsigned long long)AeroCase);
@@ -3152,14 +3664,34 @@ void StateSweepSolve(void)
        int SolverCase = (int)((RunCase - 1) % (uint64_t)(INT_MAX - 1)) + 1;
        // A negative case closes files that were opened by case 1.  A singleton
        // process must therefore remain case +1; process exit flushes/closes it.
-       if ( AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
+       if ( !StateSweepContinuation_ && AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
+       double ProfileStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
        VSPAERO().Solve(SolverCase);
+       if ( StateSweepContinuation_ ) {
+          ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
+          if ( ContinuePreviousState && VSPAERO().StateSweepContinuationFailedThisSolve() ) {
+             printf("State Sweep continuation failed for case %llu; retrying cold.\n",
+                    (unsigned long long)AeroCase);
+             ContinuationFallbacks++;
+             ContinuationAccepted--;
+             ContinuationColdStarts++;
+             VSPAERO().RestartFromPreviousSolve() = 0;
+             VSPAERO().Solve(SolverCase);
+             ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
+          }
+       }
+       if ( StateSweepProfile_ ) ProfileSolveSeconds += StateSweepProfileClock() - ProfileStart;
 
        for ( int ReynoldsIndex = 1 ; ReynoldsIndex <= NumberOfReCrefs_ ; ReynoldsIndex++ ) {
           uint64_t Row = AeroCase * (uint64_t)NumberOfReCrefs_ + (uint64_t)(ReynoldsIndex - 1);
           VSPAERO().ReCref() = ReCrefList_[ReynoldsIndex];
-          if ( ReynoldsIndex > 1 ) VSPAERO().ReCalculateForces();
+          if ( ReynoldsIndex > 1 ) {
+             if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
+             VSPAERO().ReCalculateForces();
+             if ( StateSweepProfile_ ) ProfileReynoldsSeconds += StateSweepProfileClock() - ProfileStart;
+          }
           if ( Row < NextRow ) continue;
+          if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
           uint64_t Chunk = Row / StateSweepChunkSize_;
           if ( Csv == NULL || Chunk != OpenChunk ) {
              if ( Csv != NULL ) fclose(Csv);
@@ -3194,12 +3726,47 @@ void StateSweepSolve(void)
           fflush(Csv);
           NextRow = Row + 1;
           StateSweepWriteCheckpoint(CheckpointPath,Hash,NextRow,TotalRows);
+          if ( StateSweepProfile_ ) ProfileOutputSeconds += StateSweepProfileClock() - ProfileStart;
           if ( NextRow % 100 == 0 || NextRow == TotalRows ) {
              printf("State Sweep progress: %llu / %llu rows.\n",(unsigned long long)NextRow,(unsigned long long)TotalRows);
           }
        }
     }
     if ( Csv != NULL ) fclose(Csv);
+    if ( StateSweepProfile_ ) {
+       double ProfileProcessSeconds = StateSweepProfileClock() - ProfileProcessStart;
+       char ProfilePath[MAX_CHAR_SIZE];
+       snprintf(ProfilePath,sizeof(ProfilePath),"%s/profile.json",Directory);
+       FILE *Profile = fopen(ProfilePath,"w");
+       if ( Profile == NULL ) { printf("Could not write State Sweep profile: %s\n",ProfilePath); exit(1); }
+       fprintf(Profile,"{\n");
+       fprintf(Profile,"  \"format\": \"vspaero-state-sweep-profile\",\n  \"format_version\": 1,\n");
+       fprintf(Profile,"  \"aerodynamic_cases\": %llu,\n",
+               (unsigned long long)(EndAerodynamicCase - StartAerodynamicCase));
+       fprintf(Profile,"  \"output_rows\": %llu,\n",
+               (unsigned long long)((EndAerodynamicCase - StartAerodynamicCase) * (uint64_t)NumberOfReCrefs_));
+       fprintf(Profile,"  \"threads\": %d,\n",NumberOfThreads_);
+       fprintf(Profile,"  \"reused_invariant_setup_cases\": %llu,\n",(unsigned long long)ReusedInvariantCases);
+       fprintf(Profile,"  \"continuation_attempts\": %llu,\n",(unsigned long long)ContinuationAttempts);
+       fprintf(Profile,"  \"continuation_accepted\": %llu,\n",(unsigned long long)ContinuationAccepted);
+       fprintf(Profile,"  \"continuation_cold_starts\": %llu,\n",(unsigned long long)ContinuationColdStarts);
+       fprintf(Profile,"  \"continuation_fallbacks\": %llu,\n",(unsigned long long)ContinuationFallbacks);
+       fprintf(Profile,"  \"total_wake_iterations\": %llu,\n",(unsigned long long)ContinuationWakeIterations);
+       fprintf(Profile,"  \"seconds\": {\n");
+       fprintf(Profile,"    \"process_total\": %.17g,\n",ProfileProcessSeconds);
+       fprintf(Profile,"    \"solver_calls\": %.17g,\n",ProfileSolveSeconds);
+       fprintf(Profile,"    \"wake_initialization\": %.17g,\n",VSPAERO().StateSweepProfileWakeInitialization());
+       fprintf(Profile,"    \"interaction_lists\": %.17g,\n",VSPAERO().StateSweepProfileInteractionLists());
+       fprintf(Profile,"    \"preconditioner\": %.17g,\n",VSPAERO().StateSweepProfilePreconditioner());
+       fprintf(Profile,"    \"wake_iterations\": %.17g,\n",VSPAERO().StateSweepProfileIterations());
+       fprintf(Profile,"    \"linear_solve_with_wake_update\": %.17g,\n",VSPAERO().StateSweepProfileLinearSolve());
+       fprintf(Profile,"    \"force_integration\": %.17g,\n",VSPAERO().StateSweepProfileForces());
+       fprintf(Profile,"    \"additional_reynolds_force_recalculation\": %.17g,\n",ProfileReynoldsSeconds);
+       fprintf(Profile,"    \"csv_and_checkpoint_output\": %.17g\n",ProfileOutputSeconds);
+       fprintf(Profile,"  }\n}\n");
+       fclose(Profile);
+       printf("State Sweep profile: %s\n",ProfilePath);
+    }
     if ( NextRow < RangeEndRow ) {
        printf("State Sweep process batch complete at row %llu / %llu for this range; resume to continue.\n",
               (unsigned long long)NextRow,(unsigned long long)RangeEndRow);
@@ -3219,6 +3786,16 @@ void Solve(void)
     double AR, E, Ewake, LoD, LoDwake, CL, CLwake;
     char PolarFileName[MAX_CHAR_SIZE];
     FILE *PolarFile;
+
+    if ( SteadyOptimization_ ) {
+       VSPAERO().ResetStateSweepProfile();
+       VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
+       VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+    }
 
     ApplyControlDeflections();
     
@@ -3267,6 +3844,17 @@ void Solve(void)
              VSPAERO().RotationalRate_p() = 0.;
              VSPAERO().RotationalRate_q() = 0.;
              VSPAERO().RotationalRate_r() = 0.;
+
+             if ( SteadyOptimization_ ) {
+                // Keep each public steady-sweep state cold. Carrying a relaxed wake
+                // between incidence points introduces measurable path dependence when
+                // WakeIters is small. Cross-case setup caches are also disabled because
+                // their small coefficient changes failed strict official-reference parity.
+                VSPAERO().RestartFromPreviousSolve() = 0;
+                VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                VSPAERO().StateSweepReusePreconditioner() = 0;
+                VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+             }
 
              // Set a comment line
              
@@ -3625,6 +4213,12 @@ void Solve(void)
        
     }
     
+    if ( SteadyOptimization_ && SolverOptimizationProfile_ ) {
+       printf("VSPAERO_OPT_PROFILE mode=steady wake_init=%.6f interaction=%.6f preconditioner=%.6f iterations=%.6f linear=%.6f forces=%.6f\n",
+              VSPAERO().StateSweepProfileWakeInitialization(), VSPAERO().StateSweepProfileInteractionLists(),
+              VSPAERO().StateSweepProfilePreconditioner(), VSPAERO().StateSweepProfileIterations(),
+              VSPAERO().StateSweepProfileLinearSolve(), VSPAERO().StateSweepProfileForces());
+    }
     fclose(PolarFile);
 
 }
@@ -3685,8 +4279,27 @@ void FiniteDifference_StabilityAndControlSolve(void)
     }
    
     VSPAERO().ForwardGMRESConvergenceFactor() = ForwardGMRESConvergenceFactor_;
+
+    if ( StabilityOptimization_ ) {
+       VSPAERO().ResetStateSweepProfile();
+       VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
+       VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
+       VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
+       VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
+       VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
+    }
      
     int SelectedDerivativeCount = 0;
+    int SelectedControlCount = 0;
+    for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) if ( StabControlGroupSelected(i) ) SelectedControlCount++;
+    for ( size_t Selected = 0 ; Selected < StabSelectedControlGroups_.size() ; Selected++ ) {
+       if ( StabSelectedControlGroups_[Selected] > NumberOfControlGroups_ ) {
+          printf("Selected stability control group %d is unavailable; model has %d groups.\n",
+                 StabSelectedControlGroups_[Selected],NumberOfControlGroups_);
+          exit(1);
+       }
+    }
     if ( StabDerivativeFlags_ & STAB_DERIV_ALPHA ) SelectedDerivativeCount++;
     if ( StabDerivativeFlags_ & STAB_DERIV_BETA  ) SelectedDerivativeCount++;
     if ( StabDerivativeFlags_ & STAB_DERIV_MACH  ) SelectedDerivativeCount++;
@@ -3695,7 +4308,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
     if ( StabDerivativeFlags_ & STAB_DERIV_R     ) SelectedDerivativeCount++;
 
     TotalCases = ( 1 + 2 * SelectedDerivativeCount
-                     + ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? 2 * NumberOfControlGroups_ : 0 ) )
+                     + ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? 2 * SelectedControlCount : 0 ) )
                    * NumberOfMachs_ * NumberOfAoAs_ * NumberOfBetas_;
     
     Case = CaseTotal = 0;
@@ -3806,7 +4419,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 
                 CaseTotal++;
 
-                printf("Calculating stability derivative case: %d of %d \n",Case,NumStabCases_);
+                printf("Calculating stability derivative solve: %d of %d \n",CaseTotal,TotalCases);
                 
                 // Set free stream conditions
                 
@@ -3817,6 +4430,16 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 VSPAERO().RotationalRate_p() = RotationalRate_pList_[Case];
                 VSPAERO().RotationalRate_q() = RotationalRate_qList_[Case];
                 VSPAERO().RotationalRate_r() = RotationalRate_rList_[Case];
+
+                if ( StabilityOptimization_ ) {
+                   // Stability perturbations remain cold and independent so positive and
+                   // negative derivatives cannot depend on traversal order.  Alpha, beta,
+                   // and rate cases may still reuse Mach/geometry-invariant setup.
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
                 
                 // Set a comment line
 
@@ -3919,10 +4542,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
              printf("Calculating Control Derivatives... \n"); 
           
              for ( i = 1 ; i <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumberOfControlGroups_ : 0 ) ; i++ ) {
+
+                if ( !StabControlGroupSelected(i) ) continue;
                 
                 CaseTotal++;
                 
-                printf("Calculating control derivative case: %d of %d \n",i,NumberOfControlGroups_);
+                printf("Calculating control derivative solve: %d of %d (group %d) \n",
+                       CaseTotal,TotalCases,i);
                 
                 // Initialize to unperturbed free stream conditions
                 
@@ -3936,7 +4562,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
              
                 // Perturb controls
              
-                Case++;
+                Case = NumStabCases_ + i;
                 
                 k = 1;
                 
@@ -3981,6 +4607,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Deflecting Control Group: %-d",i);
                
                 // Now solve
+
+                if ( StabilityOptimization_ ) {
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
                
                 if ( CaseTotal < TotalCases ) {
                    
@@ -4098,6 +4731,13 @@ void FiniteDifference_StabilityAndControlSolve(void)
                 if ( Deriv == 6 ) VSPAERO().RotationalRate_r() = -Delta_R_;
                 if ( Deriv == 7 ) VSPAERO().Mach()             = Mach_ - Delta_Mach_;
 
+                if ( StabilityOptimization_ ) {
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                   VSPAERO().StateSweepReusePreconditioner() = 0;
+                   VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                }
+
                 if ( Deriv == 2 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Alpha      -%5.3lf",Delta_AoA_);
                 if ( Deriv == 3 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Beta       -%5.3lf",Delta_Beta_);
                 if ( Deriv == 4 ) snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Roll Rate  -%5.3lf",Delta_P_);
@@ -4114,6 +4754,8 @@ void FiniteDifference_StabilityAndControlSolve(void)
              if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
 
                 for ( i = 1 ; i <= NumberOfControlGroups_ ; i++ ) {
+
+                   if ( !StabControlGroupSelected(i) ) continue;
 
                    NegativeCase++;
                    CaseTotal++;
@@ -4145,6 +4787,12 @@ void FiniteDifference_StabilityAndControlSolve(void)
                    }
 
                    snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE*sizeof(char),"Negative Control Group: %-d",i);
+                   if ( StabilityOptimization_ ) {
+                      VSPAERO().RestartFromPreviousSolve() = 0;
+                      VSPAERO().StateSweepReuseInitialInteractionList() = 0;
+                      VSPAERO().StateSweepReusePreconditioner() = 0;
+                      VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
+                   }
                    VSPAERO().SaveRestartFile() = VSPAERO().DoRestart() = 0;
                    VSPAERO().Solve(CaseTotal < TotalCases ? CaseTotal : -CaseTotal);
                    StoreStabilityCaseResults(NegativeCase);
@@ -4168,6 +4816,12 @@ void FiniteDifference_StabilityAndControlSolve(void)
        
     }
                    
+    if ( StabilityOptimization_ && SolverOptimizationProfile_ ) {
+       printf("VSPAERO_OPT_PROFILE mode=stability wake_init=%.6f interaction=%.6f preconditioner=%.6f iterations=%.6f linear=%.6f forces=%.6f\n",
+              VSPAERO().StateSweepProfileWakeInitialization(), VSPAERO().StateSweepProfileInteractionLists(),
+              VSPAERO().StateSweepProfilePreconditioner(), VSPAERO().StateSweepProfileIterations(),
+              VSPAERO().StateSweepProfileLinearSolve(), VSPAERO().StateSweepProfileForces());
+    }
     fclose(StabFile);
     fclose(VorviewFlt);
     
@@ -4242,8 +4896,9 @@ void CalculateStabilityDerivatives(void)
             StabStepQIsReduced_ == 1 ? "reduced" : (StabStepQIsReduced_ == -1 ? "physical" : "legacy_physical_default"),
             StabStepRIsReduced_ == 1 ? "reduced" : (StabStepRIsReduced_ == -1 ? "physical" : "legacy_physical_default"));
     for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
-       fprintf(StabFile,"# Control group %d: name=%s base_deflection=%0.12g deg\n", n,
-               ControlSurfaceGroup_[n].Name(), ControlSurfaceGroup_[n].ControlSurface_DeflectionAngle());
+       fprintf(StabFile,"# Control group %d: name=%s base_deflection=%0.12g deg selected=%s\n", n,
+               ControlSurfaceGroup_[n].Name(), ControlSurfaceGroup_[n].ControlSurface_DeflectionAngle(),
+               StabControlGroupSelected(n) ? "yes" : "no");
     }
     
     // Write out column labels
@@ -4264,6 +4919,7 @@ void CalculateStabilityDerivatives(void)
        if ( n == 6 && !( StabDerivativeFlags_ & STAB_DERIV_R     ) ) continue;
        if ( n == 7 && !( StabDerivativeFlags_ & STAB_DERIV_MACH  ) ) continue;
        if ( n  > 7 && !( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ) continue;
+       if ( n  > 7 && !StabControlGroupSelected(n - NumStabCases_) ) continue;
        
        // Stability derivative cases
                                      //12345678901234567890123456789
@@ -4358,6 +5014,8 @@ void CalculateStabilityDerivatives(void)
     // Calculate the control derivatives and write them out
 
     for ( n = 8 ; n <= ( ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) ? NumStabCases_ + NumberOfControlGroups_ : 7 ) ; n++ ) {
+
+       if ( !StabControlGroupSelected(n - NumStabCases_) ) continue;
     
        Delta = Delta_Control_ * TORAD; // wrt control group deflection
 
@@ -4403,6 +5061,7 @@ void CalculateStabilityDerivatives(void)
     }
     if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
        for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          if ( !StabControlGroupSelected(n) ) continue;
           NegativeOutputCase++;
           snprintf(CaseType,sizeof(CaseType),"%-22s -%5.3lf %-9s",ControlSurfaceGroup_[n].Name(),Delta_Control_,"deg");
           fprintf(StabFile,"%-39s %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f %12.7f \n",
@@ -4471,6 +5130,7 @@ void CalculateStabilityDerivatives(void)
 
     if ( StabDerivativeFlags_ & STAB_DERIV_CONTROLS ) {
        for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) {
+          if ( !StabControlGroupSelected(n) ) continue;
           NegativeCase++;
           CALCULATE_ALL_SYMMETRIC(NumStabCases_ + n, NegativeCase, 8 + n, Delta_Control_ * TORAD);
        }
@@ -4483,12 +5143,12 @@ void CalculateStabilityDerivatives(void)
     // readable table. The repeated Total column is the unperturbed base value.
 #define WRITE_STABILITY_HEADER(METHOD) \
     fprintf(StabFile,"#\n# %s finite-difference derivatives\n",METHOD); \
-    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"  ConGrp_%-3d ",n-7); fprintf(StabFile,"\n"); \
-    fprintf(StabFile,"#              -           rad          rad   reduced_rate reduced_rate reduced_rate      Mach          u      "); for ( n = 8 ; n <= NumStabCases_ + NumberOfControlGroups_ ; n++ ) fprintf(StabFile,"      rad    "); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"Coef          Total        Alpha        Beta          p            q            r           Mach         U      "); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"  ConGrp_%-3d ",n); fprintf(StabFile,"\n"); \
+    fprintf(StabFile,"#              -           rad          rad   reduced_rate reduced_rate reduced_rate      Mach          u      "); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"      rad    "); fprintf(StabFile,"\n"); \
     fprintf(StabFile,"#\n")
 
 #define WRITE_STABILITY_ROW(NAME, TOTAL, VALUES) \
-    fprintf(StabFile,"%-6s ",NAME); fprintf(StabFile,"%12.7f ",TOTAL); for ( n = 2 ; n <= NumStabCases_ + NumberOfControlGroups_ + 1 ; n++ ) fprintf(StabFile,"%12.7f ",VALUES[n]); fprintf(StabFile,"\n")
+    fprintf(StabFile,"%-6s ",NAME); fprintf(StabFile,"%12.7f ",TOTAL); for ( n = 2 ; n <= 8 ; n++ ) fprintf(StabFile,"%12.7f ",VALUES[n]); for ( n = 1 ; n <= NumberOfControlGroups_ ; n++ ) if ( StabControlGroupSelected(n) ) fprintf(StabFile,"%12.7f ",VALUES[8+n]); fprintf(StabFile,"\n")
 
 #define WRITE_STABILITY_TABLE(METHOD, X, Y, Z, MX, MY, MZ, L, D, S, ML, MM, MN) \
     WRITE_STABILITY_HEADER(METHOD); \
