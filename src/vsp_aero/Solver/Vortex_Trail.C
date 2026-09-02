@@ -112,6 +112,10 @@ void VORTEX_TRAIL::init(void)
     
     StallFactor_ = 1.;
 
+    HasSectionStallLimits_ = 0;
+    ClMaxPositive_ = 0.;
+    ClMinNegative_ = 0.;
+
     LocalChord_ = 0.;
 
     LocalSpan_ = 0.;
@@ -281,6 +285,10 @@ VORTEX_TRAIL& VORTEX_TRAIL::operator=(const VORTEX_TRAIL &Trailing_Vortex)
     KuttaStallEquationNumber_ = Trailing_Vortex.KuttaStallEquationNumber_;
     
     StallFactor_ = Trailing_Vortex.StallFactor_;
+
+    HasSectionStallLimits_ = Trailing_Vortex.HasSectionStallLimits_;
+    ClMaxPositive_ = Trailing_Vortex.ClMaxPositive_;
+    ClMinNegative_ = Trailing_Vortex.ClMinNegative_;
     
     LocalChord_ = Trailing_Vortex.LocalChord_;
     

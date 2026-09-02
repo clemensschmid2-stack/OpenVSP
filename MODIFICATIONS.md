@@ -2,6 +2,29 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## 2026-08-30 - XFOIL-derived strip stall limits
+
+- Added `-stall-strip-template <csv>` to expose the vortex-sheet/strip mapping,
+  local chord, span station, and trailing-edge position without running a solve.
+- Added `-stall-strip-table <csv>` to load approved positive and negative 2-D
+  lift limits for every physical strip.
+- The original scalar `CLMax2D` path is retained whenever no table is supplied.
+  A uniform symmetric table can therefore be checked against the original model.
+- This optional extension does not model cavitation, ventilation, or free-surface
+  effects.
+
+## 2026-08-30 - Clemens Schmid
+
+- Corrected State Sweep physical-wing planform geometry to dereference
+  vortex-trail leading/trailing-edge indices on finest grid level 0, where
+  those indices are defined. Reading the same numeric indices from level 1
+  selected unrelated edges, merging symmetry sides and shifting later wing
+  centres/frames. Planform centres are now accumulated from finest-grid panels
+  by physical `SurfaceID`, so geometries without usable wake strips (such as a
+  vertical mast) still receive valid centres and areas; wake strips are used
+  only to determine chord/span orientation. Physical geometry metadata now
+  retains distinct `ypos`/`yneg` (or equivalent) instances.
+
 ## 2026-08-29 - Clemens Schmid
 
 - Fixed physical-side wing geometry, viscous-load, and stall-load partitioning

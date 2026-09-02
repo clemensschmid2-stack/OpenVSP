@@ -18,6 +18,8 @@
 #include <chrono>
 #include <algorithm>
 #include <cctype>
+#include <fstream>
+#include <sstream>
 
 #ifdef WIN32
 #include <direct.h>
@@ -369,6 +371,8 @@ struct STATE_SWEEP_WING_LOAD {
     double Center[3];
 };
 std::vector<STATE_SWEEP_WING_LOAD> StateSweepWingLoads_;
+std::string StallStripTemplatePath_;
+std::string StallStripTablePath_;
 
 double TrimTolerance_                = 0.01;
 double TrimCLRequired_               = 0.0;
@@ -434,6 +438,8 @@ void PRINT_STAB_LINE(double F1,
                      double F8);
 void CalculateAdjointControlDerivatives(void);                     
 void WriteOutAdjointStabilityDerivatives(void);
+void WriteStallStripTemplate(const std::string &Path);
+void LoadStallStripTable(const std::string &Path);
                      
 int SearchForIntegerVariable(FILE *File, const char *VariableName, int &Value);
 int SearchForCharacterVariable(FILE *File, const char *VariableName, char *Variable);
@@ -760,6 +766,14 @@ int main(int argc, char **argv)
 
     VSPAERO().Setup();
 
+    if ( !StallStripTemplatePath_.empty() ) {
+       WriteStallStripTemplate(StallStripTemplatePath_);
+       printf("Wrote stall-strip template: %s\n",StallStripTemplatePath_.c_str());
+       exit(0);
+    }
+
+    if ( !StallStripTablePath_.empty() ) LoadStallStripTable(StallStripTablePath_);
+
     // Wake options
 
     if ( ImplicitWake_ > 0 ) VSPAERO().ImplicitWake() = 1;
@@ -875,6 +889,8 @@ void PrintUsageHelp()
        printf(" -state-design <name> <value>       Record one externally applied design state.\n");
        printf(" -state-wing-load <surface> <name> <x> <y> <z>  Output decomposed CF/CM for one wing instance about the vehicle reference point.\n");
        printf(" -state-hinge-loads                Output pressure hinge-moment coefficients per physical control surface.\n");
+       printf(" -stall-strip-template <path>       Write physical vortex-sheet/strip metadata and exit.\n");
+       printf(" -stall-strip-table <path>          Use approved signed CL limits per vortex-sheet strip.\n");
        printf(" -state-chunk-size <rows>           Set rows per output CSV part (default 25000).\n");
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
@@ -1202,6 +1218,24 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-hinge-loads") == 0 ) {
 
           StateSweepHingeLoads_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-stall-strip-template") == 0 ) {
+
+          StallStripTemplatePath_ = argv[++i];
+          if ( StallStripTemplatePath_.empty() ) {
+             printf("-stall-strip-template requires a path.\n"); exit(1);
+          }
+
+       }
+
+       else if ( strcmp(argv[i],"-stall-strip-table") == 0 ) {
+
+          StallStripTablePath_ = argv[++i];
+          if ( StallStripTablePath_.empty() ) {
+             printf("-stall-strip-table requires a path.\n"); exit(1);
+          }
 
        }
 
@@ -1555,6 +1589,68 @@ void ParseInput(int argc, char *argv[])
        exit(1);
     }
 
+}
+
+void WriteStallStripTemplate(const std::string &Path)
+{
+    std::ofstream Output(Path.c_str(),std::ios::out | std::ios::trunc);
+    if ( !Output ) { printf("Could not create stall-strip template: %s\n",Path.c_str()); exit(1); }
+    Output.precision(17);
+    Output << "vortex_sheet,strip,surface_id,wing_surface,component_id,s_over_b,local_chord,te_x,te_y,te_z\n";
+    for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
+       VORTEX_SHEET &Wake = VSPAERO().VSPGeom().VortexSheet(Sheet);
+       for ( int Strip = 1 ; Strip < Wake.NumberOfTrailingVortices() ; Strip++ ) {
+          VORTEX_TRAIL &Trail = Wake.TrailingVortex(Strip);
+          VSP_NODE &Node = VSPAERO().VSPGeom().Grid(0).NodeList(Trail.TE_Node());
+          VSP_EDGE &Edge = VSPAERO().VSPGeom().Grid(0).EdgeList(ABS(Trail.TE_Edge()));
+          Output << Sheet << ',' << Strip << ',' << Edge.SurfaceID() << ',' << Wake.WingSurface() << ','
+                 << Wake.ComponentID() << ',' << Trail.SoverB() << ','
+                 << Trail.LocalChord() << ',' << Node.x() << ',' << Node.y() << ','
+                 << Node.z() << '\n';
+       }
+    }
+    if ( !Output ) { printf("Failed while writing stall-strip template: %s\n",Path.c_str()); exit(1); }
+}
+
+void LoadStallStripTable(const std::string &Path)
+{
+    std::ifstream Input(Path.c_str());
+    if ( !Input ) { printf("Could not open stall-strip table: %s\n",Path.c_str()); exit(1); }
+    int Expected = 0;
+    for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ )
+       Expected += VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() - 1;
+    int Loaded = 0;
+    std::string Line;
+    while ( std::getline(Input,Line) ) {
+       if ( Line.empty() || Line[0] == '#' || Line.find("vortex_sheet") == 0 ) continue;
+       std::replace(Line.begin(),Line.end(),',',' ');
+       std::istringstream Row(Line);
+       int Sheet, Strip;
+       double Positive, Negative;
+       if ( !(Row >> Sheet >> Strip >> Positive >> Negative) ) {
+          printf("Malformed stall-strip row: %s\n",Line.c_str()); exit(1);
+       }
+       if ( Sheet < 1 || Sheet > VSPAERO().VSPGeom().NumberOfVortexSheets() ) {
+          printf("Stall-strip table has invalid vortex sheet %d.\n",Sheet); exit(1);
+       }
+       VORTEX_SHEET &Wake = VSPAERO().VSPGeom().VortexSheet(Sheet);
+       if ( Strip < 1 || Strip >= Wake.NumberOfTrailingVortices() ||
+            !(Positive > 0.) || !(Negative < 0.) ) {
+          printf("Stall-strip table has invalid limits for sheet %d strip %d.\n",Sheet,Strip); exit(1);
+       }
+       VORTEX_TRAIL &Trail = Wake.TrailingVortex(Strip);
+       if ( Trail.HasSectionStallLimits() ) {
+          printf("Duplicate stall-strip row for sheet %d strip %d.\n",Sheet,Strip); exit(1);
+       }
+       Trail.HasSectionStallLimits() = 1;
+       Trail.ClMaxPositive() = Positive;
+       Trail.ClMinNegative() = Negative;
+       Loaded++;
+    }
+    if ( Loaded != Expected ) {
+       printf("Stall-strip table covers %d of %d required strips.\n",Loaded,Expected); exit(1);
+    }
+    printf("Loaded signed CL limits for %d physical strips from: %s\n",Loaded,Path.c_str());
 }
 
 /*##############################################################################
@@ -3205,20 +3301,31 @@ static void StateSweepWingPlanformGeometry(
     Areas.assign(StateSweepWingLoads_.size(),0.);
     Centers.assign(StateSweepWingLoads_.size(),std::vector<double>(3,0.));
     Frames.assign(StateSweepWingLoads_.size(),std::vector<double>(9,0.));
-    // Vortex-sheet LE/TE edge indices and strip geometry are defined on the
-    // first aerodynamic grid.  Keep this geometric reference independent of
-    // whichever multigrid level is active before or after a solve.
-    int Level = 1;
+    // Vortex-sheet LE/TE edge indices refer to the finest geometry grid. Keep
+    // this reference independent of the active multigrid solve level.
+    int Level = 0;
     for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+       // Surface-panel centroids cover every physical .vkey part, including
+       // lifting surfaces for which no usable wake strip was generated.  Wake
+       // strips remain the better source for chord/span directions below.
+       for ( int Loop = 1 ; Loop <= VSPAERO().VSPGeom().Grid(Level).NumberOfLoops() ; Loop++ ) {
+          VSP_LOOP &SurfaceLoop = VSPAERO().VSPGeom().Grid(Level).LoopList(Loop);
+          if ( SurfaceLoop.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
+          double PanelArea = SurfaceLoop.Area();
+          Areas[Wing] += PanelArea;
+          Centers[Wing][0] += PanelArea*SurfaceLoop.Xc();
+          Centers[Wing][1] += PanelArea*SurfaceLoop.Yc();
+          Centers[Wing][2] += PanelArea*SurfaceLoop.Zc();
+       }
        for ( int Sheet = 1 ; Sheet <= VSPAERO().VSPGeom().NumberOfVortexSheets() ; Sheet++ ) {
           for ( int Strip = 1 ; Strip < VSPAERO().VSPGeom().VortexSheet(Sheet).NumberOfTrailingVortices() ; Strip++ ) {
              VORTEX_TRAIL &Trail = VSPAERO().VSPGeom().VortexSheet(Sheet).TrailingVortex(Strip);
              int LE = ABS(Trail.LE_Edge()), TE = ABS(Trail.TE_Edge());
              VSP_EDGE &LeadingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(LE);
              VSP_EDGE &TrailingEdge = VSPAERO().VSPGeom().Grid(Level).EdgeList(TE);
-             // WingSurface() identifies a continuous vortex sheet, which can
-             // span several physical symmetry instances.  The edge SurfaceID
-             // is the physical instance requested by -state-wing-load.
+             // WingSurface() and ComponentID identify the parent aerodynamic
+             // component and can span several planar-symmetry copies. SurfaceID
+             // is the physical .vkey part requested by -state-wing-load.
              if ( TrailingEdge.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
              int Node1 = TrailingEdge.Node1(), Node2 = TrailingEdge.Node2();
              double ChordVector[3] = {
@@ -3235,13 +3342,6 @@ static void StateSweepWingPlanformGeometry(
              double StripArea = sqrt(vector_dot(AreaVector,AreaVector));
              double ChordMagnitude = sqrt(vector_dot(ChordVector,ChordVector));
              double SpanMagnitude = sqrt(vector_dot(SpanVector,SpanVector));
-             double StripCenter[3] = {
-                0.5*(LeadingEdge.Xc()+TrailingEdge.Xc()),
-                0.5*(LeadingEdge.Yc()+TrailingEdge.Yc()),
-                0.5*(LeadingEdge.Zc()+TrailingEdge.Zc())
-             };
-             Areas[Wing] += StripArea;
-             for ( int Axis = 0 ; Axis < 3 ; Axis++ ) Centers[Wing][Axis] += StripArea*StripCenter[Axis];
              if ( ChordMagnitude > 0. && SpanMagnitude > 0. ) {
                 for ( int Axis = 0 ; Axis < 3 ; Axis++ ) {
                    Frames[Wing][Axis] += StripArea*ChordVector[Axis]/ChordMagnitude;

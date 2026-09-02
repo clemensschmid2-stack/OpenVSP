@@ -5465,9 +5465,9 @@ void VSP_SOLVER::DoForwardMatrixMultiply(double *vec_in, double *vec_out)
                 
                 dStallFactor = VSPGeom().VortexSheet(k).TrailingVortex(i).dStallFactor();
 
-                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
                 
-                dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * Clmax_2d_ );
+                dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
                 
                 dCl_Ratio_dGamma = dCl_Ratio_dGammaTE;
 
@@ -11342,9 +11342,9 @@ void VSP_SOLVER::DoAdjointMatrixMultiply(double *vec_in, double *vec_out)
 
           if ( StallModelIsOn_ && Velocity > 0. ) {
             
-             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
              
-             dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * Clmax_2d_ );
+             dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
              
              dCl_Ratio_dGamma = dCl_Ratio_dGammaTE;
 
@@ -20864,9 +20864,9 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialMesh_StallEquations(void)
 
           if ( Velocity > 0. ) {
             
-             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
              
-             dCl_Ratio_dChord = -GammaTE / ( 0.5 * Chord * Chord * Velocity * Clmax_2d_ );
+             dCl_Ratio_dChord = -GammaTE / ( 0.5 * Chord * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
 
              StallFunction(ABS(Cl_Ratio),Fstall,pFstall_pX);
              
@@ -22500,9 +22500,9 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialFreeStream(int ForceCase, i
    
              if ( Velocity > 0. ) {
                
-                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
                 
-                dCl_Ratio_dVelocity = -GammaTE / ( 0.5 * Chord  * Velocity * Velocity * Clmax_2d_ );
+                dCl_Ratio_dVelocity = -GammaTE / ( 0.5 * Chord  * Velocity * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(GammaTE,Clmax_2d_) );
    
                 StallFunction(ABS(Cl_Ratio),Fstall,pFstall_pX);
                 
@@ -27710,7 +27710,7 @@ void VSP_SOLVER::CalculateResidual(void)
 
              if ( StallModelIsOn_ && Velocity > 0. ) {
                 
-                Cl_Ratio = Gamma / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+                Cl_Ratio = Gamma / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(Gamma,Clmax_2d_) );
 
                 StallFactor = VSPGeom().VortexSheet(k).TrailingVortex(i).StallFactor();
                   
@@ -27798,7 +27798,7 @@ void VSP_SOLVER::CalculateResidual(void)
                           
              if ( StallModelIsOn_ && Velocity > 0. ) {
                 
-                Cl_Ratio = Gamma / ( 0.5 * Chord * Velocity * Clmax_2d_ );
+                Cl_Ratio = Gamma / ( 0.5 * Chord * Velocity * VSPGeom().VortexSheet(k).TrailingVortex(i).StallClLimit(Gamma,Clmax_2d_) );
                
                 StallFunction(ABS(Cl_Ratio),StallFactor,pFstall_pX);
 

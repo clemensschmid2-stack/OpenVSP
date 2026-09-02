@@ -111,6 +111,12 @@ private:
     // Stall factor
     
     double StallFactor_;
+
+    // Optional signed two-dimensional stall limits for this physical strip.
+    // A zero flag preserves the original global CLMax2D path exactly.
+    int HasSectionStallLimits_;
+    double ClMaxPositive_;
+    double ClMinNegative_;
     
     // dStall factor for GMRES solve
     
@@ -531,6 +537,14 @@ public:
     /** Stall factor **/
     
     double &StallFactor(void) { return StallFactor_; };
+
+    int &HasSectionStallLimits(void) { return HasSectionStallLimits_; };
+    double &ClMaxPositive(void) { return ClMaxPositive_; };
+    double &ClMinNegative(void) { return ClMinNegative_; };
+    double StallClLimit(double SignedLiftProxy, double GlobalLimit) const {
+       if ( !HasSectionStallLimits_ ) return GlobalLimit;
+       return SignedLiftProxy >= 0. ? ClMaxPositive_ : -ClMinNegative_;
+    };
     
     /** dStall factor **/
     
