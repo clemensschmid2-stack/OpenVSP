@@ -3124,6 +3124,13 @@ static uint64_t StateSweepConfigurationHash(void)
     snprintf(InputPath,sizeof(InputPath),"%s.vspaero",FileName); Hash = StateSweepHashFile(Hash,InputPath);
     snprintf(InputPath,sizeof(InputPath),"%s.vspgeom",FileName); Hash = StateSweepHashFile(Hash,InputPath);
     snprintf(InputPath,sizeof(InputPath),"%s.vsptri",FileName); Hash = StateSweepHashFile(Hash,InputPath);
+    // Strip limits change the physics. Hash contents, not the machine-local
+    // path, while preserving existing scalar-limit checkpoint hashes.
+    if ( !StallStripTablePath_.empty() ) {
+       const char *Tag = "signed-stall-strip-table-v1";
+       Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));
+       Hash = StateSweepHashFile(Hash,StallStripTablePath_.c_str());
+    }
 #undef HASH_VALUE
     return Hash;
 }
