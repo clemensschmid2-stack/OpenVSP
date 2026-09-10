@@ -13,6 +13,7 @@ import re
 import shutil
 import subprocess
 import sys
+from datetime import datetime
 
 
 HERE = Path(__file__).resolve().parent
@@ -43,6 +44,7 @@ def run_case(
     result_file = output_dir / "results.json"
     log_file = output_dir / "run.log"
     environment = os.environ.copy()
+    environment["PYTHONDONTWRITEBYTECODE"] = "1"
     environment["OMP_NUM_THREADS"] = "1"
     environment["PYTHONPATH"] = str(python_package(distribution))
     command = [
@@ -961,6 +963,8 @@ def main() -> int:
     parser.add_argument("--state-atol", type=float, default=5e-4)
     parser.add_argument("--timeout", type=int, default=600, help="seconds allowed per run")
     parser.add_argument("--keep-work", action="store_true")
+    parser.add_argument("--work-dir", type=Path, help="new isolated directory for this run")
+    parser.add_argument("--report", type=Path, default=HERE / "parity_report.json")
     args = parser.parse_args()
 
     # Parity has exactly one authority: the packaged, unmodified official
@@ -978,9 +982,8 @@ def main() -> int:
     if not custom_vspaero.is_file():
         parser.error(f"candidate vspaero.exe not found: {custom_vspaero}")
 
-    work = HERE / "_work"
-    if work.exists():
-        shutil.rmtree(work)
+    work = (args.work_dir or HERE / "_work" / datetime.now().strftime('%Y%m%d_%H%M%S_%f')).resolve()
+    work.mkdir(parents=True, exist_ok=False)
     report: dict[str, object] = {
         "official": str(official),
         "custom": str(custom),
@@ -992,6 +995,11 @@ def main() -> int:
     completed: dict[str, tuple[dict[str, object], dict[str, object]]] = {}
     optimized_checks: list[dict[str, object]] = []
     selective_control_checks: list[dict[str, object]] = []
+
+    from run_geometry_parity import run_suite
+    geometry_report = run_suite(custom, work / "geometry_analyses", args.timeout, args.rtol, args.atol)
+    report["geometry_analyses"] = geometry_report
+    total_failures += geometry_report["failures"]
 
     for mode, analysis in CASES:
         case_name = f"{mode}_{analysis}"
@@ -1074,7 +1082,8 @@ def main() -> int:
 
     report["status"] = "PASS" if total_failures == 0 else "FAIL"
     report["failures"] = total_failures
-    report_file = HERE / "parity_report.json"
+    report_file = args.report.resolve()
+    report_file.parent.mkdir(parents=True, exist_ok=True)
     report_file.write_text(json.dumps(report, indent=2), encoding="utf-8")
     if not args.keep_work:
         shutil.rmtree(work)

@@ -1,0 +1,126 @@
+{
+  "mass_shell": {
+    "results.Mass_Properties[0].Comp_Ixx[0][0]": {
+      "official": 264.75329699203274,
+      "custom": 264.7667889109244
+    },
+    "results.Mass_Properties[0].Comp_Ixx[0][1]": {
+      "official": 1256.2065864550304,
+      "custom": 1256.237067805615
+    },
+    "results.Mass_Properties[0].Comp_Ixy[0][0]": {
+      "official": 122.15310818883643,
+      "custom": 122.15197067498013
+    },
+    "results.Mass_Properties[0].Comp_Ixy[0][1]": {
+      "official": -544.4603854118687,
+      "custom": -544.4591361983402
+    },
+    "results.Mass_Properties[0].Comp_Ixz[0][0]": {
+      "official": -65.87790294429432,
+      "custom": -65.87716374161533
+    },
+    "results.Mass_Properties[0].Comp_Ixz[0][1]": {
+      "official": -794.6532039343485,
+      "custom": -794.6508302491592
+    },
+    "results.Mass_Properties[0].Comp_Iyy[0][0]": {
+      "official": 575.9752761261841,
+      "custom": 575.9859703091173
+    },
+    "results.Mass_Properties[0].Comp_Iyy[0][1]": {
+      "official": 3070.6911556424684,
+      "custom": 3070.7176753212266
+    },
+    "results.Mass_Properties[0].Comp_Iyz[0][0]": {
+      "official": -22.57847871834655,
+      "custom": -22.57833514447129
+    },
+    "results.Mass_Properties[0].Comp_Iyz[0][1]": {
+      "official": 214.41638461568996,
+      "custom": 214.41608947893573
+    },
+    "results.Mass_Properties[0].Comp_Izz[0][0]": {
+      "official": 615.6340202240222,
+      "custom": 615.6437264417148
+    },
+    "results.Mass_Properties[0].Comp_Izz[0][1]": {
+      "official": 2956.5153003562214,
+      "custom": 2956.5408515783342
+    },
+    "results.Mass_Properties[0].Total_Ixz[0][0]": {
+      "official": -1702.8739950417767,
+      "custom": -1702.8708821539076
+    },
+    "results.Mass_Properties[0].Total_Iyy[0][0]": {
+      "official": 22202.556869189262,
+      "custom": 22202.59408305095
+    }
+  },
+  "degen_geom": {
+    "results.point[0].Ishell[0][0]": {
+      "official": 2.7392152436046606,
+      "custom": 2.742588223327403
+    },
+    "results.point[0].Ishell[0][1]": {
+      "official": 5.553907122905273,
+      "custom": 5.556580668639245
+    },
+    "results.point[0].Ishell[0][2]": {
+      "official": 5.838449770703313,
+      "custom": 5.840876325126566
+    },
+    "results.point[0].Ishell[0][3]": {
+      "official": 1.12037144174575,
+      "custom": 1.1200870632816604
+    },
+    "results.point[0].Ishell[0][4]": {
+      "official": -0.5861162609110356,
+      "custom": -0.5859314602414011
+    },
+    "results.point[0].Ishell[0][5]": {
+      "official": -0.20478277328770783,
+      "custom": -0.20474687981886697
+    },
+    "results.point[1].Ishell[0][0]": {
+      "official": 5.933241362433249,
+      "custom": 5.939337632549168
+    },
+    "results.point[1].Ishell[0][1]": {
+      "official": 13.695375236293389,
+      "custom": 13.700679172044
+    },
+    "results.point[1].Ishell[0][2]": {
+      "official": 12.960927469676667,
+      "custom": 12.966037714098274
+    },
+    "results.point[1].Ishell[0][3]": {
+      "official": -2.1771245897609885,
+      "custom": -2.1768747470547387
+    },
+    "results.point[1].Ishell[0][4]": {
+      "official": -3.295698601680102,
+      "custom": -3.295223864641966
+    },
+    "results.point[1].Ishell[0][5]": {
+      "official": 0.8611766640114633,
+      "custom": 0.8611176366606084
+    },
+    "results.point[2].Ishell[0][0]": {
+      "official": 1737.5381569267613,
+      "custom": 1744.154018610904
+    },
+    "results.point[2].Ishell[0][1]": {
+      "official": 159.45419287941206,
+      "custom": 160.78898850666306
+    },
+    "results.point[2].Ishell[0][2]": {
+      "official": 1888.8451350495295,
+      "custom": 1896.73879137285
+    },
+    "results.point[2].Ishell[0][4]": {
+      "official": -21.69328902485577,
+      "custom": -21.876489883222277
+    }
+  }
+}

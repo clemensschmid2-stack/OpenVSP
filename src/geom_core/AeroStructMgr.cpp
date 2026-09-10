@@ -12,6 +12,7 @@
 #endif
 
 #include <filesystem>
+#include <cstdlib>
 
 #include "AeroStructMgr.h"
 #include "Vehicle.h"
@@ -20,6 +21,45 @@
 #include "FileUtil.h"
 #include "VSPAEROMgr.h"
 #include "StructureMgr.h"
+
+#ifdef WIN32
+namespace
+{
+// Dependency discovery must not execute optional programs or share scratch
+// files between OpenVSP instances. In particular, the old temp.txt probe could
+// be deleted by another worker before fopen(), followed by fseek(nullptr).
+bool ExecutableOnPath( const string & executable )
+{
+    const char *raw_path = std::getenv( "PATH" );
+    if ( !raw_path )
+    {
+        return false;
+    }
+    string path_list( raw_path );
+    size_t start = 0;
+    do
+    {
+        size_t end = path_list.find( ';', start );
+        string directory = path_list.substr( start, end - start );
+        if ( directory.size() >= 2 && directory.front() == '"' && directory.back() == '"' )
+        {
+            directory = directory.substr( 1, directory.size() - 2 );
+        }
+        std::error_code error;
+        if ( std::filesystem::is_regular_file( std::filesystem::path( directory ) / executable, error ) )
+        {
+            return true;
+        }
+        if ( end == string::npos )
+        {
+            break;
+        }
+        start = end + 1;
+    } while ( start <= path_list.size() );
+    return false;
+}
+}
+#endif
 
 AeroStructSingleton::AeroStructSingleton() : ParmContainer()
 {
@@ -169,21 +209,7 @@ void AeroStructSingleton::FindCCX( const string & path )
     else // Check for ccx in path
     {
 #ifdef WIN32
-        string tmppath = std::filesystem::temp_directory_path().generic_string();
-        string tmpfile = tmppath + "temp.txt";
-
-        string cmd = "ccx > " + tmpfile + " 2> nul";
-        system( cmd.c_str() );
-
-        // Get size of temp file
-        FILE* fp = fopen( tmpfile.c_str(), "r" );
-        fseek(fp, 0L, SEEK_END);
-        size_t sz = ftell( fp );
-        fclose( fp );
-
-        DeleteFile( tmpfile.c_str() );
-
-        if ( sz != 0 )
+        if ( ExecutableOnPath( "ccx.exe" ) )
 #else
         if ( !system( "which ccx > /dev/null 2>&1" ))
 #endif
@@ -212,21 +238,7 @@ void AeroStructSingleton::FindCGX( const string & path )
     else // Check for ccx in path
     {
 #ifdef WIN32
-        string tmppath = std::filesystem::temp_directory_path().generic_string();
-        string tmpfile = tmppath + "temp.txt";
-
-        string cmd = "cgx > " + tmpfile + " 2> nul";
-        system( cmd.c_str() );
-
-        // Get size of temp file
-        FILE* fp = fopen( tmpfile.c_str(), "r" );
-        fseek(fp, 0L, SEEK_END);
-        size_t sz = ftell( fp );
-        fclose( fp );
-
-        DeleteFile( tmpfile.c_str() );
-
-        if ( sz != 0 )
+        if ( ExecutableOnPath( "cgx.exe" ) )
 #else
         if ( !system( "which cgx > /dev/null 2>&1" ))
 #endif
