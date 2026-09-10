@@ -18,6 +18,19 @@ OpenMP thread for repeatability.
 Runtime fields such as `Analysis_Duration_Sec` are excluded from numerical
 comparison.
 
+The main runner also includes `run_geometry_parity.py`: dedicated solid/shell
+and selected-set mass properties, CompGeom, PlanarSlice, Projection, DegenGeom,
+and ParasiteDrag. Numerical vectors and matrices are included. A separate
+tetrahedral-shell analytical check verifies the custom shell-inertia correction.
+Strict parity currently exposes the intentional shell-inertia differences from
+official 3.51.2; they remain failures, while the analytical result is reported
+separately. They are not hidden by relaxed tolerances.
+
+Run only these analyses with
+`python run_geometry_parity.py --output <new-work-directory>`.
+The main runner accepts `--work-dir <new-directory>` and `--report <file>`;
+its default work directory is unique per invocation.
+
 After every thin/thick official-reference steady and stability comparison,
 the suite reruns the identical generated case with `-steady-optimize` or
 `-stab-optimize`. Numeric `.polar`/`.stab` values are compared with the custom
@@ -152,6 +165,12 @@ The batch launchers prefer the active Conda environment's Python executable
 when available.
 
 ## Experimental continuation regression
+
+The geometry suite applies the explicitly approved 30-field shell-inertia
+exception described in [SHELL_INERTIA_POLICY.md](SHELL_INERTIA_POLICY.md).
+Strict differences remain reported. Both builds must reproduce the reviewed
+baseline, and the custom analytical shell check must pass. All other differences
+remain failures. The policy document tracks the TODO to retire the exception.
 
 `run_state_continuation_regression.py` is the dedicated acceptance harness for
 circulation warm starts, wake warm starts, and convergence-based early wake
