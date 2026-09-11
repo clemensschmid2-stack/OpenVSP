@@ -76,6 +76,7 @@ BoundaryConditionData.H
 ComponentGroup.H
 ControlSurface.H
 ControlSurfaceGroup.H
+SectionProfileDrag.H
 EngineFace.H
 FastMatrix.H
 FEM_Node.H

@@ -373,6 +373,7 @@ struct STATE_SWEEP_WING_LOAD {
 std::vector<STATE_SWEEP_WING_LOAD> StateSweepWingLoads_;
 std::string StallStripTemplatePath_;
 std::string StallStripTablePath_;
+std::string ProfileDragTablePath_;
 
 double TrimTolerance_                = 0.01;
 double TrimCLRequired_               = 0.0;
@@ -773,6 +774,23 @@ int main(int argc, char **argv)
     }
 
     if ( !StallStripTablePath_.empty() ) LoadStallStripTable(StallStripTablePath_);
+    if ( !ProfileDragTablePath_.empty() ) {
+       if ( DoAdjointSolve_ || OptimizationSolve_ ) {
+          printf("XFOIL profile drag does not support adjoint optimization.\n"); exit(1);
+       }
+       try {
+          VSPAERO().SectionProfileDrag().load(ProfileDragTablePath_,NumberOfControlGroups_);
+          int expected=0;
+          for (int s=1;s<=VSPAERO().VSPGeom().NumberOfVortexSheets();++s)
+             for (int t=1;t<VSPAERO().VSPGeom().VortexSheet(s).NumberOfTrailingVortices();++t) {
+                ++expected;
+                if (!VSPAERO().SectionProfileDrag().strips.count({s,t}))
+                   throw std::runtime_error("Profile drag table does not cover every strip");
+             }
+          if (expected != (int)VSPAERO().SectionProfileDrag().strips.size())
+             throw std::runtime_error("Profile drag table contains unknown strips");
+       } catch (const std::exception &e) { printf("Profile drag: %s\n",e.what()); exit(1); }
+    }
 
     // Wake options
 
@@ -891,6 +909,7 @@ void PrintUsageHelp()
        printf(" -state-hinge-loads                Output pressure hinge-moment coefficients per physical control surface.\n");
        printf(" -stall-strip-template <path>       Write physical vortex-sheet/strip metadata and exit.\n");
        printf(" -stall-strip-table <path>          Use approved signed CL limits per vortex-sheet strip.\n");
+       printf(" -profile-drag-table <path>         Replace wing viscous drag with section polar CD.\n");
        printf(" -state-chunk-size <rows>           Set rows per output CSV part (default 25000).\n");
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
@@ -1230,6 +1249,10 @@ void ParseInput(int argc, char *argv[])
 
        }
 
+       else if ( strcmp(argv[i],"-profile-drag-table") == 0 ) {
+          if (i+1>=argc) { printf("-profile-drag-table requires a path.\n"); exit(1); }
+          ProfileDragTablePath_=argv[++i];
+       }
        else if ( strcmp(argv[i],"-stall-strip-table") == 0 ) {
 
           StallStripTablePath_ = argv[++i];
@@ -3126,6 +3149,11 @@ static uint64_t StateSweepConfigurationHash(void)
     snprintf(InputPath,sizeof(InputPath),"%s.vsptri",FileName); Hash = StateSweepHashFile(Hash,InputPath);
     // Strip limits change the physics. Hash contents, not the machine-local
     // path, while preserving existing scalar-limit checkpoint hashes.
+    if ( !ProfileDragTablePath_.empty() ) {
+       const char *Tag = "xfoil-profile-drag-v1";
+       Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));
+       Hash = StateSweepHashFile(Hash,ProfileDragTablePath_.c_str());
+    }
     if ( !StallStripTablePath_.empty() ) {
        const char *Tag = "signed-stall-strip-table-v1";
        Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));

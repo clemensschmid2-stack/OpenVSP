@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(profile_drag_tests LANGUAGES CXX)
+add_executable(profile_drag_test profile_drag_test.cpp)
+target_compile_features(profile_drag_test PRIVATE cxx_std_17)
+enable_testing()
+add_test(NAME profile_drag_interpolation COMMAND profile_drag_test)

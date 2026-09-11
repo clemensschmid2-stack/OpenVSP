@@ -2,6 +2,15 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased — recorded 2026-09-11
+
+- Added optional XFOIL section profile drag with signed-CL/Reynolds/control
+  interpolation and endpoint clipping. It replaces wing empirical viscous drag
+  while preserving the original default and induced/body contributions.
+- Added native interpolation and force-integration regressions, missing-polar
+  checks, and table-aware State Sweep checkpoint hashes. See
+  [profile drag](parity_tests/PROFILE_DRAG.md) for scope and validation.
+
 ## 2026-08-30 - XFOIL-derived strip stall limits
 
 - Added `-stall-strip-template <csv>` to expose the vortex-sheet/strip mapping,

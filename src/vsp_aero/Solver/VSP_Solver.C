@@ -29957,6 +29957,31 @@ void VSP_SOLVER::IntegrateForcesAndMoments(void)
           // Kludge for stall
           
           Cf *= 1. + 100.*StallFactor;
+
+          if ( !SectionProfileDrag_.strips.empty() ) {
+             bool clipped = false;
+             if (Vinf_<=0. || Velocity<=0. || Chord<=0.) {
+                printf("Profile drag requires positive speed and chord.\n"); exit(1);
+             }
+             // ReCref is already based on freestream speed; scale by the
+             // dimensionless local-speed ratio and local/reference chord.
+             const double PolarRe = ReCref_*(Velocity/Vinf_)*(Chord/Cref_);
+             try {
+                Cf = SectionProfileDrag_.drag(k,i,PolarRe,Gamma/(0.5*Velocity*Chord),
+                    [&](int group) { return ControlSurfaceGroup_[group].ControlSurface_DeflectionAngle(); },clipped);
+             } catch (const std::exception &e) {
+                printf("Profile drag failed: sheet=%d strip=%d Re=%.9g: %s\n",k,i,PolarRe,e.what()); exit(1);
+             }
+             if ( clipped ) printf("XFOIL profile drag clipped: sheet=%d strip=%d Re=%.9g Cl=%.9g\n",
+                                   k,i,PolarRe,Gamma/(0.5*Velocity*Chord));
+             // Polar CD is wind-axis drag, not a chordwise force coefficient.
+             for (int axis=0;axis<3;++axis)
+                SVec[axis]=0.5*(VSPGeom().Grid(MGLevel_).EdgeList(LE_Edge).LocalFreeStreamVelocity()[axis]
+                              +VSPGeom().Grid(MGLevel_).EdgeList(TE_Edge).LocalFreeStreamVelocity()[axis]);
+             const double directionNorm=sqrt(vector_dot(SVec,SVec));
+             if (directionNorm<=0.) { printf("Profile drag has undefined local flow direction.\n"); exit(1); }
+             for (int axis=0;axis<3;++axis) SVec[axis]/=directionNorm;
+          }
          
           // Viscous Forces
            
