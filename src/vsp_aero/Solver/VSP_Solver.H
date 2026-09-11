@@ -35,6 +35,7 @@
 #include "AdjointGradient.H"
 #include "SaveState.H"
 #include "CharSizes.H"
+#include "SectionProfileDrag.H"
 
 #include "START_NAME_SPACE.H"
 
@@ -393,6 +394,7 @@ private:
     // 2D aero stuff
 
     double Clo_2d_;
+    vds_profile::Table SectionProfileDrag_;
     double Clmax_2d_;
     
     // Stall factor minimum
@@ -2622,6 +2624,7 @@ public:
     /** Zero angle of attack lift coefficient for 2D viscous drag estimate... **/
 
     double &Clo2D(void) { return Clo_2d_; };
+    vds_profile::Table &SectionProfileDrag(void) { return SectionProfileDrag_; }
     
     /** Set maximum 2D Clmax **/
     
