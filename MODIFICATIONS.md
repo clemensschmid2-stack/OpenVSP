@@ -2,6 +2,13 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - XFOIL stall polar workflow
+
+- Add approved section/Reynolds/flap stall tables, signed interpolation,
+  Reynolds-dependent circulation solves and checkpoint provenance.
+- Preserve scalar/fixed strip behavior when the new option is absent.
+- See [workflow and validation](parity_tests/STALL_POLARS.md).
+
 ## Unreleased — recorded 2026-09-11
 
 - Added optional XFOIL section profile drag with signed-CL/Reynolds/control

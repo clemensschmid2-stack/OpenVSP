@@ -36,6 +36,7 @@
 #include "SaveState.H"
 #include "CharSizes.H"
 #include "SectionProfileDrag.H"
+#include "SectionStallPolars.H"
 
 #include "START_NAME_SPACE.H"
 
@@ -395,6 +396,7 @@ private:
 
     double Clo_2d_;
     vds_profile::Table SectionProfileDrag_;
+    vds_stall::Table SectionStallPolars_;
     double Clmax_2d_;
     
     // Stall factor minimum
@@ -2625,6 +2627,8 @@ public:
 
     double &Clo2D(void) { return Clo_2d_; };
     vds_profile::Table &SectionProfileDrag(void) { return SectionProfileDrag_; }
+    vds_stall::Table &SectionStallPolars(void) { return SectionStallPolars_; }
+    double StallClLimit(int sheet, int strip, double lift, double velocity, double chord);
     
     /** Set maximum 2D Clmax **/
     
