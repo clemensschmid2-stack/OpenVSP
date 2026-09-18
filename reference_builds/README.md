@@ -13,3 +13,7 @@ for parity and regression checks while changing the VSPAERO sources.
 
 Keep this reference build unchanged. New experimental binaries belong in the
 normal ignored build directories, not in this folder.
+
+Generated Python `__pycache__` files are excluded from version control; they are
+interpreter caches, not reference data. Official executables, extensions, source
+files, and bundled test fixtures are retained unchanged.

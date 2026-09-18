@@ -373,6 +373,8 @@ struct STATE_SWEEP_WING_LOAD {
 std::vector<STATE_SWEEP_WING_LOAD> StateSweepWingLoads_;
 std::string StallStripTemplatePath_;
 std::string StallStripTablePath_;
+std::string ProfileDragTablePath_;
+std::string StallPolarTablePath_;
 
 double TrimTolerance_                = 0.01;
 double TrimCLRequired_               = 0.0;
@@ -773,6 +775,40 @@ int main(int argc, char **argv)
     }
 
     if ( !StallStripTablePath_.empty() ) LoadStallStripTable(StallStripTablePath_);
+    if ( !StallPolarTablePath_.empty() ) {
+       if ( DoAdjointSolve_ || OptimizationSolve_ || !StallStripTablePath_.empty() ) {
+          printf("XFOIL stall polars cannot be combined with adjoint optimization or a fixed strip table.\n"); exit(1);
+       }
+       try {
+          VSPAERO().SectionStallPolars().load(StallPolarTablePath_,NumberOfControlGroups_);
+          int expected=0;
+          for (int s=1;s<=VSPAERO().VSPGeom().NumberOfVortexSheets();++s)
+             for (int t=1;t<VSPAERO().VSPGeom().VortexSheet(s).NumberOfTrailingVortices();++t) {
+                ++expected;
+                if (!VSPAERO().SectionStallPolars().strips.count({s,t}))
+                   throw std::runtime_error("Stall polar table does not cover every strip");
+             }
+          if (expected != (int)VSPAERO().SectionStallPolars().strips.size())
+             throw std::runtime_error("Stall polar table contains unknown strips");
+       } catch (const std::exception &e) { printf("XFOIL stall polars: %s\n",e.what()); exit(1); }
+    }
+    if ( !ProfileDragTablePath_.empty() ) {
+       if ( DoAdjointSolve_ || OptimizationSolve_ ) {
+          printf("XFOIL profile drag does not support adjoint optimization.\n"); exit(1);
+       }
+       try {
+          VSPAERO().SectionProfileDrag().load(ProfileDragTablePath_,NumberOfControlGroups_);
+          int expected=0;
+          for (int s=1;s<=VSPAERO().VSPGeom().NumberOfVortexSheets();++s)
+             for (int t=1;t<VSPAERO().VSPGeom().VortexSheet(s).NumberOfTrailingVortices();++t) {
+                ++expected;
+                if (!VSPAERO().SectionProfileDrag().strips.count({s,t}))
+                   throw std::runtime_error("Profile drag table does not cover every strip");
+             }
+          if (expected != (int)VSPAERO().SectionProfileDrag().strips.size())
+             throw std::runtime_error("Profile drag table contains unknown strips");
+       } catch (const std::exception &e) { printf("Profile drag: %s\n",e.what()); exit(1); }
+    }
 
     // Wake options
 
@@ -891,6 +927,8 @@ void PrintUsageHelp()
        printf(" -state-hinge-loads                Output pressure hinge-moment coefficients per physical control surface.\n");
        printf(" -stall-strip-template <path>       Write physical vortex-sheet/strip metadata and exit.\n");
        printf(" -stall-strip-table <path>          Use approved signed CL limits per vortex-sheet strip.\n");
+       printf(" -stall-polar-table <path>          Approved section stall limits over Reynolds/flap grids.\n");
+       printf(" -profile-drag-table <path>         Replace wing viscous drag with section polar CD.\n");
        printf(" -state-chunk-size <rows>           Set rows per output CSV part (default 25000).\n");
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
@@ -1230,6 +1268,14 @@ void ParseInput(int argc, char *argv[])
 
        }
 
+       else if ( strcmp(argv[i],"-stall-polar-table") == 0 ) {
+          if (i+1>=argc) { printf("-stall-polar-table requires a path.\n"); exit(1); }
+          StallPolarTablePath_=argv[++i];
+       }
+       else if ( strcmp(argv[i],"-profile-drag-table") == 0 ) {
+          if (i+1>=argc) { printf("-profile-drag-table requires a path.\n"); exit(1); }
+          ProfileDragTablePath_=argv[++i];
+       }
        else if ( strcmp(argv[i],"-stall-strip-table") == 0 ) {
 
           StallStripTablePath_ = argv[++i];
@@ -3126,6 +3172,16 @@ static uint64_t StateSweepConfigurationHash(void)
     snprintf(InputPath,sizeof(InputPath),"%s.vsptri",FileName); Hash = StateSweepHashFile(Hash,InputPath);
     // Strip limits change the physics. Hash contents, not the machine-local
     // path, while preserving existing scalar-limit checkpoint hashes.
+    if ( !StallPolarTablePath_.empty() ) {
+       const char *Tag = "xfoil-stall-polars-v1";
+       Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));
+       Hash = StateSweepHashFile(Hash,StallPolarTablePath_.c_str());
+    }
+    if ( !ProfileDragTablePath_.empty() ) {
+       const char *Tag = "xfoil-profile-drag-v1";
+       Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));
+       Hash = StateSweepHashFile(Hash,ProfileDragTablePath_.c_str());
+    }
     if ( !StallStripTablePath_.empty() ) {
        const char *Tag = "signed-stall-strip-table-v1";
        Hash = StateSweepHashBytes(Hash,Tag,strlen(Tag));
@@ -3751,6 +3807,9 @@ void StateSweepSolve(void)
     uint64_t ContinuationWakeIterations = 0;
     VSPAERO().StateSweepProfiling() = StateSweepProfile_;
     if ( StateSweepProfile_ ) VSPAERO().ResetStateSweepProfile();
+    const bool PolarReSolves = !StallPolarTablePath_.empty() && NumberOfReCrefs_ > 1;
+    const int UseContinuation = StateSweepContinuation_ && !PolarReSolves;
+    if (PolarReSolves) printf("XFOIL stall polars: solve circulation at every Reynolds value; cold starts across Reynolds.\n");
     int PreviousMachIndex = -1;
     int PreviousAlphaIndex = -1;
     int PreviousBetaIndex = -1;
@@ -3815,17 +3874,17 @@ void StateSweepSolve(void)
        int NearbyFlowDirection = PreviousAlphaIndex > 0 && PreviousBetaIndex > 0 &&
                                  fabs(AoAList_[AlphaIndex] - AoAList_[PreviousAlphaIndex]) <= 10. &&
                                  fabs(BetaList_[BetaIndex] - BetaList_[PreviousBetaIndex]) <= 10.;
-       int ContinuePreviousState = StateSweepContinuation_ &&
+       int ContinuePreviousState = UseContinuation &&
                                    PreviousMachIndex == MachIndex &&
                                    PreviousControlIndex == ControlIndex &&
                                    NearbyFlowDirection;
-       VSPAERO().StateSweepContinuationEnabled() = StateSweepContinuation_;
+       VSPAERO().StateSweepContinuationEnabled() = UseContinuation;
        VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
        VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
        VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
        VSPAERO().StateSweepContinuationLoadTolerance() = StateSweepContinuationLoadTolerance_;
        VSPAERO().RestartFromPreviousSolve() = ContinuePreviousState;
-       if ( StateSweepContinuation_ ) {
+       if ( UseContinuation ) {
           if ( ContinuePreviousState ) {
              ContinuationAttempts++;
              ContinuationAccepted++;
@@ -3844,14 +3903,14 @@ void StateSweepSolve(void)
        snprintf(VSPAERO().CaseString(),MAX_CHAR_SIZE,"State Sweep: %llu",(unsigned long long)AeroCase);
        // Native solver output files must be opened on the first solve of this
        // process, including when a sweep resumes in the middle of its grid.
-       uint64_t RunCase = AeroCase - StartAerodynamicCase + 1;
+       uint64_t RunCase = (AeroCase - StartAerodynamicCase) * (PolarReSolves ? NumberOfReCrefs_ : 1) + 1;
        int SolverCase = (int)((RunCase - 1) % (uint64_t)(INT_MAX - 1)) + 1;
        // A negative case closes files that were opened by case 1.  A singleton
        // process must therefore remain case +1; process exit flushes/closes it.
-       if ( !StateSweepContinuation_ && AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
+       if ( !UseContinuation && !PolarReSolves && AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
        double ProfileStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
        VSPAERO().Solve(SolverCase);
-       if ( StateSweepContinuation_ ) {
+       if ( UseContinuation ) {
           ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
           if ( ContinuePreviousState && VSPAERO().StateSweepContinuationFailedThisSolve() ) {
              printf("State Sweep continuation failed for case %llu; retrying cold.\n",
@@ -3871,7 +3930,14 @@ void StateSweepSolve(void)
           VSPAERO().ReCref() = ReCrefList_[ReynoldsIndex];
           if ( ReynoldsIndex > 1 ) {
              if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
-             VSPAERO().ReCalculateForces();
+             if (PolarReSolves) {
+                VSPAERO().RestartFromPreviousSolve() = 0;
+                uint64_t ReRunCase = RunCase + ReynoldsIndex - 1;
+                int ReSolverCase = (int)((ReRunCase - 1) % (uint64_t)(INT_MAX - 1)) + 1;
+                if (AeroCase + 1 == EndAerodynamicCase && ReynoldsIndex == NumberOfReCrefs_)
+                   ReSolverCase = -ReSolverCase;
+                VSPAERO().Solve(ReSolverCase);
+             } else VSPAERO().ReCalculateForces();
              if ( StateSweepProfile_ ) ProfileReynoldsSeconds += StateSweepProfileClock() - ProfileStart;
           }
           if ( Row < NextRow ) continue;
@@ -4164,7 +4230,10 @@ void Solve(void)
      
                 VSPAERO().ReCref() = ReCref_;
                 
-                VSPAERO().ReCalculateForces();
+                if (!StallPolarTablePath_.empty()) {
+                   VSPAERO().RestartFromPreviousSolve() = 0;
+                   VSPAERO().Solve(Case < NumCases ? Case : -Case);
+                } else VSPAERO().ReCalculateForces();
                 
                 // KJ inviscid forces
                 
@@ -4751,25 +4820,33 @@ void FiniteDifference_StabilityAndControlSolve(void)
                       StabilityMapFile,CurrentStabilityMapPoint,DerivativeName,
                       Case == 1 ? "base" : "positive",Coordinate,0,0.);
 
-                   // Reynolds only affects force reconstruction for an already
-                   // solved circulation field. Capture multiplicative +/- rows
-                   // without launching two additional aerodynamic solves.
+                   // Polar stall limits make circulation Reynolds-dependent.
+                   // Re-solve perturbed and restored states when those limits are active.
                    if ( Case == 1 && ( StabDerivativeFlags_ & STAB_DERIV_REYNOLDS ) ) {
                       double BaseReynolds = VSPAERO().ReCref();
                       double PositiveReynolds = BaseReynolds * (1. + StabStepReynoldsFraction_);
                       double NegativeReynolds = BaseReynolds * (1. - StabStepReynoldsFraction_);
                       VSPAERO().ReCref() = PositiveReynolds;
-                      VSPAERO().ReCalculateForces();
+                      if (!StallPolarTablePath_.empty()) {
+                         VSPAERO().RestartFromPreviousSolve() = 0;
+                         VSPAERO().Solve(2);
+                      } else VSPAERO().ReCalculateForces();
                       StabilityMapWriteRawRow(
                          StabilityMapFile,CurrentStabilityMapPoint,"ln_reynolds","positive",
                          log(PositiveReynolds/BaseReynolds),0,0.);
                       VSPAERO().ReCref() = NegativeReynolds;
-                      VSPAERO().ReCalculateForces();
+                      if (!StallPolarTablePath_.empty()) {
+                         VSPAERO().RestartFromPreviousSolve() = 0;
+                         VSPAERO().Solve(2);
+                      } else VSPAERO().ReCalculateForces();
                       StabilityMapWriteRawRow(
                          StabilityMapFile,CurrentStabilityMapPoint,"ln_reynolds","negative",
                          log(NegativeReynolds/BaseReynolds),0,0.);
                       VSPAERO().ReCref() = BaseReynolds;
-                      VSPAERO().ReCalculateForces();
+                      if (!StallPolarTablePath_.empty()) {
+                         VSPAERO().RestartFromPreviousSolve() = 0;
+                         VSPAERO().Solve(2);
+                      } else VSPAERO().ReCalculateForces();
                    }
                 }
              
