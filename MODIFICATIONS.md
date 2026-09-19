@@ -2,6 +2,13 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - polar lookup overhead
+
+- Reuse the same stall-limit result within residual/derivative expressions.
+- Report the first profile-drag clipping occurrence per process and suppress
+  repeats. Clipping and all aerodynamic equations remain unchanged.
+- See [performance validation](parity_tests/POLAR_PERFORMANCE.md).
+
 ## Unreleased - XFOIL stall polar workflow
 
 - Add approved section/Reynolds/flap stall tables, signed interpolation,

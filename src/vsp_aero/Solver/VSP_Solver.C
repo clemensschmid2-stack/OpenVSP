@@ -5489,9 +5489,10 @@ void VSP_SOLVER::DoForwardMatrixMultiply(double *vec_in, double *vec_out)
                 
                 dStallFactor = VSPGeom().VortexSheet(k).TrailingVortex(i).dStallFactor();
 
-                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+                const double PolarStallLimit = StallClLimit(k,i,GammaTE,Velocity,Chord);
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * PolarStallLimit );
                 
-                dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+                dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * PolarStallLimit );
                 
                 dCl_Ratio_dGamma = dCl_Ratio_dGammaTE;
 
@@ -11366,9 +11367,10 @@ void VSP_SOLVER::DoAdjointMatrixMultiply(double *vec_in, double *vec_out)
 
           if ( StallModelIsOn_ && Velocity > 0. ) {
             
-             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+             const double PolarStallLimit = StallClLimit(k,i,GammaTE,Velocity,Chord);
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * PolarStallLimit );
              
-             dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+             dCl_Ratio_dGammaTE = 1./( 0.5 * Chord * Velocity * PolarStallLimit );
              
              dCl_Ratio_dGamma = dCl_Ratio_dGammaTE;
 
@@ -20888,9 +20890,10 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialMesh_StallEquations(void)
 
           if ( Velocity > 0. ) {
             
-             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+             const double PolarStallLimit = StallClLimit(k,i,GammaTE,Velocity,Chord);
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * PolarStallLimit );
              
-             dCl_Ratio_dChord = -GammaTE / ( 0.5 * Chord * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+             dCl_Ratio_dChord = -GammaTE / ( 0.5 * Chord * Chord * Velocity * PolarStallLimit );
 
              StallFunction(ABS(Cl_Ratio),Fstall,pFstall_pX);
              
@@ -22524,9 +22527,10 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialFreeStream(int ForceCase, i
    
              if ( Velocity > 0. ) {
                
-                Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+                const double PolarStallLimit = StallClLimit(k,i,GammaTE,Velocity,Chord);
+             Cl_Ratio = GammaTE / ( 0.5 * Chord * Velocity * PolarStallLimit );
                 
-                dCl_Ratio_dVelocity = -GammaTE / ( 0.5 * Chord  * Velocity * Velocity * StallClLimit(k,i,GammaTE,Velocity,Chord) );
+                dCl_Ratio_dVelocity = -GammaTE / ( 0.5 * Chord  * Velocity * Velocity * PolarStallLimit );
    
                 StallFunction(ABS(Cl_Ratio),Fstall,pFstall_pX);
                 
@@ -29996,8 +30000,12 @@ void VSP_SOLVER::IntegrateForcesAndMoments(void)
              } catch (const std::exception &e) {
                 printf("Profile drag failed: sheet=%d strip=%d Re=%.9g: %s\n",k,i,PolarRe,e.what()); exit(1);
              }
-             if ( clipped ) printf("XFOIL profile drag clipped: sheet=%d strip=%d Re=%.9g Cl=%.9g\n",
-                                   k,i,PolarRe,Gamma/(0.5*Velocity*Chord));
+             if ( clipped ) {
+                static std::atomic<bool> reported(false);
+                if (!reported.exchange(true))
+                   printf("XFOIL profile drag clipped: sheet=%d strip=%d Re=%.9g Cl=%.9g; further clipping warnings suppressed for this process.\n",
+                          k,i,PolarRe,Gamma/(0.5*Velocity*Chord));
+             }
              // Polar CD is wind-axis drag, not a chordwise force coefficient.
              for (int axis=0;axis<3;++axis)
                 SVec[axis]=0.5*(VSPGeom().Grid(MGLevel_).EdgeList(LE_Edge).LocalFreeStreamVelocity()[axis]
