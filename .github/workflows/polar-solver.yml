@@ -1,0 +1,27 @@
+name: Polar solver checks
+on:
+  pull_request:
+    paths:
+      - 'src/vsp_aero/Solver/**'
+      - 'parity_tests/profile_drag/**'
+      - 'parity_tests/stall_polars/**'
+      - '.github/workflows/polar-solver.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  polar-solver:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure solver
+        run: cmake -S parity_tests/stall_polars -B build/polar-solver -A x64
+      - name: Build solver
+        run: cmake --build build/polar-solver --config Release --target vspaero --parallel 2
+      - name: Configure interpolation tests
+        run: cmake -S parity_tests/profile_drag -B build/polar-tests -A x64
+      - name: Build interpolation tests
+        run: cmake --build build/polar-tests --config Release --parallel 2
+      - name: Run interpolation tests
+        run: ctest --test-dir build/polar-tests -C Release --output-on-failure

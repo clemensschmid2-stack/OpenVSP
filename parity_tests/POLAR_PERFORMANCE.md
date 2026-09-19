@@ -10,6 +10,11 @@ warnings for the process, using an atomic guard like the existing stall warning.
 Limits, interpolation order, derivatives, force equations and tolerances do not
 change. The log is no longer a list of every clipped strip or occurrence.
 
+`Polar solver checks` now builds the C++17 solver and runs both profile-drag and
+stall interpolation tests for affected pull requests. The existing full build
+workflow only triggers on the `build` branch; it provided no PR gate. This focused
+gate supplements, rather than replaces, the local official-reference parity run.
+
 Built the Solver CMake subdirectory as Release x64 with MSVC 19.44, OpenMP and
 C++17, with `VSP_NO_VSPAERO_OPT=ON`, in an isolated directory. A first scratch
 wrapper used C++11 and failed on existing filesystem code; correcting it to the
