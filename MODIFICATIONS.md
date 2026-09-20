@@ -2,6 +2,14 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - Windows checkpoint replacement
+
+- Use ReplaceFile for existing State Sweep checkpoints and a non-overwriting
+  MoveFileEx for initial publication. Compatible readers must share deletion.
+  Retain the bounded retry policy and report the actual saved Windows error.
+- Aerodynamic equations and checkpoint format/hash remain unchanged. See
+  [paired deployment and validation](parity_tests/CHECKPOINT_SHARING.md).
+
 ## Unreleased - polar lookup overhead
 
 - Reuse the same stall-limit result within residual/derivative expressions.
