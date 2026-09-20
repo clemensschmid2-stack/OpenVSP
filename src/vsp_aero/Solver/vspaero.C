@@ -34,6 +34,7 @@
 #endif
 
 #include "VSP_Solver.H"
+#include "StateSweepCheckpoint.H"
 #include "ControlSurfaceGroup.H"
 #include "OptimizationParameterData.H"
 #include "OptimizationGradientData.H"
@@ -3189,35 +3190,6 @@ static uint64_t StateSweepConfigurationHash(void)
     }
 #undef HASH_VALUE
     return Hash;
-}
-
-static void StateSweepWriteCheckpoint(const char *Path, uint64_t Hash, uint64_t Next, uint64_t Total)
-{
-    char Temporary[MAX_CHAR_SIZE];
-    snprintf(Temporary,sizeof(Temporary),"%s.tmp",Path);
-    FILE *File = fopen(Temporary,"w");
-    if ( File == NULL ) { printf("Could not write State Sweep checkpoint: %s\n",Temporary); exit(1); }
-    fprintf(File,"%016llx %llu %llu\n",(unsigned long long)Hash,
-            (unsigned long long)Next,(unsigned long long)Total);
-    fflush(File);
-    fclose(File);
-#ifdef WIN32
-    // Indexers and virus scanners can briefly hold the destination open on
-    // Windows.  Replace atomically and retry transient sharing violations.
-    int Published = 0;
-    for ( int Attempt = 0 ; Attempt < 40 && !Published ; Attempt++ ) {
-       Published = MoveFileExA(Temporary,Path,MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) != 0;
-       if ( !Published ) Sleep(50);
-    }
-    if ( !Published ) {
-       printf("Could not publish State Sweep checkpoint: %s (Windows error %lu)\n",Path,(unsigned long)GetLastError());
-       exit(1);
-    }
-#else
-    if ( rename(Temporary,Path) != 0 ) {
-       printf("Could not publish State Sweep checkpoint: %s (errno %d)\n",Path,errno); exit(1);
-    }
-#endif
 }
 
 static std::string StateSweepSafeColumnToken(const char *Name)
