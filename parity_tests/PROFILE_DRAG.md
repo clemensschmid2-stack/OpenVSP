@@ -15,6 +15,10 @@ returned as a coefficient: a lookup requiring that polar fails explicitly.
 Interpolation is linear in signed section CL, Reynolds, deflection, and section
 weight. Requests beyond valid endpoints clip, with strip/Re/CL diagnostics in
 the solver log. A one-point polar is a constant with clipping outside that point.
+The query is `CL = sign(TE_Edge) * Gamma_edge / (0.5 * speed * chord)`.
+The sign converts stored mesh-edge circulation to ordered wake-strip circulation,
+matching the mapped table and stall convention. Reversing edge storage reverses
+both the edge index and circulation, leaving the physical query unchanged.
 Local Reynolds is ReCref*(local speed/freestream speed)*(local chord/Cref).
 Profile force uses local dynamic pressure and strip area, acts along local flow,
 and contributes moments at the existing section-force location.
@@ -36,3 +40,6 @@ python parity_tests/verify_profile_drag.py --solver <candidate.exe> --fixture <t
 The fixture comes from the existing official-reference parity suite. The force
 test verifies no empirical double counting with zero CD, constant-CD force
 accuracy, unchanged inviscid coefficients, and clipping diagnostics.
+
+Lift-sign validation and build provenance are recorded in
+[POLAR_LIFT_SIGN.md](POLAR_LIFT_SIGN.md).

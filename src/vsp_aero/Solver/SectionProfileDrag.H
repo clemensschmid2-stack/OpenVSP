@@ -11,6 +11,12 @@
 #include <string>
 
 namespace vds_profile {
+// Polar tables and stall limits use ordered wake-strip circulation, whereas
+// edge circulation follows the mesh edge's storage orientation.
+inline double liftCoefficient(int signedEdge, double gamma, double speed, double chord) {
+    return (signedEdge < 0 ? -gamma : gamma)/(0.5*speed*chord);
+}
+
 typedef std::map<double, double> Curve;
 typedef std::map<double, Curve> ReynoldsGrid;
 typedef std::map<double, ReynoldsGrid> DeflectionGrid;
