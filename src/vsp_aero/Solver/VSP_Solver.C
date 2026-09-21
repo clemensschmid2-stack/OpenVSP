@@ -29994,8 +29994,10 @@ void VSP_SOLVER::IntegrateForcesAndMoments(void)
              // ReCref is already based on freestream speed; scale by the
              // dimensionless local-speed ratio and local/reference chord.
              const double PolarRe = ReCref_*(Velocity/Vinf_)*(Chord/Cref_);
+             const double PolarCl = vds_profile::liftCoefficient(
+                 VSPGeom().VortexSheet(k).TrailingVortex(i).TE_Edge(), Gamma, Velocity, Chord);
              try {
-                Cf = SectionProfileDrag_.drag(k,i,PolarRe,Gamma/(0.5*Velocity*Chord),
+                Cf = SectionProfileDrag_.drag(k,i,PolarRe,PolarCl,
                     [&](int group) { return ControlSurfaceGroup_[group].ControlSurface_DeflectionAngle(); },clipped);
              } catch (const std::exception &e) {
                 printf("Profile drag failed: sheet=%d strip=%d Re=%.9g: %s\n",k,i,PolarRe,e.what()); exit(1);
@@ -30004,7 +30006,7 @@ void VSP_SOLVER::IntegrateForcesAndMoments(void)
                 static std::atomic<bool> reported(false);
                 if (!reported.exchange(true))
                    printf("XFOIL profile drag clipped: sheet=%d strip=%d Re=%.9g Cl=%.9g; further clipping warnings suppressed for this process.\n",
-                          k,i,PolarRe,Gamma/(0.5*Velocity*Chord));
+                          k,i,PolarRe,PolarCl);
              }
              // Polar CD is wind-axis drag, not a chordwise force coefficient.
              for (int axis=0;axis<3;++axis)

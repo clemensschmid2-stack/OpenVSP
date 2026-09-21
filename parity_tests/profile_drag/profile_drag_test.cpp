@@ -15,6 +15,18 @@ int main() {
     clipped=false;
     value=t.drag(1,1,1000.,-5.,[](int){return -5.;},clipped);
     check(std::abs(value-.028)<1.e-12 && clipped);
+    // Deliberately asymmetric polar: reversing edge storage must not change CD.
+    // Test both physical loading directions and both control-table endpoints.
+    for (double loading: {-1.,1.}) for (double delta: {0.,10.}) {
+        for (int edge: {-7,7}) {
+            const double gamma = (edge < 0 ? -1. : 1.)*loading*5.;
+            const double cl = vds_profile::liftCoefficient(edge,gamma,10.,2.);
+            check(std::abs(cl-loading*.5)<1.e-12);
+            clipped=false;
+            value=t.drag(1,1,150.,cl,[delta](int){return delta;},clipped);
+            check(std::abs(value-(.025+.001*delta+.001*loading))<1.e-12 && !clipped);
+        }
+    }
     s.data[0.][100.].clear();
     bool rejected=false;
     try { t.drag(1,1,100.,0.,[](int){return 0.;},clipped); }
@@ -24,5 +36,5 @@ int main() {
     file << "1,1,0,1,0,0,0,100,0,-0.2\n"; file.close();
     rejected=false; try { t.load("invalid.csv",0); } catch(const std::runtime_error&) {rejected=true;}
     check(rejected);
-    std::cout << "PASS: interpolation, clipping, empty polar and invalid CD rejection\n";
+    std::cout << "PASS: oriented asymmetric polar, controls, interpolation, clipping, empty polar and invalid CD rejection\n";
 }

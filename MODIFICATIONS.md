@@ -2,6 +2,14 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - polar lift sign
+
+- Align profile CD(CL) queries with ordered wake-strip circulation, matching
+  mapped polars and stall limits. Correct the query shown in clipping diagnostics.
+- Native unit tests and default/asymmetric force checks pass. The isolated MSVC
+  solver executes successfully on Windows. Not installed; see
+  [evidence and limitations](parity_tests/POLAR_LIFT_SIGN.md).
+
 ## Unreleased - Windows checkpoint replacement
 
 - Use ReplaceFile for existing State Sweep checkpoints and a non-overwriting
