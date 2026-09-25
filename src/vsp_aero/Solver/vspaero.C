@@ -35,6 +35,7 @@
 
 #include "VSP_Solver.H"
 #include "StateSweepCheckpoint.H"
+#include "CaseValidity.H"
 #include "ControlSurfaceGroup.H"
 #include "OptimizationParameterData.H"
 #include "OptimizationGradientData.H"
@@ -1640,6 +1641,7 @@ void ParseInput(int argc, char *argv[])
 
 void WriteStallStripTemplate(const std::string &Path)
 {
+    const int Level = VSPAERO().VSPGeom().SolveOnMGLevel();
     std::ofstream Output(Path.c_str(),std::ios::out | std::ios::trunc);
     if ( !Output ) { printf("Could not create stall-strip template: %s\n",Path.c_str()); exit(1); }
     Output.precision(17);
@@ -1648,8 +1650,8 @@ void WriteStallStripTemplate(const std::string &Path)
        VORTEX_SHEET &Wake = VSPAERO().VSPGeom().VortexSheet(Sheet);
        for ( int Strip = 1 ; Strip < Wake.NumberOfTrailingVortices() ; Strip++ ) {
           VORTEX_TRAIL &Trail = Wake.TrailingVortex(Strip);
-          VSP_NODE &Node = VSPAERO().VSPGeom().Grid(0).NodeList(Trail.TE_Node());
-          VSP_EDGE &Edge = VSPAERO().VSPGeom().Grid(0).EdgeList(ABS(Trail.TE_Edge()));
+          VSP_NODE &Node = VSPAERO().VSPGeom().Grid(Level).NodeList(Trail.TE_Node());
+          VSP_EDGE &Edge = VSPAERO().VSPGeom().Grid(Level).EdgeList(ABS(Trail.TE_Edge()));
           Output << Sheet << ',' << Strip << ',' << Edge.SurfaceID() << ',' << Wake.WingSurface() << ','
                  << Wake.ComponentID() << ',' << Trail.SoverB() << ','
                  << Trail.LocalChord() << ',' << Node.x() << ',' << Node.y() << ','
@@ -3120,12 +3122,14 @@ static uint64_t StateSweepHashFile(uint64_t Hash, const char *Path)
 static uint64_t StateSweepConfigurationHash(void)
 {
     uint64_t Hash = UINT64_C(1469598103934665603);
+    // Do not append corrected physics/metadata to checkpoints from older builds.
+    const char *PhysicsVersion = "lookup-integrity-v1";
+    Hash = StateSweepHashBytes(Hash,PhysicsVersion,strlen(PhysicsVersion));
 #define HASH_VALUE(VALUE) Hash = StateSweepHashBytes(Hash,&(VALUE),sizeof(VALUE))
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);
     HASH_VALUE(Xcg_); HASH_VALUE(Ycg_); HASH_VALUE(Zcg_); HASH_VALUE(Vinf_);
     HASH_VALUE(StateSweepChunkSize_);
-    // Preserve hashes from builds predating fast ordering when it is omitted,
-    // so existing canonical checkpoints remain resumable.
+    // Within this physics version, omitted optional modes add no hash fields.
     if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
     if ( StateSweepContinuation_ ) {
        HASH_VALUE(StateSweepContinuation_);
@@ -3152,8 +3156,7 @@ static uint64_t StateSweepConfigurationHash(void)
        Hash = StateSweepHashBytes(Hash,StateSweepDesignNames_[i].c_str(),StateSweepDesignNames_[i].size());
        HASH_VALUE(StateSweepDesignValues_[i]);
     }
-    // Preserve the pre-optional-load hash when neither output is requested so
-    // sweeps created by an earlier executable remain resumable.
+    // Omitted optional outputs add no hash fields within this physics version.
     if ( StateSweepHingeLoads_ || !StateSweepWingLoads_.empty() ) {
        HASH_VALUE(StateSweepHingeLoads_);
        const uint64_t WingLoadSchema = UINT64_C(5);
@@ -3208,6 +3211,8 @@ static std::string StateSweepControlColumn(int Control)
     return StateSweepSafeColumnToken(ControlSurfaceGroup_[Control].Name()) + "_deflection_deg";
 }
 
+static std::string StateSweepWingParentName(const std::string &Name);
+
 static std::vector<std::string> StateSweepHingeColumns(void)
 {
     std::vector<std::string> Columns(1);
@@ -3231,18 +3236,15 @@ static std::vector<std::string> StateSweepHingeColumns(void)
              }
           }
           if ( !HasSide ) {
-             std::string Parent = WingName;
-             size_t Copy = Parent.find("_copy_");
-             if ( Copy != std::string::npos ) Parent.erase(Copy);
+             std::string Parent = StateSweepWingParentName(WingName);
              Name = Parent + "_" + Name;
           }
           break;
        }
        std::string Candidate = "Cm_hinge_" + Name;
        int Duplicate = 1;
-       for ( int Prior = 1 ; Prior < i ; Prior++ ) if ( Columns[Prior] == Candidate ) Duplicate++;
-       if ( Duplicate > 1 ) {
-          char Suffix[24]; snprintf(Suffix,sizeof(Suffix),"_%03d",Duplicate);
+       while ( std::find(Columns.begin() + 1,Columns.end(),Candidate) != Columns.end() ) {
+          char Suffix[24]; snprintf(Suffix,sizeof(Suffix),"_%03d",++Duplicate);
           Candidate = "Cm_hinge_" + Name + Suffix;
        }
        Columns.push_back(Candidate);
@@ -3259,14 +3261,24 @@ static std::string StateSweepWingParentName(const std::string &Name)
           return Name.substr(0,Name.size()-Length);
        }
     }
-    size_t Copy = Name.find("_copy_");
-    return Copy == std::string::npos ? Name : Name.substr(0,Copy);
+    size_t Copy = Name.rfind("_copy_");
+    if ( Copy != std::string::npos && Copy + 6 < Name.size() &&
+         Name.find_first_not_of("0123456789",Copy + 6) == std::string::npos ) return Name.substr(0,Copy);
+    return Name;
 }
 
 static std::vector<std::string> StateSweepWingOutputNames(void)
 {
     std::vector<std::string> Names;
-    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) Names.push_back(StateSweepWingLoads_[Wing].Name);
+    for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
+       const std::string &Name = StateSweepWingLoads_[Wing].Name;
+       if ( std::find(Names.begin(),Names.end(),Name) != Names.end() ) {
+          printf("Duplicate State Sweep physical wing name: %s. Use unique geometry/copy identifiers.\n",Name.c_str());
+          exit(1);
+       }
+       Names.push_back(Name);
+    }
+    const size_t PhysicalCount = Names.size();
     for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
        std::string Parent = StateSweepWingParentName(StateSweepWingLoads_[Wing].Name);
        int Count = 0;
@@ -3274,6 +3286,10 @@ static std::vector<std::string> StateSweepWingOutputNames(void)
           if ( StateSweepWingParentName(StateSweepWingLoads_[Other].Name) == Parent ) Count++;
        }
        if ( Count < 2 ) continue;
+       if ( std::find(Names.begin(),Names.begin() + PhysicalCount,Parent) != Names.begin() + PhysicalCount ) {
+          printf("State Sweep aggregate wing name collides with a physical wing: %s.\n",Parent.c_str());
+          exit(1);
+       }
        if ( std::find(Names.begin(),Names.end(),Parent) == Names.end() ) Names.push_back(Parent);
     }
     return Names;
@@ -3336,15 +3352,16 @@ static void StateSweepWingPlanformGeometry(
     Areas.assign(StateSweepWingLoads_.size(),0.);
     Centers.assign(StateSweepWingLoads_.size(),std::vector<double>(3,0.));
     Frames.assign(StateSweepWingLoads_.size(),std::vector<double>(9,0.));
-    // Vortex-sheet LE/TE edge indices refer to the finest geometry grid. Keep
-    // this reference independent of the active multigrid solve level.
-    int Level = 0;
+    // Wake LE/TE indices are owned by StoreWakeKuttaEdges' solve grid.
+    // Integrate centroids on grid zero separately to retain the existing
+    // physical surface-area/center definition.
+    const int Level = VSPAERO().VSPGeom().SolveOnMGLevel();
     for ( size_t Wing = 0 ; Wing < StateSweepWingLoads_.size() ; Wing++ ) {
        // Surface-panel centroids cover every physical .vkey part, including
        // lifting surfaces for which no usable wake strip was generated.  Wake
        // strips remain the better source for chord/span directions below.
-       for ( int Loop = 1 ; Loop <= VSPAERO().VSPGeom().Grid(Level).NumberOfLoops() ; Loop++ ) {
-          VSP_LOOP &SurfaceLoop = VSPAERO().VSPGeom().Grid(Level).LoopList(Loop);
+       for ( int Loop = 1 ; Loop <= VSPAERO().VSPGeom().Grid(0).NumberOfLoops() ; Loop++ ) {
+          VSP_LOOP &SurfaceLoop = VSPAERO().VSPGeom().Grid(0).LoopList(Loop);
           if ( SurfaceLoop.SurfaceID() != StateSweepWingLoads_[Wing].Surface ) continue;
           double PanelArea = SurfaceLoop.Area();
           Areas[Wing] += PanelArea;
@@ -3402,8 +3419,40 @@ static void StateSweepWingPlanformGeometry(
     }
 }
 
-static void StateSweepWriteOptionalLoads(FILE *File)
+static void StateSweepRequireFinite(const double *Values, size_t Count, const char *Quantity)
 {
+    if ( vspaero_validity::finiteValues(Values, Count) ) return;
+    printf("Nonfinite State Sweep %s at Mach=%.17g alpha=%.17g beta=%.17g p=%.17g q=%.17g r=%.17g; case will not be checkpointed.\n",
+           Quantity,VSPAERO().Mach(),VSPAERO().AngleOfAttack()/TORAD,VSPAERO().AngleOfBeta()/TORAD,
+           VSPAERO().RotationalRate_p(),VSPAERO().RotationalRate_q(),VSPAERO().RotationalRate_r());
+    fflush(NULL); exit(1);
+}
+
+static void StateSweepValidateVehicleResults(void)
+{
+    // Check component values as well as totals: MAX operations must not hide
+    // NaNs behind a surviving finite viscous coefficient.
+    const double Values[] = {
+       VSPAERO().Mach(),VSPAERO().ReCref(),Vinf_,VSPAERO().AngleOfAttack(),VSPAERO().AngleOfBeta(),
+       VSPAERO().RotationalRate_p(),VSPAERO().RotationalRate_q(),VSPAERO().RotationalRate_r(),
+       VSPAERO().CFox(),VSPAERO().CFoy(),VSPAERO().CFoz(),
+       VSPAERO().CFix(),VSPAERO().CFiy(),VSPAERO().CFiz(),
+       VSPAERO().CFiwx(),VSPAERO().CFiwy(),VSPAERO().CFiwz(),
+       VSPAERO().CMox(),VSPAERO().CMoy(),VSPAERO().CMoz(),
+       VSPAERO().CMix(),VSPAERO().CMiy(),VSPAERO().CMiz(),
+       VSPAERO().CLo(),VSPAERO().CDo(),VSPAERO().CSo(),
+       VSPAERO().CLi(),VSPAERO().CDi(),VSPAERO().CSi(),
+       VSPAERO().CLiw(),VSPAERO().CDiw(),VSPAERO().CSiw(),VSPAERO().MinStallFactor(),
+       VSPAERO().CFox()+VSPAERO().CFiwx(),VSPAERO().CFoy()+VSPAERO().CFiwy(),VSPAERO().CFoz()+VSPAERO().CFiwz(),
+       VSPAERO().CMox()+VSPAERO().CMix(),VSPAERO().CMoy()+VSPAERO().CMiy(),VSPAERO().CMoz()+VSPAERO().CMiz(),
+       VSPAERO().CLo()+VSPAERO().CLiw(),VSPAERO().CDo()+VSPAERO().CDiw(),VSPAERO().CSo()+VSPAERO().CSiw()
+    };
+    StateSweepRequireFinite(Values,sizeof(Values)/sizeof(Values[0]),"vehicle result");
+}
+
+static std::vector<double> StateSweepValidatedOptionalLoads(void)
+{
+    std::vector<double> Values;
     std::vector< std::vector<double> > PhysicalLoads(StateSweepWingLoads_.size(),std::vector<double>(24,0.));
     std::vector<double> PhysicalAreas;
     std::vector< std::vector<double> > PhysicalCenters;
@@ -3528,7 +3577,8 @@ static void StateSweepWriteOptionalLoads(FILE *File)
        Load[21] = Load[15]-(Dy*Fz-Dz*Fy)/Bref_;
        Load[22] = Load[16]-(Dz*Fx-Dx*Fz)/Cref_;
        Load[23] = Load[17]-(Dx*Fy-Dy*Fx)/Bref_;
-       for ( int i = 0 ; i < 24 ; i++ ) fprintf(File,",%.17g",Load[i]);
+       StateSweepRequireFinite(Load.data(),Load.size(),OutputNames[Output].c_str());
+       Values.insert(Values.end(),Load.begin(),Load.end());
     }
     if ( StateSweepHingeLoads_ ) {
        for ( int Control = 1 ; Control <= VSPAERO().VSPGeom().NumberOfControlSurfaces() ; Control++ ) {
@@ -3540,9 +3590,16 @@ static void StateSweepWriteOptionalLoads(FILE *File)
           double Hinge = Load[3]*Bref_*Surface.HingeVec(0)/Cref_
                        + Load[4]*Surface.HingeVec(1)
                        + Load[5]*Bref_*Surface.HingeVec(2)/Cref_;
-          fprintf(File,",%.17g",Hinge);
+          StateSweepRequireFinite(&Hinge,1,Surface.Name());
+          Values.push_back(Hinge);
        }
     }
+    return Values;
+}
+
+static void StateSweepWriteOptionalLoads(FILE *File, const std::vector<double> &Values)
+{
+    for ( size_t i = 0 ; i < Values.size() ; i++ ) fprintf(File,",%.17g",Values[i]);
 }
 
 static void StabilityMapWriteRawHeader(FILE *File)
@@ -3556,12 +3613,16 @@ static void StabilityMapWriteRawRow(
     FILE *File, uint64_t Point, const char *Derivative, const char *Direction,
     double Coordinate, int PerturbedControl, double ControlDelta)
 {
+    StateSweepValidateVehicleResults();
     double P = VSPAERO().RotationalRate_p();
     double Q = VSPAERO().RotationalRate_q();
     double R = VSPAERO().RotationalRate_r();
     double PHat = Vinf_ > 0. ? P * Bref_ / (2. * Vinf_) : NAN;
     double QHat = Vinf_ > 0. ? Q * Cref_ / (2. * Vinf_) : NAN;
     double RHat = Vinf_ > 0. ? R * Bref_ / (2. * Vinf_) : NAN;
+    const double Coordinates[] = {Coordinate,PHat,QHat,RHat};
+    StateSweepRequireFinite(Coordinates,4,"stability-map coordinate");
+    const std::vector<double> OptionalLoads = StateSweepValidatedOptionalLoads();
     fprintf(File,"%llu,%s,%s,%.17g,%llu,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
             (unsigned long long)Point,Derivative,Direction,Coordinate,
             (unsigned long long)Point,VSPAERO().Mach(),VSPAERO().ReCref(),Vinf_,
@@ -3586,7 +3647,7 @@ static void StabilityMapWriteRawRow(
     double CS = VSPAERO().CSo() + VSPAERO().CSiw();
     fprintf(File,",%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
             CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,-CMx,CMy,-CMz,VSPAERO().MinStallFactor());
-    StateSweepWriteOptionalLoads(File);
+    StateSweepWriteOptionalLoads(File,OptionalLoads);
     fprintf(File,"\n");
     fflush(File);
 }
@@ -3835,11 +3896,13 @@ void StateSweepSolve(void)
           ControlSurfaceGroup_[Control].ControlSurface_DeflectionAngle() = StateSweepControls_[Control][ControlIndex[Control]];
        }
        ApplyControlDeflections();
-       int ReuseInvariantSetup = StateSweepFastOrder_ && PreviousMachIndex == MachIndex &&
-                                 PreviousControlIndex == ControlIndex;
+       // These interaction lists and preconditioners include wake geometry.
+       // Equal Mach/control indices do not make spatial selections invariant.
+       // Retain fast traversal/continuation, but rebuild each case's setup.
+       int ReuseInvariantSetup = 0;
        VSPAERO().StateSweepReuseInitialInteractionList() = ReuseInvariantSetup;
        VSPAERO().StateSweepReusePreconditioner() = ReuseInvariantSetup;
-       VSPAERO().StateSweepReuseWakeInteractionLists() = StateSweepFastOrder_;
+       VSPAERO().StateSweepReuseWakeInteractionLists() = 0;
        // A relaxed wake is only a useful initial condition for a nearby flow
        // direction. Large incidence jumps can converge to a path-dependent
        // wake within the configured iteration cap, so start those blocks cold.
@@ -3913,6 +3976,12 @@ void StateSweepSolve(void)
              if ( StateSweepProfile_ ) ProfileReynoldsSeconds += StateSweepProfileClock() - ProfileStart;
           }
           if ( Row < NextRow ) continue;
+          StateSweepValidateVehicleResults();
+          const double RateCoordinates[] = {PHat,QHat,RHat};
+          StateSweepRequireFinite(RateCoordinates,3,"reduced rate coordinate (requires positive Vinf)");
+          // Validate all optional data before emitting even the row prefix. A
+          // rejected case must not leave an appendable partial CSV row.
+          const std::vector<double> OptionalLoads = StateSweepValidatedOptionalLoads();
           if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
           uint64_t Chunk = Row / StateSweepChunkSize_;
           if ( Csv == NULL || Chunk != OpenChunk ) {
@@ -3943,7 +4012,7 @@ void StateSweepSolve(void)
           double CS = VSPAERO().CSo() + VSPAERO().CSiw();
           fprintf(Csv,",%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g",
                   CFx,CFy,CFz,CMx,CMy,CMz,CL,CD,CS,-CMx,CMy,-CMz,VSPAERO().MinStallFactor());
-          StateSweepWriteOptionalLoads(Csv);
+          StateSweepWriteOptionalLoads(Csv,OptionalLoads);
           fprintf(Csv,"\n");
           fflush(Csv);
           NextRow = Row + 1;

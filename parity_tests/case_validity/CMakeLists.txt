@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(case_validity_tests LANGUAGES CXX)
+add_executable(case_validity_test case_validity_test.cpp)
+target_compile_features(case_validity_test PRIVATE cxx_std_17)
+enable_testing()
+add_test(NAME solver_case_validity COMMAND case_validity_test)
