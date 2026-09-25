@@ -1,9 +1,12 @@
 # Aerodynamic lookup integrity
 
-The Foil04 review corrections are implemented in source. They have not been
-compiled or numerically exercised locally: native validation is assigned to the
-hosted Windows/Linux jobs or a home-machine build. Passing Python runner tests
-does not certify the native physics or installed runtime.
+The Foil04 review corrections are implemented in source. No native builds run
+locally for this task. The [first hosted run](https://github.com/clemensschmid2-stack/vds/actions/runs/36193012538)
+passed the Linux solver build, three CTests and checkpoint integration. Windows
+exposed a `max` macro/header conflict, corrected with macro-safe calls and a
+Windows include-order regression. Windows point validation and full reference
+gates remain pending. Passing these focused checks does not certify the full
+physics or installed runtime.
 
 ## Behavior
 

@@ -21,7 +21,7 @@ inline const char *cellError(const std::vector<std::array<double, 3> > &points)
             if (!std::isfinite(points[i][axis])) return "nonfinite node coordinate";
             const double edge = points[(i + 1) % points.size()][axis] - points[i][axis];
             if (!std::isfinite(edge)) return "nonfinite edge length";
-            scale = std::max(scale, std::abs(edge));
+            scale = (std::max)(scale, std::abs(edge));
         }
     }
     if (!(scale > 0.)) return "zero-length edges";

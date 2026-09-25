@@ -1,3 +1,7 @@
+#ifdef _WIN32
+// Match the CLI translation unit's include order, including Windows min/max macros.
+#include <windows.h>
+#endif
 #include "../../src/vsp_aero/Solver/CaseValidity.H"
 #include <iostream>
 #include <limits>
@@ -40,10 +44,10 @@ int main()
     for (double referenceRe : {1., 1e6}) {
         const double localSpeed = 13., referenceSpeed = 10., chord = .1, referenceChord = .2;
         auto force = [&](double reynolds) {
-            double re = std::max(2., localReynolds(reynolds,localSpeed,referenceSpeed,chord,referenceChord));
+            double re = (std::max)(2., localReynolds(reynolds,localSpeed,referenceSpeed,chord,referenceChord));
             return .5 * localSpeed * localSpeed * chord * 1.5 / std::pow(std::log10(re),2.58);
         };
-        double re = std::max(2.,localReynolds(referenceRe,localSpeed,referenceSpeed,chord,referenceChord));
+        double re = (std::max)(2.,localReynolds(referenceRe,localSpeed,referenceSpeed,chord,referenceChord));
         double dCf = -2.58 * 1.5 / (re * std::log(10.) * std::pow(std::log10(re),3.58));
         double analytic = .5 * localSpeed * localSpeed * chord * dCf *
             localReynoldsReferenceDerivative(referenceRe,localSpeed,referenceSpeed,chord,referenceChord);
