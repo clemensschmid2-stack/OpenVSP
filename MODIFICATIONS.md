@@ -15,8 +15,9 @@ This fork is derived from NASA's OpenVSP project.
 - Reject ambiguous physical/aggregate wing names, keep internal `_copy_` labels,
   and avoid partial rows when optional load validation fails. A new physics hash
   prevents resuming checkpoints produced before these corrections.
-- Source and bounded regressions are implemented; native build and numerical
-  validation remain pending. See [scope and validation](parity_tests/LOOKUP_INTEGRITY.md).
+- Hosted Windows/Linux solver builds and bounded native regressions pass.
+  Full OpenVSP/optimizer/reference gates and installation remain pending.
+  See [scope and validation](parity_tests/LOOKUP_INTEGRITY.md).
 
 ## Unreleased - polar lift sign
 

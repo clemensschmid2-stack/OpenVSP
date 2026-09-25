@@ -1,12 +1,19 @@
 # Aerodynamic lookup integrity
 
-The Foil04 review corrections are implemented in source. No native builds run
-locally for this task. The [first hosted run](https://github.com/clemensschmid2-stack/vds/actions/runs/36193012538)
-passed the Linux solver build, three CTests and checkpoint integration. Windows
-exposed a `max` macro/header conflict, corrected with macro-safe calls and a
-Windows include-order regression. Windows point validation and full reference
-gates remain pending. Passing these focused checks does not certify the full
-physics or installed runtime.
+The Foil04 review corrections are implemented in source. No native builds ran
+locally for this task. [Hosted validation](https://github.com/clemensschmid2-stack/vds/actions/runs/36193471742)
+passed on Windows and Linux for native revision `1ea6fa995c349c0adeb35e661533bfe9941d5eac`:
+both solver builds, three CTests per platform, 17 runner tests per platform,
+checkpoint integration (two Windows tests, one Linux test), and all nine Windows
+point regressions below. The official distribution manifest remained unchanged.
+The initial Windows macro/header failure is corrected and covered by the
+include-order regression. Full OpenVSP/optimizer/reference gates remain pending;
+focused success does not certify the full physics or installed runtime.
+
+Windows solver SHA-256: `fb87d253841a06a7152af210e72c30259a2807848d87e5c6a81f75cc05e7661f`.
+Linux solver SHA-256: `24ba005bfa2e63ef7faeb6a1183b043ca1039e9e7d66fbcb6b61a74660bdc134`.
+These results describe the solver jobs; the same run's separate VDS application
+job found an outdated body-axis test expectation, tracked in the companion PR.
 
 ## Behavior
 
