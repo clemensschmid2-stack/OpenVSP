@@ -1,5 +1,10 @@
 # OpenVSP/VSPAERO validation
 
+For bounded, isolated-point regressions covering geometry validity, dimensional
+Reynolds scaling, metadata and State Sweep lookup integrity, see
+[lookup integrity](LOOKUP_INTEGRITY.md). These additional checks do not replace
+the official-reference gates below.
+
 ## Official-reference parity policy
 
 Every test described as **parity** compares the custom build with the official

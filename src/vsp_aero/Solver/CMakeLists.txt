@@ -78,6 +78,7 @@ ControlSurface.H
 ControlSurfaceGroup.H
 SectionProfileDrag.H
 SectionStallPolars.H
+CaseValidity.H
 EngineFace.H
 FastMatrix.H
 FEM_Node.H

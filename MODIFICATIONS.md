@@ -2,6 +2,23 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - aerodynamic lookup integrity
+
+- Reject degenerate input cells and nonfinite solutions before successful State
+  Sweep checkpoints; preserve control geometry and per-attempt resources on a
+  failed continuation retry. No convergence threshold or negative-drag clipping
+  is introduced.
+- Correct wake-owned metadata grid references, dimensional empirical Reynolds
+  scaling and its affected derivatives, and rotational wake freestream updates.
+  Rebuild wake-dependent setup in fast-order mode; preserve traversal and
+  continuation features and the existing force/moment convention.
+- Reject ambiguous physical/aggregate wing names, keep internal `_copy_` labels,
+  and avoid partial rows when optional load validation fails. A new physics hash
+  prevents resuming checkpoints produced before these corrections.
+- Hosted Windows/Linux solver builds and bounded native regressions pass.
+  Full OpenVSP/optimizer/reference gates and installation remain pending.
+  See [scope and validation](parity_tests/LOOKUP_INTEGRITY.md).
+
 ## Unreleased - polar lift sign
 
 - Align profile CD(CL) queries with ordered wake-strip circulation, matching
@@ -53,6 +70,10 @@ This fork is derived from NASA's OpenVSP project.
   effects.
 
 ## 2026-08-30 - Clemens Schmid
+
+Historical rationale below is superseded for wake node/edge ownership by the
+Unreleased lookup-integrity correction. The separate finest-grid centroid policy
+is retained; see [current behavior](parity_tests/LOOKUP_INTEGRITY.md).
 
 - Corrected State Sweep physical-wing planform geometry to dereference
   vortex-trail leading/trailing-edge indices on finest grid level 0, where

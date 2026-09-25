@@ -5,6 +5,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "VSP_Solver.H"
+#include "CaseValidity.H"
 
 #include <chrono>
 #include <atomic>
@@ -2797,6 +2798,11 @@ void VSP_SOLVER::Solve(int Case)
    
        InitializeTrailingVortices();
 
+       // InitializeFreeStream ran before wake reset. Rotation makes the edge
+       // field position dependent, so sample it again on the new wake.
+       if ( RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. )
+          UpdateEdgeFreeStreamVelocities();
+
        if ( StateSweepProfiling_ ) ProfileWakeInitializationSeconds_ += StateSweepProfileClock() - ProfileStart;
        
     }
@@ -3166,6 +3172,21 @@ void VSP_SOLVER::Solve(int Case)
 
     VSPGeom().DeflectControlSurfaces();
 
+    // Both successful solves and rejected warm starts must release per-attempt
+    // resources and restore the controls before the next attempt. The case
+    // series status/load/ADB streams deliberately stay open for a cold retry.
+    auto CleanupSolveAttempt = [&]() {
+       if ( NumberofSurveyPoints_ > 0 ) { fclose(SurveyFile_); SurveyFile_ = NULL; }
+       int Rotor = 0;
+       for ( int Group = 0 ; Group <= VSPGeom().NumberOfComponentGroups() ; Group++ ) {
+          fclose(GroupFile_[Group]);
+          if ( VSPGeom().ComponentGroupList(Group).GeometryIsARotor() ) fclose(RotorFile_[++Rotor]);
+       }
+       delete [] GroupFile_; GroupFile_ = NULL;
+       delete [] RotorFile_; RotorFile_ = NULL;
+       VSPGeom().UnDeflectControlSurfaces();
+    };
+
     // Initialize starting geometry and wakes for unsteady cases
 
     if ( TimeAccurate_ ) CalculateVelocities(ALL_WAKE_GAMMAS);
@@ -3275,7 +3296,8 @@ void VSP_SOLVER::Solve(int Case)
           
           // Update the free stream for the wake edges
           
-          if ( NumberOfRotors_ > 0 || NumberOfEngineFaces_ > 0 || TimeAccurate_ || VSPGeom().ThereAreRotors() ) UpdateEdgeFreeStreamVelocities();
+          if ( NumberOfRotors_ > 0 || NumberOfEngineFaces_ > 0 || TimeAccurate_ || VSPGeom().ThereAreRotors() ||
+               RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. ) UpdateEdgeFreeStreamVelocities();
 
           // Solve the linear system
 
@@ -3302,6 +3324,26 @@ void VSP_SOLVER::Solve(int Case)
           if ( StateSweepProfiling_ ) ProfileStart = StateSweepProfileClock();
           CalculateForces();
           if ( StateSweepProfiling_ ) ProfileForceSeconds_ += StateSweepProfileClock() - ProfileStart;
+
+          // A NaN residual must not masquerade as a small MAX residual, and
+          // finite viscous drag alone is not a valid solution. No residual
+          // tolerance or iteration-budget acceptance rule is changed here.
+          const double FiniteState[] = {
+             MaxResidual_, L2Residual_,
+             CFox(), CFoy(), CFoz(), CFix(), CFiy(), CFiz(), CFiwx(), CFiwy(), CFiwz(),
+             CMox(), CMoy(), CMoz(), CMix(), CMiy(), CMiz(),
+             CLo(), CDo(), CSo(), CLi(), CDi(), CSi(), CLiw(), CDiw(), CSiw()
+          };
+          if ( !vspaero_validity::finiteValues(FiniteState, sizeof(FiniteState)/sizeof(FiniteState[0])) ) {
+             if ( StateSweepContinuationEnabled_ && RestartFromPreviousSolve_ ) {
+                StateSweepContinuationFailedThisSolve_ = 1;
+                CleanupSolveAttempt();
+                return; // State Sweep retries this warm-start failure cold.
+             }
+             printf("Nonfinite VSPAERO solution: case %d, wake iteration %d; result is invalid.\n",
+                    ABS(Case), CurrentWakeIteration_);
+             fflush(NULL); exit(1);
+          }
 
           StateSweepContinuationWakeIterationsThisSolve_++;
 
@@ -3609,27 +3651,10 @@ void VSP_SOLVER::Solve(int Case)
     if ( Case <= 0                    ) fclose(ADBFile_);
     if ( Case <= 0                    ) fclose(ADBCaseListFile_);
     if ( Case <= 0 && Write2DFEMFile_ ) fclose(FEM2DLoadFile_);
-    if ( NumberofSurveyPoints_ > 0    ) fclose(SurveyFile_);
-  
-    // Close any rotor coefficient files
-    
-    k = 0;
-    
-    for ( c = 0 ; c <= VSPGeom().NumberOfComponentGroups() ; c++ ) {
-       
-       fclose(GroupFile_[c]);
-       
-       if ( VSPGeom().ComponentGroupList(c).GeometryIsARotor() ) fclose(RotorFile_[++k]);
-          
-    }
-    
-    if ( RotorFile_ != NULL ) delete [] RotorFile_;
        
     if ( SaveRestartFile_ ) WriteRestartFile();
 
-    // Restore geometry for control surfaces
-
-    VSPGeom().UnDeflectControlSurfaces();
+    CleanupSolveAttempt();
 
 #ifdef MYMEMORY    
     double MemoryGB = mymemory();
@@ -4019,6 +4044,11 @@ void VSP_SOLVER::SolveForwardLinearSystem(void)
     // Update all the multi-grid meshes
 
     VSPGeom().UpdateMeshes();
+
+    // Force evaluation below uses the moved edge locations in this iteration.
+    // Do not wait until the next iteration to refresh a rotational flow field.
+    if ( RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. )
+       UpdateEdgeFreeStreamVelocities();
     
     // If time accurate, apply vortex stretching corrections
     
@@ -17896,15 +17926,15 @@ void VSP_SOLVER::CalculateViscousForceGradients(void)
              
              pCl_pChord = -ABS(Gamma/(0.5*Velocity*Chord*Chord));
                     
-             Re = MAX(2.,ReCref_ * Velocity * Chord / Cref_);
+             Re = MAX(2.,vspaero_validity::localReynolds(ReCref_, Velocity, Vinf_, Chord, Cref_));
              
-             pRe_pChord = ReCref_ * Velocity / Cref_;
+             pRe_pChord = ReCref_ * (Velocity / Vinf_) / Cref_;
              
              if ( Re <= 2. ) pRe_pChord = 0.;
    
              pRe_pVelocity = 0.;
              
-             if ( Re > 2. ) pRe_pVelocity = ReCref_ * Chord / Cref_;
+             if ( Re > 2. ) pRe_pVelocity = ReCref_ * Chord / (Vinf_ * Cref_);
    
              pCf_pCl2 = 0.00625 + 0.01*ABS(Clo_2d_);
              
@@ -21678,11 +21708,14 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialFreeStream(int ForceCase, i
           
         //  if ( Gamma/(0.5*Velocity*Velocity*Chord) < 0. ) pCl_pVelocity *= -1.;
           
-          Re = MAX(2.,ReCref_ * Velocity * Chord / Cref_);
+          if ( !(Vinf_ > 0.) || !(Cref_ > 0.) ) {
+             printf("Profile drag requires positive reference speed and chord.\n"); exit(1);
+          }
+          Re = MAX(2.,vspaero_validity::localReynolds(ReCref_, Velocity, Vinf_, Chord, Cref_));
           
           pRe_pVelocity = 0.;
           
-          if ( Re > 2. ) pRe_pVelocity = ReCref_ * Chord / Cref_;
+          if ( Re > 2. ) pRe_pVelocity = ReCref_ * Chord / (Vinf_ * Cref_);
 
           pCf_pCl2 = 0.00625 + 0.01*ABS(Clo_2d_);
         
@@ -21710,9 +21743,11 @@ void VSP_SOLVER::CalculatePsiT_PartialResidualPartialFreeStream(int ForceCase, i
           pFyo_pVelocity = 0.5 * pCf_pRe * pRe_pVelocity * Velocity * Velocity * Chord * Span * SVec[1] + 0.5 * pCf_pCl * pCl_pVelocity * Velocity * Velocity * Chord * Span * SVec[1] + Cf * Velocity * Chord * Span * SVec[1];
           pFzo_pVelocity = 0.5 * pCf_pRe * pRe_pVelocity * Velocity * Velocity * Chord * Span * SVec[2] + 0.5 * pCf_pCl * pCl_pVelocity * Velocity * Velocity * Chord * Span * SVec[2] + Cf * Velocity * Chord * Span * SVec[2];
 
-          pFxo_pRe = 0.5 * pCf_pRe * Velocity * Velocity * Chord * Span * SVec[0];
-          pFyo_pRe = 0.5 * pCf_pRe * Velocity * Velocity * Chord * Span * SVec[1];
-          pFzo_pRe = 0.5 * pCf_pRe * Velocity * Velocity * Chord * Span * SVec[2]; 
+          const double pLocalRe_pReCref = vspaero_validity::localReynoldsReferenceDerivative(
+             ReCref_, Velocity, Vinf_, Chord, Cref_);
+          pFxo_pRe = 0.5 * pCf_pRe * pLocalRe_pReCref * Velocity * Velocity * Chord * Span * SVec[0];
+          pFyo_pRe = 0.5 * pCf_pRe * pLocalRe_pReCref * Velocity * Velocity * Chord * Span * SVec[1];
+          pFzo_pRe = 0.5 * pCf_pRe * pLocalRe_pReCref * Velocity * Velocity * Chord * Span * SVec[2];
              
           // Moments ... we assume forces act about centroid of airfoil section
           
@@ -29974,7 +30009,12 @@ void VSP_SOLVER::IntegrateForcesAndMoments(void)
 
 //printf("chord: %f ... Cl: %f ... CpCrit: %f \n",Chord,1.5*Cl,CpCrit_);fflush(NULL);
           
-          Re = MAX(2.,ReCref_ * Velocity * Chord / Cref_);
+          // ReCref already contains freestream speed. Use a speed ratio,
+          // including for imposed rotation, rather than dimensional Velocity.
+          if ( !(Vinf_ > 0.) || !(Cref_ > 0.) ) {
+             printf("Profile drag requires positive reference speed and chord.\n"); exit(1);
+          }
+          Re = MAX(2.,vspaero_validity::localReynolds(ReCref_, Velocity, Vinf_, Chord, Cref_));
 
           pCf_pCl2 = 0.00625 + 0.01*ABS(Clo_2d_);
         
