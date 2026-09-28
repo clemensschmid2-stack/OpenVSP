@@ -2798,10 +2798,6 @@ void VSP_SOLVER::Solve(int Case)
    
        InitializeTrailingVortices();
 
-       // InitializeFreeStream ran before wake reset. Rotation makes the edge
-       // field position dependent, so sample it again on the new wake.
-       if ( RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. )
-          UpdateEdgeFreeStreamVelocities();
 
        if ( StateSweepProfiling_ ) ProfileWakeInitializationSeconds_ += StateSweepProfileClock() - ProfileStart;
        
@@ -3296,8 +3292,7 @@ void VSP_SOLVER::Solve(int Case)
           
           // Update the free stream for the wake edges
           
-          if ( NumberOfRotors_ > 0 || NumberOfEngineFaces_ > 0 || TimeAccurate_ || VSPGeom().ThereAreRotors() ||
-               RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. ) UpdateEdgeFreeStreamVelocities();
+          if ( NumberOfRotors_ > 0 || NumberOfEngineFaces_ > 0 || TimeAccurate_ || VSPGeom().ThereAreRotors() ) UpdateEdgeFreeStreamVelocities();
 
           // Solve the linear system
 
@@ -4045,10 +4040,6 @@ void VSP_SOLVER::SolveForwardLinearSystem(void)
 
     VSPGeom().UpdateMeshes();
 
-    // Force evaluation below uses the moved edge locations in this iteration.
-    // Do not wait until the next iteration to refresh a rotational flow field.
-    if ( RotationalRate_[0] != 0. || RotationalRate_[1] != 0. || RotationalRate_[2] != 0. )
-       UpdateEdgeFreeStreamVelocities();
     
     // If time accurate, apply vortex stretching corrections
     

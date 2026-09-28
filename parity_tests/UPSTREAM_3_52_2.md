@@ -3,6 +3,11 @@
 Status: Unreleased; validation in progress, not installed.
 Recorded: 2026-09-28.
 
+Current decision: the user authorized [removing the three rotational refresh
+additions](ROTATIONAL_REFRESH_REMOVAL.md) after the independent wing benchmark
+was inconclusive. The blocked validation below describes the pre-removal build;
+fresh integration validation is recorded in the parent repository.
+
 The user authorized integrating upstream `OpenVSP_3.52.2` and migrating the
 official reference together. This continues `fix/foil04-lookup-integrity` from
 `f8962ef`; upstream is merged with its actual common ancestor, preserving fork

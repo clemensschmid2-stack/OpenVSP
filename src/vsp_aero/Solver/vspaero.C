@@ -3123,7 +3123,7 @@ static uint64_t StateSweepConfigurationHash(void)
 {
     uint64_t Hash = UINT64_C(1469598103934665603);
     // Do not append corrected physics/metadata to checkpoints from older builds.
-    const char *PhysicsVersion = "lookup-integrity-v1";
+    const char *PhysicsVersion = "lookup-integrity-v2-upstream-rotation";
     Hash = StateSweepHashBytes(Hash,PhysicsVersion,strlen(PhysicsVersion));
 #define HASH_VALUE(VALUE) Hash = StateSweepHashBytes(Hash,&(VALUE),sizeof(VALUE))
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);

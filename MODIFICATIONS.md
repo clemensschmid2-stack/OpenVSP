@@ -4,6 +4,11 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Remove the three added rotational-flow refresh operations with explicit user
+  approval; retain upstream refresh behavior and the separate wake-setup fixes.
+  Advance the State Sweep physics epoch to reject mixed-physics resumes.
+  Record the inconclusive physical benchmark and conditions for a possible
+  future feature in [the removal decision](parity_tests/ROTATIONAL_REFRESH_REMOVAL.md).
 - Integrate upstream geometry, inertia, tessellation and Reynolds fixes while
   retaining custom solver features. Resolve overlapping Reynolds corrections
   with one equivalent formula and unchanged numerical tolerances.
@@ -19,7 +24,8 @@ This fork is derived from NASA's OpenVSP project.
   failed continuation retry. No convergence threshold or negative-drag clipping
   is introduced.
 - Correct wake-owned metadata grid references, dimensional empirical Reynolds
-  scaling and its affected derivatives, and rotational wake freestream updates.
+  scaling and its affected derivatives. The additional rotational wake refresh
+  was subsequently removed as documented above.
   Rebuild wake-dependent setup in fast-order mode; preserve traversal and
   continuation features and the existing force/moment convention.
 - Reject ambiguous physical/aggregate wing names, keep internal `_copy_` labels,

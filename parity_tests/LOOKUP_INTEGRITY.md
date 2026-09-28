@@ -1,6 +1,8 @@
 # Aerodynamic lookup integrity
 
-The Foil04 review corrections are implemented in source. No native builds ran
+The Foil04 review corrections are implemented except the three additional
+rotational refreshes, subsequently [removed by decision](ROTATIONAL_REFRESH_REMOVAL.md).
+The evidence below is historical, before that removal. No native builds ran
 locally for this task. [Hosted validation](https://github.com/clemensschmid2-stack/vds/actions/runs/36193471742)
 passed on Windows and Linux for native revision `1ea6fa995c349c0adeb35e661533bfe9941d5eac`:
 both solver builds, three CTests per platform, 17 runner tests per platform,
@@ -38,9 +40,8 @@ job found an outdated body-axis test expectation, tracked in the companion PR.
   `max(2, Re)` clamp. The optional XFOIL profile-drag formula is unchanged.
 - Fast-order traversal and continuation remain available, but spatial wake
   interaction lists and preconditioners are rebuilt rather than reused merely
-  because Mach/control indices match. Position-dependent rotational freestream
-  values are refreshed after wake initialization, before solve iterations, and
-  after wake movement before force evaluation. Fixed iteration budgets can still
+  because Mach/control indices match. Additional rotational freestream refreshes
+  were removed; upstream refresh conditions apply. Fixed iteration budgets can still
   expose wake-history dependence; convergence is not asserted by these checks.
 - Physical wing names and generated aggregate names must be unambiguous.
   Only a terminal `_copy_<digits>` is treated as a copy suffix; internal label
