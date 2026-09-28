@@ -8,14 +8,14 @@ the official-reference gates below.
 ## Official-reference parity policy
 
 Every test described as **parity** compares the custom build with the official
-OpenVSP 3.51.2 distribution under
-`reference_builds/OpenVSP-3.51.2-win64`. A binary copied from `main`, another
+OpenVSP 3.52.2 distribution under
+`reference_builds/OpenVSP-3.52.2-win64`. A binary copied from `main`, another
 branch, or a previous custom build is never a parity reference. The parity
 runner intentionally provides no command-line option for replacing the
 official reference path.
 
 This suite creates a deterministic NACA 0012-style wing and compares the
-official OpenVSP 3.51.2 distribution with the local full build. It runs thin
+official OpenVSP 3.52.2 distribution with the local full build. It runs thin
 and thick geometry modes, each with a base alpha sweep and a default stability
 analysis. Each generated model also runs `MassProp` with 81 slices and compares
 mass, center of gravity, and inertia results. VSPAERO is restricted to one
@@ -27,9 +27,9 @@ The main runner also includes `run_geometry_parity.py`: dedicated solid/shell
 and selected-set mass properties, CompGeom, PlanarSlice, Projection, DegenGeom,
 and ParasiteDrag. Numerical vectors and matrices are included. A separate
 tetrahedral-shell analytical check verifies the custom shell-inertia correction.
-Strict parity currently exposes the intentional shell-inertia differences from
-official 3.51.2; they remain failures, while the analytical result is reported
-separately. They are not hidden by relaxed tolerances.
+The 3.52.2 baseline includes upstream shell and solid inertia fixes. Strict
+parity is required; the historical 3.51.2 shell exception is no longer applied.
+The independent analytical shell check remains mandatory.
 
 Run only these analyses with
 `python run_geometry_parity.py --output <new-work-directory>`.
@@ -52,7 +52,7 @@ solves: base, positive control, and negative control.
 The explicit Forward, Backward, and Central tables in every custom `.stab`
 file are mandatory test inputs. Every table entry must be finite, and every
 Central entry must equal `(Forward + Backward) / 2` within the printed-output
-tolerance. This check reads the solver file directly; OpenVSP 3.51.2 result
+tolerance. This check reads the solver file directly; OpenVSP 3.52.2 result
 objects expose only the legacy forward fields and cannot prove that the new
 tables exist.
 
@@ -157,7 +157,7 @@ normal sweep and `-stab` results in both thin and thick modes. Candidate-only
 batch/resume/range invariance continues to compare `CFy/CFz` normally.
 
 `run_native_regression.bat` is the mandatory combined gate. It runs official
-3.51.2 parity first and continuation correctness second; it does not invoke the
+3.52.2 parity first and continuation correctness second; it does not invoke the
 historical stable-main regression. With no argument it uses the installed custom
 distribution. To validate an incremental executable without installing it,
 pass its path as the sole argument:

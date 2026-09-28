@@ -1,0 +1,35 @@
+XSecSurf Functions
+==================
+
+This group of API functions provides capabilities related to the XSecSurf class in OpenVSP.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetNumXSecSurfs
+    GetXSecSurf
+    GetNumXSec
+    GetXSec
+    ChangeXSecShape
+    SetXSecSurfGlobalXForm
+    GetXSecSurfGlobalXForm
+
+
+Details
+-------
+
+.. autofunction:: GetNumXSecSurfs
+
+.. autofunction:: GetXSecSurf
+
+.. autofunction:: GetNumXSec
+
+.. autofunction:: GetXSec
+
+.. autofunction:: ChangeXSecShape
+
+.. autofunction:: SetXSecSurfGlobalXForm
+
+.. autofunction:: GetXSecSurfGlobalXForm
+

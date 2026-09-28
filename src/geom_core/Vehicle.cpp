@@ -10,7 +10,6 @@
 #define _HAS_STD_BYTE 0
 #endif
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include <filesystem>
@@ -44,6 +43,7 @@
 #include "NGonMeshGeom.h"
 #include "ParasiteDragMgr.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "PodGeom.h"
 #include "ProjectionMgr.h"
 #include "PropGeom.h"
@@ -57,6 +57,7 @@
 #include "StructureMgr.h"
 #include "SubSurfaceMgr.h"
 #include "SVGUtil.h"
+#include "UnformattedFile.h"
 #include "VarPresetMgr.h"
 #include "VSPAEROMgr.h"
 #include "WingGeom.h"
@@ -153,12 +154,12 @@ Vehicle::Vehicle()
     m_DXFColorFlag.Init( "DXFColorFlag", "DXFSettings", this, false, 0, 1 );
     m_DXFColorFlag.SetDescript( "Flag To Make Each Layer A Different Color" );
     m_DXF2D3DFlag.Init( "DimFlag", "DXFSettings", this , vsp::SET_3D, vsp::SET_3D, vsp::SET_2D );
-    m_DXF2DView.Init( "ViewType", "DXFSettings", this, vsp::VIEW_1, vsp::VIEW_1, vsp::VIEW_4 );
+    m_DXF2DView.Init( "ViewType", "DXFSettings", this, vsp::VIEW_4, vsp::VIEW_1, vsp::VIEW_4 );
     m_DXF2DView.SetDescript( "Sets Number Of 2D Views" );
     m_DXF4View1.Init( "TopLeftView", "DXFSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_DXF4View2.Init( "TopRightView", "DXFSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_DXF4View3.Init( "BottomLeftView", "DXFSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_DXF4View4.Init( "BottomRightView", "DXFSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_DXF4View2.Init( "TopRightView", "DXFSettings", this, vsp::VIEW_NONE, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_DXF4View3.Init( "BottomLeftView", "DXFSettings", this, vsp::VIEW_FRONT, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_DXF4View4.Init( "BottomRightView", "DXFSettings", this, vsp::VIEW_LEFT, vsp::VIEW_LEFT, vsp::VIEW_NONE );
     m_DXF4View1_rot.Init( "TopLeftRotation", "DXFSettings", this, vsp::ROT_90, vsp::ROT_0, vsp::ROT_270 );
     m_DXF4View2_rot.Init( "TopRightRotation", "DXFSettings", this, vsp::ROT_0, vsp::ROT_0, vsp::ROT_270 );
     m_DXF4View3_rot.Init( "BottomLeftRotation", "DXFSettings", this, vsp::ROT_0, vsp::ROT_0, vsp::ROT_270 );
@@ -175,12 +176,12 @@ Vehicle::Vehicle()
     m_SVGTessFactor.SetDescript( "SVG Tessellation Multiplier. Caution: May Slow Export" );
     m_SVGAllXSecFlag.Init( "SVGAllXSecFlag", "SVGSettings", this, false, 0, 1 );
     m_SVGAllXSecFlag.SetDescript( "Flag To Export XSec Feature Lines" );
-    m_SVGView.Init( "ViewType", "SVGSettings", this, vsp::VIEW_1, vsp::VIEW_1, vsp::VIEW_4 );
+    m_SVGView.Init( "ViewType", "SVGSettings", this, vsp::VIEW_4, vsp::VIEW_1, vsp::VIEW_4 );
     m_SVGView.SetDescript( "Sets Number Of 2D Views" );
     m_SVGView1.Init( "TopLeftView", "SVGSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_SVGView2.Init( "TopRightView", "SVGSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_SVGView3.Init( "BottomLeftView", "SVGSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
-    m_SVGView4.Init( "BottomRightView", "SVGSettings", this, vsp::VIEW_TOP, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_SVGView2.Init( "TopRightView", "SVGSettings", this, vsp::VIEW_NONE, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_SVGView3.Init( "BottomLeftView", "SVGSettings", this, vsp::VIEW_FRONT, vsp::VIEW_LEFT, vsp::VIEW_NONE );
+    m_SVGView4.Init( "BottomRightView", "SVGSettings", this, vsp::VIEW_LEFT, vsp::VIEW_LEFT, vsp::VIEW_NONE );
     m_SVGView1_rot.Init( "TopLeftRotation", "SVGSettings", this, vsp::ROT_90, vsp::ROT_0, vsp::ROT_270 );
     m_SVGView2_rot.Init( "TopRightRotation", "SVGSettings", this, vsp::ROT_0, vsp::ROT_0, vsp::ROT_270 );
     m_SVGView3_rot.Init( "BottomLeftRotation", "SVGSettings", this, vsp::ROT_0, vsp::ROT_0, vsp::ROT_270 );
@@ -188,11 +189,14 @@ Vehicle::Vehicle()
 
     m_WorkingXDDMType.Init( "Working_XDDM_Type", "Design", this, vsp::XDDM_VAR, vsp::XDDM_VAR, vsp::XDDM_CONST );
 
-    m_UType.Init( "U_Type", "FitModel", this, TargetPt::FREE, TargetPt::FIXED, TargetPt::FREE );
+    m_SurfIndx.Init( "SurfIndx", "FitModel", this, 0, 0, 1e6 );
+    m_SurfIndx.SetDescript( "Surface index a target point is matched to" );
+
+    m_UType.Init( "U_Type", "FitModel", this, vsp::FIT_MODEL_FREE, vsp::FIT_MODEL_FIXED, vsp::FIT_MODEL_FREE );
     m_UType.SetDescript( "Target U fixed or free" );
     m_UTargetPt.Init( "U_TargetPt", "FitModel", this, 0, 0, 1 );
     m_UTargetPt.SetDescript( "U Coordinate of Fixed Point" );
-    m_WType.Init( "W_Type", "FitModel", this, TargetPt::FREE, TargetPt::FIXED, TargetPt::FREE );
+    m_WType.Init( "W_Type", "FitModel", this, vsp::FIT_MODEL_FREE, vsp::FIT_MODEL_FIXED, vsp::FIT_MODEL_FREE );
     m_WType.SetDescript( "Target W fixed or free" );
     m_WTargetPt.Init( "W_TargetPt", "FitModel", this, 0, 0, 1 );
     m_WTargetPt.SetDescript( "W Coordinate of Fixed Point" );
@@ -379,8 +383,8 @@ Vehicle::~Vehicle()
 //=== Init ====//
 void Vehicle::Init()
 {
-    // Reset number of sets to default here so it can be used in this function.
-    m_NumUserSets.Set( 20 );
+    // The Parms are back at the values they were set up with by the time this runs -- Wype
+    // resets them -- so the set count the loop below reads is already the default.
 
     //==== Init Custom Geom and Script Mgr ====//
     LightMgr.Init();
@@ -462,102 +466,13 @@ void Vehicle::Init()
     m_IxxIyyIzz = vec3d( 0, 0, 0 );
     m_IxyIxzIyz = vec3d( 0, 0, 0 );
     m_CG = vec3d( 0, 0, 0 );
-    m_NumMassSlices = 20;
-    m_MassSliceDir = vsp::X_DIR;
     m_TotalMass = 0;
-
-    m_STEPLenUnit.Set( vsp::LEN_FT );
-    m_STEPTol.Set( 1e-6 );
-    m_STEPSplitSurfs.Set( true );
-    m_STEPSplitSubSurfs.Set( false );
-    m_STEPMergePoints.Set( false );
-    m_STEPToCubic.Set( false );
-    m_STEPToCubicTol.Set( 1e-6 );
-    m_STEPTrimTE.Set( false );
-
-    m_IGESLenUnit.Set( vsp::LEN_FT );
-    m_IGESSplitSurfs.Set( true );
-    m_IGESSplitSubSurfs.Set( false );
-    m_IGESToCubic.Set( false );
-    m_IGESToCubicTol.Set( 1e-6 );
-    m_IGESTrimTE.Set( false );
-
-    //=== DXF Initial Conditions ===//
-    m_DXFLenUnit.Set( vsp::LEN_FT );
-    m_DXF2DView.Set( vsp::VIEW_4 );
-    m_DXF2D3DFlag.Set( vsp::SET_3D );
-    m_DXF4View1.Set( vsp::VIEW_TOP );
-    m_DXF4View2.Set( vsp::VIEW_NONE );
-    m_DXF4View3.Set( vsp::VIEW_FRONT );
-    m_DXF4View4.Set( vsp::VIEW_LEFT );
-    m_DXF4View1_rot.Set( vsp::ROT_90 );
-    m_DXF4View2_rot.Set( vsp::ROT_0 );
-    m_DXF4View3_rot.Set( vsp::ROT_0 );
-    m_DXF4View4_rot.Set( vsp::ROT_0 );
-
-    //=== SVG Initial Conditions ===//
-    m_SVGLenUnit.Set( vsp::LEN_FT );
-    m_SVGView.Set( vsp::VIEW_4 );
-    m_SVGView1.Set( vsp::VIEW_TOP );
-    m_SVGView2.Set( vsp::VIEW_NONE );
-    m_SVGView3.Set( vsp::VIEW_FRONT );
-    m_SVGView4.Set( vsp::VIEW_LEFT );
-    m_SVGView1_rot.Set( vsp::ROT_90 );
-    m_SVGView2_rot.Set( vsp::ROT_0 );
-    m_SVGView3_rot.Set( vsp::ROT_0 );
-    m_SVGView4_rot.Set( vsp::ROT_0 );
-
-    m_WorkingXDDMType.Set( vsp::XDDM_VAR );
-
-    m_UType.Set( TargetPt::FREE );
-    m_UTargetPt.Set( 0 );
-    m_WType.Set( TargetPt::FREE );
-    m_WTargetPt.Set( 0 );
-    m_SelectOneFlag.Set( false );
-    m_SelectBoxFlag.Set( false );
-
-    m_TargetType.Set( vsp::SET_TARGET );
-    m_BoundaryType.Set( vsp::NO_BOUNDARY );
-    m_DirectionType.Set( vsp::X_PROJ );
-    m_XComp.Set( 0.0 );
-    m_YComp.Set( 0.0 );
-    m_ZComp.Set( 0.0 );
-
-    m_NewRatioValue.Set( 1.0 );
-    m_NewWidthValue.Set( 1.0 );
-    m_NewHeightValue.Set( 1.0 );
-    m_TransparentBGFlag.Set( true );
-    m_AutoCropFlag.Set( false );
-
-    m_STLMultiSolid.Set( false );
-    m_STLExportPropMainSurf.Set( false );
 
     m_BEMPropID = string();
 
-    m_AFExportType.Set( vsp::BEZIER_AF_EXPORT );
-    m_AFWTessFactor.Set( 1.0 );
-    m_AFAppendGeomIDFlag.Set( true );
     m_AFFileDir = string();
 
     m_UpdatingBBox = false;
-    m_BbXLen.Set( 0 );
-    m_BbYLen.Set( 0 );
-    m_BbZLen.Set( 0 );
-    m_BbXMin.Set( 0 );
-    m_BbYMin.Set( 0 );
-    m_BbZMin.Set( 0 );
-
-    m_ScaleIndependentBbXLen.Set( 0 );
-    m_ScaleIndependentBbYLen.Set( 0 );
-    m_ScaleIndependentBbZLen.Set( 0 );
-    m_ScaleIndependentBbXMin.Set( 0 );
-    m_ScaleIndependentBbYMin.Set( 0 );
-    m_ScaleIndependentBbZMin.Set( 0 );
-
-    m_exportCompGeomTxtFile.Set( true );
-    m_exportCompGeomCsvFile.Set( true );
-    m_exportDegenGeomCsvFile.Set( true );
-    m_exportDegenGeomMFile.Set( true );
 
     m_ViewDirty = true;
 
@@ -692,17 +607,38 @@ void Vehicle::Wype()
 
     // Remove references to this set up in Init()
 
+    // Put every Parm back the way a new one starts.  Init used to do this a Parm at a time
+    // for the Vehicle's own, which meant a list to extend by hand every time a Parm was
+    // added -- 94 of them had been missed -- and the settings containers had no such list at
+    // all, so nothing about a CFD mesh was ever reset.
+    //
+    // Nothing wants to hear about these one by one while the model is being torn down, so
+    // ParmChanged is held off the way it is while the bounding box Parms are assigned.
+    {
+        bool was_updating = m_UpdatingBBox;
+        m_UpdatingBBox = true;
+
+        ResetToInitVals();
+        m_CfdSettings.ResetToInitVals();
+        m_ISectSettings.ResetToInitVals();
+        m_CfdGridDensity.ResetToInitVals();
+        m_ClippingMgr.ResetToInitVals();
+
+        m_UpdatingBBox = was_updating;
+    }
+
     //wype the attributeManager BEFORE removing geoms etc.
     AttributeMgr.Wype();
 
     LinkMgr.UnRegisterContainer( this->GetID() );
 
     // Public member variables
+    // The two Parms that used to be clobbered here, NumMassSlices and MassSliceDir, are
+    // reset above.  Clobbering NumMassSlices with a default constructed int asked for zero,
+    // which is below its lower limit of ten, and Init put it back to twenty afterwards.
     m_IxxIyyIzz = vec3d();
     m_IxyIxzIyz = vec3d();
     m_CG = vec3d();
-    m_NumMassSlices = int();
-    m_MassSliceDir = vsp::X_DIR;
     m_TotalMass = double();
     m_AttrCollection.Wype();
 
@@ -716,6 +652,19 @@ void Vehicle::Wype()
     m_AFFileDir = string();
 
     m_BEMPropID = string();
+
+    // Named a Geom that the loop below deletes.
+    m_LastMassMeshID = string();
+
+    // Results of the last run, holding copies of geometry that is going away.
+    m_DegenGeomVec.clear();
+    m_DegenPtMassVec.clear();
+
+    // Counts layers through a DXF or SVG export.  It starts over at each export, so this
+    // only matters for looking the way a new Vehicle does.
+    m_ColorCount = 0;
+
+    m_XSecLineColor = vec3d();
 
     for ( auto it = m_GeomStoreMap.begin(); it != m_GeomStoreMap.end(); ++it )
     {
@@ -757,7 +706,9 @@ void Vehicle::Wype()
     OldVarPresetMgr.Renew();
     ModeMgr.Renew();
     ParasiteDragMgr.Renew();
+    ProjectionMgr.Renew();
     VSPAEROMgr.Renew();
+    WaveDragMgr.Renew();
     MeasureMgr.Renew();
     Background3DMgr.Renew();
     StructureMgr.Renew();
@@ -1189,13 +1140,6 @@ string Vehicle::CreateGeom( const GeomType & type )
     m_GeomStoreMap[ new_geom->GetID() ] = new_geom;
     SetGeomMapDirtyFlag( true );
 
-    Geom* type_geom_ptr = FindGeom( type.m_GeomID );
-    if ( type_geom_ptr )
-    {
-        new_geom->CopyFrom( type_geom_ptr );
-        new_geom->SetName( type.m_Name );
-    }
-
     return new_geom->GetID();
 }
 
@@ -1290,6 +1234,12 @@ string Vehicle::AddGeom( Geom* add_geom )
 
 string Vehicle::AddMeshGeom( int normal_set, int degen_set, bool suppressdisks, bool skipnegflipnormal, int n_ref, bool checkFlat, const string & singleGeomID )
 {
+    BndBox bbox;
+    return AddMeshGeom( bbox, normal_set, degen_set, suppressdisks, skipnegflipnormal, n_ref, checkFlat, singleGeomID );
+}
+
+string Vehicle::AddMeshGeom( BndBox & bbox, int normal_set, int degen_set, bool suppressdisks, bool skipnegflipnormal, int n_ref, bool checkFlat, const string & singleGeomID )
+{
     ClearActiveGeom();
 
     vector<string> geom_vec = GetGeomVec(); // Get geom vec before mesh is added
@@ -1319,21 +1269,10 @@ string Vehicle::AddMeshGeom( int normal_set, int degen_set, bool suppressdisks, 
         Geom* g_ptr = FindGeom( geom_vec[i] );
         if ( g_ptr )
         {
+            vector< TMesh* > tMeshVec;
             if ( g_ptr->GetSetFlag( normal_set ) )
             {
-                vector< TMesh* > tMeshVec = g_ptr->CreateTMeshVec( skipnegflipnormal, n_ref );
-                for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
-                {
-                    if ( suppressdisks && ( tMeshVec[j]->m_SurfType == vsp::DISK_SURF ) )
-                    {
-                        // Skip actuator disk.
-                        delete tMeshVec[j];
-                    }
-                    else
-                    {
-                        mesh_geom->m_TMeshVec.push_back( tMeshVec[j] );
-                    }
-                }
+                tMeshVec = g_ptr->CreateTMeshVec( skipnegflipnormal, n_ref );
             }
 
             if ( g_ptr->GetSetFlag( degen_set ) )
@@ -1344,7 +1283,6 @@ string Vehicle::AddMeshGeom( int normal_set, int degen_set, bool suppressdisks, 
 
                     g_ptr->CreateDegenGeom( DegenGeomVec, true, n_ref );
 
-                    vector< TMesh* > tMeshVec;
                     for ( int j = 0; j < DegenGeomVec.size(); j++ )
                     {
                         // Flip normals because surfaces are based on 'bottom' surface and we'd prefer normals face up.
@@ -1353,22 +1291,34 @@ string Vehicle::AddMeshGeom( int normal_set, int degen_set, bool suppressdisks, 
                         // Camber surfaces for wings & props, plates for bodies.
                         DegenGeomVec[j].createTMeshVec( g_ptr, tMeshVec, skipnegflipnormal, n_ref, checkFlat );
                     }
-
-                    // Do not combine these loops.  tMeshVec.size() != DegenGeomVec.size()
-                    for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
-                    {
-                        if ( suppressdisks && ( tMeshVec[j]->m_SurfType == vsp::DISK_SURF ) )
-                        {
-                            // Skip actuator disk.
-                            delete tMeshVec[j];
-                        }
-                        else
-                        {
-                            mesh_geom->m_TMeshVec.push_back( tMeshVec[j] );
-                        }
-                    }
                 }
             }
+
+            if ( g_ptr->IsBndBoxScaleDependent() )
+            {
+                bbox.Update( g_ptr->GetScaleIndependentBndBox() );
+            }
+            else
+            {
+                for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
+                {
+                    tMeshVec[j]->UpdateBBox( bbox );
+                }
+            }
+
+            for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
+            {
+                if ( suppressdisks && ( tMeshVec[j]->m_SurfType == vsp::DISK_SURF ) )
+                {
+                    // Skip actuator disk.
+                    delete tMeshVec[j];
+                }
+                else
+                {
+                    mesh_geom->m_TMeshVec.push_back( tMeshVec[j] );
+                }
+            }
+
         }
     }
 
@@ -1464,6 +1414,24 @@ void Vehicle::DeleteSavedXSecCurve ()
 
 vector< TMesh* > Vehicle::CreateTMeshVec( int normal_set )
 {
+    BndBox bbox;
+    return CreateTMeshVec( normal_set, bbox );
+}
+
+vector< TMesh* > Vehicle::CreateTMeshVec( const vector < string > &geom_vec )
+{
+    BndBox bbox;
+    return CreateTMeshVec( geom_vec, bbox );
+}
+
+vector< TMesh* > Vehicle::CreateTMeshVec( const string &geomid )
+{
+    BndBox bbox;
+    return CreateTMeshVec( geomid, bbox );
+}
+
+vector< TMesh* > Vehicle::CreateTMeshVec( int normal_set, BndBox & bbox )
+{
     vector< TMesh* > tmv;
     vector<string> geom_vec = GetGeomVec();
 
@@ -1479,13 +1447,25 @@ vector< TMesh* > Vehicle::CreateTMeshVec( int normal_set )
                 {
                     tmv.push_back( tMeshVec[j] );
                 }
+
+                if ( g_ptr->IsBndBoxScaleDependent() )
+                {
+                    bbox.Update( g_ptr->GetScaleIndependentBndBox() );
+                }
+                else
+                {
+                    for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
+                    {
+                        tMeshVec[j]->UpdateBBox( bbox );
+                    }
+                }
             }
         }
     }
     return tmv;
 }
 
-vector< TMesh* > Vehicle::CreateTMeshVec( const vector < string > &geom_vec )
+vector< TMesh* > Vehicle::CreateTMeshVec( const vector < string > &geom_vec, BndBox & bbox )
 {
     vector< TMesh* > tmv;
     for ( int i = 0 ; i < ( int )geom_vec.size() ; i++ )
@@ -1498,18 +1478,42 @@ vector< TMesh* > Vehicle::CreateTMeshVec( const vector < string > &geom_vec )
             {
                 tmv.push_back( tMeshVec[j] );
             }
+
+            if ( g_ptr->IsBndBoxScaleDependent() )
+            {
+                bbox.Update( g_ptr->GetScaleIndependentBndBox() );
+            }
+            else
+            {
+                for ( int j = 0 ; j < ( int )tMeshVec.size() ; j++ )
+                {
+                    tMeshVec[j]->UpdateBBox( bbox );
+                }
+            }
         }
     }
     return tmv;
 }
 
-vector< TMesh* > Vehicle::CreateTMeshVec( const string &geomid )
+vector< TMesh* > Vehicle::CreateTMeshVec( const string &geomid, BndBox & bbox )
 {
     vector< TMesh* > tmv;
     Geom *g = FindGeom( geomid );
     if ( g )
     {
         tmv = g->CreateTMeshVec( false );
+
+        if ( g->IsBndBoxScaleDependent() )
+        {
+            bbox.Update( g->GetScaleIndependentBndBox() );
+        }
+        else
+        {
+            for ( int j = 0 ; j < ( int )tmv.size() ; j++ )
+            {
+                tmv[j]->UpdateBBox( bbox );
+            }
+        }
     }
     return tmv;
 }
@@ -2114,44 +2118,73 @@ bool Vehicle::IDinClipboard( const string & id )
 //==== Copy Geoms In Vec - Create New IDs But Keep Parent/Child ====//
 vector< string > Vehicle::CopyGeomVec( const vector< string > & geom_vec )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
 
     //==== Create New Geoms ====//
     vector< string > created_id_vec;
 
+    // Make them all first and say which copy stands for which original, before any of them is
+    // filled in.  A reference from one of these Geoms to another then follows the copy however
+    // the two are ordered, while a reference to a Geom that is not being copied stays put.
+    vector< Geom* > to_vec;
+    vector< xmlNodePtr > from_node_vec;
     for ( int i = 0 ; i < ( int )geom_vec.size() ; i++ )
     {
         Geom* fromPtr = FindGeom( geom_vec[i] );
         if ( fromPtr )
         {
-            GeomType t = fromPtr->GetType();
-            string id = CreateGeom( t );
+            string id = CreateGeom( fromPtr->GetType() );
             Geom* toPtr = FindGeom( id );
             if ( toPtr )
             {
-                toPtr->CopyFrom( fromPtr );
-                if (m_CopySetsWithGeomsFlag.Get() == false)
-                {
-                    // New geom is only in SET_SHOWN
-                    for ( int j = SET_FIRST_USER; j < m_NumUserSets() + SET_FIRST_USER; j++ )
-                    {
-                        toPtr->SetSetFlag( j, false );
-                    }
+                // States the mapping from original to copy rather than reading one, so that
+                // everything decoded below resolves a reference to the original into the copy.
+                IDMgr.RemapID( fromPtr->GetID(), toPtr->GetID() );
 
-                    toPtr->Show();
-                }
+                // Written out once and kept, since the copy is read back from this same tree
+                // below.  Registering it names the copy standing for each thing nested inside --
+                // a subsurface, a cross section, a bogie, a route point -- so a reference from
+                // one of these Geoms into another follows the copy whichever order they read.
+                xmlNodePtr root = xmlNewNode( nullptr, ( const xmlChar * )"Vsp_Geometry" );
+                fromPtr->EncodeGeom( root );
+                IDMgr.PreRegisterIDs( root );
 
-                id = toPtr->GetID();
-                created_id_vec.push_back( id );
+                from_node_vec.push_back( root );
+                to_vec.push_back( toPtr );
             }
         }
     }
 
-    ParmMgr.ResetRemapID( lastreset );
+    for ( int i = 0 ; i < ( int )to_vec.size() ; i++ )
+    {
+        Geom* toPtr = to_vec[i];
 
-    // Scan through and look for parents & children outside copied vector
-    // These have nonexistant ID's because the remap created a new unique
-    // ID, but no geom was ever created and changed to that ID.
+        // Read back from the tree written and registered in the loop above.
+        toPtr->DecodeGeom( from_node_vec[i] );
+
+        if ( m_CopySetsWithGeomsFlag.Get() == false )
+        {
+            // New geom is only in SET_SHOWN
+            for ( int j = SET_FIRST_USER; j < m_NumUserSets() + SET_FIRST_USER; j++ )
+            {
+                toPtr->SetSetFlag( j, false );
+            }
+
+            toPtr->Show();
+        }
+
+        created_id_vec.push_back( toPtr->GetID() );
+    }
+
+    for ( int i = 0 ; i < ( int )from_node_vec.size() ; i++ )
+    {
+        xmlFreeNode( from_node_vec[i] );
+    }
+
+    IDMgr.ResetRemapID( lastreset );
+
+    // Drop anything still naming a Geom outside the copy: a parent becomes "NONE", which puts
+    // the copy at the top level, and a child is removed from the list.
     for ( int i = 0 ; i < ( int )created_id_vec.size() ; i++ )
     {
         Geom* geom = FindGeom( created_id_vec[i] );
@@ -2456,45 +2489,6 @@ GeomType Vehicle::GetGeomType( int index )
     return GeomType( 0, "" );
 }
 
-//==== Set Geom Type ====//
-void Vehicle::SetGeomType( int index, const GeomType & type )
-{
-    if ( index >= 0 && index < (int)m_GeomTypeVec.size() )
-    {
-        m_GeomTypeVec[index] = type;
-    }
-}
-
-//==== Get Vector of Geom IDs That Are Valid For Types ====//
-vector< string > Vehicle::GetValidTypeGeoms()
-{
-    vector< string > geom_id_vec;
-    vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    for ( int i = 0 ; i < ( int )geom_vec.size() ; i++ )
-    {
-        if ( geom_vec[i]->GetType().m_Type != CUSTOM_GEOM_TYPE )
-        {
-           geom_id_vec.push_back( geom_vec[i]->GetID() );
-        }
-    }
-    return geom_id_vec;
-}
-
-
-//==== Get All Geometry Types That Are Editable ====//
-vector< GeomType > Vehicle::GetEditableGeomTypes()
-{
-    vector< GeomType > type_vec;
-    for ( int i = 0 ; i < (int)m_GeomTypeVec.size() ; i++ )
-    {
-        if ( !m_GeomTypeVec[i].m_FixedFlag && m_GeomTypeVec[i].m_Type != CUSTOM_GEOM_TYPE )
-        {
-            type_vec.push_back( m_GeomTypeVec[i] );
-        }
-    }
-    return type_vec;
-}
-
 xmlNodePtr Vehicle::EncodeXml( xmlNodePtr & node, int set )
 {
     xmlNodePtr vehicle_node = xmlNewChild( node, nullptr, BAD_CAST"Vehicle", nullptr );
@@ -2734,10 +2728,31 @@ bool Vehicle::WriteXMLFile( const string & file_name, int set )
     return true;
 }
 
+//==== Register the identities in the trees read into newly made objects ====//
+// A file's Geoms are always created fresh, so an ID inside one may move and a reference to it
+// has to follow.  The Vehicle and the settings containers decode into the objects that already
+// hold their IDs, so they keep them and are left out.
+static void PreRegisterNewObjectIDs( xmlNodePtr node )
+{
+    xmlNodePtr vehicle_node = XmlUtil::GetNode( node, "Vehicle", 0 );
+    if ( vehicle_node )
+    {
+        int num = XmlUtil::GetNumNames( vehicle_node, "Geom" );
+        for ( int i = 0 ; i < num ; i++ )
+        {
+            xmlNodePtr geom_node = XmlUtil::GetNode( vehicle_node, "Geom", i );
+            if ( geom_node )
+            {
+                IDMgr.PreRegisterIDs( geom_node );
+            }
+        }
+    }
+}
+
 //==== Read File ====//
 int Vehicle::ReadXMLFile( const string & file_name )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
 
     // Disable link updates when until all geoms are loaded
     LinkMgr.SetFreezeUpdateFlag( true );
@@ -2789,13 +2804,17 @@ int Vehicle::ReadXMLFile( const string & file_name )
         return 4;
     }
 
+    // Register the Geoms before reading any of them, so a reference into one resolves whichever
+    // order the file lists it and the thing it names.
+    PreRegisterNewObjectIDs( root );
+
     //==== Decode Vehicle from document ====//
     DecodeXml( root );
 
     //===== Free Doc =====//
     xmlFreeDoc( doc );
 
-    ParmMgr.ResetRemapID( lastreset );
+    IDMgr.ResetRemapID( lastreset );
 
     Update();
     AdvLinkMgr.ForceUpdate();
@@ -2809,7 +2828,7 @@ int Vehicle::ReadXMLFile( const string & file_name )
 //==== Read File ====//
 int Vehicle::ReadXMLFileGeomsOnly( const string & file_name )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
 
     //==== Read Xml File ====//
     xmlDocPtr doc;
@@ -2860,12 +2879,16 @@ int Vehicle::ReadXMLFileGeomsOnly( const string & file_name )
 
     //==== Decode Vehicle from document ====//
 
+    // Register the Geoms before reading any of them, so a reference into one resolves whichever
+    // order the file lists it and the thing it names.
+    PreRegisterNewObjectIDs( root );
+
     DecodeXmlGeomsOnly( root );
 
     //===== Free Doc =====//
     xmlFreeDoc( doc );
 
-    ParmMgr.ResetRemapID( lastreset );
+    IDMgr.ResetRemapID( lastreset );
 
     Update();
 
@@ -2976,7 +2999,7 @@ bool Vehicle::ExistMesh( int set )
 bool Vehicle::ExistType( int set, int geomtype )
 {
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return false;
     }
@@ -2999,7 +3022,7 @@ vector < string > Vehicle::GetPtCloudGeoms()
     vector < string > ptclouds;
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return ptclouds;
     }
@@ -3032,7 +3055,7 @@ string Vehicle::WriteSTLFile( const string & file_name, int write_set, bool useM
     string mesh_id = string();
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return mesh_id;
     }
@@ -3088,7 +3111,7 @@ string Vehicle::WriteTaggedMSSTLFile( const string & file_name, int write_set, i
     string mesh_id = string();
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return mesh_id;
     }
@@ -3167,7 +3190,7 @@ string Vehicle::WriteFacetFile( const string & file_name, int write_set, int sub
     string mesh_id = string();
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return mesh_id;
     }
@@ -3763,9 +3786,9 @@ string Vehicle::WriteVSPGeomFile( const string &file_name, int write_set, int de
                             parttag.push_back( tag );
 
                             string str = SubSurfaceMgr.m_TagNames[ part ];
-                            int pos = str.find_first_of( '_' );
-                            string gname = str.substr( 0, pos );
-                            string sname = str.substr( pos + 2 );
+                            string gname;
+                            string sname;
+                            StringUtil::split_comp_tag_name( str, gname, sname );
 
                             StringUtil::change_space_to_underscore( gname );
                             StringUtil::change_space_to_underscore( sname );
@@ -3775,8 +3798,8 @@ string Vehicle::WriteVSPGeomFile( const string &file_name, int write_set, int de
 
                             string ptagname = gname + sname + "_" + tname;
 
-                            string tagfile_name = base_path_nospace + ptagname + ".tag";
-                            string tagfile_localname = base_fname + ptagname;
+                            string tagfile_name = base_path_nospace + "." + ptagname + ".tag";
+                            string tagfile_localname = base_fname + "." + ptagname;
 
                             fprintf( taglist_fid, "%s\n", tagfile_localname.c_str() );
 
@@ -3857,7 +3880,7 @@ string Vehicle::WriteNascartFiles( const string & file_name, int write_set, int 
     string mesh_id = string();
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return mesh_id;
     }
@@ -3964,7 +3987,7 @@ string Vehicle::WriteGmshFile( const string & file_name, int write_set, int subs
     string mesh_id = string();
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return mesh_id;
     }
@@ -4065,7 +4088,7 @@ void Vehicle::WriteX3DFile( const string & file_name, int write_set, bool useMod
     }
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return;
     }
@@ -4244,7 +4267,7 @@ void Vehicle::WritePovRayFile( const string & file_name, int write_set, bool use
     int i;
 
     vector< Geom* > geom_vec = FindGeomVec( GetGeomVec() );
-    if ( !geom_vec[0] )
+    if ( geom_vec.size() == 0 || !geom_vec[0] )
     {
         return;
     }
@@ -5666,7 +5689,7 @@ void Vehicle::WriteControlSurfaceFile( const string & file_name, const vector < 
                         string csname = cs->GetName();
                         StringUtil::change_space_to_underscore( csname );
 
-                        snprintf( str, sizeof( str ),  "%s%s_Surf%d_%s", base_fname.c_str(), gname.c_str(), isurf, csname.c_str() );
+                        snprintf( str, sizeof( str ),  "%s.%s_Surf%d_%s", base_fname.c_str(), gname.c_str(), isurf, csname.c_str() );
 
                         fprintf( csf_file, "Tagfile Name: %s\n", str );
                         fprintf( csf_file, "Surface #:    %d\n", isurf );
@@ -6228,9 +6251,7 @@ string Vehicle::PSlice( int set, int numSlices, const vec3d &axis, bool autoBoun
 
     // Grab bounding box before MeshGeom is created -- which will hide the Shown Set, rendering it empty if used.
     BndBox b;
-    GetScaleIndependentBBoxSet( set, b );
-
-    string id = AddMeshGeom( set );
+    string id = AddMeshGeom( b, set );
     if ( id.compare( "NONE" ) == 0 )
     {
         return id;
@@ -6273,6 +6294,222 @@ string Vehicle::PSliceAndFlatten( int set, int numSlices, const vec3d &axis, boo
     mesh_ptr->m_SurfDirty = true;
     mesh_ptr->Update();
     return id;
+}
+
+//==== Read A Plot3D Multiple Grid Header ====//
+// The block count and the dimensions, as text.
+//
+// A Plot3D grid file gives no header notice of how many arrays each block carries -- two
+// for a planar grid, three for x, y and z, or four when an iblank tag follows them.
+// Reading three from a file that holds four leaves every block after the first starting an
+// array late, so the tags arrive as coordinates.  The file is nothing but numbers, so
+// counting them settles it: the count past the dimensions divides by the total number of
+// points.
+static bool ReadP3DGridHeaderFormatted( FILE *fp, vector < int > &ni, vector < int > &nj, vector < int > &nk,
+                                        int &nvar )
+{
+    int num_comps = 0;
+    if ( fscanf( fp, "%d\n", &num_comps ) != 1 || num_comps <= 0 )
+    {
+        return false;
+    }
+
+    ni.assign( num_comps, 0 );
+    nj.assign( num_comps, 0 );
+    nk.assign( num_comps, 0 );
+
+    for ( int c = 0 ; c < num_comps ; c++ )
+    {
+        if ( fscanf( fp, "%d %d %d\n", &ni[c], &nj[c], &nk[c] ) != 3 )
+        {
+            return false;
+        }
+    }
+
+    long ntot = 0;
+    for ( int c = 0 ; c < num_comps ; c++ )
+    {
+        ntot += ( long )ni[c] * nj[c] * nk[c];
+    }
+
+    nvar = 3;
+
+    long pos = ftell( fp );
+    long ndata = 0;
+    double val;
+    while ( fscanf( fp, "%lf", &val ) == 1 )
+    {
+        ndata++;
+    }
+    fseek( fp, pos, SEEK_SET );
+
+    if ( ntot > 0 && ndata % ntot == 0 )
+    {
+        long nv = ndata / ntot;
+
+        if ( nv >= 2 && nv <= 4 )
+        {
+            nvar = ( int )nv;
+        }
+    }
+
+    return true;
+}
+
+//==== Read A Plot3D Multiple Grid Header, Unformatted ====//
+// The same header, as the Fortran that reads these files sees it:
+//
+//     READ(IU) NBLOCK
+//     READ(IU) (NI(N),NJ(N),NK(N),N=1,NBLOCK)
+//     READ(IU) X,Y,Z[,IB]           one record per block
+//
+// nvar is not stated here either, and neither is how wide the reals are, but the length of
+// a block record says both.  Every array in a block holds one value per point, a real is
+// eight bytes or four, and an iblank tag is a four byte integer, which leaves six possible
+// lengths per point.  Only one pair of them collides: two doubles is as long as three
+// floats and an iblank.  Those are told apart by reading the trailing quarter of the record
+// as tags and seeing whether it looks like any -- tags are small, no larger than the number
+// of blocks they can point at, and a block with none of its points active is not a grid
+// anyone wrote on purpose.
+//
+// Nothing is read out of the block records here.  The file is opened again to read them,
+// which costs one record and keeps the two passes from having to agree about where the file
+// was left.
+static bool ReadP3DGridHeaderUnformatted( const string &fname, vector < int > &ni, vector < int > &nj,
+                                          vector < int > &nk, int &nvar, bool &single )
+{
+    UnformattedIn fp;
+
+    if ( !fp.Open( fname ) )
+    {
+        return false;
+    }
+
+    if ( !fp.BeginRecord() || fp.GetRecordBytes() != ( long )sizeof( int ) )
+    {
+        return false;
+    }
+
+    int num_comps = 0;
+    fp.Read( num_comps );
+
+    if ( !fp.EndRecord() || num_comps <= 0 )
+    {
+        return false;
+    }
+
+    // Three dimensions per block, or two where a planar grid leaves k out.
+    if ( !fp.BeginRecord() )
+    {
+        return false;
+    }
+
+    long ndim = fp.GetRecordBytes() / ( ( long )sizeof( int ) * num_comps );
+
+    if ( ( ndim != 2 && ndim != 3 ) ||
+         fp.GetRecordBytes() != ( long )sizeof( int ) * ndim * num_comps )
+    {
+        return false;
+    }
+
+    ni.assign( num_comps, 0 );
+    nj.assign( num_comps, 0 );
+    nk.assign( num_comps, 1 );
+
+    for ( int c = 0 ; c < num_comps ; c++ )
+    {
+        fp.Read( ni[c] );
+        fp.Read( nj[c] );
+        if ( ndim == 3 )
+        {
+            fp.Read( nk[c] );
+        }
+    }
+
+    if ( !fp.EndRecord() )
+    {
+        return false;
+    }
+
+    for ( int c = 0 ; c < num_comps ; c++ )
+    {
+        if ( ni[c] < 1 || nj[c] < 1 || nk[c] < 1 )
+        {
+            return false;
+        }
+    }
+
+    long npt = ( long )ni[0] * nj[0] * nk[0];
+
+    if ( !fp.BeginRecord() || fp.GetRecordBytes() % npt != 0 )
+    {
+        return false;
+    }
+
+    long nbyte = fp.GetRecordBytes() / npt;
+
+    if ( nbyte == 8 )
+    {
+        nvar = 2;
+        single = true;
+    }
+    else if ( nbyte == 12 )
+    {
+        nvar = 3;
+        single = true;
+    }
+    else if ( nbyte == 24 )
+    {
+        nvar = 3;
+        single = false;
+    }
+    else if ( nbyte == 28 )
+    {
+        nvar = 4;
+        single = false;
+    }
+    else if ( nbyte == 16 )
+    {
+        vector < int > raw( 4 * npt );
+        fp.Read( raw );
+
+        bool tags = false;
+        for ( long i = 3 * npt ; i < 4 * npt ; i++ )
+        {
+            if ( raw[i] < 0 || raw[i] > num_comps )
+            {
+                tags = false;
+                break;
+            }
+
+            if ( raw[i] > 0 )
+            {
+                tags = true;
+            }
+        }
+
+        if ( tags )
+        {
+            nvar = 4;
+            single = true;
+        }
+        else
+        {
+            nvar = 2;
+            single = false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if ( !fp.EndRecord() || !fp.IsGood() )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 //==== Import File Methods ====//
@@ -6407,32 +6644,51 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
     }
     else if ( file_type == IMPORT_P3D_WIRE )
     {
-        FILE *fp;
+        vector < int > ni;
+        vector < int > nj;
+        vector < int > nk;
+        int nvar = 3;
+        bool single = false;
 
-        //==== Make Sure File Exists ====//
-        if ( ( fp = fopen( file_name.c_str(), "r" ) ) == ( FILE * )nullptr )
+        // A file says nothing about which form it is in, so try it as unformatted -- where
+        // a wrong guess shows up straight away, in record markers that do not describe the
+        // counts they bracket -- and read it as text if that does not hold up.
+        bool unformatted = ReadP3DGridHeaderUnformatted( file_name, ni, nj, nk, nvar, single );
+
+        UnformattedIn ufp;
+        FILE *fp = nullptr;
+
+        if ( unformatted )
         {
-            return id;
+            if ( !ufp.Open( file_name ) )
+            {
+                return id;
+            }
+
+            ufp.SetSinglePrecision( single );
+
+            // Step past the two header records, which have already been read.
+            ufp.BeginRecord();
+            ufp.EndRecord();
+            ufp.BeginRecord();
+            ufp.EndRecord();
+        }
+        else
+        {
+            //==== Make Sure File Exists ====//
+            if ( ( fp = fopen( file_name.c_str(), "r" ) ) == ( FILE * )nullptr )
+            {
+                return id;
+            }
+
+            if ( !ReadP3DGridHeaderFormatted( fp, ni, nj, nk, nvar ) )
+            {
+                fclose( fp );
+                return id;
+            }
         }
 
-        //==== Read in number of blockks ====//
-        int num_comps;
-        fscanf( fp, "%d\n", &num_comps );
-
-        if ( num_comps <= 0 )
-        {
-            fclose ( fp );
-            return id;
-        }
-
-        vector <int> ni( num_comps, 0 );
-        vector <int> nj( num_comps, 0 );
-        vector <int> nk( num_comps, 0 );
-
-        for ( int c = 0 ; c < num_comps ; c++ )
-        {
-            fscanf( fp, "%d %d %d\n", &ni[c], &nj[c], &nk[c] );
-        }
+        int num_comps = ni.size();
 
         // Make sure blank gets added to top level.
         // Consider removing this to make blank added as child of active.
@@ -6442,7 +6698,10 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
         id = AddGeom( type );
         if ( !id.compare( "NONE" ) )
         {
-            fclose( fp );
+            if ( fp )
+            {
+                fclose( fp );
+            }
             return id;
         }
 
@@ -6455,17 +6714,32 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
             string cid = AddGeom( type );
             if ( !cid.compare( "NONE" ) )
             {
+                if ( fp )
+                {
+                    fclose( fp );
+                }
                 return id;
             }
 
             WireGeom* new_geom = ( WireGeom* )FindGeom( cid );
             if ( new_geom )
             {
-                new_geom->ReadP3D( fp, ni[c], nj[c], nk[c] );
+                if ( unformatted )
+                {
+                    new_geom->ReadP3D( ufp, ni[c], nj[c], nk[c], nvar );
+                }
+                else
+                {
+                    new_geom->ReadP3D( fp, ni[c], nj[c], nk[c], nvar );
+                }
                 new_geom->SetDirtyFlag( GeomBase::SURF );
             }
         }
-        fclose( fp );
+
+        if ( fp )
+        {
+            fclose( fp );
+        }
 
         return id;
     }
@@ -6521,7 +6795,7 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
 
 string Vehicle::ImportV2File( const string & file_name )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
 
     //==== Read Xml File ====//
     xmlDocPtr doc;
@@ -6671,7 +6945,7 @@ string Vehicle::ImportV2File( const string & file_name )
     //===== Free Doc =====//
     xmlFreeDoc( doc );
 
-    ParmMgr.ResetRemapID( lastreset );
+    IDMgr.ResetRemapID( lastreset );
 
     // The import routine has set the appropriate coordinate system values and
     // rel/abs flags. Therefore, the ignore absolute coordinate flag should

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parm Link Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Point Cloud Functions" href="PointCloud.html" />
+    <link rel="prev" title="Parm Functions" href="Parm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PointCloud.html" title="Point Cloud Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Parm.html" title="Parm Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parm Link Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parm-link-functions">
+<h1>Parm Link Functions<a class="headerlink" href="#parm-link-functions" title="Link to this heading">¶</a></h1>
+<p>The following functions are available for the simple Parm Link tool, which drives one Parm from another through an optional offset, scale and limits.  See the Advanced Link group for links driven by a script.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CopyAirfoil" title="openvsp.CopyAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CopyAirfoil</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddParmLink" title="openvsp.AddParmLink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddParmLink</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetNumParmLinks" title="openvsp.GetNumParmLinks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumParmLinks</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetParmLinkID" title="openvsp.GetParmLinkID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkID</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetParmLinkAParm" title="openvsp.GetParmLinkAParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkAParm</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetParmLinkBParm" title="openvsp.GetParmLinkBParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkBParm</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetParmLinkAParm" title="openvsp.SetParmLinkAParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkAParm</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetParmLinkBParm" title="openvsp.SetParmLinkBParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkBParm</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelParmLink" title="openvsp.DelParmLink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelParmLink</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelAllParmLinks" title="openvsp.DelAllParmLinks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllParmLinks</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SortParmLinksByA" title="openvsp.SortParmLinksByA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortParmLinksByA</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SortParmLinksByB" title="openvsp.SortParmLinksByB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortParmLinksByB</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.LinkAllComp" title="openvsp.LinkAllComp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinkAllComp</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.LinkAllGroup" title="openvsp.LinkAllGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinkAllGroup</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetParmLinkOffsetFlag" title="openvsp.GetParmLinkOffsetFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkOffsetFlag</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetParmLinkOffsetFlag" title="openvsp.SetParmLinkOffsetFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkOffsetFlag</span></code></a>(std, bool flag)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetParmLinkScaleFlag" title="openvsp.GetParmLinkScaleFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkScaleFlag</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetParmLinkScaleFlag" title="openvsp.SetParmLinkScaleFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkScaleFlag</span></code></a>(std, bool flag)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetParmLinkLowerLimitFlag" title="openvsp.GetParmLinkLowerLimitFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkLowerLimitFlag</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetParmLinkLowerLimitFlag" title="openvsp.SetParmLinkLowerLimitFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkLowerLimitFlag</span></code></a>(std, bool flag)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetParmLinkUpperLimitFlag" title="openvsp.GetParmLinkUpperLimitFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetParmLinkUpperLimitFlag</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetParmLinkUpperLimitFlag" title="openvsp.SetParmLinkUpperLimitFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetParmLinkUpperLimitFlag</span></code></a>(std, bool flag)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CopyAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CopyAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CopyAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CopyAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddParmLink">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddParmLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_a_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_b_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddParmLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddParmLink" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumParmLinks">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumParmLinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumParmLinks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumParmLinks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkAParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkAParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkAParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkAParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkBParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkBParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkBParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkBParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkAParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkAParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkAParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkAParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkBParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkBParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkBParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkBParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelParmLink">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelParmLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelParmLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelParmLink" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllParmLinks">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllParmLinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllParmLinks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllParmLinks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortParmLinksByA">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortParmLinksByA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortParmLinksByA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortParmLinksByA" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortParmLinksByB">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortParmLinksByB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortParmLinksByB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortParmLinksByB" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.LinkAllComp">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">LinkAllComp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_a_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_b_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#LinkAllComp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.LinkAllComp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.LinkAllGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">LinkAllGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_a_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_b_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#LinkAllGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.LinkAllGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkOffsetFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkOffsetFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkOffsetFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkOffsetFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkOffsetFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkOffsetFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkOffsetFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkOffsetFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkScaleFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkScaleFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkScaleFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkScaleFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkScaleFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkScaleFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkScaleFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkScaleFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkLowerLimitFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkLowerLimitFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkLowerLimitFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkLowerLimitFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkLowerLimitFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkLowerLimitFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkLowerLimitFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkLowerLimitFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetParmLinkUpperLimitFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetParmLinkUpperLimitFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetParmLinkUpperLimitFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetParmLinkUpperLimitFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetParmLinkUpperLimitFlag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetParmLinkUpperLimitFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">link_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetParmLinkUpperLimitFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetParmLinkUpperLimitFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Parm Link Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.CopyAirfoil"><code class="docutils literal notranslate"><span class="pre">CopyAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddParmLink"><code class="docutils literal notranslate"><span class="pre">AddParmLink()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumParmLinks"><code class="docutils literal notranslate"><span class="pre">GetNumParmLinks()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkID"><code class="docutils literal notranslate"><span class="pre">GetParmLinkID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkAParm"><code class="docutils literal notranslate"><span class="pre">GetParmLinkAParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkBParm"><code class="docutils literal notranslate"><span class="pre">GetParmLinkBParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkAParm"><code class="docutils literal notranslate"><span class="pre">SetParmLinkAParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkBParm"><code class="docutils literal notranslate"><span class="pre">SetParmLinkBParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelParmLink"><code class="docutils literal notranslate"><span class="pre">DelParmLink()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllParmLinks"><code class="docutils literal notranslate"><span class="pre">DelAllParmLinks()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortParmLinksByA"><code class="docutils literal notranslate"><span class="pre">SortParmLinksByA()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortParmLinksByB"><code class="docutils literal notranslate"><span class="pre">SortParmLinksByB()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.LinkAllComp"><code class="docutils literal notranslate"><span class="pre">LinkAllComp()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.LinkAllGroup"><code class="docutils literal notranslate"><span class="pre">LinkAllGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkOffsetFlag"><code class="docutils literal notranslate"><span class="pre">GetParmLinkOffsetFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkOffsetFlag"><code class="docutils literal notranslate"><span class="pre">SetParmLinkOffsetFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkScaleFlag"><code class="docutils literal notranslate"><span class="pre">GetParmLinkScaleFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkScaleFlag"><code class="docutils literal notranslate"><span class="pre">SetParmLinkScaleFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkLowerLimitFlag"><code class="docutils literal notranslate"><span class="pre">GetParmLinkLowerLimitFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkLowerLimitFlag"><code class="docutils literal notranslate"><span class="pre">SetParmLinkLowerLimitFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetParmLinkUpperLimitFlag"><code class="docutils literal notranslate"><span class="pre">GetParmLinkUpperLimitFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetParmLinkUpperLimitFlag"><code class="docutils literal notranslate"><span class="pre">SetParmLinkUpperLimitFlag()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Parm.html"
+                          title="previous chapter">Parm Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="PointCloud.html"
+                          title="next chapter">Point Cloud Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/ParmLink.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PointCloud.html" title="Point Cloud Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Parm.html" title="Parm Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parm Link Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -15,6 +15,7 @@
 #include "SVGUtil.h"
 #include "StringUtil.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "SubSurfaceMgr.h"
 #include "HingeGeom.h"
 #include "HumanGeom.h"
@@ -47,16 +48,6 @@ GeomType::GeomType( int id, const string& name, bool fixed_flag, const string& m
 // suppress the implicit move operations that vector<GeomType> relies on to avoid deep copies.
 static_assert( std::is_nothrow_move_constructible< GeomType >::value, "GeomType must be nothrow move constructible" );
 static_assert( std::is_nothrow_move_assignable< GeomType >::value, "GeomType must be nothrow move assignable" );
-
-void GeomType::CopyFrom( const GeomType & t )
-{
-    m_Type = t.m_Type;
-    m_Name = t.m_Name;
-    m_FixedFlag = t.m_FixedFlag;
-    m_ModuleName = t.m_ModuleName;
-    m_DisplayName = t.m_DisplayName;
-    m_GeomID = t.m_GeomID;
-}
 
 
 
@@ -495,6 +486,16 @@ void GeomBase::RemoveChildID( const string &id )
     vector_remove_val( m_ChildIDVec, id );
 }
 
+void GeomBase::AddStepChildID( const string &id )
+{
+    if ( vector_contains_val( m_StepChildIDVec, id ) )
+    {
+        return;
+    }
+
+    m_StepChildIDVec.push_back( id );
+}
+
 void GeomBase::RemoveStepChildID( const string &id )
 {
     vector_remove_val( m_StepChildIDVec, id );
@@ -539,9 +540,19 @@ xmlNodePtr GeomBase::EncodeXml( xmlNodePtr & node )
             XmlUtil::AddStringNode( child_node, "ID", m_ChildIDVec[i] );
         }
 
+        Vehicle* veh = VehicleMgr.GetVehicle();
+
         xmlNodePtr sclist_node = xmlNewChild( geombase_node, nullptr, BAD_CAST "Step_Child_List", nullptr );
         for ( int i = 0 ; i < ( int )m_StepChildIDVec.size() ; i++ )
         {
+            // A Geom on the clipboard is registered with the Geoms its points name, but it is
+            // not part of the model and is not written, so it is left out here.  It becomes a
+            // step child like any other once it is pasted.
+            if ( veh && veh->IDinClipboard( m_StepChildIDVec[i] ) )
+            {
+                continue;
+            }
+
             xmlNodePtr schild_node = xmlNewChild( sclist_node, nullptr, BAD_CAST "Step_Child", nullptr );
             XmlUtil::AddStringNode( schild_node, "ID", m_StepChildIDVec[i] );
         }
@@ -559,7 +570,13 @@ xmlNodePtr GeomBase::DecodeXml( xmlNodePtr & node )
         //m_Type.m_Name   = XmlUtil::FindString( child_node, "TypeName", m_Type.m_Name );
         //m_Type.m_Type   = XmlUtil::FindInt( child_node, "TypeID", m_Type.m_Type );
         m_Type.m_FixedFlag = !!XmlUtil::FindInt( geombase_node, "TypeFixed", m_Type.m_FixedFlag );
-        m_ParentID = ParmMgr.RemapID( XmlUtil::FindString( geombase_node, "ParentID", m_ParentID ) );
+        // The parent only comes across if it was part of the same read or copy.  Anything
+        // else and this Geom lands at the top level, where the paste puts it.
+        m_ParentID = IDMgr.RemapCopiedID( XmlUtil::FindString( geombase_node, "ParentID", m_ParentID ) );
+        if ( m_ParentID.empty() )
+        {
+            m_ParentID = "NONE";
+        }
 
         m_ChildIDVec.clear();
 
@@ -571,7 +588,11 @@ xmlNodePtr GeomBase::DecodeXml( xmlNodePtr & node )
             for ( int i = 0 ; i < num_children ; i++ )
             {
                 xmlNodePtr n = XmlUtil::GetNode( cl_node, "Child", i );
-                m_ChildIDVec.push_back( ParmMgr.RemapID( XmlUtil::FindString( n, "ID", string() ) ) );
+                string child = IDMgr.RemapCopiedID( XmlUtil::FindString( n, "ID", string() ) );
+                if ( !child.empty() )
+                {
+                    m_ChildIDVec.push_back( child );
+                }
             }
         }
 
@@ -585,7 +606,11 @@ xmlNodePtr GeomBase::DecodeXml( xmlNodePtr & node )
             for ( int i = 0 ; i < num_stepchildren ; i++ )
             {
                 xmlNodePtr n = XmlUtil::GetNode( scl_node, "Step_Child", i );
-                m_StepChildIDVec.push_back( ParmMgr.RemapID( XmlUtil::FindString( n, "ID", string() ) ) );
+                string child = IDMgr.RemapCopiedID( XmlUtil::FindString( n, "ID", string() ) );
+                if ( !child.empty() )
+                {
+                    AddStepChildID( child );
+                }
             }
         }
     }
@@ -1398,6 +1423,49 @@ void GeomXForm::AcceptScale()
     m_LastScale = 1;
 }
 
+//==== Scale (template method) ====//
+// Compute the incremental scale factor, let the derived Geom scale its own dimensional Parms and
+// geom-specific nested containers (ApplyScale), then always recurse into the Geom-common
+// containers.  Only reached when the scale actually changed (see Geom::Update).
+void Geom::Scale()
+{
+    double currentScale = m_Scale() / m_LastScale();
+
+    ApplyScale( currentScale );
+    ScaleCommonSubComponents( currentScale );
+
+    m_LastScale = m_Scale();
+}
+
+// Scale the dimensional Parms of the containers that every Geom can carry: sub-surfaces, CFD mesh
+// sources, and FEA structures.  Each container knows which of its own Parms are dimensional.
+void Geom::ScaleCommonSubComponents( double currentScale )
+{
+    for ( int i = 0; i < ( int )m_SubSurfVec.size(); i++ )
+    {
+        if ( m_SubSurfVec[i] )
+        {
+            m_SubSurfVec[i]->Scale( currentScale );
+        }
+    }
+
+    for ( int i = 0; i < ( int )m_MainSourceVec.size(); i++ )
+    {
+        if ( m_MainSourceVec[i] )
+        {
+            m_MainSourceVec[i]->Scale( currentScale );
+        }
+    }
+
+    for ( int i = 0; i < ( int )m_FeaStructVec.size(); i++ )
+    {
+        if ( m_FeaStructVec[i] )
+        {
+            m_FeaStructVec[i]->Scale( currentScale );
+        }
+    }
+}
+
 bool GeomXForm::RigidAttachedToParent() const
 {
     if ( IsParentJoint() )
@@ -1764,16 +1832,6 @@ void Geom::NoShow()
 }
 
 //==== Copy Geometry ====//
-void Geom::CopyFrom( Geom* geom )
-{
-    xmlNodePtr root = xmlNewNode( nullptr, ( const xmlChar * )"Vsp_Geometry" );
-
-    geom->EncodeGeom( root );
-    DecodeGeom( root );
-
-    xmlFreeNode( root );
-}
-
 //==== Update ====//
 void Geom::Update( bool fullupdate )
 {
@@ -3931,7 +3989,7 @@ void Geom::ReadV2File( xmlNodePtr &root )
     m_WLoc = XmlUtil::FindDouble( root, "V_Attach", m_WLoc() );
 
     //==== Read Pointer ID and Parent/Children Info ====//
-    string newID = ParmMgr.ForceRemapID( XmlUtil::FindString( root, "PtrID", m_ID ), 10 );
+    string newID = IDMgr.ForceRemapID( XmlUtil::FindString( root, "PtrID", m_ID ), 10 );
 
     if( newID.compare( m_ID ) != 0 )
     {
@@ -3941,7 +3999,7 @@ void Geom::ReadV2File( xmlNodePtr &root )
     string parent = XmlUtil::FindString( root, "Parent_PtrID", m_ParentID );
     if ( parent != "0" )
     {
-        m_ParentID = ParmMgr.ForceRemapID( parent , 10 );
+        m_ParentID = IDMgr.ForceRemapID( parent , 10 );
     }
 
     m_ChildIDVec.clear();
@@ -3949,7 +4007,7 @@ void Geom::ReadV2File( xmlNodePtr &root )
     for (  i = 0 ; i < numChildren ; i++ )
     {
         xmlNodePtr child_node = XmlUtil::GetNode( root, "Children_PtrID", i );
-        m_ChildIDVec.push_back( ParmMgr.ForceRemapID( XmlUtil::ExtractString( child_node ) , 10 ) );
+        m_ChildIDVec.push_back( IDMgr.ForceRemapID( XmlUtil::ExtractString( child_node ) , 10 ) );
     }
 
     //==== Read CFD Mesh Sources ====//
@@ -4507,14 +4565,36 @@ void Geom::CreateDegenGeom( DegenGeom &degenGeom, const vector< vector< vec3d > 
     degenGeom.setParentGeom( this );
     degenGeom.setSurfNum( isurf );
     degenGeom.setFlipNormal( flipnormal );
-    degenGeom.setMainSurfInd( m_MainSurfIndxVec[isurf] );
-    degenGeom.setSymCopyInd( m_SurfCopyIndx[isurf] );
+
+    // The symmetry tables are indexed by surface number, and a Geom with no surface of its own
+    // -- a wireframe, whose points are already transformed -- has none of them: UpdateSymmAttach
+    // sizes them by the number of main surfaces.  Such a Geom is its own main surface and its
+    // own symmetry copy, with no relative transform.
+    int main_surf_indx = 0;
+    int sym_copy_indx = 0;
+    Matrix4d trans_mat;
+
+    if ( isurf >= 0 && isurf < ( int )m_MainSurfIndxVec.size() )
+    {
+        main_surf_indx = m_MainSurfIndxVec[isurf];
+    }
+    if ( isurf >= 0 && isurf < ( int )m_SurfCopyIndx.size() )
+    {
+        sym_copy_indx = m_SurfCopyIndx[isurf];
+    }
+    if ( isurf >= 0 && isurf < ( int )m_TransMatVec.size() )
+    {
+        trans_mat = m_TransMatVec[isurf];
+    }
+
+    degenGeom.setMainSurfInd( main_surf_indx );
+    degenGeom.setSymCopyInd( sym_copy_indx );
     degenGeom.setCfdSurfType( cfdsurftype );
 
     vector < double > tmatvec( 16 );
     for ( int j = 0; j < 16; j++ )
     {
-        tmatvec[j] = m_TransMatVec[isurf].data()[ j ];
+        tmatvec[j] = trans_mat.data()[ j ];
     }
     degenGeom.setTransMat( tmatvec );
 
@@ -4566,7 +4646,7 @@ void Geom::CreateDegenGeom( DegenGeom &degenGeom, const vector< vector< vec3d > 
     // degenerate subsurfaces
     for ( int j = 0; j < m_SubSurfVec.size(); j++ )
     {
-        if ( m_SubSurfVec[j]->m_MainSurfIndx() == -1 || m_MainSurfIndxVec[isurf] == m_SubSurfVec[j]->m_MainSurfIndx() )
+        if ( m_SubSurfVec[j]->m_MainSurfIndx() == -1 || main_surf_indx == m_SubSurfVec[j]->m_MainSurfIndx() )
         {
             degenGeom.addDegenSubSurf( m_SubSurfVec[j], isurf );    //TODO is there a way to eliminate having to send in the surf index "i"
 
@@ -4595,7 +4675,7 @@ const VspSurf* Geom::GetSurfPtr( int indx ) const
     {
         return &m_SurfVec[ indx ];
     }
-    assert( true );
+    assert( false );
     return nullptr;
 }
 
@@ -4606,7 +4686,7 @@ const VspSurf* Geom::GetMainSurfPtr( int indx ) const
     {
         return &m_MainSurfVec[ indx ];
     }
-    assert( true );
+    assert( false );
     return nullptr;
 }
 
@@ -5882,9 +5962,23 @@ void Geom::ChangeID( const string &id )
 
     ParmContainer::ChangeID( id );
 
+    // The component ID as well as the parent container: the mesher matches a subsurface to a
+    // surface by comparing that against this Geom's ID, so a Geom whose ID changes has to tell
+    // its subsurfaces both halves or they stop matching anything.
     for ( int i = 0 ; i < ( int )m_SubSurfVec.size() ; i ++ )
     {
-        m_SubSurfVec[i]->SetParentContainer( GetID() );
+        m_SubSurfVec[i]->SetCompID( GetID() );
+    }
+
+    // And the structures built on it, which resolve this Geom by ID from about forty places --
+    // every one of which would find nothing, leaving a structure that cannot be meshed and says
+    // nothing about why.
+    for ( int i = 0 ; i < ( int )m_FeaStructVec.size() ; i ++ )
+    {
+        if ( m_FeaStructVec[i] )
+        {
+            m_FeaStructVec[i]->SetParentGeomID( GetID() );
+        }
     }
 }
 

@@ -2,6 +2,16 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - upstream OpenVSP 3.52.2
+
+- Integrate upstream geometry, inertia, tessellation and Reynolds fixes while
+  retaining custom solver features. Resolve overlapping Reynolds corrections
+  with one equivalent formula and unchanged numerical tolerances.
+- Migrate active parity to the official 3.52.2 Python 3.13 distribution;
+  preserve 3.51.2 as historical evidence and retire its active shell exception.
+- Reject silent solver-path fallback during parity. See
+  [provenance, conflict review and validation](parity_tests/UPSTREAM_3_52_2.md).
+
 ## Unreleased - aerodynamic lookup integrity
 
 - Reject degenerate input cells and nonfinite solutions before successful State

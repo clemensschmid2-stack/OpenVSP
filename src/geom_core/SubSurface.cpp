@@ -8,7 +8,6 @@
 // Alex Gary
 //////////////////////////////////////////////////////////////////////
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "SubSurface.h"
@@ -17,6 +16,7 @@
 #include "PropGeom.h"
 #include "Vehicle.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "StructureMgr.h"
 #include "Vec2d.h"
 #include "VspUtil.h"
@@ -630,8 +630,17 @@ void SubSurface::UpdateOrientation()
     vector < int > symms;
     geom->GetSymmIndexs( isurf, symms );
     vector<Matrix4d> transMats = geom->GetFeaTransMatVec();
+
+    // symms should hold one index per symmetry copy and each index should reach a transform.
+    // The sibling callers assert that, which the release build drops, so check it here: a
+    // surface index the geom no longer has leaves symms empty and this walks off the end.
     for ( size_t j = 1; j < ncopy; j++ )
     {
+        if ( j >= symms.size() || symms[ j ] < 0 || symms[ j ] >= ( int )transMats.size() )
+        {
+            continue;
+        }
+
         m_FeaOrientationVec[j] = transMats[ symms[ j ] ].xformnorm( m_FeaOrientationVec[j] );
     }
 }
@@ -693,8 +702,8 @@ xmlNodePtr SubSurface::DecodeXml( xmlNodePtr & node )
 
     if ( node )
     {
-        m_FeaPropertyID = ParmMgr.RemapID( XmlUtil::FindString( node, "FeaPropertyID", m_FeaPropertyID ) );
-        m_CapFeaPropertyID = ParmMgr.RemapID( XmlUtil::FindString( node, "CapFeaPropertyID", m_CapFeaPropertyID ) );
+        m_FeaPropertyID = IDMgr.RemapRefID( XmlUtil::FindString( node, "FeaPropertyID", m_FeaPropertyID ) );
+        m_CapFeaPropertyID = IDMgr.RemapRefID( XmlUtil::FindString( node, "CapFeaPropertyID", m_CapFeaPropertyID ) );
     }
 
     return node;
@@ -1288,6 +1297,16 @@ SSXSecCurve::~SSXSecCurve()
 
 }
 
+void SSXSecCurve::Scale( double currentScale )
+{
+    // The sub-surface's cross-section curve carries this sub-surface's dimensional shape
+    // (width, height, ...); scaling it scales the sub-surface region.
+    if ( m_XSCurve )
+    {
+        m_XSCurve->SetScale( currentScale );
+    }
+}
+
 // Main Update Routine
 void SSXSecCurve::Update()
 {
@@ -1634,26 +1653,33 @@ void SSIntersect::Intersect()
     DeleteTMeshVec( inttmv );
 }
 
-void SSIntersect::IntersectBezier()
-{
-    vector < vector < vec3d > > ptchains;
-    vector < vector < vec3d > > uwchains;
-
-    vsp::LimitedIntersectSurfaces( { m_CompID, m_IntersectID }, ptchains, uwchains );
-
-    m_NCurves.Set( uwchains.size() );
-
-    if ( m_ICurve() >= m_NCurves() )
-    {
-        m_ICurve.Set( 0 );
-    }
-
-    // Set subsurface from chain
-    if ( uwchains.size() > m_ICurve() )
-    {
-        SetFromUWChain( uwchains[ m_ICurve() ] );
-    }
-}
+// An earlier way of making an intersection subsurface, working from the Bezier surfaces rather than
+// from a discrete mesh.  It worked; the discrete path was taken instead.  Kept for reference.
+//
+// vsp::LimitedIntersectSurfaces was only ever in the API so that this could reach it, which is a
+// layering violation, and it has since been taken back out.  Reviving this wants that call put back
+// or replaced with a direct one to SurfaceIntersectionMgr.
+//
+// void SSIntersect::IntersectBezier()
+// {
+//     vector < vector < vec3d > > ptchains;
+//     vector < vector < vec3d > > uwchains;
+//
+//     vsp::LimitedIntersectSurfaces( { m_CompID, m_IntersectID }, ptchains, uwchains );
+//
+//     m_NCurves.Set( uwchains.size() );
+//
+//     if ( m_ICurve() >= m_NCurves() )
+//     {
+//         m_ICurve.Set( 0 );
+//     }
+//
+//     // Set subsurface from chain
+//     if ( uwchains.size() > m_ICurve() )
+//     {
+//         SetFromUWChain( uwchains[ m_ICurve() ] );
+//     }
+// }
 
 void SSIntersect::SetFromUWChain( vector < vec3d > uwchain )
 {
@@ -1791,7 +1817,7 @@ xmlNodePtr SSIntersect::DecodeXml(  xmlNodePtr & node  )
 {
     xmlNodePtr xscrv_node = SSXSecCurve::DecodeXml( node );
 
-    m_IntersectID = ParmMgr.RemapID( XmlUtil::FindString( node, "IntersectID", m_IntersectID ) );
+    m_IntersectID = IDMgr.RemapRefID( XmlUtil::FindString( node, "IntersectID", m_IntersectID ) );
 
     return xscrv_node;
 }
@@ -1869,6 +1895,14 @@ SSControlSurf::SSControlSurf( const string& compID, int type ) : SubSurface( com
 SSControlSurf::~SSControlSurf()
 {
 
+}
+
+void SSControlSurf::Scale( double currentScale )
+{
+    // Absolute control-surface chord distances (authoritative when m_AbsRelFlag selects absolute
+    // lengths; the fractional m_StartLenFrac / m_EndLenFrac Parms are dimensionless and untouched).
+    m_StartLength.Set( m_StartLength() * currentScale );
+    m_EndLength.Set( m_EndLength() * currentScale );
 }
 
 //==== Update Method ===//

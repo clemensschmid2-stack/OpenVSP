@@ -1,0 +1,77 @@
+Variable Preset Functions
+=========================
+
+This group of functions can be used to add, remove, and modify Variable Presets through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AddVarPresetGroup
+    AddVarPresetSetting
+    AddVarPresetParm
+    DeleteAllVarPresetGroups
+    DeleteVarPresetGroup
+    DeleteAllVarPresetSettings
+    DeleteVarPresetSetting
+    DeleteVarPresetParm
+    SetVarPresetParmVal
+    GetVarPresetParmVal
+    GetGroupName
+    GetSettingName
+    SetGroupName
+    SetSettingName
+    GetVarPresetGroups
+    GetVarPresetSettings
+    GetVarPresetParmIDs
+    GetVarPresetParmVals
+    SetVarPresetParmVals
+    SaveVarPresetParmVals
+    ApplyVarPresetSetting
+
+
+Details
+-------
+
+.. autofunction:: AddVarPresetGroup
+
+.. autofunction:: AddVarPresetSetting
+
+.. autofunction:: AddVarPresetParm
+
+.. autofunction:: DeleteAllVarPresetGroups
+
+.. autofunction:: DeleteVarPresetGroup
+
+.. autofunction:: DeleteAllVarPresetSettings
+
+.. autofunction:: DeleteVarPresetSetting
+
+.. autofunction:: DeleteVarPresetParm
+
+.. autofunction:: SetVarPresetParmVal
+
+.. autofunction:: GetVarPresetParmVal
+
+.. autofunction:: GetGroupName
+
+.. autofunction:: GetSettingName
+
+.. autofunction:: SetGroupName
+
+.. autofunction:: SetSettingName
+
+.. autofunction:: GetVarPresetGroups
+
+.. autofunction:: GetVarPresetSettings
+
+.. autofunction:: GetVarPresetParmIDs
+
+.. autofunction:: GetVarPresetParmVals
+
+.. autofunction:: SetVarPresetParmVals
+
+.. autofunction:: SaveVarPresetParmVals
+
+.. autofunction:: ApplyVarPresetSetting
+

@@ -1,0 +1,38 @@
+API Error Functions
+===================
+
+Handling of OpenVSP ErrorObj information is accomplished through this group of API functions.
+
+.. currentmodule:: openvsp
+
+ErrorMgrSingleton
+-----------------
+
+.. autosummary::
+
+    ErrorMgrSingleton.GetErrorLastCallFlag
+    ErrorMgrSingleton.GetNumTotalErrors
+    ErrorMgrSingleton.PopLastError
+    ErrorMgrSingleton.GetLastError
+    ErrorMgrSingleton.SilenceErrors
+    ErrorMgrSingleton.PrintOnErrors
+    ErrorMgrSingleton.getInstance
+
+.. autoclass:: ErrorMgrSingleton
+    :members:
+    :undoc-members:
+    :special-members: __rmul__, __neg__, __setitem__, __len__, __repr__
+
+ErrorObj
+--------
+
+.. autosummary::
+
+    ErrorObj.GetErrorCode
+    ErrorObj.GetErrorString
+
+.. autoclass:: ErrorObj
+    :members:
+    :undoc-members:
+    :special-members: __rmul__, __neg__, __setitem__, __len__, __repr__
+

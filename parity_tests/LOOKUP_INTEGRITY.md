@@ -63,10 +63,10 @@ CTest. It checks geometry degeneracy across length scales, finite-value rejectio
 dimensional Reynolds invariance, and the empirical force reference-Re derivative
 against central finite differences both above and below the existing clamp.
 
-On Windows, use Python 3.13 compatible with the pinned official 3.51.2 API:
+On Windows, use Python 3.13 compatible with the pinned official 3.52.2 API:
 
 ```text
-python parity_tests/run_lookup_review_regression.py --solver <candidate-vspaero.exe> --official reference_builds/OpenVSP-3.51.2-win64 --output <new-empty-directory>
+python parity_tests/run_lookup_review_regression.py --solver <candidate-vspaero.exe> --official reference_builds/OpenVSP-3.52.2-win64 --output <new-empty-directory>
 ```
 
 The official API creates one small rectangular wing without invoking its solver.
@@ -93,8 +93,8 @@ close it with a bounded field/force comparison at independently sampled wake
 positions. The complete optimizer build and official-reference gate remain
 required where applicable.
 
-The Reynolds correction intentionally changes empirical viscous coefficients
-relative to official 3.51.2's dimensional formula. Existing reference binaries,
-comparison fields and tolerances are untouched. Any resulting strict parity
-failure must remain visible and be resolved under the repository acceptance
-policy; these targeted checks do not waive it.
+The Reynolds correction agrees with upstream 3.52.2. The user authorized a
+source/reference migration on 2026-09-28 after upstream confirmed the scaling
+bug. The old 3.51.2 reference remains historical evidence; the active immutable
+reference is official 3.52.2. Comparison fields and tolerances are unchanged.
+See [migration and provenance](UPSTREAM_3_52_2.md).

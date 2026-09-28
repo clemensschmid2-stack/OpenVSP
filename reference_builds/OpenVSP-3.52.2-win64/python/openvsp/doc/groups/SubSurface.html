@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sub-Surface Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Variable Preset Functions" href="VariablePreset.html" />
+    <link rel="prev" title="StackGeom Functions" href="StackGeom.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VariablePreset.html" title="Variable Preset Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="StackGeom.html" title="StackGeom Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sub-Surface Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sub-surface-functions">
+<h1>Sub-Surface Functions<a class="headerlink" href="#sub-surface-functions" title="Link to this heading">¶</a></h1>
+<p>Functions related to Sub-Surfaces are defined in this group.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddSubSurf" title="openvsp.AddSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddSubSurf</span></code></a>(std, int type, int surfindex=0)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetSubSurf" title="openvsp.GetSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurf</span></code></a>(-&gt; std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DeleteSubSurf" title="openvsp.DeleteSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteSubSurf</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ReorderSubSurf" title="openvsp.ReorderSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReorderSubSurf</span></code></a>(std, std, int reorder_type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetSubSurfName" title="openvsp.SetSubSurfName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetSubSurfName</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetSubSurfName" title="openvsp.GetSubSurfName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurfName</span></code></a>(-&gt; std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetSubSurfIndex" title="openvsp.GetSubSurfIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurfIndex</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetSubSurfIDVec" title="openvsp.GetSubSurfIDVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurfIDVec</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAllSubSurfIDs" title="openvsp.GetAllSubSurfIDs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllSubSurfIDs</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumSubSurf" title="openvsp.GetNumSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumSubSurf</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetSubSurfType" title="openvsp.GetSubSurfType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurfType</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetSubSurfParmIDs" title="openvsp.GetSubSurfParmIDs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetSubSurfParmIDs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.IntersectSubSurf" title="openvsp.IntersectSubSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntersectSubSurf</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetIntersectSubSurfGeomID" title="openvsp.GetIntersectSubSurfGeomID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetIntersectSubSurfGeomID</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetIntersectSubSurfGeomID" title="openvsp.SetIntersectSubSurfGeomID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetIntersectSubSurfGeomID</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surfindex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddSubSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurf" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteSubSurf" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReorderSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReorderSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">reorder_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReorderSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReorderSubSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetSubSurfName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetSubSurfName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetSubSurfName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetSubSurfName" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetSubSurfName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurfName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurfName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurfName" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurfIndex">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurfIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurfIndex" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurfIDVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfIDVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurfIDVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurfIDVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAllSubSurfIDs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAllSubSurfIDs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAllSubSurfIDs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAllSubSurfIDs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumSubSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurfType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurfType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurfType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetSubSurfParmIDs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetSubSurfParmIDs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetSubSurfParmIDs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetSubSurfParmIDs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.IntersectSubSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">IntersectSubSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#IntersectSubSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.IntersectSubSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetIntersectSubSurfGeomID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetIntersectSubSurfGeomID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetIntersectSubSurfGeomID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetIntersectSubSurfGeomID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetIntersectSubSurfGeomID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetIntersectSubSurfGeomID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">sub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetIntersectSubSurfGeomID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetIntersectSubSurfGeomID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Sub-Surface Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.AddSubSurf"><code class="docutils literal notranslate"><span class="pre">AddSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurf"><code class="docutils literal notranslate"><span class="pre">GetSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteSubSurf"><code class="docutils literal notranslate"><span class="pre">DeleteSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReorderSubSurf"><code class="docutils literal notranslate"><span class="pre">ReorderSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetSubSurfName"><code class="docutils literal notranslate"><span class="pre">SetSubSurfName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurfName"><code class="docutils literal notranslate"><span class="pre">GetSubSurfName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurfIndex"><code class="docutils literal notranslate"><span class="pre">GetSubSurfIndex()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurfIDVec"><code class="docutils literal notranslate"><span class="pre">GetSubSurfIDVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAllSubSurfIDs"><code class="docutils literal notranslate"><span class="pre">GetAllSubSurfIDs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumSubSurf"><code class="docutils literal notranslate"><span class="pre">GetNumSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurfType"><code class="docutils literal notranslate"><span class="pre">GetSubSurfType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetSubSurfParmIDs"><code class="docutils literal notranslate"><span class="pre">GetSubSurfParmIDs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.IntersectSubSurf"><code class="docutils literal notranslate"><span class="pre">IntersectSubSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetIntersectSubSurfGeomID"><code class="docutils literal notranslate"><span class="pre">GetIntersectSubSurfGeomID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetIntersectSubSurfGeomID"><code class="docutils literal notranslate"><span class="pre">SetIntersectSubSurfGeomID()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="StackGeom.html"
+                          title="previous chapter">StackGeom Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="VariablePreset.html"
+                          title="next chapter">Variable Preset Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/SubSurface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VariablePreset.html" title="Variable Preset Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="StackGeom.html" title="StackGeom Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sub-Surface Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

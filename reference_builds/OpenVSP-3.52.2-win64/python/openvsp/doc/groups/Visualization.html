@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Visualization Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VSPAERO Actuator Disk and Propeller Functions" href="VSPAERODiskAndProp.html" />
+    <link rel="prev" title="Vehicle Functions" href="Vehicle.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VSPAERODiskAndProp.html" title="VSPAERO Actuator Disk and Propeller Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Vehicle.html" title="Vehicle Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Visualization Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="visualization-functions">
+<h1>Visualization Functions<a class="headerlink" href="#visualization-functions" title="Link to this heading">¶</a></h1>
+<p>The following group of functions allow for the OpenVSP GUI to be manipulated through the API.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.InitGUI" title="openvsp.InitGUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InitGUI</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.StartGUI" title="openvsp.StartGUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StartGUI</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.EnableStopGUIMenuItem" title="openvsp.EnableStopGUIMenuItem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnableStopGUIMenuItem</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DisableStopGUIMenuItem" title="openvsp.DisableStopGUIMenuItem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DisableStopGUIMenuItem</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.StopGUI" title="openvsp.StopGUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StopGUI</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PopupMsg" title="openvsp.PopupMsg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PopupMsg</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.UpdateGUI" title="openvsp.UpdateGUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateGUI</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.IsGUIBuild" title="openvsp.IsGUIBuild"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IsGUIBuild</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Lock" title="openvsp.Lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Lock</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Unlock" title="openvsp.Unlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unlock</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.IsEventLoopRunning" title="openvsp.IsEventLoopRunning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IsEventLoopRunning</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ScreenGrab" title="openvsp.ScreenGrab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScreenGrab</span></code></a>(std, int w, int h, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetViewAxis" title="openvsp.SetViewAxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetViewAxis</span></code></a>(bool vaxis)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetShowBorders" title="openvsp.SetShowBorders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetShowBorders</span></code></a>(bool brdr)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetGeomDrawType" title="openvsp.SetGeomDrawType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGeomDrawType</span></code></a>(std, int type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetGeomWireColor" title="openvsp.SetGeomWireColor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGeomWireColor</span></code></a>(std, int r, int g, int b)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetGeomDisplayType" title="openvsp.SetGeomDisplayType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGeomDisplayType</span></code></a>(std, int type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetGeomDrawType" title="openvsp.GetGeomDrawType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetGeomDrawType</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetGeomDisplayType" title="openvsp.GetGeomDisplayType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetGeomDisplayType</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetGeomWireColor" title="openvsp.GetGeomWireColor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetGeomWireColor</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetGeomMaterialName" title="openvsp.GetGeomMaterialName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetGeomMaterialName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddMaterial" title="openvsp.AddMaterial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddMaterial</span></code></a>(std, vec3d ambient, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetMaterialNames" title="openvsp.GetMaterialNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetMaterialNames</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumLights" title="openvsp.GetNumLights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumLights</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindLight" title="openvsp.FindLight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindLight</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetBackground" title="openvsp.SetBackground"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBackground</span></code></a>(double r, double g, double b)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAllViews" title="openvsp.SetAllViews"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAllViews</span></code></a>(int view)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetView" title="openvsp.SetView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetView</span></code></a>(int viewport, int view)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FitAllViews" title="openvsp.FitAllViews"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitAllViews</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ResetViews" title="openvsp.ResetViews"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResetViews</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetWindowLayout" title="openvsp.SetWindowLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetWindowLayout</span></code></a>(int r, int c)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetGUIElementDisable" title="openvsp.SetGUIElementDisable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGUIElementDisable</span></code></a>(int e, bool state)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetGUIScreenDisable" title="openvsp.SetGUIScreenDisable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGUIScreenDisable</span></code></a>(int s, bool state)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetGeomScreenDisable" title="openvsp.SetGeomScreenDisable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetGeomScreenDisable</span></code></a>(int s, bool state)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.HideScreen" title="openvsp.HideScreen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HideScreen</span></code></a>(int s)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ShowScreen" title="openvsp.ShowScreen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShowScreen</span></code></a>(int s)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.InitGUI">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">InitGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#InitGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.InitGUI" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.StartGUI">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">StartGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#StartGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.StartGUI" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.EnableStopGUIMenuItem">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">EnableStopGUIMenuItem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#EnableStopGUIMenuItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.EnableStopGUIMenuItem" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DisableStopGUIMenuItem">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DisableStopGUIMenuItem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DisableStopGUIMenuItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DisableStopGUIMenuItem" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.StopGUI">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">StopGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#StopGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.StopGUI" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PopupMsg">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PopupMsg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PopupMsg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PopupMsg" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UpdateGUI">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UpdateGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#UpdateGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UpdateGUI" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.IsGUIBuild">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">IsGUIBuild</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#IsGUIBuild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.IsGUIBuild" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.Lock">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">Lock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Lock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Lock" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.Unlock">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">Unlock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Unlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Unlock" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.IsEventLoopRunning">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">IsEventLoopRunning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#IsEventLoopRunning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.IsEventLoopRunning" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ScreenGrab">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ScreenGrab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">transparentBG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">autocrop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ScreenGrab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ScreenGrab" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetViewAxis">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetViewAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">vaxis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetViewAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetViewAxis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetShowBorders">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetShowBorders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">brdr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetShowBorders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetShowBorders" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGeomDrawType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGeomDrawType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGeomDrawType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGeomDrawType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGeomWireColor">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGeomWireColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGeomWireColor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGeomWireColor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGeomDisplayType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGeomDisplayType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGeomDisplayType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGeomDisplayType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetGeomDrawType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetGeomDrawType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetGeomDrawType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetGeomDrawType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetGeomDisplayType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetGeomDisplayType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetGeomDisplayType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetGeomDisplayType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetGeomWireColor">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetGeomWireColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetGeomWireColor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetGeomWireColor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetGeomMaterialName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetGeomMaterialName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetGeomMaterialName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetGeomMaterialName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddMaterial">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddMaterial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">ambient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">diffuse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">specular</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">emissive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">shininess</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddMaterial" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetMaterialNames">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetMaterialNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetMaterialNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetMaterialNames" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumLights">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumLights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumLights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumLights" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindLight">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindLight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindLight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindLight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBackground">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBackground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBackground"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBackground" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAllViews">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAllViews</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAllViews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAllViews" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetView">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">viewport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetView" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FitAllViews">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FitAllViews</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FitAllViews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FitAllViews" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ResetViews">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ResetViews</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ResetViews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ResetViews" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetWindowLayout">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetWindowLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetWindowLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetWindowLayout" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGUIElementDisable">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGUIElementDisable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGUIElementDisable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGUIElementDisable" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGUIScreenDisable">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGUIScreenDisable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGUIScreenDisable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGUIScreenDisable" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetGeomScreenDisable">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetGeomScreenDisable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetGeomScreenDisable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetGeomScreenDisable" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.HideScreen">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">HideScreen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#HideScreen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.HideScreen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ShowScreen">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ShowScreen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ShowScreen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ShowScreen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Visualization Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.InitGUI"><code class="docutils literal notranslate"><span class="pre">InitGUI()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.StartGUI"><code class="docutils literal notranslate"><span class="pre">StartGUI()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.EnableStopGUIMenuItem"><code class="docutils literal notranslate"><span class="pre">EnableStopGUIMenuItem()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DisableStopGUIMenuItem"><code class="docutils literal notranslate"><span class="pre">DisableStopGUIMenuItem()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.StopGUI"><code class="docutils literal notranslate"><span class="pre">StopGUI()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PopupMsg"><code class="docutils literal notranslate"><span class="pre">PopupMsg()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UpdateGUI"><code class="docutils literal notranslate"><span class="pre">UpdateGUI()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.IsGUIBuild"><code class="docutils literal notranslate"><span class="pre">IsGUIBuild()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Lock"><code class="docutils literal notranslate"><span class="pre">Lock()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Unlock"><code class="docutils literal notranslate"><span class="pre">Unlock()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.IsEventLoopRunning"><code class="docutils literal notranslate"><span class="pre">IsEventLoopRunning()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ScreenGrab"><code class="docutils literal notranslate"><span class="pre">ScreenGrab()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetViewAxis"><code class="docutils literal notranslate"><span class="pre">SetViewAxis()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetShowBorders"><code class="docutils literal notranslate"><span class="pre">SetShowBorders()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGeomDrawType"><code class="docutils literal notranslate"><span class="pre">SetGeomDrawType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGeomWireColor"><code class="docutils literal notranslate"><span class="pre">SetGeomWireColor()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGeomDisplayType"><code class="docutils literal notranslate"><span class="pre">SetGeomDisplayType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetGeomDrawType"><code class="docutils literal notranslate"><span class="pre">GetGeomDrawType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetGeomDisplayType"><code class="docutils literal notranslate"><span class="pre">GetGeomDisplayType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetGeomWireColor"><code class="docutils literal notranslate"><span class="pre">GetGeomWireColor()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetGeomMaterialName"><code class="docutils literal notranslate"><span class="pre">GetGeomMaterialName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddMaterial"><code class="docutils literal notranslate"><span class="pre">AddMaterial()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetMaterialNames"><code class="docutils literal notranslate"><span class="pre">GetMaterialNames()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumLights"><code class="docutils literal notranslate"><span class="pre">GetNumLights()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindLight"><code class="docutils literal notranslate"><span class="pre">FindLight()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBackground"><code class="docutils literal notranslate"><span class="pre">SetBackground()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAllViews"><code class="docutils literal notranslate"><span class="pre">SetAllViews()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetView"><code class="docutils literal notranslate"><span class="pre">SetView()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FitAllViews"><code class="docutils literal notranslate"><span class="pre">FitAllViews()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ResetViews"><code class="docutils literal notranslate"><span class="pre">ResetViews()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetWindowLayout"><code class="docutils literal notranslate"><span class="pre">SetWindowLayout()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGUIElementDisable"><code class="docutils literal notranslate"><span class="pre">SetGUIElementDisable()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGUIScreenDisable"><code class="docutils literal notranslate"><span class="pre">SetGUIScreenDisable()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetGeomScreenDisable"><code class="docutils literal notranslate"><span class="pre">SetGeomScreenDisable()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.HideScreen"><code class="docutils literal notranslate"><span class="pre">HideScreen()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ShowScreen"><code class="docutils literal notranslate"><span class="pre">ShowScreen()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Vehicle.html"
+                          title="previous chapter">Vehicle Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="VSPAERODiskAndProp.html"
+                          title="next chapter">VSPAERO Actuator Disk and Propeller Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/Visualization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VSPAERODiskAndProp.html" title="VSPAERO Actuator Disk and Propeller Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Vehicle.html" title="Vehicle Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Visualization Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -20,6 +20,14 @@ def set_int(vsp, analysis: str, name: str, value: int) -> None:
     vsp.SetIntAnalysisInput(analysis, name, [value], 0)
 
 
+def select_solver_directory(vsp, directory: Path) -> None:
+    directory = directory.resolve()
+    vsp.SetVSPAEROPath(str(directory))
+    if Path(vsp.GetVSPAEROPath()).resolve() != directory:
+        raise RuntimeError(f"OpenVSP rejected solver directory {directory}; "
+                           f"selected {vsp.GetVSPAEROPath()}. Provide all companion tools.")
+
+
 def extract_numeric_results(vsp, result_name: str) -> list[dict[str, object]]:
     output = []
     for index in range(vsp.GetNumResults(result_name)):
@@ -53,10 +61,9 @@ def main() -> None:
     os.add_dll_directory(str(distribution))
     import openvsp as vsp
 
-    vsp.SetVSPAEROPath(str(
-        args.vspaero_directory.resolve() if args.vspaero_directory else distribution
-    ))
     vsp.VSPRenew()
+    solver_directory = args.vspaero_directory.resolve() if args.vspaero_directory else distribution
+    select_solver_directory(vsp, solver_directory)
 
     # Cp slicing is unrelated to coefficient parity and launches vsploads.exe.
     # Disable it so the test exercises only geometry generation and VSPAERO;

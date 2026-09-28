@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Propeller Blade Curve Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Results Manager Functions" href="Results.html" />
+    <link rel="prev" title="Point Cloud Functions" href="PointCloud.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Results.html" title="Results Manager Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PointCloud.html" title="Point Cloud Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Propeller Blade Curve Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="propeller-blade-curve-functions">
+<h1>Propeller Blade Curve Functions<a class="headerlink" href="#propeller-blade-curve-functions" title="Link to this heading">¶</a></h1>
+<p>The following group of API functions may be used to control parametric propeller blade curves (PCurves).</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetPCurve" title="openvsp.SetPCurve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetPCurve</span></code></a>(std, int const &amp; pcurveid, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PCurveConvertTo" title="openvsp.PCurveConvertTo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveConvertTo</span></code></a>(std, int const &amp; pcurveid, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PCurveGetType" title="openvsp.PCurveGetType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveGetType</span></code></a>(std, int const &amp; pcurveid)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PCurveGetTVec" title="openvsp.PCurveGetTVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveGetTVec</span></code></a>(std, int const &amp; pcurveid)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PCurveGetValVec" title="openvsp.PCurveGetValVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveGetValVec</span></code></a>(std, int const &amp; pcurveid)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PCurveDeletePt" title="openvsp.PCurveDeletePt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveDeletePt</span></code></a>(std, int const &amp; pcurveid, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PCurveSplit" title="openvsp.PCurveSplit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCurveSplit</span></code></a>(std, int const &amp; pcurveid, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ApproximateAllPropellerPCurves" title="openvsp.ApproximateAllPropellerPCurves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ApproximateAllPropellerPCurves</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ResetPropellerThicknessCurve" title="openvsp.ResetPropellerThicknessCurve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResetPropellerThicknessCurve</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetPCurve">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetPCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">tvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">valvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">newtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetPCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetPCurve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveConvertTo">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveConvertTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">newtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveConvertTo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveConvertTo" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveGetType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveGetType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveGetType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveGetType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveGetTVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveGetTVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveGetTVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveGetTVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveGetValVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveGetValVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveGetValVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveGetValVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveDeletePt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveDeletePt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">indx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveDeletePt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveDeletePt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PCurveSplit">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PCurveSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">pcurveid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">tsplit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#PCurveSplit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PCurveSplit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ApproximateAllPropellerPCurves">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ApproximateAllPropellerPCurves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ApproximateAllPropellerPCurves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ApproximateAllPropellerPCurves" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ResetPropellerThicknessCurve">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ResetPropellerThicknessCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ResetPropellerThicknessCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ResetPropellerThicknessCurve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Propeller Blade Curve Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.SetPCurve"><code class="docutils literal notranslate"><span class="pre">SetPCurve()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveConvertTo"><code class="docutils literal notranslate"><span class="pre">PCurveConvertTo()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveGetType"><code class="docutils literal notranslate"><span class="pre">PCurveGetType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveGetTVec"><code class="docutils literal notranslate"><span class="pre">PCurveGetTVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveGetValVec"><code class="docutils literal notranslate"><span class="pre">PCurveGetValVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveDeletePt"><code class="docutils literal notranslate"><span class="pre">PCurveDeletePt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PCurveSplit"><code class="docutils literal notranslate"><span class="pre">PCurveSplit()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ApproximateAllPropellerPCurves"><code class="docutils literal notranslate"><span class="pre">ApproximateAllPropellerPCurves()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ResetPropellerThicknessCurve"><code class="docutils literal notranslate"><span class="pre">ResetPropellerThicknessCurve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="PointCloud.html"
+                          title="previous chapter">Point Cloud Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Results.html"
+                          title="next chapter">Results Manager Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/PCurve.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Results.html" title="Results Manager Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PointCloud.html" title="Point Cloud Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Propeller Blade Curve Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parasite Drag Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Parm Container Functions" href="ParmContainer.html" />
+    <link rel="prev" title="Mode Functions" href="Mode.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ParmContainer.html" title="Parm Container Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Mode.html" title="Mode Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parasite Drag Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parasite-drag-functions">
+<h1>Parasite Drag Functions<a class="headerlink" href="#parasite-drag-functions" title="Link to this heading">¶</a></h1>
+<p>This group of API functions is supplemental to performing a Paraste Drag analysis through the Analysis Manager. They include functions to write out Parasite Drag Tool equations, calculate atmospheric properties, and control excrescences.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddExcrescence" title="openvsp.AddExcrescence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddExcrescence</span></code></a>(std, int const &amp; excresType, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumExcrescences" title="openvsp.GetNumExcrescences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumExcrescences</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DeleteAllExcrescences" title="openvsp.DeleteAllExcrescences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllExcrescences</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteExcrescence" title="openvsp.DeleteExcrescence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteExcrescence</span></code></a>(int const &amp; index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.UpdateParasiteDrag" title="openvsp.UpdateParasiteDrag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateParasiteDrag</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ExportParasiteDragToCSV" title="openvsp.ExportParasiteDragToCSV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportParasiteDragToCSV</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.WriteAtmosphereCSVFile" title="openvsp.WriteAtmosphereCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteAtmosphereCSVFile</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CalcAtmosphere" title="openvsp.CalcAtmosphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalcAtmosphere</span></code></a>(double const &amp; alt, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.WriteBodyFFCSVFile" title="openvsp.WriteBodyFFCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteBodyFFCSVFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.WriteWingFFCSVFile" title="openvsp.WriteWingFFCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteWingFFCSVFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.WriteCfEqnCSVFile" title="openvsp.WriteCfEqnCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteCfEqnCSVFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.WritePartialCfMethodCSVFile" title="openvsp.WritePartialCfMethodCSVFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WritePartialCfMethodCSVFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddExcrescence">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddExcrescence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">excresName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">excresType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">excresVal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddExcrescence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddExcrescence" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumExcrescences">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumExcrescences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumExcrescences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumExcrescences" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllExcrescences">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllExcrescences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllExcrescences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllExcrescences" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteExcrescence">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteExcrescence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteExcrescence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteExcrescence" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UpdateParasiteDrag">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UpdateParasiteDrag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#UpdateParasiteDrag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UpdateParasiteDrag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ExportParasiteDragToCSV">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ExportParasiteDragToCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ExportParasiteDragToCSV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ExportParasiteDragToCSV" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteAtmosphereCSVFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteAtmosphereCSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">atmos_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteAtmosphereCSVFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteAtmosphereCSVFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CalcAtmosphere">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CalcAtmosphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">delta_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">atmos_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CalcAtmosphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CalcAtmosphere" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteBodyFFCSVFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteBodyFFCSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteBodyFFCSVFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteBodyFFCSVFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteWingFFCSVFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteWingFFCSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteWingFFCSVFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteWingFFCSVFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteCfEqnCSVFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteCfEqnCSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteCfEqnCSVFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteCfEqnCSVFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WritePartialCfMethodCSVFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WritePartialCfMethodCSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WritePartialCfMethodCSVFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WritePartialCfMethodCSVFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Parasite Drag Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.AddExcrescence"><code class="docutils literal notranslate"><span class="pre">AddExcrescence()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumExcrescences"><code class="docutils literal notranslate"><span class="pre">GetNumExcrescences()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllExcrescences"><code class="docutils literal notranslate"><span class="pre">DeleteAllExcrescences()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteExcrescence"><code class="docutils literal notranslate"><span class="pre">DeleteExcrescence()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UpdateParasiteDrag"><code class="docutils literal notranslate"><span class="pre">UpdateParasiteDrag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ExportParasiteDragToCSV"><code class="docutils literal notranslate"><span class="pre">ExportParasiteDragToCSV()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteAtmosphereCSVFile"><code class="docutils literal notranslate"><span class="pre">WriteAtmosphereCSVFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CalcAtmosphere"><code class="docutils literal notranslate"><span class="pre">CalcAtmosphere()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteBodyFFCSVFile"><code class="docutils literal notranslate"><span class="pre">WriteBodyFFCSVFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteWingFFCSVFile"><code class="docutils literal notranslate"><span class="pre">WriteWingFFCSVFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteCfEqnCSVFile"><code class="docutils literal notranslate"><span class="pre">WriteCfEqnCSVFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WritePartialCfMethodCSVFile"><code class="docutils literal notranslate"><span class="pre">WritePartialCfMethodCSVFile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Mode.html"
+                          title="previous chapter">Mode Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="ParmContainer.html"
+                          title="next chapter">Parm Container Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/ParasiteDrag.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ParmContainer.html" title="Parm Container Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Mode.html" title="Mode Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parasite Drag Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+Parasite Drag Functions
+=======================
+
+This group of API functions is supplemental to performing a Paraste Drag analysis through the Analysis Manager. They include functions to write out Parasite Drag Tool equations, calculate atmospheric properties, and control excrescences.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AddExcrescence
+    GetNumExcrescences
+    DeleteAllExcrescences
+    DeleteExcrescence
+    UpdateParasiteDrag
+    ExportParasiteDragToCSV
+    WriteAtmosphereCSVFile
+    CalcAtmosphere
+    WriteBodyFFCSVFile
+    WriteWingFFCSVFile
+    WriteCfEqnCSVFile
+    WritePartialCfMethodCSVFile
+
+
+Details
+-------
+
+.. autofunction:: AddExcrescence
+
+.. autofunction:: GetNumExcrescences
+
+.. autofunction:: DeleteAllExcrescences
+
+.. autofunction:: DeleteExcrescence
+
+.. autofunction:: UpdateParasiteDrag
+
+.. autofunction:: ExportParasiteDragToCSV
+
+.. autofunction:: WriteAtmosphereCSVFile
+
+.. autofunction:: CalcAtmosphere
+
+.. autofunction:: WriteBodyFFCSVFile
+
+.. autofunction:: WriteWingFFCSVFile
+
+.. autofunction:: WriteCfEqnCSVFile
+
+.. autofunction:: WritePartialCfMethodCSVFile
+

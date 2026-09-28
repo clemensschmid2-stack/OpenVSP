@@ -9,6 +9,7 @@
 
 #include "Parm.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "LinkMgr.h"
 #include "StringUtil.h"
 #include "StlHelper.h"
@@ -99,6 +100,20 @@ void ParmContainer::AddParm( const string& id )
 void ParmContainer::RemoveParm( const string& id )
 {
     vector_remove_val( m_ParmVec, id );
+}
+
+//==== Put Every Parm Back The Way A New One Starts ====//
+void ParmContainer::ResetToInitVals()
+{
+    for ( int i = 0; i < ( int )m_ParmVec.size(); i++ )
+    {
+        Parm* p = ParmMgr.FindParm( m_ParmVec[i] );
+
+        if ( p )
+        {
+            p->ResetToInitVal();
+        }
+    }
 }
 
 //==== Return Pointer To Parent Container ====//
@@ -213,7 +228,7 @@ xmlNodePtr ParmContainer::DecodeXml( xmlNodePtr & node )
     if ( child_node )
     {
         string oldID = XmlUtil::FindString( child_node, "ID", m_ID );
-        string newID = ParmMgr.RemapID( oldID, m_ID );
+        string newID = IDMgr.RemapID( oldID, m_ID );
 
         if( newID.compare( m_ID ) != 0 )        // they differ
         {
@@ -249,6 +264,23 @@ xmlNodePtr ParmContainer::DecodeXml( xmlNodePtr & node )
         }
     }
     m_AttrCollection.DecodeXml( child_node );
+
+    // Built again, because the map built above is now stale.  Decoding a Parm remaps its ID,
+    // so every entry put in before the loop names a Parm ID that no longer exists.  A container
+    // that is walked as part of the linkable set has its map rebuilt by
+    // LinkMgr::BuildLinkableParmData and never notices; every other container -- a subsurface,
+    // a cross section, a texture, a mesh source, a bogie, a routing point, an FEA part -- keeps
+    // the stale map for the life of the model, and FindParm( id, name, group ) answers nothing
+    // on it.  That is why those Parms can be read from a model just built and not from the same
+    // model reopened.  The call above the loop is not redundant: that one builds the map the
+    // loop walks to find each group's node, so it has to come first and this has to come after.
+    LoadGroupParmVec( m_ParmVec, false );
+
+    // Paired with the rebuild, the same way the call above the loop is.  LoadGroupParmVec sets
+    // the dirty flag, but BuildLinkableParmData gates on the change COUNT and only lowers the
+    // flag once it has done some work -- so a flag raised without a count to go with it is
+    // never lowered, and every FindParm after this calls in only to be turned away.
+    ParmMgr.IncNumParmChanges();
 
     return child_node;
 

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Attributes Manager Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AuxiliaryGeom Functions" href="AuxiliaryGeom.html" />
+    <link rel="prev" title="API Error Functions" href="APIError.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AuxiliaryGeom.html" title="AuxiliaryGeom Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="APIError.html" title="API Error Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Attributes Manager Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="attributes-manager-functions">
+<h1>Attributes Manager Functions<a class="headerlink" href="#attributes-manager-functions" title="Link to this heading">¶</a></h1>
+<p>This group is for functions included in the Attributes Manager. The Attributes Manager stores Attributes and provides methods to add, delete, get and set them.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SummarizeAttributes" title="openvsp.SummarizeAttributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SummarizeAttributes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SummarizeAttributesAsTree" title="openvsp.SummarizeAttributesAsTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SummarizeAttributesAsTree</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindAllAttributes" title="openvsp.FindAllAttributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAllAttributes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FindAttributesByName" title="openvsp.FindAttributesByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributesByName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindAttributeByName" title="openvsp.FindAttributeByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributeByName</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FindAttributeInCollection" title="openvsp.FindAttributeInCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributeInCollection</span></code></a>(std, std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindAttributeNamesInCollection" title="openvsp.FindAttributeNamesInCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributeNamesInCollection</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FindAttributesInCollection" title="openvsp.FindAttributesInCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributesInCollection</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindAttributedObjects" title="openvsp.FindAttributedObjects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindAttributedObjects</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetObjectType" title="openvsp.GetObjectType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetObjectType</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetObjectTypeName" title="openvsp.GetObjectTypeName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetObjectTypeName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetObjectName" title="openvsp.GetObjectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetObjectName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetObjectParent" title="openvsp.GetObjectParent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetObjectParent</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetChildCollection" title="openvsp.GetChildCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetChildCollection</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetGeomSetCollection" title="openvsp.GetGeomSetCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetGeomSetCollection</span></code></a>(int const &amp; index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeName" title="openvsp.GetAttributeName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeID" title="openvsp.GetAttributeID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeID</span></code></a>(std, std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeDoc" title="openvsp.GetAttributeDoc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeDoc</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeType" title="openvsp.GetAttributeType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeType</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeTypeName" title="openvsp.GetAttributeTypeName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeTypeName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeBoolVal" title="openvsp.GetAttributeBoolVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeBoolVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeIntVal" title="openvsp.GetAttributeIntVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeIntVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeDoubleVal" title="openvsp.GetAttributeDoubleVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeDoubleVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeStringVal" title="openvsp.GetAttributeStringVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeStringVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeParmID" title="openvsp.GetAttributeParmID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeParmID</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeParmVal" title="openvsp.GetAttributeParmVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeParmVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeParmName" title="openvsp.GetAttributeParmName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeParmName</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeVec3dVal" title="openvsp.GetAttributeVec3dVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeVec3dVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAttributeIntMatrixVal" title="openvsp.GetAttributeIntMatrixVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeIntMatrixVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAttributeDoubleMatrixVal" title="openvsp.GetAttributeDoubleMatrixVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAttributeDoubleMatrixVal</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAttributeName" title="openvsp.SetAttributeName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeName</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAttributeDoc" title="openvsp.SetAttributeDoc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeDoc</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAttributeBool" title="openvsp.SetAttributeBool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeBool</span></code></a>(std, bool value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAttributeInt" title="openvsp.SetAttributeInt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeInt</span></code></a>(std, int value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAttributeDouble" title="openvsp.SetAttributeDouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeDouble</span></code></a>(std, double value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAttributeString" title="openvsp.SetAttributeString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeString</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAttributeParmID" title="openvsp.SetAttributeParmID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeParmID</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAttributeVec3d" title="openvsp.SetAttributeVec3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeVec3d</span></code></a>(std, Vec3dVec value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAttributeIntMatrix" title="openvsp.SetAttributeIntMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeIntMatrix</span></code></a>(std, IntVecVec value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAttributeDoubleMatrix" title="openvsp.SetAttributeDoubleMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttributeDoubleMatrix</span></code></a>(std, DoubleVecVec value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DeleteAttribute" title="openvsp.DeleteAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAttribute</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAttributeBool" title="openvsp.AddAttributeBool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeBool</span></code></a>(std, std, bool value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAttributeInt" title="openvsp.AddAttributeInt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeInt</span></code></a>(std, std, int value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAttributeDouble" title="openvsp.AddAttributeDouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeDouble</span></code></a>(std, std, double value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAttributeString" title="openvsp.AddAttributeString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeString</span></code></a>(std, std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAttributeParm" title="openvsp.AddAttributeParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeParm</span></code></a>(std, std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAttributeVec3d" title="openvsp.AddAttributeVec3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeVec3d</span></code></a>(std, std, Vec3dVec value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAttributeIntMatrix" title="openvsp.AddAttributeIntMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeIntMatrix</span></code></a>(std, std, IntVecVec value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAttributeDoubleMatrix" title="openvsp.AddAttributeDoubleMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeDoubleMatrix</span></code></a>(std, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAttributeGroup" title="openvsp.AddAttributeGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAttributeGroup</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CopyAttribute" title="openvsp.CopyAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CopyAttribute</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CutAttribute" title="openvsp.CutAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CutAttribute</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PasteAttribute" title="openvsp.PasteAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PasteAttribute</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SummarizeAttributes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SummarizeAttributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#SummarizeAttributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SummarizeAttributes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SummarizeAttributesAsTree">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SummarizeAttributesAsTree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#SummarizeAttributesAsTree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SummarizeAttributesAsTree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAllAttributes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAllAttributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAllAttributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAllAttributes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributesByName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributesByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">search_str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributesByName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributesByName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributeByName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributeByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">search_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributeByName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributeByName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributeInCollection">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributeInCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">obj_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">search_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributeInCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributeInCollection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributeNamesInCollection">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributeNamesInCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributeNamesInCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributeNamesInCollection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributesInCollection">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributesInCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributesInCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributesInCollection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindAttributedObjects">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindAttributedObjects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindAttributedObjects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindAttributedObjects" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetObjectType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetObjectType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attachID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetObjectType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetObjectType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetObjectTypeName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetObjectTypeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attachID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetObjectTypeName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetObjectTypeName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetObjectName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetObjectName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attachID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetObjectName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetObjectName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetObjectParent">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetObjectParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetObjectParent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetObjectParent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetChildCollection">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetChildCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attachID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetChildCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetChildCollection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetGeomSetCollection">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetGeomSetCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetGeomSetCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetGeomSetCollection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeDoc">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeDoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeDoc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeDoc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeTypeName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeTypeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeTypeName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeTypeName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeBoolVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeBoolVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IntVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeBoolVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeBoolVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeIntVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeIntVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IntVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeIntVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeIntVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeDoubleVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeDoubleVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeDoubleVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeDoubleVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeStringVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeStringVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeStringVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeStringVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeParmID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeParmID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeParmID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeParmID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeParmVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeParmVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeParmVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeParmVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeParmName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeParmName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeParmName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeParmName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeVec3dVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeVec3dVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeVec3dVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeVec3dVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeIntMatrixVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeIntMatrixVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IntVecVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeIntMatrixVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeIntMatrixVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAttributeDoubleMatrixVal">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAttributeDoubleMatrixVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVecVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAttributeDoubleMatrixVal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAttributeDoubleMatrixVal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeDoc">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeDoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeDoc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeDoc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeBool">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeBool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeBool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeBool" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeInt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeInt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeInt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeDouble">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeDouble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeDouble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeDouble" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeString">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeString" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeParmID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeParmID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeParmID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeParmID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeVec3d">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeVec3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeVec3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeVec3d" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeIntMatrix">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeIntMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IntVecVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeIntMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeIntMatrix" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAttributeDoubleMatrix">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAttributeDoubleMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVecVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAttributeDoubleMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAttributeDoubleMatrix" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAttribute">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAttribute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeBool">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeBool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeBool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeBool" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeInt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeInt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeInt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeDouble">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeDouble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeDouble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeDouble" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeString">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeString" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parmID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeVec3d">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeVec3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeVec3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeVec3d" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeIntMatrix">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeIntMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IntVecVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeIntMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeIntMatrix" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeDoubleMatrix">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeDoubleMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVecVec</span> <span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeDoubleMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeDoubleMatrix" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAttributeGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAttributeGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">collID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attributeName</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAttributeGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAttributeGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CopyAttribute">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CopyAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CopyAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CopyAttribute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CutAttribute">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CutAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">attrID</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CutAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CutAttribute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PasteAttribute">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PasteAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">coll_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#PasteAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PasteAttribute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Attributes Manager Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.SummarizeAttributes"><code class="docutils literal notranslate"><span class="pre">SummarizeAttributes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SummarizeAttributesAsTree"><code class="docutils literal notranslate"><span class="pre">SummarizeAttributesAsTree()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAllAttributes"><code class="docutils literal notranslate"><span class="pre">FindAllAttributes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributesByName"><code class="docutils literal notranslate"><span class="pre">FindAttributesByName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributeByName"><code class="docutils literal notranslate"><span class="pre">FindAttributeByName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributeInCollection"><code class="docutils literal notranslate"><span class="pre">FindAttributeInCollection()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributeNamesInCollection"><code class="docutils literal notranslate"><span class="pre">FindAttributeNamesInCollection()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributesInCollection"><code class="docutils literal notranslate"><span class="pre">FindAttributesInCollection()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindAttributedObjects"><code class="docutils literal notranslate"><span class="pre">FindAttributedObjects()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetObjectType"><code class="docutils literal notranslate"><span class="pre">GetObjectType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetObjectTypeName"><code class="docutils literal notranslate"><span class="pre">GetObjectTypeName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetObjectName"><code class="docutils literal notranslate"><span class="pre">GetObjectName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetObjectParent"><code class="docutils literal notranslate"><span class="pre">GetObjectParent()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetChildCollection"><code class="docutils literal notranslate"><span class="pre">GetChildCollection()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetGeomSetCollection"><code class="docutils literal notranslate"><span class="pre">GetGeomSetCollection()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeName"><code class="docutils literal notranslate"><span class="pre">GetAttributeName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeID"><code class="docutils literal notranslate"><span class="pre">GetAttributeID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeDoc"><code class="docutils literal notranslate"><span class="pre">GetAttributeDoc()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeType"><code class="docutils literal notranslate"><span class="pre">GetAttributeType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeTypeName"><code class="docutils literal notranslate"><span class="pre">GetAttributeTypeName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeBoolVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeBoolVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeIntVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeIntVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeDoubleVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeDoubleVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeStringVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeStringVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeParmID"><code class="docutils literal notranslate"><span class="pre">GetAttributeParmID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeParmVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeParmVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeParmName"><code class="docutils literal notranslate"><span class="pre">GetAttributeParmName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeVec3dVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeVec3dVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeIntMatrixVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeIntMatrixVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAttributeDoubleMatrixVal"><code class="docutils literal notranslate"><span class="pre">GetAttributeDoubleMatrixVal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeName"><code class="docutils literal notranslate"><span class="pre">SetAttributeName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeDoc"><code class="docutils literal notranslate"><span class="pre">SetAttributeDoc()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeBool"><code class="docutils literal notranslate"><span class="pre">SetAttributeBool()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeInt"><code class="docutils literal notranslate"><span class="pre">SetAttributeInt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeDouble"><code class="docutils literal notranslate"><span class="pre">SetAttributeDouble()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeString"><code class="docutils literal notranslate"><span class="pre">SetAttributeString()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeParmID"><code class="docutils literal notranslate"><span class="pre">SetAttributeParmID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeVec3d"><code class="docutils literal notranslate"><span class="pre">SetAttributeVec3d()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeIntMatrix"><code class="docutils literal notranslate"><span class="pre">SetAttributeIntMatrix()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAttributeDoubleMatrix"><code class="docutils literal notranslate"><span class="pre">SetAttributeDoubleMatrix()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAttribute"><code class="docutils literal notranslate"><span class="pre">DeleteAttribute()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeBool"><code class="docutils literal notranslate"><span class="pre">AddAttributeBool()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeInt"><code class="docutils literal notranslate"><span class="pre">AddAttributeInt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeDouble"><code class="docutils literal notranslate"><span class="pre">AddAttributeDouble()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeString"><code class="docutils literal notranslate"><span class="pre">AddAttributeString()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeParm"><code class="docutils literal notranslate"><span class="pre">AddAttributeParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeVec3d"><code class="docutils literal notranslate"><span class="pre">AddAttributeVec3d()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeIntMatrix"><code class="docutils literal notranslate"><span class="pre">AddAttributeIntMatrix()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeDoubleMatrix"><code class="docutils literal notranslate"><span class="pre">AddAttributeDoubleMatrix()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAttributeGroup"><code class="docutils literal notranslate"><span class="pre">AddAttributeGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CopyAttribute"><code class="docutils literal notranslate"><span class="pre">CopyAttribute()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CutAttribute"><code class="docutils literal notranslate"><span class="pre">CutAttribute()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PasteAttribute"><code class="docutils literal notranslate"><span class="pre">PasteAttribute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="APIError.html"
+                          title="previous chapter">API Error Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="AuxiliaryGeom.html"
+                          title="next chapter">AuxiliaryGeom Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/Attributes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AuxiliaryGeom.html" title="AuxiliaryGeom Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="APIError.html" title="API Error Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Attributes Manager Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Point Cloud Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Propeller Blade Curve Functions" href="PCurve.html" />
+    <link rel="prev" title="Parm Link Functions" href="ParmLink.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PCurve.html" title="Propeller Blade Curve Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ParmLink.html" title="Parm Link Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Point Cloud Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="point-cloud-functions">
+<h1>Point Cloud Functions<a class="headerlink" href="#point-cloud-functions" title="Link to this heading">¶</a></h1>
+<p>This group of functions works with clouds of points – imported, or made from a MeshGeom such as the one a planar slice produces – and narrows them down to the points wanted.  In the GUI a cloud is whittled down by selecting and hiding points with the mouse, which projects a screen rectangle into three dimensions and is only as good as that projection.  Through the API the points are handed about as plain vectors of coordinates and filtered by where they actually are, which is both exact and repeatable.  Filters come in keep and remove pairs, so a selection is inverted by asking for the other one, and there are set operations for combining the results.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CreatePtCloudGeomFromPts" title="openvsp.CreatePtCloudGeomFromPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreatePtCloudGeomFromPts</span></code></a>(Vec3dVec pt_vec, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.KeepPtsInBBox" title="openvsp.KeepPtsInBBox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsInBBox</span></code></a>(Vec3dVec pt_vec, vec3d min_pt, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.RemovePtsInBBox" title="openvsp.RemovePtsInBBox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemovePtsInBBox</span></code></a>(Vec3dVec pt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.KeepPtsInRange" title="openvsp.KeepPtsInRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsInRange</span></code></a>(Vec3dVec pt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.RemovePtsInRange" title="openvsp.RemovePtsInRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemovePtsInRange</span></code></a>(Vec3dVec pt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.KeepPtsAbove" title="openvsp.KeepPtsAbove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsAbove</span></code></a>(Vec3dVec pt_vec, int dir_index, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.KeepPtsBelow" title="openvsp.KeepPtsBelow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsBelow</span></code></a>(Vec3dVec pt_vec, int dir_index, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.KeepPtsNearPt" title="openvsp.KeepPtsNearPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsNearPt</span></code></a>(Vec3dVec pt_vec, vec3d center, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.RemovePtsNearPt" title="openvsp.RemovePtsNearPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemovePtsNearPt</span></code></a>(Vec3dVec pt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.KeepPtsNearGeom" title="openvsp.KeepPtsNearGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeepPtsNearGeom</span></code></a>(Vec3dVec pt_vec, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.RemovePtsNearGeom" title="openvsp.RemovePtsNearGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemovePtsNearGeom</span></code></a>(Vec3dVec pt_vec, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.UniquePts" title="openvsp.UniquePts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UniquePts</span></code></a>(Vec3dVec pt_vec, double tol)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.UnionPts" title="openvsp.UnionPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnionPts</span></code></a>(Vec3dVec pt_vec_a, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.IntersectPts" title="openvsp.IntersectPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntersectPts</span></code></a>(Vec3dVec pt_vec_a, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SubtractPts" title="openvsp.SubtractPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SubtractPts</span></code></a>(Vec3dVec pt_vec_a, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CreatePtCloudGeom" title="openvsp.CreatePtCloudGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreatePtCloudGeom</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CreatePtCloudGeomFromPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CreatePtCloudGeomFromPts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CreatePtCloudGeomFromPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CreatePtCloudGeomFromPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsInBBox">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsInBBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">min_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">max_pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsInBBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsInBBox" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemovePtsInBBox">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemovePtsInBBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">min_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">max_pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemovePtsInBBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemovePtsInBBox" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsInRange">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsInRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">dir_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">high</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsInRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsInRange" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemovePtsInRange">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemovePtsInRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">dir_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">high</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemovePtsInRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemovePtsInRange" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsAbove">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsAbove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">dir_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">val</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsAbove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsAbove" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsBelow">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsBelow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">dir_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">val</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsBelow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsBelow" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsNearPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsNearPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">radius</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsNearPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsNearPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemovePtsNearPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemovePtsNearPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">radius</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemovePtsNearPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemovePtsNearPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.KeepPtsNearGeom">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">KeepPtsNearGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#KeepPtsNearGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.KeepPtsNearGeom" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemovePtsNearGeom">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemovePtsNearGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemovePtsNearGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemovePtsNearGeom" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UniquePts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UniquePts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#UniquePts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UniquePts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UnionPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UnionPts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#UnionPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UnionPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.IntersectPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">IntersectPts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#IntersectPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.IntersectPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SubtractPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SubtractPts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">tol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#SubtractPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SubtractPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CreatePtCloudGeom">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CreatePtCloudGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CreatePtCloudGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CreatePtCloudGeom" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Point Cloud Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.CreatePtCloudGeomFromPts"><code class="docutils literal notranslate"><span class="pre">CreatePtCloudGeomFromPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsInBBox"><code class="docutils literal notranslate"><span class="pre">KeepPtsInBBox()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemovePtsInBBox"><code class="docutils literal notranslate"><span class="pre">RemovePtsInBBox()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsInRange"><code class="docutils literal notranslate"><span class="pre">KeepPtsInRange()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemovePtsInRange"><code class="docutils literal notranslate"><span class="pre">RemovePtsInRange()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsAbove"><code class="docutils literal notranslate"><span class="pre">KeepPtsAbove()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsBelow"><code class="docutils literal notranslate"><span class="pre">KeepPtsBelow()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsNearPt"><code class="docutils literal notranslate"><span class="pre">KeepPtsNearPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemovePtsNearPt"><code class="docutils literal notranslate"><span class="pre">RemovePtsNearPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.KeepPtsNearGeom"><code class="docutils literal notranslate"><span class="pre">KeepPtsNearGeom()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemovePtsNearGeom"><code class="docutils literal notranslate"><span class="pre">RemovePtsNearGeom()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UniquePts"><code class="docutils literal notranslate"><span class="pre">UniquePts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UnionPts"><code class="docutils literal notranslate"><span class="pre">UnionPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.IntersectPts"><code class="docutils literal notranslate"><span class="pre">IntersectPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SubtractPts"><code class="docutils literal notranslate"><span class="pre">SubtractPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CreatePtCloudGeom"><code class="docutils literal notranslate"><span class="pre">CreatePtCloudGeom()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ParmLink.html"
+                          title="previous chapter">Parm Link Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="PCurve.html"
+                          title="next chapter">Propeller Blade Curve Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/PointCloud.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="PCurve.html" title="Propeller Blade Curve Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ParmLink.html" title="Parm Link Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Point Cloud Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

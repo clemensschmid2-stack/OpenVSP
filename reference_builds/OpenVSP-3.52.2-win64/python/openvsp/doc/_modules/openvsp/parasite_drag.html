@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>openvsp.parasite_drag &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">openvsp.parasite_drag</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for openvsp.parasite_drag</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2018-2020 Uber Technologies, Inc.</span>
+
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
+<span class="c1"># in the Software without restriction, including without limitation the rights</span>
+<span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1"># furnished to do so, subject to the following conditions:</span>
+
+<span class="c1"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c1"># all copies or substantial portions of the Software.</span>
+
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
+<span class="c1"># THE SOFTWARE.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">openvsp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">vsp_module</span>
+
+
+<div class="viewcode-block" id="ParasiteDragResults">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.parasite_drag.ParasiteDragResults">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParasiteDragResults</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Class that contains all of the results from a parasite drag sweep in</span>
+<span class="sd">    OpenVSP</span>
+<span class="sd">    """</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Alt_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Alt_Label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_CD</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_CD</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Cf</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_FFEqn</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_FFEqn</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_FFEqnName</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_FFEqnName</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_FFIn</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_FFIn</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_FFOut</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_FFOut</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_FineRat</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_FineRat</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_ID</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_ID</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Lref</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Lref</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_PercLam</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_PercLam</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_PercTotalCD</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_PercTotalCD</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Q</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Q</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Re</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Re</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Roughness</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Roughness</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_SurfNum</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_SurfNum</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_Swet</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_Swet</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_TawTwRatio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_TawTwRatio</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_TeTwRatio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_TeTwRatio</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Comp_f</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Comp_f</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_Amount</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_Amount</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_CD_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_CD_Total</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_Input</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_Input</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_PercTotalCD</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_PercTotalCD</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_Perc_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_Perc_Total</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_Type</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_Type</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Excres_f_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Excres_f_Total</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Alt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Mach</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pres</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Pres</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rho</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Rho</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FreestreamPropChoice</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FreestreamPropChoice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Re_L</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Re_L</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SpecificHeatRatio</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">SpecificHeatRatio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sref</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Sref</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vinf</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">FC_Vinf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Geom_CD_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Geom_CD_Total</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Geom_Perc_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Geom_Perc_Total</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Geom_f_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Geom_f_Total</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LamCfEqnName</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">LamCfEqnName</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Lref_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Lref_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Num_Comp</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Num_Comp</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Num_Excres</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Num_Excres</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pres_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Pres_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rho_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Rho_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sref_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Sref_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Swet_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Swet_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Temp_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Temp_Label</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CD_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Total_CD_Total</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Total_Perc_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Total_Perc_Total</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Total_f_Total</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Total_f_Total</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TurbCfEqnName</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">TurbCfEqnName</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vinf_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">Vinf_Label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_Label</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">f_Label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ParasiteDragResults.plot">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.parasite_drag.ParasiteDragResults.plot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Creates plot of CD0 vs speed and altitude</span>
+<span class="sd">        """</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Vinf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">CD_Total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Rho</span><span class="p">))</span>
+
+        <span class="n">speeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">alts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">alt</span> <span class="ow">in</span> <span class="n">alts</span><span class="p">:</span>
+            <span class="n">d_filtered</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">alt</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">cd</span> <span class="o">=</span> <span class="n">d_filtered</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">rho</span> <span class="o">=</span> <span class="n">d_filtered</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="c1"># d = [cd[i]*(speeds[i]*1.46667)**2*self.Sref[0]*0.5*rho[i] for i in range(len(cd))]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">speeds</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Alt = </span><span class="si">{</span><span class="n">alt</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vinf_Label</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'CD_0'</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="ParasiteDragResults.build_interpolator">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.parasite_drag.ParasiteDragResults.build_interpolator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_interpolator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">""" Returns interpolator to interpolate results as a function of speed and altitude """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearNDInterpolator</span><span class="p">,</span> <span class="n">interp1d</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+        <span class="n">alts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Alt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">LinearNDInterpolator</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Vinf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Alt</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CD_Total</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">intrp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vinf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">CD_Total</span><span class="p">)</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">intrp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="parasitedrag_sweep">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.parasite_drag.parasitedrag_sweep">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parasitedrag_sweep</span><span class="p">(</span><span class="n">speeds</span><span class="p">,</span> <span class="n">alts_ft</span><span class="p">,</span> <span class="n">sref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">length_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">speed_unit</span><span class="o">=</span><span class="n">vsp_module</span><span class="o">.</span><span class="n">V_UNIT_MACH</span><span class="p">,</span> <span class="nb">set</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Runs a parasite drag sweep over a range of speeds and altitudes. For subsonic data only.</span>
+
+<span class="sd">    :param speeds: list of speeds to sweep over</span>
+<span class="sd">    :param alts_ft: list of altitudes to sweep over</span>
+<span class="sd">    :param speed_unit: units of speed array</span>
+<span class="sd">    :param set: vsp geometry set to use for build up</span>
+<span class="sd">    :param length_unit: length unit of the vsp model</span>
+<span class="sd">    :param sref: reference area</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: named tuple with results</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+
+    <span class="c1"># Reset default values to ensure values that have been read from a vsp file are used by default</span>
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetAnalysisInputDefaults</span><span class="p">(</span><span class="s1">'ParasiteDrag'</span><span class="p">)</span>
+
+    <span class="c1"># inputs that don't change during a sweep</span>
+
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"VelocityUnit"</span><span class="p">,</span> <span class="p">[</span><span class="n">speed_unit</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">length_unit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"LengthUnit"</span><span class="p">,</span> <span class="p">[</span><span class="n">length_unit</span><span class="p">])</span>
+
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetStringAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"FileName"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"/dev/null"</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">set</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"GeomSet"</span><span class="p">,</span> <span class="p">[</span><span class="nb">set</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">sref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"RefFlag"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">SetDoubleAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"Sref"</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">sref</span><span class="p">)])</span>
+
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetVSP3FileName</span><span class="p">(</span><span class="s1">'/dev/null'</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">first_val</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">speed</span> <span class="ow">in</span> <span class="n">speeds</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">alt</span> <span class="ow">in</span> <span class="n">alts_ft</span><span class="p">:</span>
+            <span class="n">vsp</span><span class="o">.</span><span class="n">SetDoubleAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"Vinf"</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">speed</span><span class="p">)])</span>
+            <span class="n">vsp</span><span class="o">.</span><span class="n">SetDoubleAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"Altitude"</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">alt</span><span class="p">)])</span>
+            <span class="k">if</span> <span class="n">first_val</span><span class="p">:</span>
+                <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"RecomputeGeom"</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">])</span>
+                <span class="n">first_val</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">,</span> <span class="s2">"RecomputeGeom"</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">])</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">parse_results_object</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">ExecAnalysis</span><span class="p">(</span><span class="s2">"ParasiteDrag"</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">ParasiteDragResults</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">openvsp.parasite_drag</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+BOR Functions
+=============
+
+This group of API functions provides capabilities related to the body of revolution (BOR) geometry type in OpenVSP.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SetBEMPropID
+    ChangeBORXSecShape
+    GetBORXSecShape
+    ReadBORFileXSec
+    GetBORXSecPnts
+    SetBORXSecPnts
+    ComputeBORXSecPnt
+    ComputeBORXSecTan
+    ReadBORFileAirfoil
+    SetBORAirfoilUpperPnts
+    SetBORAirfoilLowerPnts
+    SetBORAirfoilPnts
+    GetBORAirfoilUpperPnts
+    GetBORAirfoilLowerPnts
+    GetBORUpperCSTCoefs
+    GetBORLowerCSTCoefs
+    GetBORUpperCSTDegree
+    GetBORLowerCSTDegree
+    SetBORUpperCST
+    SetBORLowerCST
+    PromoteBORCSTUpper
+    PromoteBORCSTLower
+    DemoteBORCSTUpper
+    DemoteBORCSTLower
+    FitBORAfCST
+
+
+Details
+-------
+
+.. autofunction:: SetBEMPropID
+
+.. autofunction:: ChangeBORXSecShape
+
+.. autofunction:: GetBORXSecShape
+
+.. autofunction:: ReadBORFileXSec
+
+.. autofunction:: GetBORXSecPnts
+
+.. autofunction:: SetBORXSecPnts
+
+.. autofunction:: ComputeBORXSecPnt
+
+.. autofunction:: ComputeBORXSecTan
+
+.. autofunction:: ReadBORFileAirfoil
+
+.. autofunction:: SetBORAirfoilUpperPnts
+
+.. autofunction:: SetBORAirfoilLowerPnts
+
+.. autofunction:: SetBORAirfoilPnts
+
+.. autofunction:: GetBORAirfoilUpperPnts
+
+.. autofunction:: GetBORAirfoilLowerPnts
+
+.. autofunction:: GetBORUpperCSTCoefs
+
+.. autofunction:: GetBORLowerCSTCoefs
+
+.. autofunction:: GetBORUpperCSTDegree
+
+.. autofunction:: GetBORLowerCSTDegree
+
+.. autofunction:: SetBORUpperCST
+
+.. autofunction:: SetBORLowerCST
+
+.. autofunction:: PromoteBORCSTUpper
+
+.. autofunction:: PromoteBORCSTLower
+
+.. autofunction:: DemoteBORCSTUpper
+
+.. autofunction:: DemoteBORCSTLower
+
+.. autofunction:: FitBORAfCST
+

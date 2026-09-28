@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API Error Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Attributes Manager Functions" href="Attributes.html" />
+    <link rel="prev" title="Analysis Manager Functions" href="Analysis.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Attributes.html" title="Attributes Manager Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Analysis.html" title="Analysis Manager Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API Error Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="api-error-functions">
+<h1>API Error Functions<a class="headerlink" href="#api-error-functions" title="Link to this heading">¶</a></h1>
+<p>Handling of OpenVSP ErrorObj information is accomplished through this group of API functions.</p>
+<section id="errormgrsingleton">
+<h2>ErrorMgrSingleton<a class="headerlink" href="#errormgrsingleton" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetErrorLastCallFlag" title="openvsp.ErrorMgrSingleton.GetErrorLastCallFlag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetErrorLastCallFlag</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetNumTotalErrors" title="openvsp.ErrorMgrSingleton.GetNumTotalErrors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetNumTotalErrors</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.PopLastError" title="openvsp.ErrorMgrSingleton.PopLastError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.PopLastError</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetLastError" title="openvsp.ErrorMgrSingleton.GetLastError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetLastError</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.SilenceErrors" title="openvsp.ErrorMgrSingleton.SilenceErrors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.SilenceErrors</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.PrintOnErrors" title="openvsp.ErrorMgrSingleton.PrintOnErrors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.PrintOnErrors</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ErrorMgrSingleton.getInstance" title="openvsp.ErrorMgrSingleton.getInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorMgrSingleton.getInstance</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ErrorMgrSingleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton" title="Link to this definition">¶</a></dt>
+<dd><p>Proxy of C++ vsp::ErrorMgrSingleton class.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.thisown">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openvsp.ErrorMgrSingleton.thisown" title="Link to this definition">¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openvsp.ErrorMgrSingleton.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.GetErrorLastCallFlag">
+<span class="sig-name descname"><span class="pre">GetErrorLastCallFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.GetErrorLastCallFlag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.GetErrorLastCallFlag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.GetNumTotalErrors">
+<span class="sig-name descname"><span class="pre">GetNumTotalErrors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.GetNumTotalErrors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.GetNumTotalErrors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.PopLastError">
+<span class="sig-name descname"><span class="pre">PopLastError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.ErrorObj" title="openvsp.ErrorObj"><span class="pre">ErrorObj</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.PopLastError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.PopLastError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.GetLastError">
+<span class="sig-name descname"><span class="pre">GetLastError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.ErrorObj" title="openvsp.ErrorObj"><span class="pre">ErrorObj</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.GetLastError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.GetLastError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.PopErrorAndPrint">
+<span class="sig-name descname"><span class="pre">PopErrorAndPrint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FILE</span> <span class="pre">*</span> <span class="pre">stream</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.PopErrorAndPrint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.PopErrorAndPrint" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.SilenceErrors">
+<span class="sig-name descname"><span class="pre">SilenceErrors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.SilenceErrors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.SilenceErrors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.PrintOnErrors">
+<span class="sig-name descname"><span class="pre">PrintOnErrors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.PrintOnErrors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.PrintOnErrors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.AddError">
+<span class="sig-name descname"><span class="pre">AddError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vsp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:ERROR_CODE</span> <span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">desc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.AddError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.AddError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.NoError">
+<span class="sig-name descname"><span class="pre">NoError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.NoError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.NoError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.MessageCallback">
+<span class="sig-name descname"><span class="pre">MessageCallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorMgrSingleton</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MessageBase</span> <span class="pre">const</span> <span class="pre">*</span> <span class="pre">_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MessageData</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.MessageCallback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.MessageCallback" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorMgrSingleton.getInstance">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">getInstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.ErrorMgrSingleton" title="openvsp.ErrorMgrSingleton"><span class="pre">ErrorMgrSingleton</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorMgrSingleton.getInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorMgrSingleton.getInstance" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="errorobj">
+<h2>ErrorObj<a class="headerlink" href="#errorobj" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ErrorObj.GetErrorCode" title="openvsp.ErrorObj.GetErrorCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorObj.GetErrorCode</span></code></a>(ErrorObj self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ErrorObj.GetErrorString" title="openvsp.ErrorObj.GetErrorString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ErrorObj.GetErrorString</span></code></a>(ErrorObj self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="openvsp.ErrorObj">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ErrorObj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorObj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorObj" title="Link to this definition">¶</a></dt>
+<dd><p>Proxy of C++ vsp::ErrorObj class.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.thisown">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openvsp.ErrorObj.thisown" title="Link to this definition">¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openvsp.ErrorObj.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.GetErrorCode">
+<span class="sig-name descname"><span class="pre">GetErrorCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorObj</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">vsp::ERROR_CODE</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorObj.GetErrorCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorObj.GetErrorCode" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.GetErrorString">
+<span class="sig-name descname"><span class="pre">GetErrorString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorObj</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorObj.GetErrorString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorObj.GetErrorString" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.m_ErrorCode">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">m_ErrorCode</span></span><a class="headerlink" href="#openvsp.ErrorObj.m_ErrorCode" title="Link to this definition">¶</a></dt>
+<dd><p>m_ErrorCode : vsp::ERROR_CODE</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.m_ErrorString">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">m_ErrorString</span></span><a class="headerlink" href="#openvsp.ErrorObj.m_ErrorString" title="Link to this definition">¶</a></dt>
+<dd><p>m_ErrorString : string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.ErrorObj.NoError">
+<span class="sig-name descname"><span class="pre">NoError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ErrorObj</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ErrorObj.NoError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ErrorObj.NoError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">API Error Functions</a><ul>
+<li><a class="reference internal" href="#errormgrsingleton">ErrorMgrSingleton</a><ul>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton</span></code></a><ul>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.thisown"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.thisown</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.__repr__"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetErrorLastCallFlag"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetErrorLastCallFlag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetNumTotalErrors"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetNumTotalErrors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.PopLastError"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.PopLastError()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.GetLastError"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.GetLastError()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.PopErrorAndPrint"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.PopErrorAndPrint()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.SilenceErrors"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.SilenceErrors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.PrintOnErrors"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.PrintOnErrors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.AddError"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.AddError()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.NoError"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.NoError()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.MessageCallback"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.MessageCallback()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorMgrSingleton.getInstance"><code class="docutils literal notranslate"><span class="pre">ErrorMgrSingleton.getInstance()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#errorobj">ErrorObj</a><ul>
+<li><a class="reference internal" href="#openvsp.ErrorObj"><code class="docutils literal notranslate"><span class="pre">ErrorObj</span></code></a><ul>
+<li><a class="reference internal" href="#openvsp.ErrorObj.thisown"><code class="docutils literal notranslate"><span class="pre">ErrorObj.thisown</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.__repr__"><code class="docutils literal notranslate"><span class="pre">ErrorObj.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.GetErrorCode"><code class="docutils literal notranslate"><span class="pre">ErrorObj.GetErrorCode()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.GetErrorString"><code class="docutils literal notranslate"><span class="pre">ErrorObj.GetErrorString()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.m_ErrorCode"><code class="docutils literal notranslate"><span class="pre">ErrorObj.m_ErrorCode</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.m_ErrorString"><code class="docutils literal notranslate"><span class="pre">ErrorObj.m_ErrorString</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ErrorObj.NoError"><code class="docutils literal notranslate"><span class="pre">ErrorObj.NoError()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Analysis.html"
+                          title="previous chapter">Analysis Manager Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Attributes.html"
+                          title="next chapter">Attributes Manager Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/APIError.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Attributes.html" title="Attributes Manager Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Analysis.html" title="Analysis Manager Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API Error Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

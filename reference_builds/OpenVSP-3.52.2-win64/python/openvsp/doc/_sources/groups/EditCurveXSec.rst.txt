@@ -1,0 +1,50 @@
+Edit Curve XSec Functions
+=========================
+
+Functions for modifying XSecs of type XS_EDIT_CURVE are defined here.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    EditXSecInitShape
+    EditXSecConvertTo
+    GetEditXSecUVec
+    GetEditXSecCtrlVec
+    SetEditXSecPnts
+    EditXSecDelPnt
+    EditXSecSplit01
+    MoveEditXSecPnt
+    ConvertXSecToEdit
+    GetEditXSecFixedUVec
+    SetEditXSecFixedUVec
+    ReparameterizeEditXSec
+
+
+Details
+-------
+
+.. autofunction:: EditXSecInitShape
+
+.. autofunction:: EditXSecConvertTo
+
+.. autofunction:: GetEditXSecUVec
+
+.. autofunction:: GetEditXSecCtrlVec
+
+.. autofunction:: SetEditXSecPnts
+
+.. autofunction:: EditXSecDelPnt
+
+.. autofunction:: EditXSecSplit01
+
+.. autofunction:: MoveEditXSecPnt
+
+.. autofunction:: ConvertXSecToEdit
+
+.. autofunction:: GetEditXSecFixedUVec
+
+.. autofunction:: SetEditXSecFixedUVec
+
+.. autofunction:: ReparameterizeEditXSec
+

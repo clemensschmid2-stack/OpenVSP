@@ -1,0 +1,20 @@
+Snap-To Functions
+=================
+
+This group of API functions provide the capabilities available in the Snap-To tool.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ComputeMinClearanceDistance
+    SnapParm
+
+
+Details
+-------
+
+.. autofunction:: ComputeMinClearanceDistance
+
+.. autofunction:: SnapParm
+

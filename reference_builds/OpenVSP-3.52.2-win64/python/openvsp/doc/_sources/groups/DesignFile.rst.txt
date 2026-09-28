@@ -1,0 +1,41 @@
+Design File Functions
+=====================
+
+This group of functions is available for managing Design Variables through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ReadApplyDESFile
+    WriteDESFile
+    ReadApplyXDDMFile
+    WriteXDDMFile
+    GetNumDesignVars
+    AddDesignVar
+    DeleteAllDesignVars
+    GetDesignVar
+    GetDesignVarType
+
+
+Details
+-------
+
+.. autofunction:: ReadApplyDESFile
+
+.. autofunction:: WriteDESFile
+
+.. autofunction:: ReadApplyXDDMFile
+
+.. autofunction:: WriteXDDMFile
+
+.. autofunction:: GetNumDesignVars
+
+.. autofunction:: AddDesignVar
+
+.. autofunction:: DeleteAllDesignVars
+
+.. autofunction:: GetDesignVar
+
+.. autofunction:: GetDesignVarType
+

@@ -1,0 +1,62 @@
+Mode Functions
+==============
+
+This group of API functions are used to manipulate Modes -- a combination of Sets and Variable Presets
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    CreateAndAddMode
+    GetNumModes
+    GetAllModes
+    DelMode
+    DelAllModes
+    GetModeName
+    SetModeName
+    ApplyModeSettings
+    ShowOnlyMode
+    ModeAddGroupSetting
+    ModeGetGroup
+    ModeGetSetting
+    ModeGetAllGroups
+    ModeGetAllSettings
+    RemoveGroupSetting
+    RemoveAllGroupSettings
+
+
+Details
+-------
+
+.. autofunction:: CreateAndAddMode
+
+.. autofunction:: GetNumModes
+
+.. autofunction:: GetAllModes
+
+.. autofunction:: DelMode
+
+.. autofunction:: DelAllModes
+
+.. autofunction:: GetModeName
+
+.. autofunction:: SetModeName
+
+.. autofunction:: ApplyModeSettings
+
+.. autofunction:: ShowOnlyMode
+
+.. autofunction:: ModeAddGroupSetting
+
+.. autofunction:: ModeGetGroup
+
+.. autofunction:: ModeGetSetting
+
+.. autofunction:: ModeGetAllGroups
+
+.. autofunction:: ModeGetAllSettings
+
+.. autofunction:: RemoveGroupSetting
+
+.. autofunction:: RemoveAllGroupSettings
+

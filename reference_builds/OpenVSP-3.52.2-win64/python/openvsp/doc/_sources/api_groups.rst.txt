@@ -1,0 +1,55 @@
+API Functions by Group
+======================
+
+The OpenVSP API is sorted into the groups below.  Each page lists the contents of
+one group with a short summary, followed by the full description of each.
+
+.. toctree::
+    :maxdepth: 1
+
+    groups/AdvancedLink
+    groups/Analysis
+    groups/APIError
+    groups/Attributes
+    groups/AuxiliaryGeom
+    groups/Background3D
+    groups/BOR
+    groups/CFDMesh
+    groups/DesignFile
+    groups/EditCurveXSec
+    groups/Enumerations
+    groups/FEAMesh
+    groups/FileIO
+    groups/FitModel
+    groups/Sets
+    groups/GearGeom
+    groups/APIUtilities
+    groups/Computations
+    groups/Geom
+    groups/SurfaceQuery
+    groups/GroupMod
+    groups/Matrix4d
+    groups/Measure
+    groups/Mode
+    groups/ParasiteDrag
+    groups/ParmContainer
+    groups/Parm
+    groups/ParmLink
+    groups/PointCloud
+    groups/PCurve
+    groups/Results
+    groups/RoutingGeom
+    groups/SnapTo
+    groups/StackGeom
+    groups/SubSurface
+    groups/VariablePreset
+    groups/vec2d
+    groups/vec3d
+    groups/Vehicle
+    groups/Visualization
+    groups/VSPAERODiskAndProp
+    groups/CSGroup
+    groups/VSPAERO
+    groups/XSec
+    groups/XSecSurf
+

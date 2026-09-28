@@ -1,0 +1,53 @@
+Background3D Functions
+======================
+
+This group of functions is used to work with 3D background images.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AddBackground3D
+    GetNumBackground3Ds
+    GetAllBackground3Ds
+    ShowAllBackground3Ds
+    HideAllBackground3Ds
+    DelAllBackground3Ds
+    DelBackground3D
+    GetAllBackground3DRelativePaths
+    GetAllBackground3DAbsolutePaths
+    GetBackground3DRelativePath
+    GetBackground3DAbsolutePath
+    SetBackground3DRelativePath
+    SetBackground3DAbsolutePath
+
+
+Details
+-------
+
+.. autofunction:: AddBackground3D
+
+.. autofunction:: GetNumBackground3Ds
+
+.. autofunction:: GetAllBackground3Ds
+
+.. autofunction:: ShowAllBackground3Ds
+
+.. autofunction:: HideAllBackground3Ds
+
+.. autofunction:: DelAllBackground3Ds
+
+.. autofunction:: DelBackground3D
+
+.. autofunction:: GetAllBackground3DRelativePaths
+
+.. autofunction:: GetAllBackground3DAbsolutePaths
+
+.. autofunction:: GetBackground3DRelativePath
+
+.. autofunction:: GetBackground3DAbsolutePath
+
+.. autofunction:: SetBackground3DRelativePath
+
+.. autofunction:: SetBackground3DAbsolutePath
+

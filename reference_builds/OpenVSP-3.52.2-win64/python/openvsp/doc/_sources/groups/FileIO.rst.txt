@@ -1,0 +1,35 @@
+File Input and Output Functions
+===============================
+
+This group of functions provides file input and output interfacing through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ReadVSPFile
+    WriteVSPFile
+    SetVSP3FileName
+    InsertVSPFile
+    ExportFile
+    ImportFile
+    GetBEMPropID
+
+
+Details
+-------
+
+.. autofunction:: ReadVSPFile
+
+.. autofunction:: WriteVSPFile
+
+.. autofunction:: SetVSP3FileName
+
+.. autofunction:: InsertVSPFile
+
+.. autofunction:: ExportFile
+
+.. autofunction:: ImportFile
+
+.. autofunction:: GetBEMPropID
+

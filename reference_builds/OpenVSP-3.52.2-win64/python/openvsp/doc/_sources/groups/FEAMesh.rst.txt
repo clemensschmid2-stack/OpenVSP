@@ -1,0 +1,257 @@
+FEA Mesh Functions
+==================
+
+The following group of API functions supports all functionality of the FEA Mesh Tool. Structures, FEA Parts, materials, and properties can be defined and manipulated. Mesh and output file settings can be adjusted, and an FEA mesh can be generated.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AddFeaStruct
+    GetFeaMeshStructIndex
+    SetFeaMeshStructIndex
+    DeleteFeaStruct
+    GetFeaStructID
+    GetFeaStructIndex
+    GetFeaStructParentGeomID
+    GetFeaStructName
+    SetFeaStructName
+    GetFeaStructIDVec
+    SetFeaPartName
+    AddFeaPart
+    DeleteFeaPart
+    ReorderFeaPart
+    IndividualizeFeaPart
+    GetFeaPartID
+    GetFeaPartName
+    GetFeaPartType
+    GetFeaPartIDVec
+    GetFeaSubSurfIDVec
+    SetFeaPartPerpendicularSparID
+    GetFeaPartPerpendicularSparID
+    SetFeaSubSurfName
+    GetFeaSubSurfName
+    AddFeaSubSurf
+    DeleteFeaSubSurf
+    GetFeaSubSurfIndex
+    GetFeaPolySparNumPt
+    AddFeaPolySparPt
+    InsertFeaPolySparPt
+    DelFeaPolySparPt
+    DelAllFeaPolySparPt
+    MoveFeaPolySparPt
+    SetFeaPolySparPtName
+    GetFeaPolySparPtName
+    GetFeaPolySparPtID
+    GetAllFeaPolySparPtIDVec
+    AddFeaTrimPart
+    DeleteFeaTrimPart
+    GetFeaTrimPartIDVec
+    AddFeaAssembly
+    DeleteFeaAssembly
+    NumFeaAssemblies
+    GetFeaAssemblyIDVec
+    GetFeaAssemblyName
+    SetFeaAssemblyName
+    AddFeaStructureToAssembly
+    DeleteFeaStructureFromAssembly
+    AddFeaAssemblyStructure
+    DeleteFeaAssemblyStructure
+    GetFeaAssemblyStructureIDVec
+    AddFeaAssemblyConnection
+    DeleteFeaAssemblyConnection
+    NumFeaAssemblyConnections
+    GetFeaAssemblyConnectionID
+    GetFeaAssemblyFileName
+    SetFeaAssemblyFileName
+    ComputeFeaAssemblyMesh
+    NumFeaStructures
+    NumFeaParts
+    NumFeaSubSurfs
+    AddFeaBC
+    DelFeaBC
+    GetFeaBCIDVec
+    NumFeaBCs
+    AddFeaLayer
+    DeleteFeaLayer
+    ReorderFeaLayer
+    NumFeaLayers
+    GetFeaLayerIDVec
+    GetFeaMaterialIDVec
+    DeleteFeaMaterial
+    AddFeaMaterial
+    GetFeaPropertyIDVec
+    DeleteFeaProperty
+    AddFeaProperty
+    GetFeaMeshVal
+    SetFeaMeshVal
+    GetFeaMeshFileName
+    SetFeaMeshFileName
+    ComputeFeaMesh
+
+
+Details
+-------
+
+.. autofunction:: AddFeaStruct
+
+.. autofunction:: GetFeaMeshStructIndex
+
+.. autofunction:: SetFeaMeshStructIndex
+
+.. autofunction:: DeleteFeaStruct
+
+.. autofunction:: GetFeaStructID
+
+.. autofunction:: GetFeaStructIndex
+
+.. autofunction:: GetFeaStructParentGeomID
+
+.. autofunction:: GetFeaStructName
+
+.. autofunction:: SetFeaStructName
+
+.. autofunction:: GetFeaStructIDVec
+
+.. autofunction:: SetFeaPartName
+
+.. autofunction:: AddFeaPart
+
+.. autofunction:: DeleteFeaPart
+
+.. autofunction:: ReorderFeaPart
+
+.. autofunction:: IndividualizeFeaPart
+
+.. autofunction:: GetFeaPartID
+
+.. autofunction:: GetFeaPartName
+
+.. autofunction:: GetFeaPartType
+
+.. autofunction:: GetFeaPartIDVec
+
+.. autofunction:: GetFeaSubSurfIDVec
+
+.. autofunction:: SetFeaPartPerpendicularSparID
+
+.. autofunction:: GetFeaPartPerpendicularSparID
+
+.. autofunction:: SetFeaSubSurfName
+
+.. autofunction:: GetFeaSubSurfName
+
+.. autofunction:: AddFeaSubSurf
+
+.. autofunction:: DeleteFeaSubSurf
+
+.. autofunction:: GetFeaSubSurfIndex
+
+.. autofunction:: GetFeaPolySparNumPt
+
+.. autofunction:: AddFeaPolySparPt
+
+.. autofunction:: InsertFeaPolySparPt
+
+.. autofunction:: DelFeaPolySparPt
+
+.. autofunction:: DelAllFeaPolySparPt
+
+.. autofunction:: MoveFeaPolySparPt
+
+.. autofunction:: SetFeaPolySparPtName
+
+.. autofunction:: GetFeaPolySparPtName
+
+.. autofunction:: GetFeaPolySparPtID
+
+.. autofunction:: GetAllFeaPolySparPtIDVec
+
+.. autofunction:: AddFeaTrimPart
+
+.. autofunction:: DeleteFeaTrimPart
+
+.. autofunction:: GetFeaTrimPartIDVec
+
+.. autofunction:: AddFeaAssembly
+
+.. autofunction:: DeleteFeaAssembly
+
+.. autofunction:: NumFeaAssemblies
+
+.. autofunction:: GetFeaAssemblyIDVec
+
+.. autofunction:: GetFeaAssemblyName
+
+.. autofunction:: SetFeaAssemblyName
+
+.. autofunction:: AddFeaStructureToAssembly
+
+.. autofunction:: DeleteFeaStructureFromAssembly
+
+.. autofunction:: AddFeaAssemblyStructure
+
+.. autofunction:: DeleteFeaAssemblyStructure
+
+.. autofunction:: GetFeaAssemblyStructureIDVec
+
+.. autofunction:: AddFeaAssemblyConnection
+
+.. autofunction:: DeleteFeaAssemblyConnection
+
+.. autofunction:: NumFeaAssemblyConnections
+
+.. autofunction:: GetFeaAssemblyConnectionID
+
+.. autofunction:: GetFeaAssemblyFileName
+
+.. autofunction:: SetFeaAssemblyFileName
+
+.. autofunction:: ComputeFeaAssemblyMesh
+
+.. autofunction:: NumFeaStructures
+
+.. autofunction:: NumFeaParts
+
+.. autofunction:: NumFeaSubSurfs
+
+.. autofunction:: AddFeaBC
+
+.. autofunction:: DelFeaBC
+
+.. autofunction:: GetFeaBCIDVec
+
+.. autofunction:: NumFeaBCs
+
+.. autofunction:: AddFeaLayer
+
+.. autofunction:: DeleteFeaLayer
+
+.. autofunction:: ReorderFeaLayer
+
+.. autofunction:: NumFeaLayers
+
+.. autofunction:: GetFeaLayerIDVec
+
+.. autofunction:: GetFeaMaterialIDVec
+
+.. autofunction:: DeleteFeaMaterial
+
+.. autofunction:: AddFeaMaterial
+
+.. autofunction:: GetFeaPropertyIDVec
+
+.. autofunction:: DeleteFeaProperty
+
+.. autofunction:: AddFeaProperty
+
+.. autofunction:: GetFeaMeshVal
+
+.. autofunction:: SetFeaMeshVal
+
+.. autofunction:: GetFeaMeshFileName
+
+.. autofunction:: SetFeaMeshFileName
+
+.. autofunction:: ComputeFeaMesh
+

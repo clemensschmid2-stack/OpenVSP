@@ -1,0 +1,159 @@
+Vec3D Functions
+===============
+
+API functions that utilize the vec3d class are grouped here. For details of the class, including member functions, see vec3d.
+
+.. currentmodule:: openvsp
+
+vec3d
+-----
+
+.. autosummary::
+
+    vec3d.set_xyz
+    vec3d.set_vec
+    vec3d.set_x
+    vec3d.set_y
+    vec3d.set_z
+    vec3d.set_refx
+    vec3d.set_refy
+    vec3d.set_refz
+    vec3d.x
+    vec3d.y
+    vec3d.z
+    vec3d.rotate_x
+    vec3d.rotate_y
+    vec3d.rotate_z
+    vec3d.scale_x
+    vec3d.scale_y
+    vec3d.scale_z
+    vec3d.offset_x
+    vec3d.offset_y
+    vec3d.offset_z
+    vec3d.offset_i
+    vec3d.reflect_xy
+    vec3d.reflect_xz
+    vec3d.reflect_yz
+    vec3d.mag
+    vec3d.magsq
+    vec3d.normalize
+    vec3d.major_comp
+    vec3d.minor_comp
+    vec3d.isnan
+    vec3d.isinf
+    vec3d.isfinite
+    vec3d.print
+
+.. autoclass:: vec3d
+    :members:
+    :undoc-members:
+    :special-members: __rmul__, __neg__, __setitem__, __len__, __repr__
+
+Operators
+^^^^^^^^^
+
+.. method:: vec3d.__add__(other)
+
+    Addition operator for two vec3d objects, performed by the addition of each corresponding component
+
+    .. code-block:: python
+
+        a = vec3d()                                # Default Constructor
+        b = vec3d()
+
+        a.set_xyz( 1.0, 2.0, 3.0 )
+        b.set_xyz( 4.0, 5.0, 6.0 )
+
+        c = a + b
+
+        print( "a + b = ", False )
+
+        print( c )
+
+.. method:: vec3d.__sub__(other)
+
+    Subtraction operator for two vec3d objects, performed by the subtraction of each corresponding component
+
+    .. code-block:: python
+
+        a = vec3d()                                # Default Constructor
+        b = vec3d()
+
+        a.set_xyz( 1.0, 2.0, 3.0 )
+        b.set_xyz( 4.0, 5.0, 6.0 )
+
+        c = a - b
+
+        print( "a - b = ", False )
+
+        print( c )
+
+.. method:: vec3d.__mul__(other)
+
+    Scalar multiplication operator for a vec3d, performed by the multiplication of each vec3d component and the scalar
+
+    .. code-block:: python
+
+        a = vec3d()                                # Default Constructor
+
+        a.set_xyz( 1.0, 2.0, 3.0 )
+
+        b = 1.5
+
+        c = a * b
+
+        print( "a * b = ", False )
+
+        print( c )
+
+.. method:: vec3d.__truediv__(other)
+
+    Scalar division operator for a vec3d, performed by the division of of each vec3d component by the scalar
+
+    .. code-block:: python
+
+        a = vec3d()                                # Default Constructor
+
+        a.set_xyz( 1.0, 2.0, 3.0 )
+
+        b = 1.5
+
+        c = a / b
+
+        print( "a / b = ", False )
+
+        print( c )
+
+.. method:: vec3d.__getitem__(other)
+
+Functions
+---------
+
+.. autosummary::
+
+    dist
+    dist_squared
+    dot
+    cross
+    angle
+    signed_angle
+    cos_angle
+    RotateArbAxis
+    to_string
+    FitPlane
+    compsum
+
+
+Details
+-------
+
+.. autofunction:: signed_angle
+
+.. autofunction:: RotateArbAxis
+
+.. autofunction:: to_string
+
+.. autofunction:: FitPlane
+
+.. autofunction:: compsum
+

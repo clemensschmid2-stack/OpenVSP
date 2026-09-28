@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Measure Tool Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mode Functions" href="Mode.html" />
+    <link rel="prev" title="Matrix4d Functions" href="Matrix4d.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Mode.html" title="Mode Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Matrix4d.html" title="Matrix4d Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Measure Tool Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="measure-tool-functions">
+<h1>Measure Tool Functions<a class="headerlink" href="#measure-tool-functions" title="Link to this heading">¶</a></h1>
+<p>This group of API functions can be used to control the Ruler Tool through the API.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ShowAllRulers" title="openvsp.ShowAllRulers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShowAllRulers</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.HideAllRulers" title="openvsp.HideAllRulers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HideAllRulers</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ShowAllProbes" title="openvsp.ShowAllProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShowAllProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.HideAllProbes" title="openvsp.HideAllProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HideAllProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ShowAllProtractors" title="openvsp.ShowAllProtractors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShowAllProtractors</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.HideAllProtractors" title="openvsp.HideAllProtractors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HideAllProtractors</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ShowAllRSTProbes" title="openvsp.ShowAllRSTProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShowAllRSTProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.HideAllRSTProbes" title="openvsp.HideAllRSTProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HideAllRSTProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddProtractor" title="openvsp.AddProtractor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddProtractor</span></code></a>(std, int startsurfindx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAllProtractors" title="openvsp.GetAllProtractors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllProtractors</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelProtractor" title="openvsp.DelProtractor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelProtractor</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteAllProtractors" title="openvsp.DeleteAllProtractors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllProtractors</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddRSTProbe" title="openvsp.AddRSTProbe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddRSTProbe</span></code></a>(std, int surfindx, double r, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAllRSTProbes" title="openvsp.GetAllRSTProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllRSTProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelRSTProbe" title="openvsp.DelRSTProbe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelRSTProbe</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteAllRSTProbes" title="openvsp.DeleteAllRSTProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllRSTProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddRuler" title="openvsp.AddRuler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddRuler</span></code></a>(std, int startsurfindx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAllRulers" title="openvsp.GetAllRulers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllRulers</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelRuler" title="openvsp.DelRuler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelRuler</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteAllRulers" title="openvsp.DeleteAllRulers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllRulers</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddProbe" title="openvsp.AddProbe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddProbe</span></code></a>(std, int surfindx, double u, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAllProbes" title="openvsp.GetAllProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelProbe" title="openvsp.DelProbe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelProbe</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteAllProbes" title="openvsp.DeleteAllProbes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllProbes</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ShowAllRulers">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ShowAllRulers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ShowAllRulers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ShowAllRulers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.HideAllRulers">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">HideAllRulers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#HideAllRulers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.HideAllRulers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ShowAllProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ShowAllProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ShowAllProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ShowAllProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.HideAllProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">HideAllProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#HideAllProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.HideAllProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ShowAllProtractors">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ShowAllProtractors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ShowAllProtractors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ShowAllProtractors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.HideAllProtractors">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">HideAllProtractors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#HideAllProtractors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.HideAllProtractors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ShowAllRSTProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ShowAllRSTProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ShowAllRSTProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ShowAllRSTProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.HideAllRSTProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">HideAllRSTProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#HideAllRSTProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.HideAllRSTProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddProtractor">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddProtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">startgeomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">startsurfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">startu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">startw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">midgeomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">midsurfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">midu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">midw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">endgeomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">endsurfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">endu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">endw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddProtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddProtractor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAllProtractors">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAllProtractors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAllProtractors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAllProtractors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelProtractor">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelProtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelProtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelProtractor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllProtractors">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllProtractors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllProtractors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllProtractors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddRSTProbe">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddRSTProbe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddRSTProbe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddRSTProbe" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAllRSTProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAllRSTProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAllRSTProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAllRSTProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelRSTProbe">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelRSTProbe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelRSTProbe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelRSTProbe" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllRSTProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllRSTProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllRSTProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllRSTProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddRuler">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddRuler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">startgeomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">startsurfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">startu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">startw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">endgeomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">endsurfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">endu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">endw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddRuler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddRuler" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAllRulers">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAllRulers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAllRulers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAllRulers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelRuler">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelRuler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelRuler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelRuler" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllRulers">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllRulers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllRulers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllRulers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddProbe">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddProbe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geomid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surfindx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddProbe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddProbe" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAllProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAllProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAllProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAllProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelProbe">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelProbe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelProbe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelProbe" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllProbes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllProbes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllProbes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllProbes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Measure Tool Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.ShowAllRulers"><code class="docutils literal notranslate"><span class="pre">ShowAllRulers()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.HideAllRulers"><code class="docutils literal notranslate"><span class="pre">HideAllRulers()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ShowAllProbes"><code class="docutils literal notranslate"><span class="pre">ShowAllProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.HideAllProbes"><code class="docutils literal notranslate"><span class="pre">HideAllProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ShowAllProtractors"><code class="docutils literal notranslate"><span class="pre">ShowAllProtractors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.HideAllProtractors"><code class="docutils literal notranslate"><span class="pre">HideAllProtractors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ShowAllRSTProbes"><code class="docutils literal notranslate"><span class="pre">ShowAllRSTProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.HideAllRSTProbes"><code class="docutils literal notranslate"><span class="pre">HideAllRSTProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddProtractor"><code class="docutils literal notranslate"><span class="pre">AddProtractor()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAllProtractors"><code class="docutils literal notranslate"><span class="pre">GetAllProtractors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelProtractor"><code class="docutils literal notranslate"><span class="pre">DelProtractor()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllProtractors"><code class="docutils literal notranslate"><span class="pre">DeleteAllProtractors()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddRSTProbe"><code class="docutils literal notranslate"><span class="pre">AddRSTProbe()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAllRSTProbes"><code class="docutils literal notranslate"><span class="pre">GetAllRSTProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelRSTProbe"><code class="docutils literal notranslate"><span class="pre">DelRSTProbe()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllRSTProbes"><code class="docutils literal notranslate"><span class="pre">DeleteAllRSTProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddRuler"><code class="docutils literal notranslate"><span class="pre">AddRuler()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAllRulers"><code class="docutils literal notranslate"><span class="pre">GetAllRulers()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelRuler"><code class="docutils literal notranslate"><span class="pre">DelRuler()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllRulers"><code class="docutils literal notranslate"><span class="pre">DeleteAllRulers()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddProbe"><code class="docutils literal notranslate"><span class="pre">AddProbe()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAllProbes"><code class="docutils literal notranslate"><span class="pre">GetAllProbes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelProbe"><code class="docutils literal notranslate"><span class="pre">DelProbe()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllProbes"><code class="docutils literal notranslate"><span class="pre">DeleteAllProbes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Matrix4d.html"
+                          title="previous chapter">Matrix4d Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Mode.html"
+                          title="next chapter">Mode Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/Measure.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Mode.html" title="Mode Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Matrix4d.html" title="Matrix4d Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Measure Tool Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

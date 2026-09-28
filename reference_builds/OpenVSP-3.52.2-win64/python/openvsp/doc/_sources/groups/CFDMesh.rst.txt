@@ -1,0 +1,74 @@
+CFD Mesh Functions
+==================
+
+This group of functions is used to setup and run the CFD Mesh tool through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetComputationFileName
+    SetComputationFileName
+    ComputeCFDMesh
+    GetCFDMeshVal
+    SetCFDMeshVal
+    GetCFDWakeFlag
+    SetCFDWakeFlag
+    SetCFDFarFieldGeomID
+    GetCFDFarFieldGeomID
+    GetNumCFDSources
+    GetCFDSourceName
+    SetCFDSourceName
+    GetCFDSourceType
+    DeleteCFDSource
+    DeleteAllCFDSources
+    GetCFDSourceID
+    AdjustAllCFDSourceLen
+    AdjustAllCFDSourceRad
+    AddDefaultSources
+    AddCFDSource
+
+
+Details
+-------
+
+.. autofunction:: GetComputationFileName
+
+.. autofunction:: SetComputationFileName
+
+.. autofunction:: ComputeCFDMesh
+
+.. autofunction:: GetCFDMeshVal
+
+.. autofunction:: SetCFDMeshVal
+
+.. autofunction:: GetCFDWakeFlag
+
+.. autofunction:: SetCFDWakeFlag
+
+.. autofunction:: SetCFDFarFieldGeomID
+
+.. autofunction:: GetCFDFarFieldGeomID
+
+.. autofunction:: GetNumCFDSources
+
+.. autofunction:: GetCFDSourceName
+
+.. autofunction:: SetCFDSourceName
+
+.. autofunction:: GetCFDSourceType
+
+.. autofunction:: DeleteCFDSource
+
+.. autofunction:: DeleteAllCFDSources
+
+.. autofunction:: GetCFDSourceID
+
+.. autofunction:: AdjustAllCFDSourceLen
+
+.. autofunction:: AdjustAllCFDSourceRad
+
+.. autofunction:: AddDefaultSources
+
+.. autofunction:: AddCFDSource
+

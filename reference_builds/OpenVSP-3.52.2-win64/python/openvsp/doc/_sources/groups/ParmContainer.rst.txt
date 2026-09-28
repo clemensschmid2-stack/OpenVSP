@@ -1,0 +1,59 @@
+Parm Container Functions
+========================
+
+All Parms in OpenVSP are stored in Parm Containers. The functions in this group can be used to work with Parm Containers through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    FindContainers
+    FindContainersWithName
+    FindContainer
+    SetContainerName
+    GetContainerName
+    FindContainerGroupNames
+    FindContainerParmIDs
+    GetVehicleID
+    GetNumUserParms
+    GetNumPredefinedUserParms
+    GetAllUserParms
+    GetUserParmContainer
+    AddUserParm
+    DeleteUserParm
+    DeleteAllUserParm
+
+
+Details
+-------
+
+.. autofunction:: FindContainers
+
+.. autofunction:: FindContainersWithName
+
+.. autofunction:: FindContainer
+
+.. autofunction:: SetContainerName
+
+.. autofunction:: GetContainerName
+
+.. autofunction:: FindContainerGroupNames
+
+.. autofunction:: FindContainerParmIDs
+
+.. autofunction:: GetVehicleID
+
+.. autofunction:: GetNumUserParms
+
+.. autofunction:: GetNumPredefinedUserParms
+
+.. autofunction:: GetAllUserParms
+
+.. autofunction:: GetUserParmContainer
+
+.. autofunction:: AddUserParm
+
+.. autofunction:: DeleteUserParm
+
+.. autofunction:: DeleteAllUserParm
+

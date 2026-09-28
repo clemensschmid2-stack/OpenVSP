@@ -1,0 +1,41 @@
+Propeller Blade Curve Functions
+===============================
+
+The following group of API functions may be used to control parametric propeller blade curves (PCurves).
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SetPCurve
+    PCurveConvertTo
+    PCurveGetType
+    PCurveGetTVec
+    PCurveGetValVec
+    PCurveDeletePt
+    PCurveSplit
+    ApproximateAllPropellerPCurves
+    ResetPropellerThicknessCurve
+
+
+Details
+-------
+
+.. autofunction:: SetPCurve
+
+.. autofunction:: PCurveConvertTo
+
+.. autofunction:: PCurveGetType
+
+.. autofunction:: PCurveGetTVec
+
+.. autofunction:: PCurveGetValVec
+
+.. autofunction:: PCurveDeletePt
+
+.. autofunction:: PCurveSplit
+
+.. autofunction:: ApproximateAllPropellerPCurves
+
+.. autofunction:: ResetPropellerThicknessCurve
+

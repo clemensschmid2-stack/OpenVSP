@@ -7,13 +7,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "XSecCurve.h"
 #include "Geom.h"
 //#include "SuperEllipse.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "FuselageGeom.h"
 #include "BORGeom.h"
 #include "VspUtil.h"
@@ -569,14 +569,14 @@ xmlNodePtr XSecCurve::DecodeXml( xmlNodePtr & node )
 //==== Copy From ====//
 void XSecCurve::CopyFrom( XSecCurve* from_crv )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
     xmlNodePtr root = xmlNewNode( nullptr, ( const xmlChar * )"Vsp_Geometry" );
 
     from_crv->EncodeXml( root );
     DecodeXml( root );
 
     xmlFreeNode( root );
-    ParmMgr.ResetRemapID( lastreset );
+    IDMgr.ResetRemapID( lastreset );
 }
 
 bool XSecCurve::DetermineWingType()

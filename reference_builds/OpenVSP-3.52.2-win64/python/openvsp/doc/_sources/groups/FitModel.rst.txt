@@ -1,0 +1,158 @@
+Fit Model Functions
+===================
+
+This group of functions supports the Fit Model Tool, which adjusts a model until its surfaces pass through a set of known points.  Each point to match is set up as a target point: a point in space paired with the surface of a Geom, either pinned to a surface coordinate or free to slide along the surface.  One or more Parms are then nominated as variables.  Together these define a least squares problem, which is solved with a Levenberg-Marquardt algorithm where the free surface coordinates and the nominated Parms are the degrees of freedom and every target point contributes three residuals.  Unlike the GUI, the API takes target points directly as coordinates rather than through a point cloud Geom and mouse selection.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ResetFitModel
+    AddFitModelTargetPt
+    AddFitModelTargetPtFixedU
+    AddFitModelTargetPtFixedW
+    AddFitModelTargetPtFixedUW
+    AddFitModelTargetPts
+    AddFitModelTargetPtsFixedU
+    AddFitModelTargetPtsFixedUs
+    AddFitModelTargetPtsFixedW
+    AddFitModelTargetPtsFixedWs
+    AddFitModelTargetPtsFixedUW
+    AddFitModelTargetPtsFixedUWs
+    DelFitModelTargetPt
+    DelAllFitModelTargetPts
+    SortFitModelTargetPtsByDist
+    MoveFitModelTargetPt
+    GetNumFitModelTargetPts
+    GetFitModelTargetPt
+    SetFitModelTargetPt
+    GetFitModelTargetPtGeom
+    SetFitModelTargetPtGeom
+    GetFitModelTargetPtSurfIndx
+    SetFitModelTargetPtSurfIndx
+    GetFitModelTargetPtU
+    GetFitModelTargetPtW
+    GetFitModelTargetPtDist
+    SetFitModelTargetPtUW
+    GetFitModelTargetPtUType
+    SetFitModelTargetPtUType
+    GetFitModelTargetPtWType
+    SetFitModelTargetPtWType
+    GetFitModelTargetPtSurfPt
+    AddFitModelVar
+    DelFitModelVar
+    DelAllFitModelVars
+    GetNumFitModelVars
+    GetFitModelVar
+    GetFitModelVarVec
+    SearchFitModelTargetUW
+    RefineFitModelTargetUW
+    UpdateFitModelDist
+    GetFitModelDist
+    GetNumFitModelOptVars
+    OptimizeFitModel
+    CanUndoFitModel
+    UndoFitModel
+    SaveFitModelFile
+    LoadFitModelFile
+
+
+Details
+-------
+
+.. autofunction:: ResetFitModel
+
+.. autofunction:: AddFitModelTargetPt
+
+.. autofunction:: AddFitModelTargetPtFixedU
+
+.. autofunction:: AddFitModelTargetPtFixedW
+
+.. autofunction:: AddFitModelTargetPtFixedUW
+
+.. autofunction:: AddFitModelTargetPts
+
+.. autofunction:: AddFitModelTargetPtsFixedU
+
+.. autofunction:: AddFitModelTargetPtsFixedUs
+
+.. autofunction:: AddFitModelTargetPtsFixedW
+
+.. autofunction:: AddFitModelTargetPtsFixedWs
+
+.. autofunction:: AddFitModelTargetPtsFixedUW
+
+.. autofunction:: AddFitModelTargetPtsFixedUWs
+
+.. autofunction:: DelFitModelTargetPt
+
+.. autofunction:: DelAllFitModelTargetPts
+
+.. autofunction:: SortFitModelTargetPtsByDist
+
+.. autofunction:: MoveFitModelTargetPt
+
+.. autofunction:: GetNumFitModelTargetPts
+
+.. autofunction:: GetFitModelTargetPt
+
+.. autofunction:: SetFitModelTargetPt
+
+.. autofunction:: GetFitModelTargetPtGeom
+
+.. autofunction:: SetFitModelTargetPtGeom
+
+.. autofunction:: GetFitModelTargetPtSurfIndx
+
+.. autofunction:: SetFitModelTargetPtSurfIndx
+
+.. autofunction:: GetFitModelTargetPtU
+
+.. autofunction:: GetFitModelTargetPtW
+
+.. autofunction:: GetFitModelTargetPtDist
+
+.. autofunction:: SetFitModelTargetPtUW
+
+.. autofunction:: GetFitModelTargetPtUType
+
+.. autofunction:: SetFitModelTargetPtUType
+
+.. autofunction:: GetFitModelTargetPtWType
+
+.. autofunction:: SetFitModelTargetPtWType
+
+.. autofunction:: GetFitModelTargetPtSurfPt
+
+.. autofunction:: AddFitModelVar
+
+.. autofunction:: DelFitModelVar
+
+.. autofunction:: DelAllFitModelVars
+
+.. autofunction:: GetNumFitModelVars
+
+.. autofunction:: GetFitModelVar
+
+.. autofunction:: GetFitModelVarVec
+
+.. autofunction:: SearchFitModelTargetUW
+
+.. autofunction:: RefineFitModelTargetUW
+
+.. autofunction:: UpdateFitModelDist
+
+.. autofunction:: GetFitModelDist
+
+.. autofunction:: GetNumFitModelOptVars
+
+.. autofunction:: OptimizeFitModel
+
+.. autofunction:: CanUndoFitModel
+
+.. autofunction:: UndoFitModel
+
+.. autofunction:: SaveFitModelFile
+
+.. autofunction:: LoadFitModelFile
+

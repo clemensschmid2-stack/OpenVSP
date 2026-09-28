@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advanced Link Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analysis Manager Functions" href="Analysis.html" />
+    <link rel="prev" title="API Functions by Group" href="../api_groups.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Analysis.html" title="Analysis Manager Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api_groups.html" title="API Functions by Group"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Advanced Link Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="advanced-link-functions">
+<h1>Advanced Link Functions<a class="headerlink" href="#advanced-link-functions" title="Link to this heading">¶</a></h1>
+<p>The following functions are available for the Advanced Link tool.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkNames" title="openvsp.GetAdvLinkNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkNames</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetLinkIndex" title="openvsp.GetLinkIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetLinkIndex</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkName" title="openvsp.GetAdvLinkName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkName</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAdvLinkName" title="openvsp.SetAdvLinkName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAdvLinkName</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelAdvLink" title="openvsp.DelAdvLink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAdvLink</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelAllAdvLinks" title="openvsp.DelAllAdvLinks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllAdvLinks</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAdvLink" title="openvsp.AddAdvLink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAdvLink</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddAdvLinkInput" title="openvsp.AddAdvLinkInput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAdvLinkInput</span></code></a>(int index, std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAdvLinkOutput" title="openvsp.AddAdvLinkOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAdvLinkOutput</span></code></a>(int index, std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelAllAdvLinkInputs" title="openvsp.DelAllAdvLinkInputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllAdvLinkInputs</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelAllAdvLinkOutputs" title="openvsp.DelAllAdvLinkOutputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllAdvLinkOutputs</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelAdvLinkInput" title="openvsp.DelAdvLinkInput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAdvLinkInput</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelAdvLinkOutput" title="openvsp.DelAdvLinkOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAdvLinkOutput</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkInputNames" title="openvsp.GetAdvLinkInputNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkInputNames</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkInputParms" title="openvsp.GetAdvLinkInputParms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkInputParms</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkOutputNames" title="openvsp.GetAdvLinkOutputNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkOutputNames</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkOutputParms" title="openvsp.GetAdvLinkOutputParms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkOutputParms</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ValidateAdvLinkParms" title="openvsp.ValidateAdvLinkParms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidateAdvLinkParms</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAdvLinkCode" title="openvsp.SetAdvLinkCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAdvLinkCode</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAdvLinkCode" title="openvsp.GetAdvLinkCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAdvLinkCode</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SearchReplaceAdvLinkCode" title="openvsp.SearchReplaceAdvLinkCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SearchReplaceAdvLinkCode</span></code></a>(int index, std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.BuildAdvLinkScript" title="openvsp.BuildAdvLinkScript"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BuildAdvLinkScript</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.WriteAdvLinkCodeFile" title="openvsp.WriteAdvLinkCodeFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteAdvLinkCodeFile</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ReorderAdvLinkInput" title="openvsp.ReorderAdvLinkInput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReorderAdvLinkInput</span></code></a>(int index, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ReorderAdvLinkOutput" title="openvsp.ReorderAdvLinkOutput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReorderAdvLinkOutput</span></code></a>(int index, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ReadAdvLinkCodeFile" title="openvsp.ReadAdvLinkCodeFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadAdvLinkCodeFile</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SortAdvLinkInputsVar" title="openvsp.SortAdvLinkInputsVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAdvLinkInputsVar</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SortAdvLinkInputsCGP" title="openvsp.SortAdvLinkInputsCGP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAdvLinkInputsCGP</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SortAdvLinkOutputsVar" title="openvsp.SortAdvLinkOutputsVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAdvLinkOutputsVar</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SortAdvLinkOutputsCGP" title="openvsp.SortAdvLinkOutputsCGP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAdvLinkOutputsCGP</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkNames">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkNames" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetLinkIndex">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetLinkIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetLinkIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetLinkIndex" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAdvLinkName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAdvLinkName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAdvLinkName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAdvLinkName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAdvLink">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAdvLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAdvLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAdvLink" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllAdvLinks">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllAdvLinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllAdvLinks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllAdvLinks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAdvLink">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAdvLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAdvLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAdvLink" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAdvLinkInput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAdvLinkInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAdvLinkInput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAdvLinkInput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAdvLinkOutput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAdvLinkOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAdvLinkOutput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAdvLinkOutput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllAdvLinkInputs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllAdvLinkInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllAdvLinkInputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllAdvLinkInputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllAdvLinkOutputs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllAdvLinkOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllAdvLinkOutputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllAdvLinkOutputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAdvLinkInput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAdvLinkInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAdvLinkInput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAdvLinkInput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAdvLinkOutput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAdvLinkOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAdvLinkOutput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAdvLinkOutput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkInputNames">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkInputNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkInputNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkInputNames" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkInputParms">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkInputParms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkInputParms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkInputParms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkOutputNames">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkOutputNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkOutputNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkOutputNames" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkOutputParms">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkOutputParms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkOutputParms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkOutputParms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ValidateAdvLinkParms">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ValidateAdvLinkParms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ValidateAdvLinkParms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ValidateAdvLinkParms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAdvLinkCode">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAdvLinkCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAdvLinkCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAdvLinkCode" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAdvLinkCode">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAdvLinkCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAdvLinkCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAdvLinkCode" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SearchReplaceAdvLinkCode">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SearchReplaceAdvLinkCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">to</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SearchReplaceAdvLinkCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SearchReplaceAdvLinkCode" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.BuildAdvLinkScript">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">BuildAdvLinkScript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#BuildAdvLinkScript"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.BuildAdvLinkScript" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteAdvLinkCodeFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteAdvLinkCodeFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteAdvLinkCodeFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteAdvLinkCodeFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReorderAdvLinkInput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReorderAdvLinkInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">reorder_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReorderAdvLinkInput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReorderAdvLinkInput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReorderAdvLinkOutput">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReorderAdvLinkOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">var_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">reorder_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReorderAdvLinkOutput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReorderAdvLinkOutput" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReadAdvLinkCodeFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReadAdvLinkCodeFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReadAdvLinkCodeFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReadAdvLinkCodeFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortAdvLinkInputsVar">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortAdvLinkInputsVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortAdvLinkInputsVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortAdvLinkInputsVar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortAdvLinkInputsCGP">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortAdvLinkInputsCGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortAdvLinkInputsCGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortAdvLinkInputsCGP" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortAdvLinkOutputsVar">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortAdvLinkOutputsVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortAdvLinkOutputsVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortAdvLinkOutputsVar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortAdvLinkOutputsCGP">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortAdvLinkOutputsCGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortAdvLinkOutputsCGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortAdvLinkOutputsCGP" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Advanced Link Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkNames"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkNames()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetLinkIndex"><code class="docutils literal notranslate"><span class="pre">GetLinkIndex()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkName"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAdvLinkName"><code class="docutils literal notranslate"><span class="pre">SetAdvLinkName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAdvLink"><code class="docutils literal notranslate"><span class="pre">DelAdvLink()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllAdvLinks"><code class="docutils literal notranslate"><span class="pre">DelAllAdvLinks()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAdvLink"><code class="docutils literal notranslate"><span class="pre">AddAdvLink()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAdvLinkInput"><code class="docutils literal notranslate"><span class="pre">AddAdvLinkInput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAdvLinkOutput"><code class="docutils literal notranslate"><span class="pre">AddAdvLinkOutput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllAdvLinkInputs"><code class="docutils literal notranslate"><span class="pre">DelAllAdvLinkInputs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllAdvLinkOutputs"><code class="docutils literal notranslate"><span class="pre">DelAllAdvLinkOutputs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAdvLinkInput"><code class="docutils literal notranslate"><span class="pre">DelAdvLinkInput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAdvLinkOutput"><code class="docutils literal notranslate"><span class="pre">DelAdvLinkOutput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkInputNames"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkInputNames()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkInputParms"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkInputParms()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkOutputNames"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkOutputNames()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkOutputParms"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkOutputParms()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ValidateAdvLinkParms"><code class="docutils literal notranslate"><span class="pre">ValidateAdvLinkParms()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAdvLinkCode"><code class="docutils literal notranslate"><span class="pre">SetAdvLinkCode()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAdvLinkCode"><code class="docutils literal notranslate"><span class="pre">GetAdvLinkCode()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SearchReplaceAdvLinkCode"><code class="docutils literal notranslate"><span class="pre">SearchReplaceAdvLinkCode()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.BuildAdvLinkScript"><code class="docutils literal notranslate"><span class="pre">BuildAdvLinkScript()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteAdvLinkCodeFile"><code class="docutils literal notranslate"><span class="pre">WriteAdvLinkCodeFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReorderAdvLinkInput"><code class="docutils literal notranslate"><span class="pre">ReorderAdvLinkInput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReorderAdvLinkOutput"><code class="docutils literal notranslate"><span class="pre">ReorderAdvLinkOutput()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReadAdvLinkCodeFile"><code class="docutils literal notranslate"><span class="pre">ReadAdvLinkCodeFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortAdvLinkInputsVar"><code class="docutils literal notranslate"><span class="pre">SortAdvLinkInputsVar()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortAdvLinkInputsCGP"><code class="docutils literal notranslate"><span class="pre">SortAdvLinkInputsCGP()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortAdvLinkOutputsVar"><code class="docutils literal notranslate"><span class="pre">SortAdvLinkOutputsVar()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortAdvLinkOutputsCGP"><code class="docutils literal notranslate"><span class="pre">SortAdvLinkOutputsCGP()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../api_groups.html"
+                          title="previous chapter">API Functions by Group</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Analysis.html"
+                          title="next chapter">Analysis Manager Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/AdvancedLink.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Analysis.html" title="Analysis Manager Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../api_groups.html" title="API Functions by Group"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Advanced Link Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

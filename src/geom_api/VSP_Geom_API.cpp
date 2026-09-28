@@ -13,7 +13,6 @@
 #define _HAS_STD_BYTE 0
 #endif
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "AdvLinkMgr.h"
@@ -25,6 +24,7 @@
 #include "CfdMeshMgr.h"
 #include "DesignVarMgr.h"
 #include "FeaMeshMgr.h"
+#include "FitModelMgr.h"
 #include "GeometryAnalysisMgr.h"
 #include "LinkMgr.h"
 #include "Link.h"
@@ -32,6 +32,7 @@
 #include "MeasureMgr.h"
 #include "ParasiteDragMgr.h"
 #include "ParmMgr.h"
+#include "PntNodeMerge.h"
 #include "PropGeom.h"
 #include "RoutingGeom.h"
 #include "AuxiliaryGeom.h"
@@ -46,6 +47,7 @@
 #include "VKTAirfoil.h"
 #include "VSP_Geom_API.h"
 #include "VSPAEROMgr.h"
+#include "LightMgr.h"
 #include "VspUtil.h"
 #include "WingGeom.h"
 #include "MeshGeom.h"
@@ -222,11 +224,6 @@ void RegisterCFDMeshAnalyses()
     SurfaceIntersectionMgr.RegisterAnalysis();
     CfdMeshMgr.RegisterAnalysis();
     FeaMeshMgr.RegisterAnalysis();
-}
-
-void LimitedIntersectSurfaces( const std::vector < std::string > & geomvec, std::vector < std::vector < vec3d > > & ptchains, std::vector < std::vector < vec3d > > & uwchains )
-{
-    SurfaceIntersectionMgr.LimitedIntersectSurfaces( geomvec, ptchains, uwchains );
 }
 
 //===================================================================//
@@ -789,6 +786,31 @@ void SetCFDWakeFlag( const std::string & geom_id, bool flag )
     {
         ErrorMgr.NoError();
     }
+}
+
+/// Name The Geom Standing In For The Far Field Box
+void SetCFDFarFieldGeomID( const string & geom_id )
+{
+    Vehicle* veh = GetVehicle();
+
+    // An empty ID is how the setting reads before anything has been chosen, so allow it
+    // back in to clear the choice.
+    if ( !geom_id.empty() && !veh->FindGeom( geom_id ) )
+    {
+        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, "SetCFDFarFieldGeomID::Can't Find Geom " + geom_id );
+        return;
+    }
+
+    veh->GetCfdSettingsPtr()->SetFarGeomID( geom_id );
+
+    ErrorMgr.NoError();
+}
+
+/// The Geom Standing In For The Far Field Box
+string GetCFDFarFieldGeomID()
+{
+    ErrorMgr.NoError();
+    return GetVehicle()->GetCfdSettingsPtr()->GetFarGeomID();
 }
 
 /// Add A CFD Source
@@ -1401,6 +1423,28 @@ void RemoveSelectedFromCSGroup( const std::vector <int> &selected, int CSGroupIn
 int GetNumControlSurfaceGroups()
 {
     return VSPAEROMgr.GetControlSurfaceGroupVec().size();
+}
+
+std::string FindControlSurfaceGroup( int group_index )
+{
+    vector < ControlSurfaceGroup* > cs_vec = VSPAEROMgr.GetControlSurfaceGroupVec();
+
+    if ( group_index < 0 || group_index >= ( int )cs_vec.size() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "FindControlSurfaceGroup::group_index " +
+                           to_string( group_index ) + " out of range" );
+        return std::string();
+    }
+
+    if ( !cs_vec[ group_index ] )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "FindControlSurfaceGroup::Group " +
+                           to_string( group_index ) + " is empty" );
+        return std::string();
+    }
+
+    ErrorMgr.NoError();
+    return cs_vec[ group_index ]->GetID();
 }
 
 
@@ -2682,6 +2726,7 @@ void AddMaterial( const std::string &name, const vec3d & ambient, const vec3d & 
     mat.SetEmissive( emissive );
     mat.SetAlpha( alpha );
     mat.SetShininess( shininess );
+    mat.m_UserMaterial = true;
 
     MaterialMgr.AddMaterial( mat );
     ErrorMgr.NoError();
@@ -2691,6 +2736,33 @@ std::vector < std::string > GetMaterialNames()
 {
     ErrorMgr.NoError();
     return MaterialMgr.GetNames();
+}
+
+int GetNumLights()
+{
+    ErrorMgr.NoError();
+    return ( int )LightMgr.GetVec().size();
+}
+
+std::string FindLight( int index )
+{
+    vector < Light* > lights = LightMgr.GetVec();
+
+    if ( index < 0 || index >= ( int )lights.size() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "FindLight::index " + to_string( index ) +
+                           " out of range" );
+        return std::string();
+    }
+
+    if ( !lights[ index ] )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "FindLight::Light " + to_string( index ) + " is empty" );
+        return std::string();
+    }
+
+    ErrorMgr.NoError();
+    return lights[ index ]->GetID();
 }
 
 void SetBackground( double r, double g, double b )
@@ -3300,6 +3372,29 @@ vec3d GetGeomBBoxMax( const std::string& geom_id, int main_surf_ind, bool ref_fr
         return vec3d();
     }
 
+    // Determine BndBox dimensions prior to rotating and translating
+    Matrix4d model_matrix = geom_ptr->getModelMatrix();
+    model_matrix.affineInverse();
+
+    BndBox bbox;
+
+    // A Geom with no surfaces -- a mesh, a point cloud, a wireframe -- has none to ask for a
+    // bounding box, but it keeps one of its own.  That box is in absolute coordinates, so a
+    // box in body axes is the most a box can give: the absolute one turned back through the
+    // model matrix, which holds the geometry but is not as tight as what the surface path
+    // returns.  There is no surface to index either, so main_surf_ind does not apply.
+    if ( geom_ptr->isNonSurfaceType() )
+    {
+        bbox = geom_ptr->GetBndBox();
+
+        if ( !ref_frame_is_absolute )
+        {
+            bbox.Transform( model_matrix );
+        }
+
+        return bbox.GetMax();
+    }
+
     int num_surf = geom_ptr->GetNumTotalSurfs();
 
     if ( main_surf_ind < 0 || main_surf_ind >= num_surf )
@@ -3307,12 +3402,6 @@ vec3d GetGeomBBoxMax( const std::string& geom_id, int main_surf_ind, bool ref_fr
         ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "GetGeomBBoxMax::Main Surf Index " + to_string( main_surf_ind) + " Out of Range" );
         return vec3d();
     }
-
-    // Determine BndBox dimensions prior to rotating and translating
-    Matrix4d model_matrix = geom_ptr->getModelMatrix();
-    model_matrix.affineInverse();
-
-    BndBox bbox;
 
     if ( !ref_frame_is_absolute )
     {
@@ -3339,6 +3428,25 @@ vec3d GetGeomBBoxMin( const std::string& geom_id, int main_surf_ind, bool ref_fr
         return vec3d();
     }
 
+    // Determine BndBox dimensions prior to rotating and translating
+    Matrix4d model_matrix = geom_ptr->getModelMatrix();
+    model_matrix.affineInverse();
+
+    BndBox bbox;
+
+    // See GetGeomBBoxMax:  a Geom with no surfaces answers out of its own bounding box.
+    if ( geom_ptr->isNonSurfaceType() )
+    {
+        bbox = geom_ptr->GetBndBox();
+
+        if ( !ref_frame_is_absolute )
+        {
+            bbox.Transform( model_matrix );
+        }
+
+        return bbox.GetMin();
+    }
+
     int num_surf = geom_ptr->GetNumTotalSurfs();
 
     if ( main_surf_ind < 0 || main_surf_ind >= num_surf )
@@ -3346,12 +3454,6 @@ vec3d GetGeomBBoxMin( const std::string& geom_id, int main_surf_ind, bool ref_fr
         ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "GetGeomBBoxMin::Main Surf Index " + to_string( main_surf_ind ) + " Out of Range" );
         return vec3d();
     }
-
-    // Determine BndBox dimensions prior to rotating and translating
-    Matrix4d model_matrix = geom_ptr->getModelMatrix();
-    model_matrix.affineInverse();
-
-    BndBox bbox;
 
     if ( !ref_frame_is_absolute )
     {
@@ -4934,6 +5036,52 @@ void DeleteFeaStructureFromAssembly( const std::string & assembly_id, const std:
     ErrorMgr.NoError();
 }
 
+void AddFeaAssemblyStructure( const std::string & assembly_id, const std::string & struct_id )
+{
+    FeaAssembly* assy = FindFeaAssembly( assembly_id, "AddFeaAssemblyStructure" );
+    if ( !assy )
+    {
+        return;
+    }
+
+    // The assembly holds structures by ID, and nothing downstream checks that the ID names one, so
+    // it is checked here.
+    if ( StructureMgr.GetFeaStruct( struct_id ) == nullptr )
+    {
+        ErrorMgr.AddError( VSP_INVALID_ID, "AddFeaAssemblyStructure::Can't Find Structure " + struct_id );
+        return;
+    }
+
+    if ( vector_contains_val( assy->m_StructIDVec, struct_id ) )
+    {
+        ErrorMgr.AddError( VSP_INVALID_ID, "AddFeaAssemblyStructure::Structure Already In Assembly " + struct_id );
+        return;
+    }
+
+    assy->AddStructure( struct_id );
+
+    ErrorMgr.NoError();
+}
+
+void DeleteFeaAssemblyStructure( const std::string & assembly_id, const std::string & struct_id )
+{
+    FeaAssembly* assy = FindFeaAssembly( assembly_id, "DeleteFeaAssemblyStructure" );
+    if ( !assy )
+    {
+        return;
+    }
+
+    if ( !vector_contains_val( assy->m_StructIDVec, struct_id ) )
+    {
+        ErrorMgr.AddError( VSP_INVALID_ID, "DeleteFeaAssemblyStructure::Structure Not In Assembly " + struct_id );
+        return;
+    }
+
+    assy->DelStructure( struct_id );
+
+    ErrorMgr.NoError();
+}
+
 std::vector < std::string > GetFeaAssemblyStructureIDVec( const std::string & assembly_id )
 {
     std::vector < std::string > ret;
@@ -4995,6 +5143,32 @@ int NumFeaAssemblyConnections( const std::string & assembly_id )
     return ( int )assy->m_ConnectionVec.size();
 }
 
+std::string GetFeaAssemblyConnectionID( const std::string & assembly_id, int connection_index )
+{
+    FeaAssembly* assy = FindFeaAssembly( assembly_id, "GetFeaAssemblyConnectionID" );
+    if ( !assy )
+    {
+        return std::string();
+    }
+
+    if ( connection_index < 0 || connection_index >= ( int )assy->m_ConnectionVec.size() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "GetFeaAssemblyConnectionID::connection_index " +
+                           to_string( connection_index ) + " out of range" );
+        return std::string();
+    }
+
+    if ( !assy->m_ConnectionVec[ connection_index ] )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "GetFeaAssemblyConnectionID::Connection " +
+                           to_string( connection_index ) + " is empty" );
+        return std::string();
+    }
+
+    ErrorMgr.NoError();
+    return assy->m_ConnectionVec[ connection_index ]->GetID();
+}
+
 std::string GetFeaAssemblyFileName( const std::string & assembly_id, int file_type )
 {
     FeaAssembly* assy = FindFeaAssembly( assembly_id, "GetFeaAssemblyFileName" );
@@ -5030,6 +5204,12 @@ void ComputeFeaAssemblyMesh( const std::string & assembly_id )
 
     // Mesh whatever structures in the assembly have not been meshed yet, then
     // write the assembly out.
+    for ( int i = 0; i < ( int )assy->m_StructIDVec.size(); i++ )
+    {
+        FeaMeshMgr.SetFeaMeshStructID( assy->m_StructIDVec[i] );
+        FeaMeshMgr.UpdateStructure();
+    }
+
     FeaMeshMgr.MeshUnMeshed( assy->m_StructIDVec );
     FeaMeshMgr.ExportAssemblyMesh( assembly_id );
 
@@ -5303,6 +5483,7 @@ void ComputeFeaMesh( const std::string & geom_id, int fea_struct_ind, int file_t
     feastruct->GetStructSettingsPtr()->SetFileExportFlag( file_type, true );
 
     FeaMeshMgr.SetFeaMeshStructID( feastruct->GetID() );
+    FeaMeshMgr.UpdateStructure();
 
     FeaMeshMgr.addOutputText( "CLEAR_TERMINAL" );
     FeaMeshMgr.GenerateFeaMesh();
@@ -5327,6 +5508,7 @@ void ComputeFeaMesh( const std::string & struct_id, int file_type )
     feastruct->GetStructSettingsPtr()->SetFileExportFlag( file_type, true );
 
     FeaMeshMgr.SetFeaMeshStructID( struct_id );
+    FeaMeshMgr.UpdateStructure();
 
     FeaMeshMgr.addOutputText( "CLEAR_TERMINAL" );
     FeaMeshMgr.GenerateFeaMesh();
@@ -10282,6 +10464,938 @@ double SnapParm( const std::string & parm_id, double target_min_dist, bool inc_f
 }
 
 //===================================================================//
+//=======================  Fit Model Functions  =====================//
+//===================================================================//
+
+// Look up a target point by index, reporting the error the API reports for a bad index.  Every
+// function here that takes an index goes through this so they all fail the same way.
+static TargetPt * FindFitModelTargetPt( int index, const std::string & routine )
+{
+    if ( index < 0 || index >= FitModelMgr.GetNumTargetPt() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, routine + "::Index Out Of Range " + to_string( index ) );
+        return nullptr;
+    }
+
+    TargetPt *tpt = FitModelMgr.GetTargetPt( index );
+
+    if ( !tpt )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, routine + "::Can't Find Target Point " + to_string( index ) );
+        return nullptr;
+    }
+
+    return tpt;
+}
+
+// A target point is matched against the first surface of a Geom, so a Geom that has no surfaces
+// -- a Blank, a point cloud -- cannot carry one.  Nothing downstream checks, and the optimizer
+// would read through the null surface pointer.
+static Geom * FindFitModelMatchGeom( const std::string & geom_id, int surf_indx, const std::string & routine )
+{
+    Vehicle* veh = GetVehicle();
+    Geom* geom_ptr = veh->FindGeom( geom_id );
+
+    if ( !geom_ptr )
+    {
+        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, routine + "::Can't Find Geom " + geom_id );
+        return nullptr;
+    }
+
+    if ( geom_ptr->GetNumTotalSurfs() < 1 )
+    {
+        ErrorMgr.AddError( VSP_INVALID_TYPE, routine + "::Geom Has No Surface " + geom_id );
+        return nullptr;
+    }
+
+    if ( surf_indx < 0 || surf_indx >= geom_ptr->GetNumTotalSurfs() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, routine + "::Surface Index Out Of Range " + to_string( surf_indx ) +
+                           ", " + geom_id + " has " + to_string( geom_ptr->GetNumTotalSurfs() ) + " surfaces" );
+        return nullptr;
+    }
+
+    return geom_ptr;
+}
+
+static bool CheckFitModelTargetType( int type, const std::string & routine )
+{
+    if ( type != FIT_MODEL_FIXED && type != FIT_MODEL_FREE )
+    {
+        ErrorMgr.AddError( VSP_INVALID_TYPE, routine + "::Invalid Fit Model Target Type " + to_string( type ) );
+        return false;
+    }
+    return true;
+}
+
+void ResetFitModel()
+{
+    FitModelMgr.Renew();
+    ErrorMgr.NoError();
+}
+
+// One place where a single target point is built, so each of the four ways in reports under its
+// own name.  Mirrors AddFitModelTargetPtGroup for the vector forms.
+static int AddFitModelTargetPtOne( const std::string & geom_id, int surf_indx, const vec3d & pt, int u_type, int w_type,
+                                   double u, double w, const std::string & routine )
+{
+    Geom* geom_ptr = FindFitModelMatchGeom( geom_id, surf_indx, routine );
+    if ( !geom_ptr )
+    {
+        return -1;
+    }
+
+    if ( !CheckFitModelTargetType( u_type, routine ) ||
+         !CheckFitModelTargetType( w_type, routine ) )
+    {
+        return -1;
+    }
+
+    TargetPt *tpt = new TargetPt();
+    tpt->SetPt( pt );
+    tpt->SetMatchGeom( geom_id );
+    tpt->SetSurfIndx( surf_indx );
+    tpt->SetUW( vec2d( u, w ) );
+    tpt->SetUType( u_type );
+    tpt->SetWType( w_type );
+
+    // Only moves the free directions; with both pinned this does nothing.
+    tpt->SearchUW( geom_ptr );
+
+    FitModelMgr.AddTargetPt( tpt );
+
+    ErrorMgr.NoError();
+    return FitModelMgr.GetNumTargetPt() - 1;
+}
+
+int AddFitModelTargetPt( const std::string & geom_id, int surf_indx, const vec3d & pt, int u_type, int w_type, double u, double w )
+{
+    return AddFitModelTargetPtOne( geom_id, surf_indx, pt, u_type, w_type, u, w, "AddFitModelTargetPt" );
+}
+
+int AddFitModelTargetPtFixedU( const std::string & geom_id, int surf_indx, const vec3d & pt, double u )
+{
+    return AddFitModelTargetPtOne( geom_id, surf_indx, pt, FIT_MODEL_FIXED, FIT_MODEL_FREE, u, 0.0, "AddFitModelTargetPtFixedU" );
+}
+
+int AddFitModelTargetPtFixedW( const std::string & geom_id, int surf_indx, const vec3d & pt, double w )
+{
+    return AddFitModelTargetPtOne( geom_id, surf_indx, pt, FIT_MODEL_FREE, FIT_MODEL_FIXED, 0.0, w, "AddFitModelTargetPtFixedW" );
+}
+
+int AddFitModelTargetPtFixedUW( const std::string & geom_id, int surf_indx, const vec3d & pt, double u, double w )
+{
+    return AddFitModelTargetPtOne( geom_id, surf_indx, pt, FIT_MODEL_FIXED, FIT_MODEL_FIXED, u, w, "AddFitModelTargetPtFixedUW" );
+}
+
+// One place where a group of target points is built.  u_vec and w_vec, when given, carry a
+// coordinate per point; otherwise u and w are used for every point.  A pinned direction is left
+// where it is put.  A free one is searched onto the nearest point of the surface, because the
+// topology can tell a caller where a point sits in a pinned direction but seldom in a free one,
+// and a coordinate left at zero would otherwise pin the search to a corner of the surface.
+static void AddFitModelTargetPtGroup( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec,
+                                      int u_type, int w_type, double u, double w,
+                                      const std::vector < double > & u_vec, const std::vector < double > & w_vec,
+                                      const std::string & routine )
+{
+    Geom* geom_ptr = FindFitModelMatchGeom( geom_id, surf_indx, routine );
+    if ( !geom_ptr )
+    {
+        return;
+    }
+
+    if ( !u_vec.empty() && u_vec.size() != pt_vec.size() )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, routine + "::U Vector Length " + to_string( ( int )u_vec.size() ) +
+                           " Does Not Match Point Vector Length " + to_string( ( int )pt_vec.size() ) );
+        return;
+    }
+
+    if ( !w_vec.empty() && w_vec.size() != pt_vec.size() )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, routine + "::W Vector Length " + to_string( ( int )w_vec.size() ) +
+                           " Does Not Match Point Vector Length " + to_string( ( int )pt_vec.size() ) );
+        return;
+    }
+
+    for ( int i = 0; i < ( int )pt_vec.size(); i++ )
+    {
+        double ui = u;
+        if ( !u_vec.empty() )
+        {
+            ui = u_vec[i];
+        }
+
+        double wi = w;
+        if ( !w_vec.empty() )
+        {
+            wi = w_vec[i];
+        }
+
+        TargetPt *tpt = new TargetPt();
+        tpt->SetPt( pt_vec[i] );
+        tpt->SetMatchGeom( geom_id );
+        tpt->SetSurfIndx( surf_indx );
+        tpt->SetUW( vec2d( ui, wi ) );
+        tpt->SetUType( u_type );
+        tpt->SetWType( w_type );
+
+        // Only moves the free directions; with both pinned this does nothing.
+        tpt->SearchUW( geom_ptr );
+
+        FitModelMgr.AddTargetPt( tpt );
+    }
+
+    ErrorMgr.NoError();
+}
+
+void AddFitModelTargetPts( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FREE, FIT_MODEL_FREE, 0.0, 0.0,
+                              std::vector < double >(), std::vector < double >(), "AddFitModelTargetPts" );
+}
+
+void AddFitModelTargetPtsFixedU( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, double u )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FIXED, FIT_MODEL_FREE, u, 0.0,
+                              std::vector < double >(), std::vector < double >(), "AddFitModelTargetPtsFixedU" );
+}
+
+void AddFitModelTargetPtsFixedUs( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, const std::vector < double > & u_vec )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FIXED, FIT_MODEL_FREE, 0.0, 0.0,
+                              u_vec, std::vector < double >(), "AddFitModelTargetPtsFixedUs" );
+}
+
+void AddFitModelTargetPtsFixedW( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, double w )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FREE, FIT_MODEL_FIXED, 0.0, w,
+                              std::vector < double >(), std::vector < double >(), "AddFitModelTargetPtsFixedW" );
+}
+
+void AddFitModelTargetPtsFixedWs( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, const std::vector < double > & w_vec )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FREE, FIT_MODEL_FIXED, 0.0, 0.0,
+                              std::vector < double >(), w_vec, "AddFitModelTargetPtsFixedWs" );
+}
+
+void AddFitModelTargetPtsFixedUW( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, double u, double w )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FIXED, FIT_MODEL_FIXED, u, w,
+                              std::vector < double >(), std::vector < double >(), "AddFitModelTargetPtsFixedUW" );
+}
+
+void AddFitModelTargetPtsFixedUWs( const std::string & geom_id, int surf_indx, const std::vector < vec3d > & pt_vec, const std::vector < double > & u_vec, const std::vector < double > & w_vec )
+{
+    AddFitModelTargetPtGroup( geom_id, surf_indx, pt_vec, FIT_MODEL_FIXED, FIT_MODEL_FIXED, 0.0, 0.0,
+                              u_vec, w_vec, "AddFitModelTargetPtsFixedUWs" );
+}
+
+void DelFitModelTargetPt( int index )
+{
+    if ( index < 0 || index >= FitModelMgr.GetNumTargetPt() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "DelFitModelTargetPt::Index Out Of Range " + to_string( index ) );
+        return;
+    }
+
+    // The manager deletes whichever point it currently calls current, so say which that is.  It
+    // clears the selection afterwards, which is left alone here: the points above the deleted one
+    // have moved down, so any index held from before now names a different point.
+    FitModelMgr.SetCurrTargetPtIndex( index );
+    FitModelMgr.DelCurrTargetPt();
+
+    ErrorMgr.NoError();
+}
+
+void DelAllFitModelTargetPts()
+{
+    FitModelMgr.DelAllTargetPts();
+    ErrorMgr.NoError();
+}
+
+void SortFitModelTargetPtsByDist()
+{
+    FitModelMgr.SortTargetPtsByDist();
+    ErrorMgr.NoError();
+}
+
+int MoveFitModelTargetPt( int index, int reorder_type )
+{
+    if ( index < 0 || index >= FitModelMgr.GetNumTargetPt() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "MoveFitModelTargetPt::index " + to_string( index ) + " is out of range" );
+        return index;
+    }
+
+    if ( reorder_type < REORDER_MOVE_UP || reorder_type > REORDER_MOVE_BOTTOM )
+    {
+        ErrorMgr.AddError( VSP_INVALID_TYPE, "MoveFitModelTargetPt::Invalid Reorder Type " + to_string( reorder_type ) );
+        return index;
+    }
+
+    int newindex = FitModelMgr.MoveTargetPt( index, reorder_type );
+
+    ErrorMgr.NoError();
+    return newindex;
+}
+
+int GetNumFitModelTargetPts()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.GetNumTargetPt();
+}
+
+vec3d GetFitModelTargetPt( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPt" );
+    if ( !tpt )
+    {
+        return vec3d();
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetPt();
+}
+
+void SetFitModelTargetPt( int index, const vec3d & pt )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPt" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    tpt->SetPt( pt );
+    ErrorMgr.NoError();
+}
+
+std::string GetFitModelTargetPtGeom( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtGeom" );
+    if ( !tpt )
+    {
+        return std::string();
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetMatchGeom();
+}
+
+void SetFitModelTargetPtGeom( int index, const std::string & geom_id )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPtGeom" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    // The index has to be in range on the Geom being moved to, not the one being left.
+    if ( !FindFitModelMatchGeom( geom_id, tpt->GetSurfIndx(), "SetFitModelTargetPtGeom" ) )
+    {
+        return;
+    }
+
+    tpt->SetMatchGeom( geom_id );
+    ErrorMgr.NoError();
+}
+
+int GetFitModelTargetPtSurfIndx( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtSurfIndx" );
+    if ( !tpt )
+    {
+        return -1;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetSurfIndx();
+}
+
+void SetFitModelTargetPtSurfIndx( int index, int surf_indx )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPtSurfIndx" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    if ( !FindFitModelMatchGeom( tpt->GetMatchGeom(), surf_indx, "SetFitModelTargetPtSurfIndx" ) )
+    {
+        return;
+    }
+
+    tpt->SetSurfIndx( surf_indx );
+    ErrorMgr.NoError();
+}
+
+double GetFitModelTargetPtU( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtU" );
+    if ( !tpt )
+    {
+        return 0.0;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetUW().x();
+}
+
+double GetFitModelTargetPtDist( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtDist" );
+    if ( !tpt )
+    {
+        return 0.0;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetDist();
+}
+
+double GetFitModelTargetPtW( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtW" );
+    if ( !tpt )
+    {
+        return 0.0;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetUW().y();
+}
+
+void SetFitModelTargetPtUW( int index, double u, double w )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPtUW" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    tpt->SetUW( vec2d( u, w ) );
+    ErrorMgr.NoError();
+}
+
+int GetFitModelTargetPtUType( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtUType" );
+    if ( !tpt )
+    {
+        return FIT_MODEL_FIXED;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetUType();
+}
+
+void SetFitModelTargetPtUType( int index, int u_type )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPtUType" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    if ( !CheckFitModelTargetType( u_type, "SetFitModelTargetPtUType" ) )
+    {
+        return;
+    }
+
+    tpt->SetUType( u_type );
+    ErrorMgr.NoError();
+}
+
+int GetFitModelTargetPtWType( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtWType" );
+    if ( !tpt )
+    {
+        return FIT_MODEL_FIXED;
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetWType();
+}
+
+void SetFitModelTargetPtWType( int index, int w_type )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "SetFitModelTargetPtWType" );
+    if ( !tpt )
+    {
+        return;
+    }
+
+    if ( !CheckFitModelTargetType( w_type, "SetFitModelTargetPtWType" ) )
+    {
+        return;
+    }
+
+    tpt->SetWType( w_type );
+    ErrorMgr.NoError();
+}
+
+vec3d GetFitModelTargetPtSurfPt( int index )
+{
+    TargetPt *tpt = FindFitModelTargetPt( index, "GetFitModelTargetPtSurfPt" );
+    if ( !tpt )
+    {
+        return vec3d();
+    }
+
+    if ( !tpt->IsValid() )
+    {
+        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, "GetFitModelTargetPtSurfPt::Can't Find Surface For Geom " + tpt->GetMatchGeom() );
+        return vec3d();
+    }
+
+    ErrorMgr.NoError();
+    return tpt->GetMatchPt();
+}
+
+void AddFitModelVar( const std::string & parm_id )
+{
+    Parm* p = ParmMgr.FindParm( parm_id );
+    if ( !p )
+    {
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "AddFitModelVar::Can't Find Parm " + parm_id );
+        return;
+    }
+
+    if ( !FitModelMgr.AddVar( parm_id ) )
+    {
+        ErrorMgr.AddError( VSP_INVALID_ID, "AddFitModelVar::Duplicate Variable " + parm_id );
+        return;
+    }
+
+    ErrorMgr.NoError();
+}
+
+void DelFitModelVar( const std::string & parm_id )
+{
+    if ( !FitModelMgr.CheckForDuplicateVar( parm_id ) )
+    {
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "DelFitModelVar::Can't Find Variable " + parm_id );
+        return;
+    }
+
+    FitModelMgr.DelVar( parm_id );
+    ErrorMgr.NoError();
+}
+
+void DelAllFitModelVars()
+{
+    FitModelMgr.DelAllVars();
+    ErrorMgr.NoError();
+}
+
+int GetNumFitModelVars()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.GetNumVars();
+}
+
+std::string GetFitModelVar( int index )
+{
+    if ( index < 0 || index >= FitModelMgr.GetNumVars() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "GetFitModelVar::Index Out Of Range " + to_string( index ) );
+        return std::string();
+    }
+
+    ErrorMgr.NoError();
+    return FitModelMgr.GetVar( index );
+}
+
+std::vector < std::string > GetFitModelVarVec()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.GetVarVec();
+}
+
+void SearchFitModelTargetUW()
+{
+    FitModelMgr.SearchTargetUW();
+    ErrorMgr.NoError();
+}
+
+void RefineFitModelTargetUW()
+{
+    FitModelMgr.RefineTargetUW();
+    ErrorMgr.NoError();
+}
+
+double UpdateFitModelDist()
+{
+    // Zero is a real answer here, and the wanted one, so it cannot also stand for having nothing
+    // to measure.  The manager reports -1 for that.
+    if ( FitModelMgr.GetNumTargetPt() == 0 )
+    {
+        FitModelMgr.UpdateDist();
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, "UpdateFitModelDist::No Target Points" );
+        return -1.0;
+    }
+
+    FitModelMgr.UpdateDist();
+    ErrorMgr.NoError();
+    return FitModelMgr.m_DistMetric;
+}
+
+double GetFitModelDist()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.m_DistMetric;
+}
+
+int GetNumFitModelOptVars()
+{
+    FitModelMgr.UpdateNumOptVars();
+    ErrorMgr.NoError();
+    return FitModelMgr.GetNumOptVars();
+}
+
+int OptimizeFitModel()
+{
+    if ( FitModelMgr.GetNumTargetPt() == 0 )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, "OptimizeFitModel::No Target Points" );
+        return 0;
+    }
+
+    FitModelMgr.UpdateNumOptVars();
+    int n = FitModelMgr.GetNumOptVars();
+    if ( n == 0 )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, "OptimizeFitModel::No Variables Or Free Target Points" );
+        return 0;
+    }
+
+    // Least squares needs at least as many conditions as unknowns.  Each target point supplies
+    // three.  Given fewer, the solver returns its invalid-input code and changes nothing, which on
+    // its own does not say which way the problem was underdetermined.
+    int m = 3 * FitModelMgr.GetNumTargetPt();
+    if ( m < n )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, "OptimizeFitModel::Too Few Target Points, " +
+                           to_string( m ) + " conditions for " + to_string( n ) + " degrees of freedom" );
+        return 0;
+    }
+
+    int info = FitModelMgr.Optimize();
+
+    FitModelMgr.UpdateDist();
+
+    ErrorMgr.NoError();
+    return info;
+}
+
+bool CanUndoFitModel()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.CanUndo();
+}
+
+bool UndoFitModel()
+{
+    ErrorMgr.NoError();
+    return FitModelMgr.Undo();
+}
+
+void SaveFitModelFile( const std::string & file_name )
+{
+    FitModelMgr.SetSaveFitFileName( file_name );
+
+    if ( !FitModelMgr.Save() )
+    {
+        ErrorMgr.AddError( VSP_FILE_WRITE_FAILURE, "SaveFitModelFile::Failure Writing File " + file_name );
+        return;
+    }
+
+    ErrorMgr.NoError();
+}
+
+int LoadFitModelFile( const std::string & file_name )
+{
+    FitModelMgr.SetLoadFitFileName( file_name );
+
+    int err = FitModelMgr.Load();
+
+    if ( err != 0 )
+    {
+        ErrorMgr.AddError( VSP_FILE_READ_FAILURE, "LoadFitModelFile::Failure Reading File " + file_name );
+        return err;
+    }
+
+    ErrorMgr.NoError();
+    return err;
+}
+
+//===================================================================//
+//====================  Point Cloud Functions  ======================//
+//===================================================================//
+
+static bool CheckPtsTol( double tol, const std::string & routine )
+{
+    if ( tol < 0.0 )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, routine + "::Negative Tolerance" );
+        return false;
+    }
+    return true;
+}
+
+static bool CheckDirIndex( int dir_index, const std::string & routine )
+{
+    if ( dir_index < vsp::X_DIR || dir_index > vsp::Z_DIR )
+    {
+        ErrorMgr.AddError( VSP_INVALID_INPUT_VAL, routine + "::Invalid Direction Index " + to_string( dir_index ) );
+        return false;
+    }
+    return true;
+}
+
+std::string CreatePtCloudGeomFromPts( const std::vector < vec3d > & pt_vec, const std::string & name )
+{
+    Vehicle* veh = GetVehicle();
+
+    // A point cloud is not one of the types offered for creation -- it only ever arrives by import
+    // or by conversion from a mesh -- so the type is built here the way Vehicle::ImportFile builds
+    // it, rather than looked up by name.
+    GeomType type = GeomType( PT_CLOUD_GEOM_TYPE, "PTS", true );
+    std::string id = veh->AddGeom( type );
+
+    if ( id.empty() || id.compare( "NONE" ) == 0 )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "CreatePtCloudGeomFromPts::Could Not Add Point Cloud Geom" );
+        return std::string();
+    }
+
+    Geom* geom_ptr = veh->FindGeom( id );
+    if ( !geom_ptr )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "CreatePtCloudGeomFromPts::Could Not Add Point Cloud Geom" );
+        return std::string();
+    }
+
+    PtCloudGeom* pt_cloud = dynamic_cast< PtCloudGeom* >( geom_ptr );
+    if ( !pt_cloud )
+    {
+        ErrorMgr.AddError( VSP_INVALID_TYPE, "CreatePtCloudGeomFromPts::Geom Is Not A Point Cloud" );
+        return std::string();
+    }
+
+    pt_cloud->m_Pts = pt_vec;
+    pt_cloud->InitPts();
+
+    if ( !name.empty() )
+    {
+        pt_cloud->SetName( name );
+    }
+
+    pt_cloud->SetDirtyFlag( GeomBase::SURF );
+    pt_cloud->Update();
+
+    Update();
+
+    ErrorMgr.NoError();
+    return id;
+}
+
+std::vector < vec3d > KeepPtsInBBox( const std::vector < vec3d > & pt_vec, const vec3d & min_pt, const vec3d & max_pt )
+{
+    ErrorMgr.NoError();
+    return FilterPntsInBBox( pt_vec, min_pt, max_pt, true );
+}
+
+std::vector < vec3d > RemovePtsInBBox( const std::vector < vec3d > & pt_vec, const vec3d & min_pt, const vec3d & max_pt )
+{
+    ErrorMgr.NoError();
+    return FilterPntsInBBox( pt_vec, min_pt, max_pt, false );
+}
+
+std::vector < vec3d > KeepPtsInRange( const std::vector < vec3d > & pt_vec, int dir_index, double low, double high )
+{
+    if ( !CheckDirIndex( dir_index, "KeepPtsInRange" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsInRange( pt_vec, dir_index, low, high, true );
+}
+
+std::vector < vec3d > RemovePtsInRange( const std::vector < vec3d > & pt_vec, int dir_index, double low, double high )
+{
+    if ( !CheckDirIndex( dir_index, "RemovePtsInRange" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsInRange( pt_vec, dir_index, low, high, false );
+}
+
+std::vector < vec3d > KeepPtsAbove( const std::vector < vec3d > & pt_vec, int dir_index, double val )
+{
+    if ( !CheckDirIndex( dir_index, "KeepPtsAbove" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsByValue( pt_vec, dir_index, val, true );
+}
+
+std::vector < vec3d > KeepPtsBelow( const std::vector < vec3d > & pt_vec, int dir_index, double val )
+{
+    if ( !CheckDirIndex( dir_index, "KeepPtsBelow" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsByValue( pt_vec, dir_index, val, false );
+}
+
+std::vector < vec3d > KeepPtsNearPt( const std::vector < vec3d > & pt_vec, const vec3d & center, double radius )
+{
+    if ( !CheckPtsTol( radius, "KeepPtsNearPt" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsNearPnt( pt_vec, center, radius, true );
+}
+
+std::vector < vec3d > RemovePtsNearPt( const std::vector < vec3d > & pt_vec, const vec3d & center, double radius )
+{
+    if ( !CheckPtsTol( radius, "RemovePtsNearPt" ) )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsNearPnt( pt_vec, center, radius, false );
+}
+
+// Look up the surface a point filter is measured against, reporting whichever way it is not there.
+static const VspSurf * FindPtsSurf( const std::string & geom_id, int surf_indx, double tol, const std::string & routine )
+{
+    if ( !CheckPtsTol( tol, routine ) )
+    {
+        return nullptr;
+    }
+
+    Vehicle* veh = GetVehicle();
+    Geom* geom_ptr = veh->FindGeom( geom_id );
+    if ( !geom_ptr )
+    {
+        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, routine + "::Can't Find Geom " + geom_id );
+        return nullptr;
+    }
+
+    if ( surf_indx < 0 || surf_indx >= geom_ptr->GetNumTotalSurfs() )
+    {
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, routine + "::Surface Index Out Of Range " + to_string( surf_indx ) );
+        return nullptr;
+    }
+
+    const VspSurf* surf = geom_ptr->GetSurfPtr( surf_indx );
+    if ( !surf )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, routine + "::Can't Find Surface " + to_string( surf_indx ) );
+        return nullptr;
+    }
+
+    return surf;
+}
+
+std::vector < vec3d > KeepPtsNearGeom( const std::vector < vec3d > & pt_vec, const std::string & geom_id, int surf_indx, double tol )
+{
+    const VspSurf* surf = FindPtsSurf( geom_id, surf_indx, tol, "KeepPtsNearGeom" );
+    if ( !surf )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsNearSurf( pt_vec, surf, tol, true );
+}
+
+std::vector < vec3d > RemovePtsNearGeom( const std::vector < vec3d > & pt_vec, const std::string & geom_id, int surf_indx, double tol )
+{
+    const VspSurf* surf = FindPtsSurf( geom_id, surf_indx, tol, "RemovePtsNearGeom" );
+    if ( !surf )
+    {
+        return std::vector < vec3d >();
+    }
+
+    ErrorMgr.NoError();
+    return FilterPntsNearSurf( pt_vec, surf, tol, false );
+}
+
+std::vector < vec3d > UniquePts( const std::vector < vec3d > & pt_vec, double tol )
+{
+    std::vector < vec3d > out;
+
+    if ( !CheckPtsTol( tol, "UniquePts" ) )
+    {
+        return out;
+    }
+
+    out = UniquePnts( pt_vec, tol );
+
+    ErrorMgr.NoError();
+    return out;
+}
+
+std::vector < vec3d > UnionPts( const std::vector < vec3d > & pt_vec_a, const std::vector < vec3d > & pt_vec_b, double tol )
+{
+    std::vector < vec3d > both;
+
+    if ( !CheckPtsTol( tol, "UnionPts" ) )
+    {
+        return both;
+    }
+
+    both = UnionPnts( pt_vec_a, pt_vec_b, tol );
+
+    ErrorMgr.NoError();
+    return both;
+}
+
+std::vector < vec3d > IntersectPts( const std::vector < vec3d > & pt_vec_a, const std::vector < vec3d > & pt_vec_b, double tol )
+{
+    std::vector < vec3d > out;
+
+    if ( !CheckPtsTol( tol, "IntersectPts" ) )
+    {
+        return out;
+    }
+
+    out = FilterPntsByMembership( pt_vec_a, pt_vec_b, tol, true );
+
+    ErrorMgr.NoError();
+    return out;
+}
+
+std::vector < vec3d > SubtractPts( const std::vector < vec3d > & pt_vec_a, const std::vector < vec3d > & pt_vec_b, double tol )
+{
+    std::vector < vec3d > out;
+
+    if ( !CheckPtsTol( tol, "SubtractPts" ) )
+    {
+        return out;
+    }
+
+    out = FilterPntsByMembership( pt_vec_a, pt_vec_b, tol, false );
+
+    ErrorMgr.NoError();
+    return out;
+}
+
+//===================================================================//
 //===============     Variable Presets Functions       ==============//
 //===================================================================//
 
@@ -12600,6 +13714,53 @@ void DelProbe( const std::string &id )
 void DeleteAllProbes()
 {
     MeasureMgr.DelAllProbes();
+}
+
+//===================================================================//
+//========================  General Utilities  ======================//
+//===================================================================//
+
+// The bodies live in VspUtil.h and VspUtil.cpp, next to the MAX, MIN and DEG2RAD macros they are
+// the function forms of.  These are the wrappers that put them in the API.
+
+void Print( const std::string & data, bool new_line )
+{
+    ::Print( data, new_line );
+}
+
+void Print( const vec3d & data, bool new_line )
+{
+    ::Print( data, new_line );
+}
+
+void Print( double data, bool new_line )
+{
+    ::Print( data, new_line );
+}
+
+void Print( int data, bool new_line )
+{
+    ::Print( data, new_line );
+}
+
+double Min( double x, double y )
+{
+    return ::Min( x, y );
+}
+
+double Max( double x, double y )
+{
+    return ::Max( x, y );
+}
+
+double Rad2Deg( double r )
+{
+    return ::Rad2Deg( r );
+}
+
+double Deg2Rad( double d )
+{
+    return ::Deg2Rad( d );
 }
 
 std::string GetVSPVersion()

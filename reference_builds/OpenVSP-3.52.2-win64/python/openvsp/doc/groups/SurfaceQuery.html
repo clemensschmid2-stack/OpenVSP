@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Geom Surface Query Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Group Modification Functions" href="GroupMod.html" />
+    <link rel="prev" title="Geom Functions" href="Geom.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GroupMod.html" title="Group Modification Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Geom.html" title="Geom Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Geom Surface Query Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="geom-surface-query-functions">
+<h1>Geom Surface Query Functions<a class="headerlink" href="#geom-surface-query-functions" title="Link to this heading">¶</a></h1>
+<p>This group of API functions pertains to general surface queries for Geom surfaces, such as computing 3D location from surface coordinates, identifying curvature, and performing point projections.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompPnt01" title="openvsp.CompPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompPnt01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CompNorm01" title="openvsp.CompNorm01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompNorm01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompTanU01" title="openvsp.CompTanU01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompTanU01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CompTanW01" title="openvsp.CompTanW01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompTanW01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompCurvature01" title="openvsp.CompCurvature01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompCurvature01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ProjPnt01" title="openvsp.ProjPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjPnt01</span></code></a>(std, int const &amp; surf_indx, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ProjPnt01I" title="openvsp.ProjPnt01I"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjPnt01I</span></code></a>(std, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ProjPnt01Guess" title="openvsp.ProjPnt01Guess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjPnt01Guess</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AxisProjPnt01" title="openvsp.AxisProjPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisProjPnt01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AxisProjPnt01I" title="openvsp.AxisProjPnt01I"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisProjPnt01I</span></code></a>(std, int const &amp; iaxis, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AxisProjPnt01Guess" title="openvsp.AxisProjPnt01Guess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisProjPnt01Guess</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.InsideSurf" title="openvsp.InsideSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InsideSurf</span></code></a>(std, int const &amp; surf_indx, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompPntRST" title="openvsp.CompPntRST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompPntRST</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FindRST" title="openvsp.FindRST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindRST</span></code></a>(std, int const &amp; surf_indx, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindRSTGuess" title="openvsp.FindRSTGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindRSTGuess</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ConvertRSTtoLMN" title="openvsp.ConvertRSTtoLMN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertRSTtoLMN</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ConvertRtoL" title="openvsp.ConvertRtoL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertRtoL</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ConvertLMNtoRST" title="openvsp.ConvertLMNtoRST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertLMNtoRST</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ConvertLtoR" title="openvsp.ConvertLtoR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertLtoR</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ConvertUtoEta" title="openvsp.ConvertUtoEta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertUtoEta</span></code></a>(std, double const &amp; u)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ConvertEtatoU" title="openvsp.ConvertEtatoU"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertEtatoU</span></code></a>(std, double const &amp; eta)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CompVecPnt01" title="openvsp.CompVecPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompVecPnt01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompVecDegenPnt01" title="openvsp.CompVecDegenPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompVecDegenPnt01</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CompVecNorm01" title="openvsp.CompVecNorm01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompVecNorm01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompVecCurvature01" title="openvsp.CompVecCurvature01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompVecCurvature01</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ProjVecPnt01" title="openvsp.ProjVecPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjVecPnt01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ProjVecPnt01Guess" title="openvsp.ProjVecPnt01Guess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjVecPnt01Guess</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AxisProjVecPnt01" title="openvsp.AxisProjVecPnt01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisProjVecPnt01</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AxisProjVecPnt01Guess" title="openvsp.AxisProjVecPnt01Guess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisProjVecPnt01Guess</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.VecInsideSurf" title="openvsp.VecInsideSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VecInsideSurf</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CompVecPntRST" title="openvsp.CompVecPntRST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompVecPntRST</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FindRSTVec" title="openvsp.FindRSTVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindRSTVec</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindRSTVecGuess" title="openvsp.FindRSTVecGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindRSTVecGuess</span></code></a>(std, int const &amp; surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ConvertRSTtoLMNVec" title="openvsp.ConvertRSTtoLMNVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertRSTtoLMNVec</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ConvertLMNtoRSTVec" title="openvsp.ConvertLMNtoRSTVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvertLMNtoRSTVec</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetUWTess01" title="openvsp.GetUWTess01"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUWTess01</span></code></a>(std, int const &amp; surf_indx)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompNorm01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompNorm01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompNorm01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompNorm01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompTanU01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompTanU01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompTanU01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompTanU01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompTanW01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompTanW01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompTanW01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompTanW01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompCurvature01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompCurvature01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompCurvature01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompCurvature01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ProjPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ProjPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ProjPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ProjPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ProjPnt01I">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ProjPnt01I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ProjPnt01I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ProjPnt01I" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ProjPnt01Guess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ProjPnt01Guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ProjPnt01Guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ProjPnt01Guess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AxisProjPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AxisProjPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">iaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AxisProjPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AxisProjPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AxisProjPnt01I">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AxisProjPnt01I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">iaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AxisProjPnt01I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AxisProjPnt01I" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AxisProjPnt01Guess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AxisProjPnt01Guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">iaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">w0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AxisProjPnt01Guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AxisProjPnt01Guess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.InsideSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">InsideSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#InsideSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.InsideSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompPntRST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompPntRST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">t</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompPntRST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompPntRST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindRST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindRST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindRST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindRST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindRSTGuess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindRSTGuess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">r0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">s0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">t0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindRSTGuess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindRSTGuess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertRSTtoLMN">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertRSTtoLMN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertRSTtoLMN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertRSTtoLMN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertRtoL">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertRtoL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertRtoL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertRtoL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertLMNtoRST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertLMNtoRST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertLMNtoRST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertLMNtoRST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertLtoR">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertLtoR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertLtoR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertLtoR" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertUtoEta">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertUtoEta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertUtoEta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertUtoEta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertEtatoU">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertEtatoU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">eta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertEtatoU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertEtatoU" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompVecPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompVecPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u_in_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w_in_vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompVecPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompVecPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompVecDegenPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompVecDegenPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">degen_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u_in_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w_in_vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompVecDegenPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompVecDegenPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompVecNorm01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompVecNorm01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">us</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">ws</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompVecNorm01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompVecNorm01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompVecCurvature01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompVecCurvature01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">us</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompVecCurvature01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompVecCurvature01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ProjVecPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ProjVecPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ProjVecPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ProjVecPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ProjVecPnt01Guess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ProjVecPnt01Guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u0s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w0s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ProjVecPnt01Guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ProjVecPnt01Guess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AxisProjVecPnt01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AxisProjVecPnt01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">iaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AxisProjVecPnt01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AxisProjVecPnt01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AxisProjVecPnt01Guess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AxisProjVecPnt01Guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">iaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u0s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w0s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AxisProjVecPnt01Guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AxisProjVecPnt01Guess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.VecInsideSurf">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">VecInsideSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BoolVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#VecInsideSurf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.VecInsideSurf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CompVecPntRST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CompVecPntRST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">r_in_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">s_in_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">t_in_vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CompVecPntRST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CompVecPntRST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindRSTVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindRSTVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindRSTVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindRSTVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindRSTVecGuess">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindRSTVecGuess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">r0s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">s0s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">t0s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindRSTVecGuess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindRSTVecGuess" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertRSTtoLMNVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertRSTtoLMNVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">r_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">s_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">t_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertRSTtoLMNVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertRSTtoLMNVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ConvertLMNtoRSTVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ConvertLMNtoRSTVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">l_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">m_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">n_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ConvertLMNtoRSTVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ConvertLMNtoRSTVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUWTess01">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUWTess01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">surf_indx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUWTess01"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUWTess01" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Geom Surface Query Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.CompPnt01"><code class="docutils literal notranslate"><span class="pre">CompPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompNorm01"><code class="docutils literal notranslate"><span class="pre">CompNorm01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompTanU01"><code class="docutils literal notranslate"><span class="pre">CompTanU01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompTanW01"><code class="docutils literal notranslate"><span class="pre">CompTanW01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompCurvature01"><code class="docutils literal notranslate"><span class="pre">CompCurvature01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ProjPnt01"><code class="docutils literal notranslate"><span class="pre">ProjPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ProjPnt01I"><code class="docutils literal notranslate"><span class="pre">ProjPnt01I()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ProjPnt01Guess"><code class="docutils literal notranslate"><span class="pre">ProjPnt01Guess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AxisProjPnt01"><code class="docutils literal notranslate"><span class="pre">AxisProjPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AxisProjPnt01I"><code class="docutils literal notranslate"><span class="pre">AxisProjPnt01I()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AxisProjPnt01Guess"><code class="docutils literal notranslate"><span class="pre">AxisProjPnt01Guess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.InsideSurf"><code class="docutils literal notranslate"><span class="pre">InsideSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompPntRST"><code class="docutils literal notranslate"><span class="pre">CompPntRST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindRST"><code class="docutils literal notranslate"><span class="pre">FindRST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindRSTGuess"><code class="docutils literal notranslate"><span class="pre">FindRSTGuess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertRSTtoLMN"><code class="docutils literal notranslate"><span class="pre">ConvertRSTtoLMN()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertRtoL"><code class="docutils literal notranslate"><span class="pre">ConvertRtoL()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertLMNtoRST"><code class="docutils literal notranslate"><span class="pre">ConvertLMNtoRST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertLtoR"><code class="docutils literal notranslate"><span class="pre">ConvertLtoR()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertUtoEta"><code class="docutils literal notranslate"><span class="pre">ConvertUtoEta()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertEtatoU"><code class="docutils literal notranslate"><span class="pre">ConvertEtatoU()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompVecPnt01"><code class="docutils literal notranslate"><span class="pre">CompVecPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompVecDegenPnt01"><code class="docutils literal notranslate"><span class="pre">CompVecDegenPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompVecNorm01"><code class="docutils literal notranslate"><span class="pre">CompVecNorm01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompVecCurvature01"><code class="docutils literal notranslate"><span class="pre">CompVecCurvature01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ProjVecPnt01"><code class="docutils literal notranslate"><span class="pre">ProjVecPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ProjVecPnt01Guess"><code class="docutils literal notranslate"><span class="pre">ProjVecPnt01Guess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AxisProjVecPnt01"><code class="docutils literal notranslate"><span class="pre">AxisProjVecPnt01()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AxisProjVecPnt01Guess"><code class="docutils literal notranslate"><span class="pre">AxisProjVecPnt01Guess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.VecInsideSurf"><code class="docutils literal notranslate"><span class="pre">VecInsideSurf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CompVecPntRST"><code class="docutils literal notranslate"><span class="pre">CompVecPntRST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindRSTVec"><code class="docutils literal notranslate"><span class="pre">FindRSTVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindRSTVecGuess"><code class="docutils literal notranslate"><span class="pre">FindRSTVecGuess()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertRSTtoLMNVec"><code class="docutils literal notranslate"><span class="pre">ConvertRSTtoLMNVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ConvertLMNtoRSTVec"><code class="docutils literal notranslate"><span class="pre">ConvertLMNtoRSTVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUWTess01"><code class="docutils literal notranslate"><span class="pre">GetUWTess01()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Geom.html"
+                          title="previous chapter">Geom Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="GroupMod.html"
+                          title="next chapter">Group Modification Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/SurfaceQuery.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GroupMod.html" title="Group Modification Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Geom.html" title="Geom Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Geom Surface Query Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

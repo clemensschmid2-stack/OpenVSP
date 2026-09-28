@@ -18,7 +18,7 @@ from datetime import datetime
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-DEFAULT_OFFICIAL = ROOT / "reference_builds" / "OpenVSP-3.51.2-win64"
+DEFAULT_OFFICIAL = ROOT / "reference_builds" / "OpenVSP-3.52.2-win64"
 DEFAULT_CUSTOM = ROOT / "build-msvc-full" / "install"
 CASES = (("thin", "base"), ("thin", "stab"), ("thick", "base"), ("thick", "stab"))
 VOLATILE_FIELDS = {"Wall_Time", "WallTime", "Analysis_Duration_Sec"}
@@ -30,6 +30,14 @@ def python_package(distribution: Path) -> Path:
     if not package.is_dir():
         raise FileNotFoundError(f"OpenVSP Python package not found: {package}")
     return package
+
+
+def python_path(distribution: Path) -> str:
+    """Use support packages from the same distribution as the geometry API."""
+    package = python_package(distribution.resolve())
+    return os.pathsep.join(str(p) for p in
+                           [package, *sorted(p for p in package.parent.iterdir()
+                                             if p.is_dir() and p != package)])
 
 
 def run_case(
@@ -46,7 +54,7 @@ def run_case(
     environment = os.environ.copy()
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
     environment["OMP_NUM_THREADS"] = "1"
-    environment["PYTHONPATH"] = str(python_package(distribution))
+    environment["PYTHONPATH"] = python_path(distribution)
     command = [
         sys.executable,
         str(HERE / "run_case.py"),
