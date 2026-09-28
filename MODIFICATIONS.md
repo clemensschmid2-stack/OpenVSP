@@ -9,6 +9,10 @@ This fork is derived from NASA's OpenVSP project.
   Advance the State Sweep physics epoch to reject mixed-physics resumes.
   Record the inconclusive physical benchmark and conditions for a possible
   future feature in [the removal decision](parity_tests/ROTATIONAL_REFRESH_REMOVAL.md).
+- Post-removal full build/package and unchanged official geometry/base/stability
+  parity pass with zero failures, together with all nine bounded lookup checks.
+  Hosted status and integration are recorded in PR #7 and the parent VDS PR #55;
+  merging does not install the runtime.
 - Integrate upstream geometry, inertia, tessellation and Reynolds fixes while
   retaining custom solver features. Resolve overlapping Reynolds corrections
   with one equivalent formula and unchanged numerical tolerances.

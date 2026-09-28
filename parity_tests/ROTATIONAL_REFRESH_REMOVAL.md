@@ -1,6 +1,6 @@
 # Restore upstream rotational-flow refresh behavior
 
-Status: Unreleased; validation and integration in progress. Not installed.
+Status: Unreleased; local validation passed. Not installed.
 Recorded: 2026-09-28.
 
 The user authorized removing the fork's three additional rotational-flow refresh
@@ -35,6 +35,17 @@ The parent VDS repository retains the model, original three-block ablation patch
 finest/60-iteration case, while mesh sensitivity was much larger. That historical
 benchmark does not validate the full vehicle or all rotational derivatives.
 
-Current integration evidence is recorded in the parent
+## Validation
+
+The isolated full GUI/API/optimizer build and ZIP packaging passed. The unchanged
+official 3.52.2 parity gate passes all nine geometry cases, both 1,991-value
+base-flow cases and both 2,550-value stability cases; zero comparison failures.
+All nine bounded lookup regressions and 17 harness tests pass. A copied old-epoch
+checkpoint is rejected without modification. Candidate solver SHA-256:
+`73f33f043a41e3afd9dce3bc4d3d290eb8ec845d377757947b87741184561a45`.
+The native merge rehearsal against `0ad85f015` is conflict-free and exactly
+matches the topic source tree. No numerical acceptance rule changed.
+
+Current integration and hosted-check evidence is recorded in the parent
 `docs/openvsp-3.52.2-integration.md`; the earlier blocked results in
 [UPSTREAM_3_52_2.md](UPSTREAM_3_52_2.md) remain historical evidence.
