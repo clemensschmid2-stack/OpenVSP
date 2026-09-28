@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>VSPAERO Control Surface Group Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VSPAERO Functions" href="VSPAERO.html" />
+    <link rel="prev" title="VSPAERO Actuator Disk and Propeller Functions" href="VSPAERODiskAndProp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VSPAERO.html" title="VSPAERO Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="VSPAERODiskAndProp.html" title="VSPAERO Actuator Disk and Propeller Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VSPAERO Control Surface Group Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="vspaero-control-surface-group-functions">
+<h1>VSPAERO Control Surface Group Functions<a class="headerlink" href="#vspaero-control-surface-group-functions" title="Link to this heading">¶</a></h1>
+<p>This group of functions is available for manipulating VSPAERO control surface groups through the API. Note, VSPAERO also includes rectangle type sub-surfaces as possible control surfaces.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AutoGroupVSPAEROControlSurfaces" title="openvsp.AutoGroupVSPAEROControlSurfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AutoGroupVSPAEROControlSurfaces</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddCpSlice" title="openvsp.AddCpSlice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddCpSlice</span></code></a>(int cut_type, double location)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetNumCpSlices" title="openvsp.GetNumCpSlices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumCpSlices</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetCpSliceID" title="openvsp.GetCpSliceID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetCpSliceID</span></code></a>(int slice_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelCpSlice" title="openvsp.DelCpSlice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelCpSlice</span></code></a>(int slice_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DeleteAllCpSlices" title="openvsp.DeleteAllCpSlices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteAllCpSlices</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DeleteVSPAEROControlSurfaceGroup" title="openvsp.DeleteVSPAEROControlSurfaceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeleteVSPAEROControlSurfaceGroup</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CreateVSPAEROControlSurfaceGroup" title="openvsp.CreateVSPAEROControlSurfaceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreateVSPAEROControlSurfaceGroup</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddAllToVSPAEROControlSurfaceGroup" title="openvsp.AddAllToVSPAEROControlSurfaceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddAllToVSPAEROControlSurfaceGroup</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.RemoveAllFromVSPAEROControlSurfaceGroup" title="openvsp.RemoveAllFromVSPAEROControlSurfaceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemoveAllFromVSPAEROControlSurfaceGroup</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetActiveCSNameVec" title="openvsp.GetActiveCSNameVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetActiveCSNameVec</span></code></a>(int CSGroupIndex)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetCompleteCSNameVec" title="openvsp.GetCompleteCSNameVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetCompleteCSNameVec</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAvailableCSNameVec" title="openvsp.GetAvailableCSNameVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAvailableCSNameVec</span></code></a>(int CSGroupIndex)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetVSPAEROControlGroupName" title="openvsp.SetVSPAEROControlGroupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetVSPAEROControlGroupName</span></code></a>(std, int CSGroupIndex)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetVSPAEROControlGroupName" title="openvsp.GetVSPAEROControlGroupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetVSPAEROControlGroupName</span></code></a>(int CSGroupIndex)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddSelectedToCSGroup" title="openvsp.AddSelectedToCSGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddSelectedToCSGroup</span></code></a>(IntVector selected, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.RemoveSelectedFromCSGroup" title="openvsp.RemoveSelectedFromCSGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemoveSelectedFromCSGroup</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumControlSurfaceGroups" title="openvsp.GetNumControlSurfaceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumControlSurfaceGroups</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindControlSurfaceGroup" title="openvsp.FindControlSurfaceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindControlSurfaceGroup</span></code></a>(int group_index)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AutoGroupVSPAEROControlSurfaces">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AutoGroupVSPAEROControlSurfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AutoGroupVSPAEROControlSurfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AutoGroupVSPAEROControlSurfaces" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddCpSlice">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddCpSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">cut_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">location</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddCpSlice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddCpSlice" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumCpSlices">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumCpSlices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumCpSlices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumCpSlices" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetCpSliceID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetCpSliceID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">slice_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetCpSliceID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetCpSliceID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelCpSlice">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelCpSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">slice_index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelCpSlice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelCpSlice" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteAllCpSlices">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteAllCpSlices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteAllCpSlices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteAllCpSlices" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DeleteVSPAEROControlSurfaceGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DeleteVSPAEROControlSurfaceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DeleteVSPAEROControlSurfaceGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DeleteVSPAEROControlSurfaceGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CreateVSPAEROControlSurfaceGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CreateVSPAEROControlSurfaceGroup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CreateVSPAEROControlSurfaceGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CreateVSPAEROControlSurfaceGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddAllToVSPAEROControlSurfaceGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddAllToVSPAEROControlSurfaceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddAllToVSPAEROControlSurfaceGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddAllToVSPAEROControlSurfaceGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemoveAllFromVSPAEROControlSurfaceGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemoveAllFromVSPAEROControlSurfaceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemoveAllFromVSPAEROControlSurfaceGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemoveAllFromVSPAEROControlSurfaceGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetActiveCSNameVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetActiveCSNameVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetActiveCSNameVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetActiveCSNameVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetCompleteCSNameVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetCompleteCSNameVec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetCompleteCSNameVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetCompleteCSNameVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAvailableCSNameVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAvailableCSNameVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAvailableCSNameVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAvailableCSNameVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetVSPAEROControlGroupName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetVSPAEROControlGroupName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetVSPAEROControlGroupName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetVSPAEROControlGroupName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetVSPAEROControlGroupName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetVSPAEROControlGroupName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetVSPAEROControlGroupName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetVSPAEROControlGroupName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddSelectedToCSGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddSelectedToCSGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IntVector</span> <span class="pre">selected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddSelectedToCSGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddSelectedToCSGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RemoveSelectedFromCSGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RemoveSelectedFromCSGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IntVector</span> <span class="pre">selected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">CSGroupIndex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#RemoveSelectedFromCSGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RemoveSelectedFromCSGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumControlSurfaceGroups">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumControlSurfaceGroups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumControlSurfaceGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumControlSurfaceGroups" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindControlSurfaceGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindControlSurfaceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">group_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindControlSurfaceGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindControlSurfaceGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">VSPAERO Control Surface Group Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.AutoGroupVSPAEROControlSurfaces"><code class="docutils literal notranslate"><span class="pre">AutoGroupVSPAEROControlSurfaces()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddCpSlice"><code class="docutils literal notranslate"><span class="pre">AddCpSlice()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumCpSlices"><code class="docutils literal notranslate"><span class="pre">GetNumCpSlices()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetCpSliceID"><code class="docutils literal notranslate"><span class="pre">GetCpSliceID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelCpSlice"><code class="docutils literal notranslate"><span class="pre">DelCpSlice()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteAllCpSlices"><code class="docutils literal notranslate"><span class="pre">DeleteAllCpSlices()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DeleteVSPAEROControlSurfaceGroup"><code class="docutils literal notranslate"><span class="pre">DeleteVSPAEROControlSurfaceGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CreateVSPAEROControlSurfaceGroup"><code class="docutils literal notranslate"><span class="pre">CreateVSPAEROControlSurfaceGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddAllToVSPAEROControlSurfaceGroup"><code class="docutils literal notranslate"><span class="pre">AddAllToVSPAEROControlSurfaceGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemoveAllFromVSPAEROControlSurfaceGroup"><code class="docutils literal notranslate"><span class="pre">RemoveAllFromVSPAEROControlSurfaceGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetActiveCSNameVec"><code class="docutils literal notranslate"><span class="pre">GetActiveCSNameVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetCompleteCSNameVec"><code class="docutils literal notranslate"><span class="pre">GetCompleteCSNameVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAvailableCSNameVec"><code class="docutils literal notranslate"><span class="pre">GetAvailableCSNameVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetVSPAEROControlGroupName"><code class="docutils literal notranslate"><span class="pre">SetVSPAEROControlGroupName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetVSPAEROControlGroupName"><code class="docutils literal notranslate"><span class="pre">GetVSPAEROControlGroupName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddSelectedToCSGroup"><code class="docutils literal notranslate"><span class="pre">AddSelectedToCSGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RemoveSelectedFromCSGroup"><code class="docutils literal notranslate"><span class="pre">RemoveSelectedFromCSGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumControlSurfaceGroups"><code class="docutils literal notranslate"><span class="pre">GetNumControlSurfaceGroups()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindControlSurfaceGroup"><code class="docutils literal notranslate"><span class="pre">FindControlSurfaceGroup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="VSPAERODiskAndProp.html"
+                          title="previous chapter">VSPAERO Actuator Disk and Propeller Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="VSPAERO.html"
+                          title="next chapter">VSPAERO Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/CSGroup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="VSPAERO.html" title="VSPAERO Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="VSPAERODiskAndProp.html" title="VSPAERO Actuator Disk and Propeller Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VSPAERO Control Surface Group Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

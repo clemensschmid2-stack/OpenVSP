@@ -1,0 +1,137 @@
+Geom Functions
+==============
+
+This group of functions is available for adding, deleting, and modifying OpenVSP Geoms through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SetGeomMaterialName
+    GetGeomTypes
+    AddGeom
+    UpdateGeom
+    DeleteGeom
+    DeleteGeomVec
+    CutGeomToClipboard
+    CopyGeomToClipboard
+    PasteGeomClipboard
+    FindGeoms
+    FindGeomsWithName
+    FindGeom
+    SetGeomName
+    GetGeomName
+    GetGeomParmIDs
+    GetGeomTypeName
+    SetGeomParent
+    ReorderGeom
+    AttachGeomTexture
+    RemoveGeomTexture
+    GetGeomTextureIDVec
+    GetGeomTextureFileName
+    GetGeomParent
+    GetGeomChildren
+    GetNumMainSurfs
+    GetTotalNumSurfs
+    GetGeomVSPSurfType
+    GetGeomVSPSurfCfdType
+    GetGeomBBoxMax
+    GetGeomBBoxMin
+    SplitWingXSec
+    GetDriverGroup
+    ResetPropellerThickness
+    PasteAirfoil
+    ClearSkinning
+    ResetGeomScale
+    AcceptGeomScale
+    GetPtCloudPnts
+    CreateNGonMeshGeom
+    CreateConvexHull
+    ProjectPtCloudPts
+
+
+Details
+-------
+
+.. autofunction:: SetGeomMaterialName
+
+.. autofunction:: GetGeomTypes
+
+.. autofunction:: AddGeom
+
+.. autofunction:: UpdateGeom
+
+.. autofunction:: DeleteGeom
+
+.. autofunction:: DeleteGeomVec
+
+.. autofunction:: CutGeomToClipboard
+
+.. autofunction:: CopyGeomToClipboard
+
+.. autofunction:: PasteGeomClipboard
+
+.. autofunction:: FindGeoms
+
+.. autofunction:: FindGeomsWithName
+
+.. autofunction:: FindGeom
+
+.. autofunction:: SetGeomName
+
+.. autofunction:: GetGeomName
+
+.. autofunction:: GetGeomParmIDs
+
+.. autofunction:: GetGeomTypeName
+
+.. autofunction:: SetGeomParent
+
+.. autofunction:: ReorderGeom
+
+.. autofunction:: AttachGeomTexture
+
+.. autofunction:: RemoveGeomTexture
+
+.. autofunction:: GetGeomTextureIDVec
+
+.. autofunction:: GetGeomTextureFileName
+
+.. autofunction:: GetGeomParent
+
+.. autofunction:: GetGeomChildren
+
+.. autofunction:: GetNumMainSurfs
+
+.. autofunction:: GetTotalNumSurfs
+
+.. autofunction:: GetGeomVSPSurfType
+
+.. autofunction:: GetGeomVSPSurfCfdType
+
+.. autofunction:: GetGeomBBoxMax
+
+.. autofunction:: GetGeomBBoxMin
+
+.. autofunction:: SplitWingXSec
+
+.. autofunction:: GetDriverGroup
+
+.. autofunction:: ResetPropellerThickness
+
+.. autofunction:: PasteAirfoil
+
+.. autofunction:: ClearSkinning
+
+.. autofunction:: ResetGeomScale
+
+.. autofunction:: AcceptGeomScale
+
+.. autofunction:: GetPtCloudPnts
+
+.. autofunction:: CreateNGonMeshGeom
+
+.. autofunction:: CreateConvexHull
+
+.. autofunction:: ProjectPtCloudPts
+

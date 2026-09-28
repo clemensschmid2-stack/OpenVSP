@@ -5,7 +5,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "BORGeom.h"
@@ -233,15 +232,13 @@ void BORGeom::ComputeCenter()
 }
 
 //==== Scale ====//
-void BORGeom::Scale()
+void BORGeom::ApplyScale( double currentScale )
 {
-    double currentScale = m_Scale() / m_LastScale();
 
     m_Diameter *= currentScale;
 
     m_XSCurve->SetScale( currentScale );
 
-    m_LastScale = m_Scale();
 }
 
 void BORGeom::AddDefaultSources( double base_len )

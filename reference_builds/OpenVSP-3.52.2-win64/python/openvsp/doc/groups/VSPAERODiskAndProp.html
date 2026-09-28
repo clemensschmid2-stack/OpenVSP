@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>VSPAERO Actuator Disk and Propeller Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VSPAERO Control Surface Group Functions" href="CSGroup.html" />
+    <link rel="prev" title="Visualization Functions" href="Visualization.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CSGroup.html" title="VSPAERO Control Surface Group Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Visualization.html" title="Visualization Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VSPAERO Actuator Disk and Propeller Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="vspaero-actuator-disk-and-propeller-functions">
+<h1>VSPAERO Actuator Disk and Propeller Functions<a class="headerlink" href="#vspaero-actuator-disk-and-propeller-functions" title="Link to this heading">¶</a></h1>
+<p>The following group of functions provide API capability for setting up actuator disks (Disk tab of VSPAERO GUI) and propellers (Propeller tab of VSPAERO GUI) for VSPAERO analysis. If a propeller geometry is used to model the actuator disk, the “PropMode” must be set to PROP_DISK or PROP_BOTH. Alternatively, the “PropMode” but be set to PROP_BLADE or PROP_BOTH for unsteady analysis. must be set to PROP_DISK or PROP_BOTH.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindActuatorDisk" title="openvsp.FindActuatorDisk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindActuatorDisk</span></code></a>(int disk_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumActuatorDisks" title="openvsp.GetNumActuatorDisks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumActuatorDisks</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FindUnsteadyGroup" title="openvsp.FindUnsteadyGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FindUnsteadyGroup</span></code></a>(int group_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetUnsteadyGroupName" title="openvsp.GetUnsteadyGroupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUnsteadyGroupName</span></code></a>(int group_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetUnsteadyGroupCompIDs" title="openvsp.GetUnsteadyGroupCompIDs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUnsteadyGroupCompIDs</span></code></a>(int group_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetUnsteadyGroupSurfIndexes" title="openvsp.GetUnsteadyGroupSurfIndexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUnsteadyGroupSurfIndexes</span></code></a>(int group_index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetNumUnsteadyGroups" title="openvsp.GetNumUnsteadyGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumUnsteadyGroups</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumUnsteadyRotorGroups" title="openvsp.GetNumUnsteadyRotorGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumUnsteadyRotorGroups</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindActuatorDisk">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindActuatorDisk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">disk_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindActuatorDisk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindActuatorDisk" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumActuatorDisks">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumActuatorDisks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumActuatorDisks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumActuatorDisks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FindUnsteadyGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FindUnsteadyGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">group_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#FindUnsteadyGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FindUnsteadyGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUnsteadyGroupName">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUnsteadyGroupName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">group_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUnsteadyGroupName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUnsteadyGroupName" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUnsteadyGroupCompIDs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUnsteadyGroupCompIDs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">group_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUnsteadyGroupCompIDs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUnsteadyGroupCompIDs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUnsteadyGroupSurfIndexes">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUnsteadyGroupSurfIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">group_index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IntVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUnsteadyGroupSurfIndexes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUnsteadyGroupSurfIndexes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumUnsteadyGroups">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumUnsteadyGroups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumUnsteadyGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumUnsteadyGroups" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumUnsteadyRotorGroups">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumUnsteadyRotorGroups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumUnsteadyRotorGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumUnsteadyRotorGroups" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">VSPAERO Actuator Disk and Propeller Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.FindActuatorDisk"><code class="docutils literal notranslate"><span class="pre">FindActuatorDisk()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumActuatorDisks"><code class="docutils literal notranslate"><span class="pre">GetNumActuatorDisks()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FindUnsteadyGroup"><code class="docutils literal notranslate"><span class="pre">FindUnsteadyGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUnsteadyGroupName"><code class="docutils literal notranslate"><span class="pre">GetUnsteadyGroupName()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUnsteadyGroupCompIDs"><code class="docutils literal notranslate"><span class="pre">GetUnsteadyGroupCompIDs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUnsteadyGroupSurfIndexes"><code class="docutils literal notranslate"><span class="pre">GetUnsteadyGroupSurfIndexes()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumUnsteadyGroups"><code class="docutils literal notranslate"><span class="pre">GetNumUnsteadyGroups()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumUnsteadyRotorGroups"><code class="docutils literal notranslate"><span class="pre">GetNumUnsteadyRotorGroups()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Visualization.html"
+                          title="previous chapter">Visualization Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CSGroup.html"
+                          title="next chapter">VSPAERO Control Surface Group Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/VSPAERODiskAndProp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CSGroup.html" title="VSPAERO Control Surface Group Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Visualization.html" title="Visualization Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VSPAERO Actuator Disk and Propeller Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

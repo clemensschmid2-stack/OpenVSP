@@ -1,0 +1,20 @@
+VSPAERO Functions
+=================
+
+The following group of functions are specific to VSPAERO. However, their relevance has been mostly replaced by Analysis Manager capabilities.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetVSPAERORefWingID
+    SetVSPAERORefWingID
+
+
+Details
+-------
+
+.. autofunction:: GetVSPAERORefWingID
+
+.. autofunction:: SetVSPAERORefWingID
+

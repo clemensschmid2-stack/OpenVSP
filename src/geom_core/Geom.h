@@ -66,8 +66,6 @@ public:
     // Destructor and copy/move operations are intentionally left implicit so vector<GeomType>
     // can move elements instead of deep-copying them.
 
-    void CopyFrom( const GeomType & t );
-
     bool GetAdoptableFlag()
     {
         return m_AdoptableFlag;
@@ -79,7 +77,6 @@ public:
 
     bool m_AdoptableFlag;
 
-    string m_GeomID;
     string m_ModuleName;
     string m_DisplayName;
 
@@ -231,18 +228,13 @@ public:
         m_ChildIDVec = vec;
     }
 
-    virtual void AddStepChildID( const string &id )
-    {
-        m_StepChildIDVec.push_back( id );
-    }
+    // Adds the ID once.  Whoever depends on this Geom re-adds itself on every update, and the
+    // list is saved with the model, so the same ID arrives many times over.
+    virtual void AddStepChildID( const string &id );
     virtual void RemoveStepChildID( const string &id );
     virtual vector< string > GetStepChildIDVec()
     {
         return m_StepChildIDVec;
-    }
-    virtual void SetStepChildIDVec( vector< string > & vec )
-    {
-        m_StepChildIDVec = vec;
     }
 
     virtual bool UpdatedParm( const string & id );
@@ -402,6 +394,15 @@ public:
     Geom( Vehicle* vehicle_ptr );
     virtual ~Geom();
 
+    // Scaling is a template method.  Scale() computes the incremental scale factor, dispatches to
+    // the per-Geom ApplyScale( double ) hook (that Geom's own dimensional Parms and geom-specific nested
+    // containers), and then always recurses into the Geom-common containers -- SubSurfaces, CFD
+    // sources, and FEA structures -- so their dimensional Parms scale too.  Derived Geoms override
+    // ApplyScale( double ), never Scale(), which guarantees the common containers are never missed.
+    virtual void Scale();
+    virtual void ApplyScale( double currentScale ) {}
+    void ScaleCommonSubComponents( double currentScale );
+
     virtual void Update( bool fullupdate = true );
     virtual void LoadMainDrawObjs( vector< DrawObj* > & draw_obj_vec );
     virtual void LoadDrawObjs( vector< DrawObj* > & draw_obj_vec );
@@ -474,8 +475,12 @@ public:
     bool GetCapUMinSuccess( int indx ) const { return m_CapUMinSuccess[indx]; }
     bool GetCapUMaxSuccess( int indx ) const { return m_CapUMaxSuccess[indx]; }
 
+    // Always writes symindexs, so an out of range imain is an empty answer rather than
+    // whatever the caller happened to have there.
     virtual void GetSymmIndexs( int imain, vector < int > & symindexs )
     {
+        symindexs.clear();
+
         if ( imain >= 0 && imain < m_SurfSymmMap.size() )
         {
             symindexs = m_SurfSymmMap[ imain ];
@@ -552,7 +557,6 @@ public:
         return nullptr;
     }
 
-    virtual void CopyFrom( Geom* geom );
 
     virtual xmlNodePtr EncodeXml( xmlNodePtr & node );
     virtual xmlNodePtr DecodeXml( xmlNodePtr & node );
@@ -578,6 +582,10 @@ public:
     virtual BndBox GetScaleIndependentBndBox() const
     {
         return m_ScaleIndependentBBox;
+    }
+    virtual bool IsBndBoxScaleDependent() const
+    {
+        return m_BBox != m_ScaleIndependentBBox;
     }
 
     virtual void WriteAirfoilFiles( FILE* meta_fid );

@@ -1,0 +1,203 @@
+XSec and Airfoil Functions
+==========================
+
+This group of functions provides API control of cross-sections (XSecs). Airfoils are a type of XSec included in this group as well. API functions for Body of Revolution XSecs are included in the Specialized Geometry group.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SetXSecAlias
+    GetXSecAlias
+    SetXSecCurveAlias
+    GetXSecCurveAlias
+    CutXSec
+    CopyXSec
+    PasteXSec
+    InsertXSec
+    SetDriverGroup
+    FitCSTAirfoil
+    GetXSecShape
+    GetXSecWidth
+    GetXSecHeight
+    SetXSecWidthHeight
+    SetXSecWidth
+    SetXSecHeight
+    GetXSecParmIDs
+    GetXSecParm
+    ReadFileXSec
+    GetXSecPnts
+    CopyXSecCurve
+    PasteXSecCurve
+    SetXSecPnts
+    ComputeXSecPnt
+    ComputeXSecTan
+    ResetXSecSkinParms
+    GetXSecContinuity
+    SetXSecContinuity
+    GetXSecTanAngles
+    SetXSecTanAngles
+    GetXSecTanSlews
+    SetXSecTanSlews
+    GetXSecTanStrengths
+    SetXSecTanStrengths
+    GetXSecCurvatures
+    SetXSecCurvatures
+    ReadFileAirfoil
+    SetAirfoilUpperPnts
+    SetAirfoilLowerPnts
+    SetAirfoilPnts
+    GetHersheyBarLiftDist
+    GetHersheyBarDragDist
+    GetVKTAirfoilPnts
+    GetVKTAirfoilCpDist
+    GetEllipsoidSurfPnts
+    GetFeatureLinePnts
+    GetEllipsoidCpDist
+    GetAirfoilUpperPnts
+    GetAirfoilLowerPnts
+    GetUpperCSTCoefs
+    GetLowerCSTCoefs
+    GetUpperCSTDegree
+    GetLowerCSTDegree
+    SetUpperCST
+    SetLowerCST
+    PromoteCSTUpper
+    PromoteCSTLower
+    DemoteCSTUpper
+    DemoteCSTLower
+    FitAfCST
+    WriteBezierAirfoil
+    WriteSeligAirfoil
+    GetAirfoilCoordinates
+
+
+Details
+-------
+
+.. autofunction:: SetXSecAlias
+
+.. autofunction:: GetXSecAlias
+
+.. autofunction:: SetXSecCurveAlias
+
+.. autofunction:: GetXSecCurveAlias
+
+.. autofunction:: CutXSec
+
+.. autofunction:: CopyXSec
+
+.. autofunction:: PasteXSec
+
+.. autofunction:: InsertXSec
+
+.. autofunction:: SetDriverGroup
+
+.. autofunction:: FitCSTAirfoil
+
+.. autofunction:: GetXSecShape
+
+.. autofunction:: GetXSecWidth
+
+.. autofunction:: GetXSecHeight
+
+.. autofunction:: SetXSecWidthHeight
+
+.. autofunction:: SetXSecWidth
+
+.. autofunction:: SetXSecHeight
+
+.. autofunction:: GetXSecParmIDs
+
+.. autofunction:: GetXSecParm
+
+.. autofunction:: ReadFileXSec
+
+.. autofunction:: GetXSecPnts
+
+.. autofunction:: CopyXSecCurve
+
+.. autofunction:: PasteXSecCurve
+
+.. autofunction:: SetXSecPnts
+
+.. autofunction:: ComputeXSecPnt
+
+.. autofunction:: ComputeXSecTan
+
+.. autofunction:: ResetXSecSkinParms
+
+.. autofunction:: GetXSecContinuity
+
+.. autofunction:: SetXSecContinuity
+
+.. autofunction:: GetXSecTanAngles
+
+.. autofunction:: SetXSecTanAngles
+
+.. autofunction:: GetXSecTanSlews
+
+.. autofunction:: SetXSecTanSlews
+
+.. autofunction:: GetXSecTanStrengths
+
+.. autofunction:: SetXSecTanStrengths
+
+.. autofunction:: GetXSecCurvatures
+
+.. autofunction:: SetXSecCurvatures
+
+.. autofunction:: ReadFileAirfoil
+
+.. autofunction:: SetAirfoilUpperPnts
+
+.. autofunction:: SetAirfoilLowerPnts
+
+.. autofunction:: SetAirfoilPnts
+
+.. autofunction:: GetHersheyBarLiftDist
+
+.. autofunction:: GetHersheyBarDragDist
+
+.. autofunction:: GetVKTAirfoilPnts
+
+.. autofunction:: GetVKTAirfoilCpDist
+
+.. autofunction:: GetEllipsoidSurfPnts
+
+.. autofunction:: GetFeatureLinePnts
+
+.. autofunction:: GetEllipsoidCpDist
+
+.. autofunction:: GetAirfoilUpperPnts
+
+.. autofunction:: GetAirfoilLowerPnts
+
+.. autofunction:: GetUpperCSTCoefs
+
+.. autofunction:: GetLowerCSTCoefs
+
+.. autofunction:: GetUpperCSTDegree
+
+.. autofunction:: GetLowerCSTDegree
+
+.. autofunction:: SetUpperCST
+
+.. autofunction:: SetLowerCST
+
+.. autofunction:: PromoteCSTUpper
+
+.. autofunction:: PromoteCSTLower
+
+.. autofunction:: DemoteCSTUpper
+
+.. autofunction:: DemoteCSTLower
+
+.. autofunction:: FitAfCST
+
+.. autofunction:: WriteBezierAirfoil
+
+.. autofunction:: WriteSeligAirfoil
+
+.. autofunction:: GetAirfoilCoordinates
+

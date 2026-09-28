@@ -1,0 +1,17 @@
+StackGeom Functions
+===================
+
+This group of functions is available for interacting with a StackGeom through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    InitStackPreset
+
+
+Details
+-------
+
+.. autofunction:: InitStackPreset
+

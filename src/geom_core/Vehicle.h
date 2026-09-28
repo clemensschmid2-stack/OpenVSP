@@ -104,6 +104,7 @@ public:
     string AddGeom( const GeomType & type );
     string AddGeom( Geom* add_geom );
     string AddMeshGeom( int normal_set, int degen_set = vsp::SET_NONE, bool suppressdisks = false, bool skipnegflipnormal = false, int n_ref = 0, bool checkFlat = false, const string & singleGeomID = string() );
+    string AddMeshGeom( BndBox & bbox, int normal_set, int degen_set = vsp::SET_NONE, bool suppressdisks = false, bool skipnegflipnormal = false, int n_ref = 0, bool checkFlat = false, const string & singleGeomID = string() );
 
     void SetSavedXSec( XSec * xSec );
     XSec * GetSavedXSec();
@@ -115,6 +116,10 @@ public:
     vector< TMesh* > CreateTMeshVec( int normal_set );
     vector< TMesh* > CreateTMeshVec( const vector < string > &geom_vec );
     vector< TMesh* > CreateTMeshVec( const string &geomid );
+
+    vector< TMesh* > CreateTMeshVec( int normal_set, BndBox & bbox );
+    vector< TMesh* > CreateTMeshVec( const vector < string > &geom_vec, BndBox & bbox );
+    vector< TMesh* > CreateTMeshVec( const string &geomid, BndBox & bbox );
 
     vector< TetraMassProp* > CreateTetraMassPropVec( int set );
     vector< TetraMassProp* > CreateTetraMassPropVec( const string &geomid );
@@ -172,13 +177,9 @@ public:
     void CopyPasteSet(int copyIndex, int pasteIndex);
 
     //==== Geom Type Data =====//
-    vector< string > GetValidTypeGeoms();
-    vector< GeomType > GetEditableGeomTypes();
-
     int GetNumGeomTypes()                                    { return ( int )m_GeomTypeVec.size(); }
     int GetNumFixedGeomTypes();
     GeomType GetGeomType( int index );
-    void SetGeomType( int index, const GeomType & type );
 
     BndBox GetBndBox()                                        { return m_BBox; }
     BndBox GetScaleIndependentBndBox()                        { return m_ScaleIndependentBBox; }
@@ -516,6 +517,7 @@ public:
     // FitModelMgr
     BoolParm m_SelectOneFlag;
     BoolParm m_SelectBoxFlag;
+    IntParm m_SurfIndx;
     IntParm m_UType;
     IntParm m_WType;
     Parm m_UTargetPt;

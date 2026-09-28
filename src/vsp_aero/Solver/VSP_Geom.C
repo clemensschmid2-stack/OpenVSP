@@ -5,8 +5,31 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "VSP_Geom.H"
+#include "CaseValidity.H"
 
 #include "START_NAME_SPACE.H"
+
+static void ValidateInputCell(VSP_GRID &Grid, const std::vector<int> &Nodes,
+                              const char *Kind, int Cell)
+{
+    std::vector<std::array<double, 3> > Points;
+    for (size_t i = 0; i < Nodes.size(); ++i) {
+        if (Nodes[i] < 1 || Nodes[i] > Grid.NumberOfNodes()) {
+            printf("Invalid VSPGEOM %s %d: node index %d is outside 1..%d.\n",
+                   Kind, Cell, Nodes[i], Grid.NumberOfNodes());
+            fflush(NULL); exit(1);
+        }
+        VSP_NODE &Node = Grid.NodeList(Nodes[i]);
+        Points.push_back({{Node.x(), Node.y(), Node.z()}});
+    }
+    const char *Error = vspaero_validity::cellError(Points);
+    if (Error) {
+        printf("Invalid VSPGEOM %s %d: %s; nodes", Kind, Cell, Error);
+        for (size_t i = 0; i < Nodes.size(); ++i) printf(" %d", Nodes[i]);
+        printf(". Correct the source mesh; no geometry was repaired.\n");
+        fflush(NULL); exit(1);
+    }
+}
 
 /*##############################################################################
 #                                                                              #
@@ -3317,6 +3340,10 @@ void VSP_GEOM::ReadVSPGeomDataFromFile(char *Name, FILE *VSPGeom_File, FILE *VKE
        
        if ( NumTriNodes > 3 ) InputMeshIsMixedPolys_ = 1;
 
+       std::vector<int> CellNodes;
+       for ( i = 1 ; i <= NumTriNodes ; i++ ) CellNodes.push_back(Grid().LoopList(n).Node(i));
+       ValidateInputCell(Grid(), CellNodes, "polygon", n);
+
     }    
 
     // Set surface type
@@ -4104,6 +4131,8 @@ void VSP_GEOM::ReadVSPGeomDataFromFile(char *Name, FILE *VSPGeom_File, FILE *VKE
              Next = strtok(NULL,Space); Node1 = atoi(Next);
              Next = strtok(NULL,Space); Node2 = atoi(Next);
              Next = strtok(NULL,Space); Node3 = atoi(Next);
+
+             ValidateInputCell(Grid(), {Node1, Node2, Node3}, "triangulation cell", NumTris);
              
              // Tri connectivity
              

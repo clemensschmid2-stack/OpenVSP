@@ -1,0 +1,110 @@
+Analysis Manager Functions
+==========================
+
+This group is for functions included in the Analysis Manager. The Analysis Manager allows for OpenVSP analyses to be setup and run through the API without having to modify Parms directly. Examples are available for every available analysis type. The results of running an analysis can be accessed through the functions defined in the Results group.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetNumAnalysis
+    ListAnalysis
+    GetAnalysisInputNames
+    GetAnalysisDoc
+    GetAnalysisInputDoc
+    ExecAnalysis
+    GetNumAnalysisInputData
+    GetAnalysisInputType
+    GetIntAnalysisInput
+    GetDoubleAnalysisInput
+    GetStringAnalysisInput
+    GetVec3dAnalysisInput
+    SetAnalysisInputDefaults
+    SetIntAnalysisInput
+    SetDoubleAnalysisInput
+    SetStringAnalysisInput
+    SetVec3dAnalysisInput
+    PrintAnalysisInputs
+    PrintAnalysisDocs
+    AddGeometryAnalysis
+    AddGeometryAnalysisAzEl
+    DeleteGeometryAnalysisAzEl
+    DeleteAllGeometryAnalysisAzEl
+    GetNumGeometryAnalysisAzEl
+    GetGeometryAnalysisAzimuthParm
+    GetGeometryAnalysisElevationParm
+    DeleteGeometryAnalysis
+    DeleteAllGeometryAnalyses
+    GetAllGeometryAnalysesIDVec
+    SetActiveGeometryAnalysis
+    GetActiveGeometryAnalysis
+    MakeMeshGeom
+
+
+Details
+-------
+
+.. autofunction:: GetNumAnalysis
+
+.. autofunction:: ListAnalysis
+
+.. autofunction:: GetAnalysisInputNames
+
+.. autofunction:: GetAnalysisDoc
+
+.. autofunction:: GetAnalysisInputDoc
+
+.. autofunction:: ExecAnalysis
+
+.. autofunction:: GetNumAnalysisInputData
+
+.. autofunction:: GetAnalysisInputType
+
+.. autofunction:: GetIntAnalysisInput
+
+.. autofunction:: GetDoubleAnalysisInput
+
+.. autofunction:: GetStringAnalysisInput
+
+.. autofunction:: GetVec3dAnalysisInput
+
+.. autofunction:: SetAnalysisInputDefaults
+
+.. autofunction:: SetIntAnalysisInput
+
+.. autofunction:: SetDoubleAnalysisInput
+
+.. autofunction:: SetStringAnalysisInput
+
+.. autofunction:: SetVec3dAnalysisInput
+
+.. autofunction:: PrintAnalysisInputs
+
+.. autofunction:: PrintAnalysisDocs
+
+.. autofunction:: AddGeometryAnalysis
+
+.. autofunction:: AddGeometryAnalysisAzEl
+
+.. autofunction:: DeleteGeometryAnalysisAzEl
+
+.. autofunction:: DeleteAllGeometryAnalysisAzEl
+
+.. autofunction:: GetNumGeometryAnalysisAzEl
+
+.. autofunction:: GetGeometryAnalysisAzimuthParm
+
+.. autofunction:: GetGeometryAnalysisElevationParm
+
+.. autofunction:: DeleteGeometryAnalysis
+
+.. autofunction:: DeleteAllGeometryAnalyses
+
+.. autofunction:: GetAllGeometryAnalysesIDVec
+
+.. autofunction:: SetActiveGeometryAnalysis
+
+.. autofunction:: GetActiveGeometryAnalysis
+
+.. autofunction:: MakeMeshGeom
+

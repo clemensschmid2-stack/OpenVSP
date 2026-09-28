@@ -25,7 +25,10 @@ def find_python_library(python: Path) -> Path:
         [str(python), "-c", "import sys; print(f'python{sys.version_info.major}{sys.version_info.minor}.lib')"],
         text=True,
     ).strip()
-    candidates = [python.parent / "libs" / version]
+    base_prefix = subprocess.check_output(
+        [str(python), "-c", "import sys; print(sys.base_prefix)"], text=True,
+    ).strip()
+    candidates = [Path(base_prefix) / "libs" / version]
     for candidate in candidates:
         if candidate.is_file():
             return candidate.resolve()
@@ -73,13 +76,18 @@ def main() -> int:
         swig = str(bundled_swig) if bundled_swig.is_file() else None
     if not swig:
         parser.error("swig was not found on PATH or in the selected Python environment")
-    python_include = python.parent / "include"
+    python_include = Path(subprocess.check_output(
+        [str(python), "-c", "import sysconfig; print(sysconfig.get_path('include'))"],
+        text=True,
+    ).strip())
     if not python_include.is_dir():
         parser.error(f"Python include directory does not exist: {python_include}")
     try:
         python_library = find_python_library(python)
     except FileNotFoundError as error:
         parser.error(str(error))
+    if subprocess.run([str(python), "-c", "import numpy"], check=False).returncode:
+        parser.error("NumPy must be installed in the selected Python environment for the API")
 
     build_dir = args.build_dir.expanduser().resolve()
     if args.clean and build_dir.exists():
@@ -116,7 +124,8 @@ def main() -> int:
     ])
 
     install_dir = build_dir / "install"
-    expected = ["vsp.exe", "vspaero.exe", "vspscript.exe", "vspviewer.exe"]
+    expected = ["vsp.exe", "vspaero.exe", "vspscript.exe", "vspviewer.exe",
+                "python/openvsp/openvsp/_vsp.pyd", "python/openvsp/openvsp/_vsp_g.pyd"]
     missing = [name for name in expected if not (install_dir / name).is_file()]
     if missing:
         print(f"\nBuild finished, but expected outputs are missing: {', '.join(missing)}", file=sys.stderr)

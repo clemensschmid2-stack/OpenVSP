@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Matrix4d Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Measure Tool Functions" href="Measure.html" />
+    <link rel="prev" title="Group Modification Functions" href="GroupMod.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Measure.html" title="Measure Tool Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GroupMod.html" title="Group Modification Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Matrix4d Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="matrix4d-functions">
+<h1>Matrix4d Functions<a class="headerlink" href="#matrix4d-functions" title="Link to this heading">¶</a></h1>
+<p>API functions that utilize the Matrix4d class are grouped here. For details of the class, including member functions, see Matrix4d.</p>
+<section id="matrix4d">
+<h2>Matrix4d<a class="headerlink" href="#matrix4d" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.loadIdentity" title="openvsp.Matrix4d.loadIdentity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.loadIdentity</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.translatef" title="openvsp.Matrix4d.translatef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.translatef</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.translatev" title="openvsp.Matrix4d.translatev"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.translatev</span></code></a>(Matrix4d self, vec3d v)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.rotateX" title="openvsp.Matrix4d.rotateX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.rotateX</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.rotateY" title="openvsp.Matrix4d.rotateY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.rotateY</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.rotateZ" title="openvsp.Matrix4d.rotateZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.rotateZ</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.rotate" title="openvsp.Matrix4d.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.rotate</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.rotatealongX" title="openvsp.Matrix4d.rotatealongX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.rotatealongX</span></code></a>(Matrix4d self, vec3d dir1)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.zeroTranslations" title="openvsp.Matrix4d.zeroTranslations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.zeroTranslations</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.affineInverse" title="openvsp.Matrix4d.affineInverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.affineInverse</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.scale" title="openvsp.Matrix4d.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.scale</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.scalex" title="openvsp.Matrix4d.scalex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.scalex</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.scaley" title="openvsp.Matrix4d.scaley"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.scaley</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.scalez" title="openvsp.Matrix4d.scalez"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.scalez</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.flipx" title="openvsp.Matrix4d.flipx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.flipx</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.loadXZRef" title="openvsp.Matrix4d.loadXZRef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.loadXZRef</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.loadXYRef" title="openvsp.Matrix4d.loadXYRef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.loadXYRef</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.loadYZRef" title="openvsp.Matrix4d.loadYZRef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.loadYZRef</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.mirrory" title="openvsp.Matrix4d.mirrory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.mirrory</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xform" title="openvsp.Matrix4d.xform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xform</span></code></a>(Matrix4d self, vec3d _in)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xformvec" title="openvsp.Matrix4d.xformvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xformvec</span></code></a>(Matrix4d self, Vec3dVec _in)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xformmat" title="openvsp.Matrix4d.xformmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xformmat</span></code></a>(Matrix4d self, Vec3dVecVec _in)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xformnorm" title="openvsp.Matrix4d.xformnorm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xformnorm</span></code></a>(Matrix4d self, vec3d _in)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xformnormvec" title="openvsp.Matrix4d.xformnormvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xformnormvec</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.xformnormmat" title="openvsp.Matrix4d.xformnormmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.xformnormmat</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.getAngles" title="openvsp.Matrix4d.getAngles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.getAngles</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.getArcballAngles" title="openvsp.Matrix4d.getArcballAngles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.getArcballAngles</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.getTranslation" title="openvsp.Matrix4d.getTranslation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.getTranslation</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.buildXForm" title="openvsp.Matrix4d.buildXForm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.buildXForm</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.getBasis" title="openvsp.Matrix4d.getBasis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.getBasis</span></code></a>(Matrix4d self, vec3d xdir, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.setBasis" title="openvsp.Matrix4d.setBasis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.setBasis</span></code></a>(Matrix4d self, vec3d xdir, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.Matrix4d.getRotationAxis" title="openvsp.Matrix4d.getRotationAxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.getRotationAxis</span></code></a>(Matrix4d self, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.Matrix4d.toQuat" title="openvsp.Matrix4d.toQuat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix4d.toQuat</span></code></a>(Matrix4d self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="openvsp.Matrix4d">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">Matrix4d</span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d" title="Link to this definition">¶</a></dt>
+<dd><p>Proxy of C++ Matrix4d class.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.thisown">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openvsp.Matrix4d.thisown" title="Link to this definition">¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openvsp.Matrix4d.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.loadIdentity">
+<span class="sig-name descname"><span class="pre">loadIdentity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.loadIdentity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.loadIdentity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.setIdentity">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">setIdentity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">*</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.setIdentity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.setIdentity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.translatef">
+<span class="sig-name descname"><span class="pre">translatef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.translatef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.translatef" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.translatev">
+<span class="sig-name descname"><span class="pre">translatev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.translatev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.translatev" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.rotateX">
+<span class="sig-name descname"><span class="pre">rotateX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">ang</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.rotateX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.rotateX" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.rotateY">
+<span class="sig-name descname"><span class="pre">rotateY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">ang</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.rotateY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.rotateY" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.rotateZ">
+<span class="sig-name descname"><span class="pre">rotateZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">ang</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.rotateZ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.rotateZ" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.rotate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.rotatealongX">
+<span class="sig-name descname"><span class="pre">rotatealongX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">dir1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.rotatealongX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.rotatealongX" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.zeroTranslations">
+<span class="sig-name descname"><span class="pre">zeroTranslations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.zeroTranslations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.zeroTranslations" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.affineInverse">
+<span class="sig-name descname"><span class="pre">affineInverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.affineInverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.affineInverse" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.scale" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.scalex">
+<span class="sig-name descname"><span class="pre">scalex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">scalex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.scalex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.scalex" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.scaley">
+<span class="sig-name descname"><span class="pre">scaley</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">scaley</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.scaley"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.scaley" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.scalez">
+<span class="sig-name descname"><span class="pre">scalez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">scalez</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.scalez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.scalez" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.flipx">
+<span class="sig-name descname"><span class="pre">flipx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.flipx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.flipx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getMat">
+<span class="sig-name descname"><span class="pre">getMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">*</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getMat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getMat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.matMult">
+<span class="sig-name descname"><span class="pre">matMult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">*</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.matMult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.matMult" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">matMult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.postMult">
+<span class="sig-name descname"><span class="pre">postMult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">*</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.postMult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.postMult" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">postMult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.initMat">
+<span class="sig-name descname"><span class="pre">initMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">*</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.initMat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.initMat" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">initMat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.mult">
+<span class="sig-name descname"><span class="pre">mult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">[4]</span> <span class="pre">_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">[4]</span> <span class="pre">out</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.mult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.mult" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span> <span class="pre">*</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.const_data">
+<span class="sig-name descname"><span class="pre">const_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">*</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.const_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.const_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.loadXZRef">
+<span class="sig-name descname"><span class="pre">loadXZRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.loadXZRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.loadXZRef" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.loadXYRef">
+<span class="sig-name descname"><span class="pre">loadXYRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.loadXYRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.loadXYRef" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.loadYZRef">
+<span class="sig-name descname"><span class="pre">loadYZRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.loadYZRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.loadYZRef" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.mirrory">
+<span class="sig-name descname"><span class="pre">mirrory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.mirrory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.mirrory" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xform">
+<span class="sig-name descname"><span class="pre">xform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xform" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xformvec">
+<span class="sig-name descname"><span class="pre">xformvec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xformvec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xformvec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xformmat">
+<span class="sig-name descname"><span class="pre">xformmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVecVec</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xformmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xformmat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xformnorm">
+<span class="sig-name descname"><span class="pre">xformnorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xformnorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xformnorm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xformnormvec">
+<span class="sig-name descname"><span class="pre">xformnormvec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xformnormvec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xformnormvec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.xformnormmat">
+<span class="sig-name descname"><span class="pre">xformnormmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVecVec</span> <span class="pre">_in</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.xformnormmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.xformnormmat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getAngles">
+<span class="sig-name descname"><span class="pre">getAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getAngles" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getArcballAngles">
+<span class="sig-name descname"><span class="pre">getArcballAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getArcballAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getArcballAngles" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getTranslation">
+<span class="sig-name descname"><span class="pre">getTranslation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getTranslation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getTranslation" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.buildXForm">
+<span class="sig-name descname"><span class="pre">buildXForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">rot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">cent_rot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.buildXForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.buildXForm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getBasis">
+<span class="sig-name descname"><span class="pre">getBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">xdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">ydir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">zdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getBasis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.setBasis">
+<span class="sig-name descname"><span class="pre">setBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">xdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">ydir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">zdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.setBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.setBasis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.getRotationAxis">
+<span class="sig-name descname"><span class="pre">getRotationAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">axis_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">axis_pnt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.getRotationAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.getRotationAxis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.Matrix4d.toQuat">
+<span class="sig-name descname"><span class="pre">toQuat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#Matrix4d.toQuat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.Matrix4d.toQuat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Matrix4d Functions</a><ul>
+<li><a class="reference internal" href="#matrix4d">Matrix4d</a><ul>
+<li><a class="reference internal" href="#openvsp.Matrix4d"><code class="docutils literal notranslate"><span class="pre">Matrix4d</span></code></a><ul>
+<li><a class="reference internal" href="#openvsp.Matrix4d.thisown"><code class="docutils literal notranslate"><span class="pre">Matrix4d.thisown</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.__repr__"><code class="docutils literal notranslate"><span class="pre">Matrix4d.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.loadIdentity"><code class="docutils literal notranslate"><span class="pre">Matrix4d.loadIdentity()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.setIdentity"><code class="docutils literal notranslate"><span class="pre">Matrix4d.setIdentity()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.translatef"><code class="docutils literal notranslate"><span class="pre">Matrix4d.translatef()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.translatev"><code class="docutils literal notranslate"><span class="pre">Matrix4d.translatev()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.rotateX"><code class="docutils literal notranslate"><span class="pre">Matrix4d.rotateX()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.rotateY"><code class="docutils literal notranslate"><span class="pre">Matrix4d.rotateY()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.rotateZ"><code class="docutils literal notranslate"><span class="pre">Matrix4d.rotateZ()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.rotate"><code class="docutils literal notranslate"><span class="pre">Matrix4d.rotate()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.rotatealongX"><code class="docutils literal notranslate"><span class="pre">Matrix4d.rotatealongX()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.zeroTranslations"><code class="docutils literal notranslate"><span class="pre">Matrix4d.zeroTranslations()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.affineInverse"><code class="docutils literal notranslate"><span class="pre">Matrix4d.affineInverse()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.scale"><code class="docutils literal notranslate"><span class="pre">Matrix4d.scale()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.scalex"><code class="docutils literal notranslate"><span class="pre">Matrix4d.scalex()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.scaley"><code class="docutils literal notranslate"><span class="pre">Matrix4d.scaley()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.scalez"><code class="docutils literal notranslate"><span class="pre">Matrix4d.scalez()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.flipx"><code class="docutils literal notranslate"><span class="pre">Matrix4d.flipx()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getMat"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getMat()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.matMult"><code class="docutils literal notranslate"><span class="pre">Matrix4d.matMult()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.postMult"><code class="docutils literal notranslate"><span class="pre">Matrix4d.postMult()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.initMat"><code class="docutils literal notranslate"><span class="pre">Matrix4d.initMat()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.mult"><code class="docutils literal notranslate"><span class="pre">Matrix4d.mult()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.data"><code class="docutils literal notranslate"><span class="pre">Matrix4d.data()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.const_data"><code class="docutils literal notranslate"><span class="pre">Matrix4d.const_data()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.loadXZRef"><code class="docutils literal notranslate"><span class="pre">Matrix4d.loadXZRef()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.loadXYRef"><code class="docutils literal notranslate"><span class="pre">Matrix4d.loadXYRef()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.loadYZRef"><code class="docutils literal notranslate"><span class="pre">Matrix4d.loadYZRef()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.mirrory"><code class="docutils literal notranslate"><span class="pre">Matrix4d.mirrory()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xform"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xform()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xformvec"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xformvec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xformmat"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xformmat()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xformnorm"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xformnorm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xformnormvec"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xformnormvec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.xformnormmat"><code class="docutils literal notranslate"><span class="pre">Matrix4d.xformnormmat()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getAngles"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getAngles()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getArcballAngles"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getArcballAngles()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getTranslation"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getTranslation()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.buildXForm"><code class="docutils literal notranslate"><span class="pre">Matrix4d.buildXForm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getBasis"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getBasis()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.setBasis"><code class="docutils literal notranslate"><span class="pre">Matrix4d.setBasis()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.getRotationAxis"><code class="docutils literal notranslate"><span class="pre">Matrix4d.getRotationAxis()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.Matrix4d.toQuat"><code class="docutils literal notranslate"><span class="pre">Matrix4d.toQuat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="GroupMod.html"
+                          title="previous chapter">Group Modification Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Measure.html"
+                          title="next chapter">Measure Tool Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/Matrix4d.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Measure.html" title="Measure Tool Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="GroupMod.html" title="Group Modification Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Matrix4d Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

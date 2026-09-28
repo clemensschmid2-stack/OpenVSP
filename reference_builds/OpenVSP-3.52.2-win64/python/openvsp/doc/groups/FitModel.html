@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fit Model Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Functions for Sets" href="Sets.html" />
+    <link rel="prev" title="File Input and Output Functions" href="FileIO.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Sets.html" title="Functions for Sets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FileIO.html" title="File Input and Output Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fit Model Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="fit-model-functions">
+<h1>Fit Model Functions<a class="headerlink" href="#fit-model-functions" title="Link to this heading">¶</a></h1>
+<p>This group of functions supports the Fit Model Tool, which adjusts a model until its surfaces pass through a set of known points.  Each point to match is set up as a target point: a point in space paired with the surface of a Geom, either pinned to a surface coordinate or free to slide along the surface.  One or more Parms are then nominated as variables.  Together these define a least squares problem, which is solved with a Levenberg-Marquardt algorithm where the free surface coordinates and the nominated Parms are the degrees of freedom and every target point contributes three residuals.  Unlike the GUI, the API takes target points directly as coordinates rather than through a point cloud Geom and mouse selection.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ResetFitModel" title="openvsp.ResetFitModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResetFitModel</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPt" title="openvsp.AddFitModelTargetPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPt</span></code></a>(std, int surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedU" title="openvsp.AddFitModelTargetPtFixedU"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedU</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedW" title="openvsp.AddFitModelTargetPtFixedW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedW</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedUW" title="openvsp.AddFitModelTargetPtFixedUW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedUW</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPts" title="openvsp.AddFitModelTargetPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPts</span></code></a>(std, int surf_indx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedU" title="openvsp.AddFitModelTargetPtsFixedU"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedU</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUs" title="openvsp.AddFitModelTargetPtsFixedUs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUs</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedW" title="openvsp.AddFitModelTargetPtsFixedW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedW</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedWs" title="openvsp.AddFitModelTargetPtsFixedWs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedWs</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUW" title="openvsp.AddFitModelTargetPtsFixedUW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUW</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUWs" title="openvsp.AddFitModelTargetPtsFixedUWs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUWs</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelFitModelTargetPt" title="openvsp.DelFitModelTargetPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelFitModelTargetPt</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelAllFitModelTargetPts" title="openvsp.DelAllFitModelTargetPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllFitModelTargetPts</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SortFitModelTargetPtsByDist" title="openvsp.SortFitModelTargetPtsByDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortFitModelTargetPtsByDist</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.MoveFitModelTargetPt" title="openvsp.MoveFitModelTargetPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MoveFitModelTargetPt</span></code></a>(int index, int reorder_type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetNumFitModelTargetPts" title="openvsp.GetNumFitModelTargetPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumFitModelTargetPts</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPt" title="openvsp.GetFitModelTargetPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPt</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPt" title="openvsp.SetFitModelTargetPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPt</span></code></a>(int index, vec3d pt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtGeom" title="openvsp.GetFitModelTargetPtGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtGeom</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPtGeom" title="openvsp.SetFitModelTargetPtGeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPtGeom</span></code></a>(int index, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtSurfIndx" title="openvsp.GetFitModelTargetPtSurfIndx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtSurfIndx</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPtSurfIndx" title="openvsp.SetFitModelTargetPtSurfIndx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPtSurfIndx</span></code></a>(int index, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtU" title="openvsp.GetFitModelTargetPtU"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtU</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtW" title="openvsp.GetFitModelTargetPtW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtW</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtDist" title="openvsp.GetFitModelTargetPtDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtDist</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPtUW" title="openvsp.SetFitModelTargetPtUW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPtUW</span></code></a>(int index, double u, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtUType" title="openvsp.GetFitModelTargetPtUType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtUType</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPtUType" title="openvsp.SetFitModelTargetPtUType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPtUType</span></code></a>(int index, int u_type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtWType" title="openvsp.GetFitModelTargetPtWType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtWType</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetFitModelTargetPtWType" title="openvsp.SetFitModelTargetPtWType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetFitModelTargetPtWType</span></code></a>(int index, int w_type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelTargetPtSurfPt" title="openvsp.GetFitModelTargetPtSurfPt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelTargetPtSurfPt</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.AddFitModelVar" title="openvsp.AddFitModelVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddFitModelVar</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DelFitModelVar" title="openvsp.DelFitModelVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelFitModelVar</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DelAllFitModelVars" title="openvsp.DelAllFitModelVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelAllFitModelVars</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetNumFitModelVars" title="openvsp.GetNumFitModelVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumFitModelVars</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetFitModelVar" title="openvsp.GetFitModelVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelVar</span></code></a>(int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelVarVec" title="openvsp.GetFitModelVarVec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelVarVec</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SearchFitModelTargetUW" title="openvsp.SearchFitModelTargetUW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SearchFitModelTargetUW</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.RefineFitModelTargetUW" title="openvsp.RefineFitModelTargetUW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefineFitModelTargetUW</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.UpdateFitModelDist" title="openvsp.UpdateFitModelDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFitModelDist</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFitModelDist" title="openvsp.GetFitModelDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFitModelDist</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetNumFitModelOptVars" title="openvsp.GetNumFitModelOptVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNumFitModelOptVars</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.OptimizeFitModel" title="openvsp.OptimizeFitModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptimizeFitModel</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CanUndoFitModel" title="openvsp.CanUndoFitModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanUndoFitModel</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.UndoFitModel" title="openvsp.UndoFitModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UndoFitModel</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SaveFitModelFile" title="openvsp.SaveFitModelFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SaveFitModelFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.LoadFitModelFile" title="openvsp.LoadFitModelFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LoadFitModelFile</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ResetFitModel">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ResetFitModel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ResetFitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ResetFitModel" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">u_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FIT_MODEL_FREE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">w_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FIT_MODEL_FREE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtFixedU">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtFixedU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtFixedU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtFixedU" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtFixedW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtFixedW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtFixedW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtFixedW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtFixedUW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtFixedUW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtFixedUW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtFixedUW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedU">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedU" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedUs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedUs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedUs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedUs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedWs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedWs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedWs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedUW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedUW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedUW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedUW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelTargetPtsFixedUWs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelTargetPtsFixedUWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">u_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">w_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelTargetPtsFixedUWs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelTargetPtsFixedUWs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelFitModelTargetPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelFitModelTargetPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelFitModelTargetPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelFitModelTargetPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllFitModelTargetPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllFitModelTargetPts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllFitModelTargetPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllFitModelTargetPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SortFitModelTargetPtsByDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SortFitModelTargetPtsByDist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SortFitModelTargetPtsByDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SortFitModelTargetPtsByDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.MoveFitModelTargetPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">MoveFitModelTargetPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">reorder_type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#MoveFitModelTargetPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.MoveFitModelTargetPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumFitModelTargetPts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumFitModelTargetPts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumFitModelTargetPts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumFitModelTargetPts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">pt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtGeom">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtGeom" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPtGeom">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPtGeom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPtGeom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPtGeom" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtSurfIndx">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtSurfIndx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtSurfIndx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtSurfIndx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPtSurfIndx">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPtSurfIndx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">surf_indx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPtSurfIndx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPtSurfIndx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtU">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtU" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPtUW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPtUW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPtUW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPtUW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtUType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtUType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtUType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtUType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPtUType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPtUType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">u_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPtUType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPtUType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtWType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtWType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtWType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtWType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetFitModelTargetPtWType">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetFitModelTargetPtWType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">w_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetFitModelTargetPtWType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetFitModelTargetPtWType" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelTargetPtSurfPt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelTargetPtSurfPt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelTargetPtSurfPt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelTargetPtSurfPt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.AddFitModelVar">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">AddFitModelVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#AddFitModelVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.AddFitModelVar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelFitModelVar">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelFitModelVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">parm_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelFitModelVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelFitModelVar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DelAllFitModelVars">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DelAllFitModelVars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DelAllFitModelVars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DelAllFitModelVars" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumFitModelVars">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumFitModelVars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumFitModelVars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumFitModelVars" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelVar">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelVar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelVarVec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelVarVec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelVarVec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelVarVec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SearchFitModelTargetUW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SearchFitModelTargetUW</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SearchFitModelTargetUW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SearchFitModelTargetUW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RefineFitModelTargetUW">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RefineFitModelTargetUW</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#RefineFitModelTargetUW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RefineFitModelTargetUW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UpdateFitModelDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UpdateFitModelDist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#UpdateFitModelDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UpdateFitModelDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFitModelDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFitModelDist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFitModelDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFitModelDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetNumFitModelOptVars">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetNumFitModelOptVars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetNumFitModelOptVars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetNumFitModelOptVars" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.OptimizeFitModel">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">OptimizeFitModel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#OptimizeFitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.OptimizeFitModel" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CanUndoFitModel">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CanUndoFitModel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#CanUndoFitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CanUndoFitModel" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.UndoFitModel">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">UndoFitModel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#UndoFitModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.UndoFitModel" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SaveFitModelFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SaveFitModelFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SaveFitModelFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SaveFitModelFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.LoadFitModelFile">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">LoadFitModelFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#LoadFitModelFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.LoadFitModelFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Fit Model Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.ResetFitModel"><code class="docutils literal notranslate"><span class="pre">ResetFitModel()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPt"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedU"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedU()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedW"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtFixedUW"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtFixedUW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPts"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedU"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedU()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUs"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedW"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedWs"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedWs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUW"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelTargetPtsFixedUWs"><code class="docutils literal notranslate"><span class="pre">AddFitModelTargetPtsFixedUWs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelFitModelTargetPt"><code class="docutils literal notranslate"><span class="pre">DelFitModelTargetPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllFitModelTargetPts"><code class="docutils literal notranslate"><span class="pre">DelAllFitModelTargetPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SortFitModelTargetPtsByDist"><code class="docutils literal notranslate"><span class="pre">SortFitModelTargetPtsByDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.MoveFitModelTargetPt"><code class="docutils literal notranslate"><span class="pre">MoveFitModelTargetPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumFitModelTargetPts"><code class="docutils literal notranslate"><span class="pre">GetNumFitModelTargetPts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPt"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPt"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtGeom"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtGeom()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPtGeom"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPtGeom()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtSurfIndx"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtSurfIndx()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPtSurfIndx"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPtSurfIndx()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtU"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtU()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtW"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtDist"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPtUW"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPtUW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtUType"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtUType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPtUType"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPtUType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtWType"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtWType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetFitModelTargetPtWType"><code class="docutils literal notranslate"><span class="pre">SetFitModelTargetPtWType()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelTargetPtSurfPt"><code class="docutils literal notranslate"><span class="pre">GetFitModelTargetPtSurfPt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.AddFitModelVar"><code class="docutils literal notranslate"><span class="pre">AddFitModelVar()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelFitModelVar"><code class="docutils literal notranslate"><span class="pre">DelFitModelVar()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DelAllFitModelVars"><code class="docutils literal notranslate"><span class="pre">DelAllFitModelVars()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumFitModelVars"><code class="docutils literal notranslate"><span class="pre">GetNumFitModelVars()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelVar"><code class="docutils literal notranslate"><span class="pre">GetFitModelVar()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelVarVec"><code class="docutils literal notranslate"><span class="pre">GetFitModelVarVec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SearchFitModelTargetUW"><code class="docutils literal notranslate"><span class="pre">SearchFitModelTargetUW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RefineFitModelTargetUW"><code class="docutils literal notranslate"><span class="pre">RefineFitModelTargetUW()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UpdateFitModelDist"><code class="docutils literal notranslate"><span class="pre">UpdateFitModelDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFitModelDist"><code class="docutils literal notranslate"><span class="pre">GetFitModelDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetNumFitModelOptVars"><code class="docutils literal notranslate"><span class="pre">GetNumFitModelOptVars()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.OptimizeFitModel"><code class="docutils literal notranslate"><span class="pre">OptimizeFitModel()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CanUndoFitModel"><code class="docutils literal notranslate"><span class="pre">CanUndoFitModel()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.UndoFitModel"><code class="docutils literal notranslate"><span class="pre">UndoFitModel()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SaveFitModelFile"><code class="docutils literal notranslate"><span class="pre">SaveFitModelFile()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.LoadFitModelFile"><code class="docutils literal notranslate"><span class="pre">LoadFitModelFile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FileIO.html"
+                          title="previous chapter">File Input and Output Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Sets.html"
+                          title="next chapter">Functions for Sets</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/FitModel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Sets.html" title="Functions for Sets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FileIO.html" title="File Input and Output Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fit Model Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

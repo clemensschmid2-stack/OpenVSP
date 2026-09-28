@@ -13,6 +13,7 @@
 #include "WingGeom.h"
 #include "HingeGeom.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include <cfloat>  //For DBL_EPSILON
 
 using namespace vsp;
@@ -142,11 +143,9 @@ ConformalGeom::~ConformalGeom()
 
 }
 
-void ConformalGeom::Scale()
+void ConformalGeom::ApplyScale( double currentScale )
 {
-    double currentScale = m_Scale() / m_LastScale();
     m_Offset *= currentScale;
-    m_LastScale = m_Scale();
 }
 
 xmlNodePtr ConformalGeom::EncodeXml( xmlNodePtr & node )
@@ -171,7 +170,7 @@ xmlNodePtr ConformalGeom::DecodeXml( xmlNodePtr & node )
 
     if ( child_node )
     {
-        SetConformalParent( ParmMgr.RemapID( XmlUtil::FindString( child_node, "ConformalParentID", GetConformalParent() ) ) );
+        SetConformalParent( IDMgr.RemapRefID( XmlUtil::FindString( child_node, "ConformalParentID", GetConformalParent() ) ) );
     }
 
     return child_node;

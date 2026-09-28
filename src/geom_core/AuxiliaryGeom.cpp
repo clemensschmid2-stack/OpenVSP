@@ -5,7 +5,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "APIDefines.h"
@@ -17,6 +16,7 @@
 #include "GearGeom.h"
 #include "Geom.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "StlHelper.h"
 #include <cfloat>  //For DBL_EPSILON
 
@@ -164,9 +164,8 @@ void AuxiliaryGeom::ComputeCenter()
 {
 }
 
-void AuxiliaryGeom::Scale()
+void AuxiliaryGeom::ApplyScale( double currentScale )
 {
-    double currentScale = m_Scale() / m_LastScale();
 
     m_XSCurve->SetScale( currentScale );
 
@@ -176,7 +175,18 @@ void AuxiliaryGeom::Scale()
 
     m_CCEMainGearOffset *= currentScale;
 
-    m_LastScale = m_Scale();
+    // Rotor-failure geometry (dimensional radii and lengths).
+    m_DiskRadius *= currentScale;
+    m_BladeLength *= currentScale;
+    m_BladeRootRadius *= currentScale;
+    m_FragLength *= currentScale;
+    m_CGRadius *= currentScale;
+
+    // Gear-spray contact geometry (dimensional widths and lengths).
+    m_SprayTireContactWidth *= currentScale;
+    m_SprayTireContactHalfLength *= currentScale;
+    m_SprayCenterWidth *= currentScale;
+
 }
 
 void AuxiliaryGeom::AddDefaultSources( double base_len )
@@ -2106,9 +2116,9 @@ xmlNodePtr AuxiliaryGeom::DecodeXml( xmlNodePtr & node )
 
     if ( child_node )
     {
-        m_ContactPt1_ID = ParmMgr.RemapID( XmlUtil::FindString( child_node, "ContactPt1_ID", m_ContactPt1_ID ) );
-        m_ContactPt2_ID = ParmMgr.RemapID( XmlUtil::FindString( child_node, "ContactPt2_ID", m_ContactPt2_ID ) );
-        m_ContactPt3_ID = ParmMgr.RemapID( XmlUtil::FindString( child_node, "ContactPt3_ID", m_ContactPt3_ID ) );
+        m_ContactPt1_ID = IDMgr.RemapRefID( XmlUtil::FindString( child_node, "ContactPt1_ID", m_ContactPt1_ID ) );
+        m_ContactPt2_ID = IDMgr.RemapRefID( XmlUtil::FindString( child_node, "ContactPt2_ID", m_ContactPt2_ID ) );
+        m_ContactPt3_ID = IDMgr.RemapRefID( XmlUtil::FindString( child_node, "ContactPt3_ID", m_ContactPt3_ID ) );
 
         vector < vec3d > pnt_vec = XmlUtil::ExtractVectorVec3dNode( child_node, "CCEFilePnts" );
         SetPnts( pnt_vec );

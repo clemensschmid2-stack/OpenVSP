@@ -1,0 +1,68 @@
+General API Utility Functions
+=============================
+
+This group of functions is provided for general API utilities, such as printing to stdout, performing basic math functions, and identifying basic OpenVSP information.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    VSPCheckSetup
+    VSPRenew
+    Print
+    Min
+    Max
+    Rad2Deg
+    Deg2Rad
+    GetVSPVersion
+    GetVSPVersionMajor
+    GetVSPVersionMinor
+    GetVSPVersionChange
+    GetVSPExePath
+    SetVSPAEROPath
+    GetVSPAEROPath
+    CheckForVSPAERO
+    SetVSPHelpPath
+    GetVSPHelpPath
+    CheckForVSPHelp
+
+
+Details
+-------
+
+.. autofunction:: VSPCheckSetup
+
+.. autofunction:: VSPRenew
+
+.. autofunction:: Print
+
+.. autofunction:: Min
+
+.. autofunction:: Max
+
+.. autofunction:: Rad2Deg
+
+.. autofunction:: Deg2Rad
+
+.. autofunction:: GetVSPVersion
+
+.. autofunction:: GetVSPVersionMajor
+
+.. autofunction:: GetVSPVersionMinor
+
+.. autofunction:: GetVSPVersionChange
+
+.. autofunction:: GetVSPExePath
+
+.. autofunction:: SetVSPAEROPath
+
+.. autofunction:: GetVSPAEROPath
+
+.. autofunction:: CheckForVSPAERO
+
+.. autofunction:: SetVSPHelpPath
+
+.. autofunction:: GetVSPHelpPath
+
+.. autofunction:: CheckForVSPHelp
+

@@ -1,0 +1,74 @@
+Parm Functions
+==============
+
+Every Parm in OpenVSP can be accessed and modified through the functions defined in this API group. Every Parm has an associated ParmContainer.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetParm
+    ValidParm
+    SetParmVal
+    SetParmValLimits
+    SetParmValUpdate
+    GetParmVal
+    GetIntParmVal
+    GetBoolParmVal
+    SetParmUpperLimit
+    GetParmUpperLimit
+    SetParmLowerLimit
+    GetParmLowerLimit
+    GetParmType
+    GetParmName
+    GetParmGroupName
+    GetParmDisplayGroupName
+    GetParmContainer
+    SetParmDescript
+    GetParmDescript
+    FindParm
+
+
+Details
+-------
+
+.. autofunction:: GetParm
+
+.. autofunction:: ValidParm
+
+.. autofunction:: SetParmVal
+
+.. autofunction:: SetParmValLimits
+
+.. autofunction:: SetParmValUpdate
+
+.. autofunction:: GetParmVal
+
+.. autofunction:: GetIntParmVal
+
+.. autofunction:: GetBoolParmVal
+
+.. autofunction:: SetParmUpperLimit
+
+.. autofunction:: GetParmUpperLimit
+
+.. autofunction:: SetParmLowerLimit
+
+.. autofunction:: GetParmLowerLimit
+
+.. autofunction:: GetParmType
+
+.. autofunction:: GetParmName
+
+.. autofunction:: GetParmGroupName
+
+.. autofunction:: GetParmDisplayGroupName
+
+.. autofunction:: GetParmContainer
+
+.. autofunction:: SetParmDescript
+
+.. autofunction:: GetParmDescript
+
+.. autofunction:: FindParm
+

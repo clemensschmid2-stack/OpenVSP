@@ -2,6 +2,43 @@
 
 This fork is derived from NASA's OpenVSP project.
 
+## Unreleased - upstream OpenVSP 3.52.2
+
+- Remove the three added rotational-flow refresh operations with explicit user
+  approval; retain upstream refresh behavior and the separate wake-setup fixes.
+  Advance the State Sweep physics epoch to reject mixed-physics resumes.
+  Record the inconclusive physical benchmark and conditions for a possible
+  future feature in [the removal decision](parity_tests/ROTATIONAL_REFRESH_REMOVAL.md).
+- Post-removal full build/package and unchanged official geometry/base/stability
+  parity pass with zero failures, together with all nine bounded lookup checks.
+  Hosted status and integration are recorded in PR #7 and the parent VDS PR #55;
+  merging does not install the runtime.
+- Integrate upstream geometry, inertia, tessellation and Reynolds fixes while
+  retaining custom solver features. Resolve overlapping Reynolds corrections
+  with one equivalent formula and unchanged numerical tolerances.
+- Migrate active parity to the official 3.52.2 Python 3.13 distribution;
+  preserve 3.51.2 as historical evidence and retire its active shell exception.
+- Reject silent solver-path fallback during parity. See
+  [provenance, conflict review and validation](parity_tests/UPSTREAM_3_52_2.md).
+
+## Unreleased - aerodynamic lookup integrity
+
+- Reject degenerate input cells and nonfinite solutions before successful State
+  Sweep checkpoints; preserve control geometry and per-attempt resources on a
+  failed continuation retry. No convergence threshold or negative-drag clipping
+  is introduced.
+- Correct wake-owned metadata grid references, dimensional empirical Reynolds
+  scaling and its affected derivatives. The additional rotational wake refresh
+  was subsequently removed as documented above.
+  Rebuild wake-dependent setup in fast-order mode; preserve traversal and
+  continuation features and the existing force/moment convention.
+- Reject ambiguous physical/aggregate wing names, keep internal `_copy_` labels,
+  and avoid partial rows when optional load validation fails. A new physics hash
+  prevents resuming checkpoints produced before these corrections.
+- Hosted Windows/Linux solver builds and bounded native regressions pass.
+  Full OpenVSP/optimizer/reference gates and installation remain pending.
+  See [scope and validation](parity_tests/LOOKUP_INTEGRITY.md).
+
 ## Unreleased - polar lift sign
 
 - Align profile CD(CL) queries with ordered wake-strip circulation, matching
@@ -53,6 +90,10 @@ This fork is derived from NASA's OpenVSP project.
   effects.
 
 ## 2026-08-30 - Clemens Schmid
+
+Historical rationale below is superseded for wake node/edge ownership by the
+Unreleased lookup-integrity correction. The separate finest-grid centroid policy
+is retained; see [current behavior](parity_tests/LOOKUP_INTEGRITY.md).
 
 - Corrected State Sweep physical-wing planform geometry to dereference
   vortex-trail leading/trailing-edge indices on finest grid level 0, where

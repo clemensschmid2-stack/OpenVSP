@@ -1,0 +1,104 @@
+Advanced Link Functions
+=======================
+
+The following functions are available for the Advanced Link tool.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetAdvLinkNames
+    GetLinkIndex
+    GetAdvLinkName
+    SetAdvLinkName
+    DelAdvLink
+    DelAllAdvLinks
+    AddAdvLink
+    AddAdvLinkInput
+    AddAdvLinkOutput
+    DelAllAdvLinkInputs
+    DelAllAdvLinkOutputs
+    DelAdvLinkInput
+    DelAdvLinkOutput
+    GetAdvLinkInputNames
+    GetAdvLinkInputParms
+    GetAdvLinkOutputNames
+    GetAdvLinkOutputParms
+    ValidateAdvLinkParms
+    SetAdvLinkCode
+    GetAdvLinkCode
+    SearchReplaceAdvLinkCode
+    BuildAdvLinkScript
+    WriteAdvLinkCodeFile
+    ReorderAdvLinkInput
+    ReorderAdvLinkOutput
+    ReadAdvLinkCodeFile
+    SortAdvLinkInputsVar
+    SortAdvLinkInputsCGP
+    SortAdvLinkOutputsVar
+    SortAdvLinkOutputsCGP
+
+
+Details
+-------
+
+.. autofunction:: GetAdvLinkNames
+
+.. autofunction:: GetLinkIndex
+
+.. autofunction:: GetAdvLinkName
+
+.. autofunction:: SetAdvLinkName
+
+.. autofunction:: DelAdvLink
+
+.. autofunction:: DelAllAdvLinks
+
+.. autofunction:: AddAdvLink
+
+.. autofunction:: AddAdvLinkInput
+
+.. autofunction:: AddAdvLinkOutput
+
+.. autofunction:: DelAllAdvLinkInputs
+
+.. autofunction:: DelAllAdvLinkOutputs
+
+.. autofunction:: DelAdvLinkInput
+
+.. autofunction:: DelAdvLinkOutput
+
+.. autofunction:: GetAdvLinkInputNames
+
+.. autofunction:: GetAdvLinkInputParms
+
+.. autofunction:: GetAdvLinkOutputNames
+
+.. autofunction:: GetAdvLinkOutputParms
+
+.. autofunction:: ValidateAdvLinkParms
+
+.. autofunction:: SetAdvLinkCode
+
+.. autofunction:: GetAdvLinkCode
+
+.. autofunction:: SearchReplaceAdvLinkCode
+
+.. autofunction:: BuildAdvLinkScript
+
+.. autofunction:: WriteAdvLinkCodeFile
+
+.. autofunction:: ReorderAdvLinkInput
+
+.. autofunction:: ReorderAdvLinkOutput
+
+.. autofunction:: ReadAdvLinkCodeFile
+
+.. autofunction:: SortAdvLinkInputsVar
+
+.. autofunction:: SortAdvLinkInputsCGP
+
+.. autofunction:: SortAdvLinkOutputsVar
+
+.. autofunction:: SortAdvLinkOutputsCGP
+

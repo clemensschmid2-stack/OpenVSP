@@ -1,0 +1,80 @@
+Results Manager Functions
+=========================
+
+This group is for functions included in the Results Manager. The Results Manager stores analysis results and provides methods to get, print, and export them.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetAllResultsNames
+    GetAllDataNames
+    GetNumResults
+    GetResultsName
+    GetResultsSetDoc
+    GetResultsEntryDoc
+    FindResultsID
+    FindLatestResultsID
+    GetNumData
+    GetResultsType
+    GetIntResults
+    GetDoubleResults
+    GetDoubleMatResults
+    GetStringResults
+    GetVec3dResults
+    CreateGeomResults
+    DeleteAllResults
+    DeleteResult
+    WriteResultsCSVFile
+    PrintResults
+    PrintResultsDocs
+    WriteTestResults
+
+
+Details
+-------
+
+.. autofunction:: GetAllResultsNames
+
+.. autofunction:: GetAllDataNames
+
+.. autofunction:: GetNumResults
+
+.. autofunction:: GetResultsName
+
+.. autofunction:: GetResultsSetDoc
+
+.. autofunction:: GetResultsEntryDoc
+
+.. autofunction:: FindResultsID
+
+.. autofunction:: FindLatestResultsID
+
+.. autofunction:: GetNumData
+
+.. autofunction:: GetResultsType
+
+.. autofunction:: GetIntResults
+
+.. autofunction:: GetDoubleResults
+
+.. autofunction:: GetDoubleMatResults
+
+.. autofunction:: GetStringResults
+
+.. autofunction:: GetVec3dResults
+
+.. autofunction:: CreateGeomResults
+
+.. autofunction:: DeleteAllResults
+
+.. autofunction:: DeleteResult
+
+.. autofunction:: WriteResultsCSVFile
+
+.. autofunction:: PrintResults
+
+.. autofunction:: PrintResultsDocs
+
+.. autofunction:: WriteTestResults
+

@@ -1,0 +1,26 @@
+Group Modification Functions
+============================
+
+The functions in this group allow for sets to be scaled, rotated, and translated.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ScaleSet
+    RotateSet
+    TranslateSet
+    TransformSet
+
+
+Details
+-------
+
+.. autofunction:: ScaleSet
+
+.. autofunction:: RotateSet
+
+.. autofunction:: TranslateSet
+
+.. autofunction:: TransformSet
+

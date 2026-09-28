@@ -1,0 +1,56 @@
+Functions for Sets
+==================
+
+The following group of API functions deals with set manipulation.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetNumSets
+    SetSetName
+    GetSetName
+    GetGeomSetAtIndex
+    GetGeomSet
+    GetSetIndex
+    GetSetFlag
+    SetSetFlag
+    CopyPasteSet
+    GetBBoxSet
+    GetScaleIndependentBBoxSet
+    ShowSet
+    NoShowSet
+    ShowOnlySet
+
+
+Details
+-------
+
+.. autofunction:: GetNumSets
+
+.. autofunction:: SetSetName
+
+.. autofunction:: GetSetName
+
+.. autofunction:: GetGeomSetAtIndex
+
+.. autofunction:: GetGeomSet
+
+.. autofunction:: GetSetIndex
+
+.. autofunction:: GetSetFlag
+
+.. autofunction:: SetSetFlag
+
+.. autofunction:: CopyPasteSet
+
+.. autofunction:: GetBBoxSet
+
+.. autofunction:: GetScaleIndependentBBoxSet
+
+.. autofunction:: ShowSet
+
+.. autofunction:: NoShowSet
+
+.. autofunction:: ShowOnlySet
+

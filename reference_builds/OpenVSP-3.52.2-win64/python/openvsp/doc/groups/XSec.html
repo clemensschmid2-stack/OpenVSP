@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XSec and Airfoil Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="XSecSurf Functions" href="XSecSurf.html" />
+    <link rel="prev" title="VSPAERO Functions" href="VSPAERO.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="XSecSurf.html" title="XSecSurf Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="VSPAERO.html" title="VSPAERO Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XSec and Airfoil Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="xsec-and-airfoil-functions">
+<h1>XSec and Airfoil Functions<a class="headerlink" href="#xsec-and-airfoil-functions" title="Link to this heading">¶</a></h1>
+<p>This group of functions provides API control of cross-sections (XSecs). Airfoils are a type of XSec included in this group as well. API functions for Body of Revolution XSecs are included in the Specialized Geometry group.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetXSecAlias" title="openvsp.SetXSecAlias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecAlias</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetXSecAlias" title="openvsp.GetXSecAlias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecAlias</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetXSecCurveAlias" title="openvsp.SetXSecCurveAlias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecCurveAlias</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetXSecCurveAlias" title="openvsp.GetXSecCurveAlias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecCurveAlias</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CutXSec" title="openvsp.CutXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CutXSec</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.CopyXSec" title="openvsp.CopyXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CopyXSec</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PasteXSec" title="openvsp.PasteXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PasteXSec</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.InsertXSec" title="openvsp.InsertXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InsertXSec</span></code></a>(std, int index, int type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetDriverGroup" title="openvsp.SetDriverGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetDriverGroup</span></code></a>(std, int section_index, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FitCSTAirfoil" title="openvsp.FitCSTAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitCSTAirfoil</span></code></a>(std, int xsec_index, int deg)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecShape" title="openvsp.GetXSecShape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecShape</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetXSecWidth" title="openvsp.GetXSecWidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecWidth</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecHeight" title="openvsp.GetXSecHeight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecHeight</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecWidthHeight" title="openvsp.SetXSecWidthHeight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecWidthHeight</span></code></a>(std, double w, double h)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetXSecWidth" title="openvsp.SetXSecWidth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecWidth</span></code></a>(std, double w)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecHeight" title="openvsp.SetXSecHeight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecHeight</span></code></a>(std, double h)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecParmIDs" title="openvsp.GetXSecParmIDs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecParmIDs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetXSecParm" title="openvsp.GetXSecParm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecParm</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ReadFileXSec" title="openvsp.ReadFileXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadFileXSec</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetXSecPnts" title="openvsp.GetXSecPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.CopyXSecCurve" title="openvsp.CopyXSecCurve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CopyXSecCurve</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PasteXSecCurve" title="openvsp.PasteXSecCurve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PasteXSecCurve</span></code></a>(std, int index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetXSecPnts" title="openvsp.SetXSecPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecPnts</span></code></a>(std, Vec3dVec pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ComputeXSecPnt" title="openvsp.ComputeXSecPnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeXSecPnt</span></code></a>(std, double fract)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ComputeXSecTan" title="openvsp.ComputeXSecTan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeXSecTan</span></code></a>(std, double fract)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ResetXSecSkinParms" title="openvsp.ResetXSecSkinParms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResetXSecSkinParms</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecContinuity" title="openvsp.GetXSecContinuity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecContinuity</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecContinuity" title="openvsp.SetXSecContinuity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecContinuity</span></code></a>(std, int cx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecTanAngles" title="openvsp.GetXSecTanAngles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecTanAngles</span></code></a>(std, int side)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecTanAngles" title="openvsp.SetXSecTanAngles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecTanAngles</span></code></a>(std, int side, double top, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecTanSlews" title="openvsp.GetXSecTanSlews"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecTanSlews</span></code></a>(std, int side)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecTanSlews" title="openvsp.SetXSecTanSlews"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecTanSlews</span></code></a>(std, int side, double top, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecTanStrengths" title="openvsp.GetXSecTanStrengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecTanStrengths</span></code></a>(std, int side)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecTanStrengths" title="openvsp.SetXSecTanStrengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecTanStrengths</span></code></a>(std, int side, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetXSecCurvatures" title="openvsp.GetXSecCurvatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetXSecCurvatures</span></code></a>(std, int side)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetXSecCurvatures" title="openvsp.SetXSecCurvatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetXSecCurvatures</span></code></a>(std, int side, double top, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ReadFileAirfoil" title="openvsp.ReadFileAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadFileAirfoil</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAirfoilUpperPnts" title="openvsp.SetAirfoilUpperPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAirfoilUpperPnts</span></code></a>(std, Vec3dVec up_pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetAirfoilLowerPnts" title="openvsp.SetAirfoilLowerPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAirfoilLowerPnts</span></code></a>(std, Vec3dVec low_pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetAirfoilPnts" title="openvsp.SetAirfoilPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAirfoilPnts</span></code></a>(std, Vec3dVec up_pnt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetHersheyBarLiftDist" title="openvsp.GetHersheyBarLiftDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetHersheyBarLiftDist</span></code></a>(int const &amp; npts, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetHersheyBarDragDist" title="openvsp.GetHersheyBarDragDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetHersheyBarDragDist</span></code></a>(int const &amp; npts, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetVKTAirfoilPnts" title="openvsp.GetVKTAirfoilPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetVKTAirfoilPnts</span></code></a>(int const &amp; npts, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetVKTAirfoilCpDist" title="openvsp.GetVKTAirfoilCpDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetVKTAirfoilCpDist</span></code></a>(double const &amp; alpha, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetEllipsoidSurfPnts" title="openvsp.GetEllipsoidSurfPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetEllipsoidSurfPnts</span></code></a>(vec3d center, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetFeatureLinePnts" title="openvsp.GetFeatureLinePnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetFeatureLinePnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetEllipsoidCpDist" title="openvsp.GetEllipsoidCpDist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetEllipsoidCpDist</span></code></a>(Vec3dVec surf_pnt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetAirfoilUpperPnts" title="openvsp.GetAirfoilUpperPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAirfoilUpperPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAirfoilLowerPnts" title="openvsp.GetAirfoilLowerPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAirfoilLowerPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetUpperCSTCoefs" title="openvsp.GetUpperCSTCoefs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUpperCSTCoefs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetLowerCSTCoefs" title="openvsp.GetLowerCSTCoefs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetLowerCSTCoefs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetUpperCSTDegree" title="openvsp.GetUpperCSTDegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetUpperCSTDegree</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetLowerCSTDegree" title="openvsp.GetLowerCSTDegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetLowerCSTDegree</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetUpperCST" title="openvsp.SetUpperCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetUpperCST</span></code></a>(std, int deg, DoubleVector coefs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetLowerCST" title="openvsp.SetLowerCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetLowerCST</span></code></a>(std, int deg, DoubleVector coefs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PromoteCSTUpper" title="openvsp.PromoteCSTUpper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PromoteCSTUpper</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PromoteCSTLower" title="openvsp.PromoteCSTLower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PromoteCSTLower</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DemoteCSTUpper" title="openvsp.DemoteCSTUpper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemoteCSTUpper</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DemoteCSTLower" title="openvsp.DemoteCSTLower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemoteCSTLower</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FitAfCST" title="openvsp.FitAfCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitAfCST</span></code></a>(std, int xsec_index, int deg)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.WriteBezierAirfoil" title="openvsp.WriteBezierAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteBezierAirfoil</span></code></a>(std, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.WriteSeligAirfoil" title="openvsp.WriteSeligAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteSeligAirfoil</span></code></a>(std, std, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetAirfoilCoordinates" title="openvsp.GetAirfoilCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAirfoilCoordinates</span></code></a>(std, ...)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecAlias">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecAlias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecAlias" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecAlias">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecAlias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecAlias" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecCurveAlias">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecCurveAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecCurveAlias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecCurveAlias" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecCurveAlias">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecCurveAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecCurveAlias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecCurveAlias" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CutXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CutXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CutXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CutXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CopyXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CopyXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CopyXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CopyXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PasteXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PasteXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PasteXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PasteXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.InsertXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">InsertXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#InsertXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.InsertXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetDriverGroup">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetDriverGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">section_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">driver_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">driver_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">driver_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetDriverGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetDriverGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FitCSTAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FitCSTAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_surf_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">xsec_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FitCSTAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FitCSTAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecShape">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecShape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecShape" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecWidth">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecWidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecWidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecWidth" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecHeight">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecHeight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecHeight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecHeight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecWidthHeight">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecWidthHeight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecWidthHeight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecWidthHeight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecWidth">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecWidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecWidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecWidth" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecHeight">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecHeight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecHeight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecHeight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecParmIDs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecParmIDs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StringVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecParmIDs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecParmIDs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecParm">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecParm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecParm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecParm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReadFileXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReadFileXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReadFileXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReadFileXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.CopyXSecCurve">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">CopyXSecCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#CopyXSecCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.CopyXSecCurve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PasteXSecCurve">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PasteXSecCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PasteXSecCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PasteXSecCurve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ComputeXSecPnt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ComputeXSecPnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">fract</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ComputeXSecPnt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ComputeXSecPnt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ComputeXSecTan">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ComputeXSecTan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">fract</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ComputeXSecTan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ComputeXSecTan" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ResetXSecSkinParms">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ResetXSecSkinParms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ResetXSecSkinParms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ResetXSecSkinParms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecContinuity">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecContinuity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecContinuity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecContinuity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecContinuity">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecContinuity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">cx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecContinuity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecContinuity" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecTanAngles">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecTanAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecTanAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecTanAngles" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecTanAngles">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecTanAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">bottom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">left</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecTanAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecTanAngles" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecTanSlews">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecTanSlews</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecTanSlews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecTanSlews" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecTanSlews">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecTanSlews</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">bottom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">left</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecTanSlews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecTanSlews" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecTanStrengths">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecTanStrengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecTanStrengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecTanStrengths" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecTanStrengths">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecTanStrengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">bottom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">left</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecTanStrengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecTanStrengths" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetXSecCurvatures">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetXSecCurvatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetXSecCurvatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetXSecCurvatures" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetXSecCurvatures">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetXSecCurvatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">side</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">bottom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">left</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetXSecCurvatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetXSecCurvatures" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReadFileAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReadFileAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReadFileAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReadFileAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAirfoilUpperPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAirfoilUpperPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">up_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAirfoilUpperPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAirfoilUpperPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAirfoilLowerPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAirfoilLowerPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">low_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAirfoilLowerPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAirfoilLowerPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetAirfoilPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetAirfoilPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">up_pnt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">low_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetAirfoilPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetAirfoilPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetHersheyBarLiftDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetHersheyBarLiftDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">npts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">Vinf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">full_span_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetHersheyBarLiftDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetHersheyBarLiftDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetHersheyBarDragDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetHersheyBarDragDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">npts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">Vinf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">full_span_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetHersheyBarDragDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetHersheyBarDragDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetVKTAirfoilPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetVKTAirfoilPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">npts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">tau</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetVKTAirfoilPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetVKTAirfoilPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetVKTAirfoilCpDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetVKTAirfoilCpDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">xyz_data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetVKTAirfoilCpDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetVKTAirfoilCpDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetEllipsoidSurfPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetEllipsoidSurfPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">abc_rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">u_npts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">w_npts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetEllipsoidSurfPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetEllipsoidSurfPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetFeatureLinePnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetFeatureLinePnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetFeatureLinePnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetFeatureLinePnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetEllipsoidCpDist">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetEllipsoidCpDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">surf_pnt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">abc_rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">V_inf</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetEllipsoidCpDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetEllipsoidCpDist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAirfoilUpperPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAirfoilUpperPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAirfoilUpperPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAirfoilUpperPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAirfoilLowerPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAirfoilLowerPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAirfoilLowerPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAirfoilLowerPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUpperCSTCoefs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUpperCSTCoefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUpperCSTCoefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUpperCSTCoefs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetLowerCSTCoefs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetLowerCSTCoefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetLowerCSTCoefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetLowerCSTCoefs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetUpperCSTDegree">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetUpperCSTDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetUpperCSTDegree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetUpperCSTDegree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetLowerCSTDegree">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetLowerCSTDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetLowerCSTDegree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetLowerCSTDegree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetUpperCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetUpperCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">coefs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetUpperCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetUpperCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetLowerCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetLowerCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">coefs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetLowerCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetLowerCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PromoteCSTUpper">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PromoteCSTUpper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PromoteCSTUpper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PromoteCSTUpper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PromoteCSTLower">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PromoteCSTLower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PromoteCSTLower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PromoteCSTLower" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DemoteCSTUpper">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DemoteCSTUpper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DemoteCSTUpper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DemoteCSTUpper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DemoteCSTLower">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DemoteCSTLower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DemoteCSTLower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DemoteCSTLower" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FitAfCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FitAfCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">xsec_surf_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">xsec_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FitAfCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FitAfCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteBezierAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteBezierAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">foilsurf_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteBezierAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteBezierAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.WriteSeligAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">WriteSeligAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">foilsurf_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#WriteSeligAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.WriteSeligAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetAirfoilCoordinates">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetAirfoilCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">geom_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">foilsurf_u</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetAirfoilCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetAirfoilCoordinates" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">XSec and Airfoil Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.SetXSecAlias"><code class="docutils literal notranslate"><span class="pre">SetXSecAlias()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecAlias"><code class="docutils literal notranslate"><span class="pre">GetXSecAlias()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecCurveAlias"><code class="docutils literal notranslate"><span class="pre">SetXSecCurveAlias()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecCurveAlias"><code class="docutils literal notranslate"><span class="pre">GetXSecCurveAlias()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CutXSec"><code class="docutils literal notranslate"><span class="pre">CutXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CopyXSec"><code class="docutils literal notranslate"><span class="pre">CopyXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PasteXSec"><code class="docutils literal notranslate"><span class="pre">PasteXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.InsertXSec"><code class="docutils literal notranslate"><span class="pre">InsertXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetDriverGroup"><code class="docutils literal notranslate"><span class="pre">SetDriverGroup()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FitCSTAirfoil"><code class="docutils literal notranslate"><span class="pre">FitCSTAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecShape"><code class="docutils literal notranslate"><span class="pre">GetXSecShape()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecWidth"><code class="docutils literal notranslate"><span class="pre">GetXSecWidth()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecHeight"><code class="docutils literal notranslate"><span class="pre">GetXSecHeight()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecWidthHeight"><code class="docutils literal notranslate"><span class="pre">SetXSecWidthHeight()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecWidth"><code class="docutils literal notranslate"><span class="pre">SetXSecWidth()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecHeight"><code class="docutils literal notranslate"><span class="pre">SetXSecHeight()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecParmIDs"><code class="docutils literal notranslate"><span class="pre">GetXSecParmIDs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecParm"><code class="docutils literal notranslate"><span class="pre">GetXSecParm()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReadFileXSec"><code class="docutils literal notranslate"><span class="pre">ReadFileXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecPnts"><code class="docutils literal notranslate"><span class="pre">GetXSecPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.CopyXSecCurve"><code class="docutils literal notranslate"><span class="pre">CopyXSecCurve()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PasteXSecCurve"><code class="docutils literal notranslate"><span class="pre">PasteXSecCurve()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecPnts"><code class="docutils literal notranslate"><span class="pre">SetXSecPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ComputeXSecPnt"><code class="docutils literal notranslate"><span class="pre">ComputeXSecPnt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ComputeXSecTan"><code class="docutils literal notranslate"><span class="pre">ComputeXSecTan()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ResetXSecSkinParms"><code class="docutils literal notranslate"><span class="pre">ResetXSecSkinParms()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecContinuity"><code class="docutils literal notranslate"><span class="pre">GetXSecContinuity()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecContinuity"><code class="docutils literal notranslate"><span class="pre">SetXSecContinuity()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecTanAngles"><code class="docutils literal notranslate"><span class="pre">GetXSecTanAngles()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecTanAngles"><code class="docutils literal notranslate"><span class="pre">SetXSecTanAngles()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecTanSlews"><code class="docutils literal notranslate"><span class="pre">GetXSecTanSlews()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecTanSlews"><code class="docutils literal notranslate"><span class="pre">SetXSecTanSlews()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecTanStrengths"><code class="docutils literal notranslate"><span class="pre">GetXSecTanStrengths()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecTanStrengths"><code class="docutils literal notranslate"><span class="pre">SetXSecTanStrengths()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetXSecCurvatures"><code class="docutils literal notranslate"><span class="pre">GetXSecCurvatures()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetXSecCurvatures"><code class="docutils literal notranslate"><span class="pre">SetXSecCurvatures()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReadFileAirfoil"><code class="docutils literal notranslate"><span class="pre">ReadFileAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAirfoilUpperPnts"><code class="docutils literal notranslate"><span class="pre">SetAirfoilUpperPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAirfoilLowerPnts"><code class="docutils literal notranslate"><span class="pre">SetAirfoilLowerPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetAirfoilPnts"><code class="docutils literal notranslate"><span class="pre">SetAirfoilPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetHersheyBarLiftDist"><code class="docutils literal notranslate"><span class="pre">GetHersheyBarLiftDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetHersheyBarDragDist"><code class="docutils literal notranslate"><span class="pre">GetHersheyBarDragDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetVKTAirfoilPnts"><code class="docutils literal notranslate"><span class="pre">GetVKTAirfoilPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetVKTAirfoilCpDist"><code class="docutils literal notranslate"><span class="pre">GetVKTAirfoilCpDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetEllipsoidSurfPnts"><code class="docutils literal notranslate"><span class="pre">GetEllipsoidSurfPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetFeatureLinePnts"><code class="docutils literal notranslate"><span class="pre">GetFeatureLinePnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetEllipsoidCpDist"><code class="docutils literal notranslate"><span class="pre">GetEllipsoidCpDist()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAirfoilUpperPnts"><code class="docutils literal notranslate"><span class="pre">GetAirfoilUpperPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAirfoilLowerPnts"><code class="docutils literal notranslate"><span class="pre">GetAirfoilLowerPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUpperCSTCoefs"><code class="docutils literal notranslate"><span class="pre">GetUpperCSTCoefs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetLowerCSTCoefs"><code class="docutils literal notranslate"><span class="pre">GetLowerCSTCoefs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetUpperCSTDegree"><code class="docutils literal notranslate"><span class="pre">GetUpperCSTDegree()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetLowerCSTDegree"><code class="docutils literal notranslate"><span class="pre">GetLowerCSTDegree()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetUpperCST"><code class="docutils literal notranslate"><span class="pre">SetUpperCST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetLowerCST"><code class="docutils literal notranslate"><span class="pre">SetLowerCST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PromoteCSTUpper"><code class="docutils literal notranslate"><span class="pre">PromoteCSTUpper()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PromoteCSTLower"><code class="docutils literal notranslate"><span class="pre">PromoteCSTLower()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DemoteCSTUpper"><code class="docutils literal notranslate"><span class="pre">DemoteCSTUpper()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DemoteCSTLower"><code class="docutils literal notranslate"><span class="pre">DemoteCSTLower()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FitAfCST"><code class="docutils literal notranslate"><span class="pre">FitAfCST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteBezierAirfoil"><code class="docutils literal notranslate"><span class="pre">WriteBezierAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.WriteSeligAirfoil"><code class="docutils literal notranslate"><span class="pre">WriteSeligAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetAirfoilCoordinates"><code class="docutils literal notranslate"><span class="pre">GetAirfoilCoordinates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="VSPAERO.html"
+                          title="previous chapter">VSPAERO Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="XSecSurf.html"
+                          title="next chapter">XSecSurf Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/XSec.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="XSecSurf.html" title="XSecSurf Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="VSPAERO.html" title="VSPAERO Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XSec and Airfoil Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

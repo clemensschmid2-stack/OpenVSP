@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>BOR Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CFD Mesh Functions" href="CFDMesh.html" />
+    <link rel="prev" title="Background3D Functions" href="Background3D.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CFDMesh.html" title="CFD Mesh Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Background3D.html" title="Background3D Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BOR Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bor-functions">
+<h1>BOR Functions<a class="headerlink" href="#bor-functions" title="Link to this heading">¶</a></h1>
+<p>This group of API functions provides capabilities related to the body of revolution (BOR) geometry type in OpenVSP.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetBEMPropID" title="openvsp.SetBEMPropID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBEMPropID</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ChangeBORXSecShape" title="openvsp.ChangeBORXSecShape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChangeBORXSecShape</span></code></a>(std, int type)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetBORXSecShape" title="openvsp.GetBORXSecShape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORXSecShape</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ReadBORFileXSec" title="openvsp.ReadBORFileXSec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadBORFileXSec</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetBORXSecPnts" title="openvsp.GetBORXSecPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORXSecPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetBORXSecPnts" title="openvsp.SetBORXSecPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORXSecPnts</span></code></a>(std, Vec3dVec pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ComputeBORXSecPnt" title="openvsp.ComputeBORXSecPnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeBORXSecPnt</span></code></a>(std, double fract)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.ComputeBORXSecTan" title="openvsp.ComputeBORXSecTan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeBORXSecTan</span></code></a>(std, double fract)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.ReadBORFileAirfoil" title="openvsp.ReadBORFileAirfoil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadBORFileAirfoil</span></code></a>(std, std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetBORAirfoilUpperPnts" title="openvsp.SetBORAirfoilUpperPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORAirfoilUpperPnts</span></code></a>(std, Vec3dVec up_pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetBORAirfoilLowerPnts" title="openvsp.SetBORAirfoilLowerPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORAirfoilLowerPnts</span></code></a>(std, Vec3dVec low_pnt_vec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetBORAirfoilPnts" title="openvsp.SetBORAirfoilPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORAirfoilPnts</span></code></a>(std, Vec3dVec up_pnt_vec, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetBORAirfoilUpperPnts" title="openvsp.GetBORAirfoilUpperPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORAirfoilUpperPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetBORAirfoilLowerPnts" title="openvsp.GetBORAirfoilLowerPnts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORAirfoilLowerPnts</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetBORUpperCSTCoefs" title="openvsp.GetBORUpperCSTCoefs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORUpperCSTCoefs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetBORLowerCSTCoefs" title="openvsp.GetBORLowerCSTCoefs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORLowerCSTCoefs</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.GetBORUpperCSTDegree" title="openvsp.GetBORUpperCSTDegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORUpperCSTDegree</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.GetBORLowerCSTDegree" title="openvsp.GetBORLowerCSTDegree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetBORLowerCSTDegree</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.SetBORUpperCST" title="openvsp.SetBORUpperCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORUpperCST</span></code></a>(std, int deg, DoubleVector coefs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.SetBORLowerCST" title="openvsp.SetBORLowerCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetBORLowerCST</span></code></a>(std, int deg, DoubleVector coefs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.PromoteBORCSTUpper" title="openvsp.PromoteBORCSTUpper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PromoteBORCSTUpper</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.PromoteBORCSTLower" title="openvsp.PromoteBORCSTLower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PromoteBORCSTLower</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.DemoteBORCSTUpper" title="openvsp.DemoteBORCSTUpper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemoteBORCSTUpper</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.DemoteBORCSTLower" title="openvsp.DemoteBORCSTLower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DemoteBORCSTLower</span></code></a>(std)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.FitBORAfCST" title="openvsp.FitBORAfCST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitBORAfCST</span></code></a>(std, int deg)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBEMPropID">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBEMPropID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">prop_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBEMPropID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBEMPropID" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ChangeBORXSecShape">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ChangeBORXSecShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ChangeBORXSecShape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ChangeBORXSecShape" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORXSecShape">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORXSecShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORXSecShape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORXSecShape" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReadBORFileXSec">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReadBORFileXSec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReadBORFileXSec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReadBORFileXSec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORXSecPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORXSecPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORXSecPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORXSecPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORXSecPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORXSecPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORXSecPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORXSecPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ComputeBORXSecPnt">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ComputeBORXSecPnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">fract</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ComputeBORXSecPnt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ComputeBORXSecPnt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ComputeBORXSecTan">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ComputeBORXSecTan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">fract</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec3d.html#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#ComputeBORXSecTan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ComputeBORXSecTan" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.ReadBORFileAirfoil">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">ReadBORFileAirfoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#ReadBORFileAirfoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.ReadBORFileAirfoil" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORAirfoilUpperPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORAirfoilUpperPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">up_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORAirfoilUpperPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORAirfoilUpperPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORAirfoilLowerPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORAirfoilLowerPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">low_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORAirfoilLowerPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORAirfoilLowerPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORAirfoilPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORAirfoilPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">up_pnt_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">low_pnt_vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORAirfoilPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORAirfoilPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORAirfoilUpperPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORAirfoilUpperPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORAirfoilUpperPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORAirfoilUpperPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORAirfoilLowerPnts">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORAirfoilLowerPnts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vec3dVec</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORAirfoilLowerPnts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORAirfoilLowerPnts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORUpperCSTCoefs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORUpperCSTCoefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORUpperCSTCoefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORUpperCSTCoefs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORLowerCSTCoefs">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORLowerCSTCoefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DoubleVector</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORLowerCSTCoefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORLowerCSTCoefs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORUpperCSTDegree">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORUpperCSTDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORUpperCSTDegree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORUpperCSTDegree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.GetBORLowerCSTDegree">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">GetBORLowerCSTDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#GetBORLowerCSTDegree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.GetBORLowerCSTDegree" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORUpperCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORUpperCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">coefs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORUpperCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORUpperCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.SetBORLowerCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">SetBORLowerCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">coefs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#SetBORLowerCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.SetBORLowerCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PromoteBORCSTUpper">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PromoteBORCSTUpper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PromoteBORCSTUpper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PromoteBORCSTUpper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.PromoteBORCSTLower">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">PromoteBORCSTLower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#PromoteBORCSTLower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.PromoteBORCSTLower" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DemoteBORCSTUpper">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DemoteBORCSTUpper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DemoteBORCSTUpper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DemoteBORCSTUpper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.DemoteBORCSTLower">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">DemoteBORCSTLower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#DemoteBORCSTLower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.DemoteBORCSTLower" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FitBORAfCST">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FitBORAfCST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">:string</span> <span class="pre">const</span> <span class="pre">&amp;</span> <span class="pre">bor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">deg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FitBORAfCST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FitBORAfCST" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">BOR Functions</a><ul>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.SetBEMPropID"><code class="docutils literal notranslate"><span class="pre">SetBEMPropID()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ChangeBORXSecShape"><code class="docutils literal notranslate"><span class="pre">ChangeBORXSecShape()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORXSecShape"><code class="docutils literal notranslate"><span class="pre">GetBORXSecShape()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReadBORFileXSec"><code class="docutils literal notranslate"><span class="pre">ReadBORFileXSec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORXSecPnts"><code class="docutils literal notranslate"><span class="pre">GetBORXSecPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORXSecPnts"><code class="docutils literal notranslate"><span class="pre">SetBORXSecPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ComputeBORXSecPnt"><code class="docutils literal notranslate"><span class="pre">ComputeBORXSecPnt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ComputeBORXSecTan"><code class="docutils literal notranslate"><span class="pre">ComputeBORXSecTan()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.ReadBORFileAirfoil"><code class="docutils literal notranslate"><span class="pre">ReadBORFileAirfoil()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORAirfoilUpperPnts"><code class="docutils literal notranslate"><span class="pre">SetBORAirfoilUpperPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORAirfoilLowerPnts"><code class="docutils literal notranslate"><span class="pre">SetBORAirfoilLowerPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORAirfoilPnts"><code class="docutils literal notranslate"><span class="pre">SetBORAirfoilPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORAirfoilUpperPnts"><code class="docutils literal notranslate"><span class="pre">GetBORAirfoilUpperPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORAirfoilLowerPnts"><code class="docutils literal notranslate"><span class="pre">GetBORAirfoilLowerPnts()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORUpperCSTCoefs"><code class="docutils literal notranslate"><span class="pre">GetBORUpperCSTCoefs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORLowerCSTCoefs"><code class="docutils literal notranslate"><span class="pre">GetBORLowerCSTCoefs()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORUpperCSTDegree"><code class="docutils literal notranslate"><span class="pre">GetBORUpperCSTDegree()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.GetBORLowerCSTDegree"><code class="docutils literal notranslate"><span class="pre">GetBORLowerCSTDegree()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORUpperCST"><code class="docutils literal notranslate"><span class="pre">SetBORUpperCST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.SetBORLowerCST"><code class="docutils literal notranslate"><span class="pre">SetBORLowerCST()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PromoteBORCSTUpper"><code class="docutils literal notranslate"><span class="pre">PromoteBORCSTUpper()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.PromoteBORCSTLower"><code class="docutils literal notranslate"><span class="pre">PromoteBORCSTLower()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DemoteBORCSTUpper"><code class="docutils literal notranslate"><span class="pre">DemoteBORCSTUpper()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.DemoteBORCSTLower"><code class="docutils literal notranslate"><span class="pre">DemoteBORCSTLower()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FitBORAfCST"><code class="docutils literal notranslate"><span class="pre">FitBORAfCST()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Background3D.html"
+                          title="previous chapter">Background3D Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CFDMesh.html"
+                          title="next chapter">CFD Mesh Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/BOR.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CFDMesh.html" title="CFD Mesh Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Background3D.html" title="Background3D Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BOR Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

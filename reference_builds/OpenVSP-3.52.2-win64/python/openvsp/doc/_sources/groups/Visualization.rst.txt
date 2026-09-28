@@ -1,0 +1,122 @@
+Visualization Functions
+=======================
+
+The following group of functions allow for the OpenVSP GUI to be manipulated through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    InitGUI
+    StartGUI
+    EnableStopGUIMenuItem
+    DisableStopGUIMenuItem
+    StopGUI
+    PopupMsg
+    UpdateGUI
+    IsGUIBuild
+    Lock
+    Unlock
+    IsEventLoopRunning
+    ScreenGrab
+    SetViewAxis
+    SetShowBorders
+    SetGeomDrawType
+    SetGeomWireColor
+    SetGeomDisplayType
+    GetGeomDrawType
+    GetGeomDisplayType
+    GetGeomWireColor
+    GetGeomMaterialName
+    AddMaterial
+    GetMaterialNames
+    GetNumLights
+    FindLight
+    SetBackground
+    SetAllViews
+    SetView
+    FitAllViews
+    ResetViews
+    SetWindowLayout
+    SetGUIElementDisable
+    SetGUIScreenDisable
+    SetGeomScreenDisable
+    HideScreen
+    ShowScreen
+
+
+Details
+-------
+
+.. autofunction:: InitGUI
+
+.. autofunction:: StartGUI
+
+.. autofunction:: EnableStopGUIMenuItem
+
+.. autofunction:: DisableStopGUIMenuItem
+
+.. autofunction:: StopGUI
+
+.. autofunction:: PopupMsg
+
+.. autofunction:: UpdateGUI
+
+.. autofunction:: IsGUIBuild
+
+.. autofunction:: Lock
+
+.. autofunction:: Unlock
+
+.. autofunction:: IsEventLoopRunning
+
+.. autofunction:: ScreenGrab
+
+.. autofunction:: SetViewAxis
+
+.. autofunction:: SetShowBorders
+
+.. autofunction:: SetGeomDrawType
+
+.. autofunction:: SetGeomWireColor
+
+.. autofunction:: SetGeomDisplayType
+
+.. autofunction:: GetGeomDrawType
+
+.. autofunction:: GetGeomDisplayType
+
+.. autofunction:: GetGeomWireColor
+
+.. autofunction:: GetGeomMaterialName
+
+.. autofunction:: AddMaterial
+
+.. autofunction:: GetMaterialNames
+
+.. autofunction:: GetNumLights
+
+.. autofunction:: FindLight
+
+.. autofunction:: SetBackground
+
+.. autofunction:: SetAllViews
+
+.. autofunction:: SetView
+
+.. autofunction:: FitAllViews
+
+.. autofunction:: ResetViews
+
+.. autofunction:: SetWindowLayout
+
+.. autofunction:: SetGUIElementDisable
+
+.. autofunction:: SetGUIScreenDisable
+
+.. autofunction:: SetGeomScreenDisable
+
+.. autofunction:: HideScreen
+
+.. autofunction:: ShowScreen
+

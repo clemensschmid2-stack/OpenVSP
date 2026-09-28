@@ -1,0 +1,80 @@
+Parm Link Functions
+===================
+
+The following functions are available for the simple Parm Link tool, which drives one Parm from another through an optional offset, scale and limits.  See the Advanced Link group for links driven by a script.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    CopyAirfoil
+    AddParmLink
+    GetNumParmLinks
+    GetParmLinkID
+    GetParmLinkAParm
+    GetParmLinkBParm
+    SetParmLinkAParm
+    SetParmLinkBParm
+    DelParmLink
+    DelAllParmLinks
+    SortParmLinksByA
+    SortParmLinksByB
+    LinkAllComp
+    LinkAllGroup
+    GetParmLinkOffsetFlag
+    SetParmLinkOffsetFlag
+    GetParmLinkScaleFlag
+    SetParmLinkScaleFlag
+    GetParmLinkLowerLimitFlag
+    SetParmLinkLowerLimitFlag
+    GetParmLinkUpperLimitFlag
+    SetParmLinkUpperLimitFlag
+
+
+Details
+-------
+
+.. autofunction:: CopyAirfoil
+
+.. autofunction:: AddParmLink
+
+.. autofunction:: GetNumParmLinks
+
+.. autofunction:: GetParmLinkID
+
+.. autofunction:: GetParmLinkAParm
+
+.. autofunction:: GetParmLinkBParm
+
+.. autofunction:: SetParmLinkAParm
+
+.. autofunction:: SetParmLinkBParm
+
+.. autofunction:: DelParmLink
+
+.. autofunction:: DelAllParmLinks
+
+.. autofunction:: SortParmLinksByA
+
+.. autofunction:: SortParmLinksByB
+
+.. autofunction:: LinkAllComp
+
+.. autofunction:: LinkAllGroup
+
+.. autofunction:: GetParmLinkOffsetFlag
+
+.. autofunction:: SetParmLinkOffsetFlag
+
+.. autofunction:: GetParmLinkScaleFlag
+
+.. autofunction:: SetParmLinkScaleFlag
+
+.. autofunction:: GetParmLinkLowerLimitFlag
+
+.. autofunction:: SetParmLinkLowerLimitFlag
+
+.. autofunction:: GetParmLinkUpperLimitFlag
+
+.. autofunction:: SetParmLinkUpperLimitFlag
+

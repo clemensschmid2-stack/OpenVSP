@@ -1,0 +1,29 @@
+General Computation Functions
+=============================
+
+The following group of API functions are available for general computations. In general, it is best practice to perform computations through the the Analysis group instead of calling these functions directly.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ComputeMassProps
+    ComputeCompGeom
+    ComputePlaneSlice
+    ComputeDegenGeom
+    IntegrateEllipsoidFlow
+
+
+Details
+-------
+
+.. autofunction:: ComputeMassProps
+
+.. autofunction:: ComputeCompGeom
+
+.. autofunction:: ComputePlaneSlice
+
+.. autofunction:: ComputeDegenGeom
+
+.. autofunction:: IntegrateEllipsoidFlow
+

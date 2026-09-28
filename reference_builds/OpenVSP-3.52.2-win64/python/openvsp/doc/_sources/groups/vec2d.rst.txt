@@ -1,0 +1,160 @@
+Vec2D Functions
+===============
+
+API functions that utilize the vec2d class are grouped here. For details of the class, including member functions, see vec2d. vec2d is used for the two dimensional problems that come up inside three dimensional ones -- parameter space coordinates, projections into a plane, and polygon tests.
+
+.. currentmodule:: openvsp
+
+vec2d
+-----
+
+.. autosummary::
+
+    vec2d.set_xy
+    vec2d.set_x
+    vec2d.set_y
+    vec2d.x
+    vec2d.y
+    vec2d.mag
+    vec2d.normalize
+
+.. autoclass:: vec2d
+    :members:
+    :undoc-members:
+    :special-members: __rmul__, __neg__, __setitem__, __len__, __repr__
+
+Operators
+^^^^^^^^^
+
+.. method:: vec2d.__getitem__(other)
+
+    Index a vec2d by coordinate, 0 for X and 1 for Y.  An index outside that range raises an IndexError, which is also what lets list() and tuple() walk a vec2d.
+
+    .. code-block:: python
+
+        a = vec2d( 3.0, 4.0 )
+
+        assert abs( a[0] - 3.0 ) < 1e-12, "vec2d index 0 is not x"
+
+        assert list( a ) == [ 3.0, 4.0 ], "vec2d did not iterate as x, y"
+
+        a[1] = 5.0
+
+        assert abs( a.y() - 5.0 ) < 1e-12, "vec2d index assignment did not take"
+
+.. method:: vec2d.__add__(other)
+
+    Addition operator for two vec2d objects, performed by the addition of each corresponding component
+
+    .. code-block:: python
+
+        a = vec2d( 1.0, 2.0 )
+        b = vec2d( 3.0, 4.0 )
+
+        c = a + b
+
+        assert abs( c.x() - 4.0 ) < 1e-12, "vec2d addition is wrong in x"
+
+        assert abs( c.y() - 6.0 ) < 1e-12, "vec2d addition is wrong in y"
+
+.. method:: vec2d.__sub__(other)
+
+    Subtraction operator for two vec2d objects, performed by the subtraction of each corresponding component
+
+    .. code-block:: python
+
+        a = vec2d( 3.0, 4.0 )
+        b = vec2d( 1.0, 2.0 )
+
+        c = a - b
+
+        assert abs( c.x() - 2.0 ) < 1e-12, "vec2d subtraction is wrong in x"
+
+        assert abs( c.y() - 2.0 ) < 1e-12, "vec2d subtraction is wrong in y"
+
+.. method:: vec2d.__mul__(other)
+
+    Scalar multiplication operator for a vec2d, performed by the multiplication of each vec2d component and the scalar
+
+    .. code-block:: python
+
+        a = vec2d( 1.0, 2.0 )
+
+        c = a * 1.5
+
+        assert abs( c.x() - 1.5 ) < 1e-12, "vec2d scaling is wrong in x"
+
+        assert abs( c.y() - 3.0 ) < 1e-12, "vec2d scaling is wrong in y"
+
+.. method:: vec2d.__truediv__(other)
+
+    Scalar division operator for a vec2d, performed by the division of each vec2d component by the scalar
+
+    .. code-block:: python
+
+        a = vec2d( 3.0, 6.0 )
+
+        c = a / 1.5
+
+        assert abs( c.x() - 2.0 ) < 1e-12, "vec2d division is wrong in x"
+
+        assert abs( c.y() - 4.0 ) < 1e-12, "vec2d division is wrong in y"
+
+Functions
+---------
+
+.. autosummary::
+
+    dist
+    dist_squared
+    cross
+    dot
+    angle
+    cos_angle
+    seg_seg_intersect
+    proj_pnt_on_line_seg
+    proj_pnt_on_line_u
+    PointInPolygon
+    det
+    poly_area
+    poly_centroid
+    orient2d
+    bi_lin_interp
+    inverse_bi_lin_interp
+
+
+Details
+-------
+
+.. autofunction:: dist
+
+.. autofunction:: dist_squared
+
+.. autofunction:: cross
+
+.. autofunction:: dot
+
+.. autofunction:: angle
+
+.. autofunction:: cos_angle
+
+.. autofunction:: seg_seg_intersect
+
+.. autofunction:: proj_pnt_on_line_seg
+
+.. autofunction:: proj_pnt_on_line_u
+
+.. autofunction:: PointInPolygon
+
+.. autofunction:: det
+
+.. autofunction:: poly_area
+
+.. autofunction:: poly_centroid
+
+.. autofunction:: orient2d
+
+.. autofunction:: bi_lin_interp
+
+.. autofunction:: inverse_bi_lin_interp
+

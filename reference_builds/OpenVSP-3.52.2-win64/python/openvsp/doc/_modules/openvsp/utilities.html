@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>openvsp.utilities &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">openvsp.utilities</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for openvsp.utilities</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2018-2020 Uber Technologies, Inc.</span>
+
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1"># of this software and associated documentation files (the "Software"), to deal</span>
+<span class="c1"># in the Software without restriction, including without limitation the rights</span>
+<span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1"># furnished to do so, subject to the following conditions:</span>
+
+<span class="c1"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c1"># all copies or substantial portions of the Software.</span>
+
+<span class="c1"># THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
+<span class="c1"># THE SOFTWARE.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunManager</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">openvsp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">vsp_module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<div class="viewcode-block" id="PropInfo">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.PropInfo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PropInfo</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geom_id</span><span class="p">,</span> <span class="n">thrust_vector</span><span class="p">,</span> <span class="n">rotation_direction</span><span class="p">,</span> <span class="n">hub_center</span><span class="p">,</span> <span class="n">transmat</span><span class="p">,</span> <span class="n">diameter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geom_id</span> <span class="o">=</span> <span class="n">geom_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thrust_vector</span> <span class="o">=</span> <span class="n">thrust_vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation_direction</span> <span class="o">=</span> <span class="n">rotation_direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hub_center</span> <span class="o">=</span> <span class="n">hub_center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transmat</span> <span class="o">=</span> <span class="n">transmat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">diameter</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="genX3d">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.genX3d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">genX3d</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="nb">set</span><span class="o">=</span><span class="n">vsp_module</span><span class="o">.</span><span class="n">SET_ALL</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="mi">400</span><span class="p">],</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">ClearVSPModel</span><span class="p">()</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">ReadVSPFile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">Update</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">ExportFile</span><span class="p">(</span><span class="s2">"prop.x3d"</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="n">vsp</span><span class="o">.</span><span class="n">EXPORT_X3D</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"prop.x3d"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">x3d_str</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+
+        <span class="n">x3d_str</span> <span class="o">=</span> <span class="n">x3d_str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span> <span class="o">+</span> <span class="s2">" width=</span><span class="se">\"</span><span class="si">{}</span><span class="s2">px</span><span class="se">\"</span><span class="s2"> height=</span><span class="se">\"</span><span class="si">{}</span><span class="s2">px</span><span class="se">\"</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">x3d_str</span><span class="p">[</span><span class="mi">26</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">x3d_str</span></div>
+
+
+
+<div class="viewcode-block" id="convert_vec3d_array_to_list_matrix">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.convert_vec3d_array_to_list_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_vec3d_array_to_list_matrix</span><span class="p">(</span><span class="n">vec3d_array</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Converts an array of vec3d objects into a list of x,y,z points</span>
+<span class="sd">    :param vec3d_array: array of vec3d objects</span>
+<span class="sd">    :return: list of x,y,z pairs</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">v3d</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">v3d</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">v3d</span><span class="o">.</span><span class="n">z</span><span class="p">()]</span> <span class="k">for</span> <span class="n">v3d</span> <span class="ow">in</span> <span class="n">vec3d_array</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="convert_double_tuple_to_list_matrix">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.convert_double_tuple_to_list_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_double_tuple_to_list_matrix</span><span class="p">(</span><span class="n">tuple_matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Converts a double matrix of tuples into a maxtrix of lists</span>
+<span class="sd">    :param tuple_matrix: matrix of tuples</span>
+<span class="sd">    :return: matrix of lists</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tuple_matrix</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="parse_results_object">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.parse_results_object">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_results_object</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Function to parse a generic results object from openvsp results manager</span>
+<span class="sd">    :param res_id: id of the results object to parse</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: named tuple of results values</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetAllDataNames</span><span class="p">(</span><span class="n">res_id</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetResultsName</span><span class="p">(</span><span class="n">res_id</span><span class="p">)</span>
+
+    <span class="n">res_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetResultsType</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">vsp</span><span class="o">.</span><span class="n">INT_DATA</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">GetIntResults</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">vsp</span><span class="o">.</span><span class="n">STRING_DATA</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">GetStringResults</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">vsp</span><span class="o">.</span><span class="n">DOUBLE_DATA</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">GetDoubleResults</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">vsp</span><span class="o">.</span><span class="n">DOUBLE_MATRIX_DATA</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">convert_double_tuple_to_list_matrix</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">GetDoubleMatResults</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">vsp</span><span class="o">.</span><span class="n">VEC3D_DATA</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">convert_vec3d_array_to_list_matrix</span><span class="p">(</span><span class="n">vsp</span><span class="o">.</span><span class="n">GetVec3dResults</span><span class="p">(</span><span class="n">res_id</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res_tuple</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_wing_reference_quantities">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.get_wing_reference_quantities">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_wing_reference_quantities</span><span class="p">(</span><span class="n">wing_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wing_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Gets wing reference area, reference span, and reference chord (sref, bref, cref) from the TotalArea, TotalSpan, and</span>
+<span class="sd">    TotalChord properties of Wing component</span>
+
+<span class="sd">    :param wing_name: Name of the wing (will find the first wing with this name)</span>
+<span class="sd">    :param wing_id: ID of the wing object, if None wing name will be used to find the wing id. Wing ID takes precedence</span>
+<span class="sd">        over wing_name</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: sref, bref, and cref</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+    <span class="c1"># Check that the wing_name and wing_id are not both none</span>
+    <span class="k">if</span> <span class="n">wing_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">wing_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"wing_name and wing_id cannot both be None"</span><span class="p">)</span>
+
+    <span class="c1"># If wing_id is None, then use wing name to find the wing id</span>
+    <span class="k">if</span> <span class="n">wing_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">found_wing_id</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">FindGeom</span><span class="p">(</span><span class="n">wing_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found_wing_id</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"could not find wing with name </span><span class="se">\"</span><span class="si">{}</span><span class="se">\"</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wing_name</span><span class="p">))</span>
+        <span class="n">wing_id</span> <span class="o">=</span> <span class="n">found_wing_id</span>
+
+    <span class="c1"># Get reference parameters</span>
+    <span class="c1"># TODO: Error check that the wing_id is actually the id to a wing component</span>
+    <span class="n">bref</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetParmVal</span><span class="p">(</span><span class="n">wing_id</span><span class="p">,</span> <span class="s2">"TotalSpan"</span><span class="p">,</span> <span class="s2">"WingGeom"</span><span class="p">)</span>
+    <span class="n">sref</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetParmVal</span><span class="p">(</span><span class="n">wing_id</span><span class="p">,</span> <span class="s2">"TotalArea"</span><span class="p">,</span> <span class="s2">"WingGeom"</span><span class="p">)</span>
+    <span class="n">cref</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetParmVal</span><span class="p">(</span><span class="n">wing_id</span><span class="p">,</span> <span class="s2">"TotalChord"</span><span class="p">,</span> <span class="s2">"WingGeom"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sref</span><span class="p">,</span> <span class="n">bref</span><span class="p">,</span> <span class="n">cref</span></div>
+
+
+
+<div class="viewcode-block" id="get_propeller_thrust_vectors">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.get_propeller_thrust_vectors">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_propeller_thrust_vectors</span><span class="p">(</span><span class="n">prop_set</span><span class="p">,</span> <span class="n">alternate_rotation_direction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Returns propeller thrust vector directions and rotation direction for all propellers in</span>
+<span class="sd">    the input set</span>
+<span class="sd">    :param prop_set: set containing all propellers (no other geometries should be included)</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: Named Tuple with (geom_id, thrust_vector, rotation_direction, hub_center)</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">degen_geom</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dg</span>
+
+    <span class="c1"># Run degen geom on the input set</span>
+    <span class="n">degen_mgr</span> <span class="o">=</span> <span class="n">run_degen_geom</span><span class="p">(</span><span class="n">set_index</span><span class="o">=</span><span class="n">prop_set</span><span class="p">)</span>
+
+    <span class="c1"># loop over all geoms in degen_mgr</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">geom_id</span><span class="p">,</span> <span class="n">degens</span> <span class="ow">in</span> <span class="n">degen_mgr</span><span class="o">.</span><span class="n">degen_objs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">propeller</span> <span class="ow">in</span> <span class="n">degens</span><span class="o">.</span><span class="n">copies</span><span class="p">:</span>
+            <span class="c1"># Only look at first blade</span>
+            <span class="n">blade_0</span> <span class="o">=</span> <span class="n">degens</span><span class="o">.</span><span class="n">copies</span><span class="p">[</span><span class="n">propeller</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_single_propeller_info</span><span class="p">(</span><span class="n">blade_0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">alternate_rotation_direction</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_direction</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+
+<div class="viewcode-block" id="get_single_propeller_info">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.get_single_propeller_info">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_single_propeller_info</span><span class="p">(</span><span class="n">prop_dg</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Gets propeller info for a single propeller degen geom object</span>
+<span class="sd">    :param prop_dg: propeller degen geom object</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: propeller info named tuple</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+    <span class="c1"># Define named tuple</span>
+    <span class="c1">#PropInfo = namedtuple("PropInfo", "geom_id thrust_vector rotation_direction hub_center transmat diameter")</span>
+
+    <span class="n">reverse_flag</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetParmVal</span><span class="p">(</span><span class="n">prop_dg</span><span class="o">.</span><span class="n">geom_id</span><span class="p">,</span> <span class="s2">"ReverseFlag"</span><span class="p">,</span> <span class="s2">"Design"</span><span class="p">)</span>
+    <span class="n">rotation_dir_geom</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">reverse_flag</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">diameter</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetParmVal</span><span class="p">(</span><span class="n">prop_dg</span><span class="o">.</span><span class="n">geom_id</span><span class="p">,</span> <span class="s2">"Diameter"</span><span class="p">,</span> <span class="s2">"Design"</span><span class="p">)</span>
+
+    <span class="c1"># Use transformation matrix to get hub center and rotate default thrust vector into position</span>
+    <span class="n">transmat</span> <span class="o">=</span> <span class="n">prop_dg</span><span class="o">.</span><span class="n">transmat</span>
+    <span class="n">hub_center</span> <span class="o">=</span> <span class="n">transmat</span><span class="o">.</span><span class="n">get_translations</span><span class="p">()</span>
+    <span class="n">thrust_vector</span> <span class="o">=</span> <span class="n">transmat</span><span class="o">.</span><span class="n">apply_rotations</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+    <span class="c1"># Check the flip normal flag to determine if rotation direction should be reversed</span>
+    <span class="n">rotation_dir_blade</span> <span class="o">=</span> <span class="n">rotation_dir_geom</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">prop_dg</span><span class="o">.</span><span class="n">flip_normal</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">reverse_flag</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">prop_dg</span><span class="o">.</span><span class="n">flip_normal</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">reverse_flag</span><span class="p">):</span>
+        <span class="n">rotation_dir_blade</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">PropInfo</span><span class="p">(</span><span class="n">prop_dg</span><span class="o">.</span><span class="n">geom_id</span><span class="p">,</span> <span class="n">thrust_vector</span><span class="p">,</span> <span class="n">rotation_dir_blade</span><span class="p">,</span> <span class="n">hub_center</span><span class="p">,</span> <span class="n">transmat</span><span class="p">,</span> <span class="n">diameter</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="plot_propeller_info">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.plot_propeller_info">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_propeller_info</span><span class="p">(</span><span class="n">prop_infos</span><span class="p">,</span> <span class="n">vector_scale</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mutation_scale</span><span class="o">=</span><span class="mf">20.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Plots an array of propeller info tuples to visually inspect thrust and rotation directions</span>
+<span class="sd">    :param prop_infos: array of prop info tuples</span>
+<span class="sd">    :param vector_scale: length of each thrust vector</span>
+<span class="sd">    :param markersize: size of marker for hub location</span>
+<span class="sd">    :param mutation_scale: mutation scale applied to arrow objects</span>
+<span class="sd">    :return: figure handle</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">FancyArrowPatch</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">proj3d</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vector_scale</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop_infos</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"vector_scale must be either a scalar or have the same length as prop_infos"</span><span class="p">)</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    maxScale = max(vector_scale)</span>
+        <span class="c1">#    vector_scale = [20.*v/maxScale for v in vector_scale]</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">vector_scale</span> <span class="o">=</span> <span class="p">[</span><span class="n">vector_scale</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prop_infos</span><span class="p">]</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Arrow3D</span><span class="p">(</span><span class="n">FancyArrowPatch</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verts3d</span> <span class="o">=</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">do_3d_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="n">xs3d</span><span class="p">,</span> <span class="n">ys3d</span><span class="p">,</span> <span class="n">zs3d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verts3d</span>
+            <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span> <span class="o">=</span> <span class="n">proj3d</span><span class="o">.</span><span class="n">proj_transform</span><span class="p">(</span><span class="n">xs3d</span><span class="p">,</span> <span class="n">ys3d</span><span class="p">,</span> <span class="n">zs3d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_positions</span><span class="p">((</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ys</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ys</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">'3d'</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">iprop</span><span class="p">,</span> <span class="n">prop_info</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prop_infos</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="s1">'blue'</span>
+        <span class="k">if</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">rotation_direction</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">'o'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">'black'</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">Arrow3D</span><span class="p">([</span><span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">prop_info</span><span class="o">.</span><span class="n">thrust_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">vector_scale</span><span class="p">[</span><span class="n">iprop</span><span class="p">]],</span>
+                    <span class="p">[</span><span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">prop_info</span><span class="o">.</span><span class="n">thrust_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">vector_scale</span><span class="p">[</span><span class="n">iprop</span><span class="p">]],</span>
+                    <span class="p">[</span><span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">hub_center</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">prop_info</span><span class="o">.</span><span class="n">thrust_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">vector_scale</span><span class="p">[</span><span class="n">iprop</span><span class="p">]],</span>
+                    <span class="n">mutation_scale</span><span class="o">=</span><span class="n">mutation_scale</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">arrowstyle</span><span class="o">=</span><span class="s2">"-|&gt;"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="c1"># add circle for rotor diameter</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">diameter</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="n">yprop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span><span class="o">*</span><span class="n">radius</span>
+        <span class="n">zprop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span><span class="o">*</span><span class="n">radius</span>
+        <span class="n">xprop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thetas</span><span class="p">))</span>
+        <span class="n">prop_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xprop</span><span class="p">,</span> <span class="n">yprop</span><span class="p">,</span> <span class="n">zprop</span><span class="p">])</span>
+        <span class="n">prop_points_transformed</span> <span class="o">=</span> <span class="n">prop_info</span><span class="o">.</span><span class="n">transmat</span><span class="o">.</span><span class="n">apply_transformation</span><span class="p">(</span><span class="n">prop_points</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prop_points_transformed</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">prop_points_transformed</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">prop_points_transformed</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">'black'</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'x'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'y'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">'z'</span><span class="p">)</span>
+
+    <span class="n">set_3d_axis_equal</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+
+<div class="viewcode-block" id="run_degen_geom">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.run_degen_geom">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_degen_geom</span><span class="p">(</span><span class="n">set_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">set_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Runs degen geom on input set</span>
+<span class="sd">    :param set_index: set index, will take precedence if both set index and set name are specified</span>
+<span class="sd">    :param set_name: name of set, will be used if set index is not specified</span>
+<span class="sd">    :param vsp_instance: optional instance of vsp if using the multifacade</span>
+<span class="sd">    :return: degen geom manager object</span>
+<span class="sd">    """</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">degen_geom</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dg</span>
+
+    <span class="k">if</span> <span class="n">set_index</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">set_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"set_index and set_name cannot both be None"</span><span class="p">)</span>
+
+    <span class="c1"># Get set index from name, if set index was not specified</span>
+    <span class="k">if</span> <span class="n">set_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">set_index</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">GetSetIndex</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+
+    <span class="c1"># Run degen geom on the input set</span>
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetAnalysisInputDefaults</span><span class="p">(</span><span class="s2">"DegenGeom"</span><span class="p">)</span>
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"DegenGeom"</span><span class="p">,</span> <span class="s2">"Set"</span><span class="p">,</span> <span class="p">[</span><span class="n">set_index</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"DegenGeom"</span><span class="p">,</span> <span class="s2">"WriteCSVFlag"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">vsp</span><span class="o">.</span><span class="n">SetIntAnalysisInput</span><span class="p">(</span><span class="s2">"DegenGeom"</span><span class="p">,</span> <span class="s2">"WriteMFileFlag"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">degen_res_id</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">ExecAnalysis</span><span class="p">(</span><span class="s2">"DegenGeom"</span><span class="p">)</span>
+
+    <span class="n">degen_objs</span> <span class="o">=</span> <span class="n">vsp</span><span class="o">.</span><span class="n">parse_degen_geom</span><span class="p">(</span><span class="n">degen_res_id</span><span class="p">)</span>
+
+    <span class="n">degen_mgr</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">DegenGeomMgr</span><span class="p">(</span><span class="n">degen_objs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">degen_mgr</span></div>
+
+
+
+<div class="viewcode-block" id="set_3d_axis_equal">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.set_3d_axis_equal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_3d_axis_equal</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Sets axis aspect ratio to equal</span>
+<span class="sd">    :param ax: 3d axis object</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">xlims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
+    <span class="n">ylims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">())</span>
+    <span class="n">zlims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_zlim</span><span class="p">())</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">xlims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xlims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ry</span> <span class="o">=</span> <span class="n">ylims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ylims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rz</span> <span class="o">=</span> <span class="n">zlims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">zlims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">rmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">rz</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rx</span> <span class="o">&lt;</span> <span class="n">rmax</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rx</span><span class="o">-</span><span class="n">rmax</span><span class="p">)</span>
+        <span class="n">xlims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">xlims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+
+    <span class="k">if</span> <span class="n">ry</span> <span class="o">&lt;</span> <span class="n">rmax</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ry</span><span class="o">-</span><span class="n">rmax</span><span class="p">)</span>
+        <span class="n">ylims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">ylims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+
+    <span class="k">if</span> <span class="n">rz</span> <span class="o">&lt;</span> <span class="n">rmax</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rz</span><span class="o">-</span><span class="n">rmax</span><span class="p">)</span>
+        <span class="n">zlims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">zlims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">diff</span><span class="o">/</span><span class="mf">2.0</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="n">zlims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zlims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="export_airfoils">
+<a class="viewcode-back" href="../../openvsp.html#openvsp.utilities.export_airfoils">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_airfoils</span><span class="p">(</span><span class="nb">set</span><span class="o">=</span><span class="n">vsp_module</span><span class="o">.</span><span class="n">SET_ALL</span><span class="p">,</span> <span class="n">vsp_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">vsp</span> <span class="o">=</span> <span class="n">vsp_module</span><span class="o">.</span><span class="n">get_instance</span><span class="p">(</span><span class="n">vsp_instance</span><span class="p">)</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">vsp_airfoils</span>
+    <span class="n">af_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">wd</span> <span class="o">+</span> <span class="s2">"/airfoils.csv"</span>
+        <span class="n">vsp</span><span class="o">.</span><span class="n">ExportFile</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="n">vsp</span><span class="o">.</span><span class="n">EXPORT_SELIG_AIRFOIL</span><span class="p">)</span>
+
+        <span class="c1">#parse airfoils.csv</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span><span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+        <span class="n">rootDir</span> <span class="o">=</span> <span class="n">strs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">"Airfoil File Name"</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">rootDir</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">af</span> <span class="o">=</span> <span class="n">vsp_airfoils</span><span class="o">.</span><span class="n">VspSeligExport</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="n">af</span><span class="o">.</span><span class="n">geom_name</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="n">af</span><span class="o">.</span><span class="n">geom_id</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="n">af</span><span class="o">.</span><span class="n">airfoil_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="n">af</span><span class="o">.</span><span class="n">xsec_flag</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"1"</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">af</span><span class="o">.</span><span class="n">xsec_flag</span><span class="p">:</span>
+                    <span class="n">af</span><span class="o">.</span><span class="n">xsec_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                    <span class="n">af</span><span class="o">.</span><span class="n">xsec_surf_id</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="n">af</span><span class="o">.</span><span class="n">foil_surf_u_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">af</span><span class="o">.</span><span class="n">global_u_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">af</span><span class="o">.</span><span class="n">le_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">af</span><span class="o">.</span><span class="n">te_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span> <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">af</span><span class="o">.</span><span class="n">chord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+
+                <span class="c1">#af.findSegments()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">af_dict</span><span class="p">[</span><span class="n">af</span><span class="o">.</span><span class="n">geom_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">af</span> <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">af_dict</span><span class="p">[</span><span class="n">af</span><span class="o">.</span><span class="n">geom_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">af_dict</span><span class="p">[</span><span class="n">af</span><span class="o">.</span><span class="n">geom_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">af</span> <span class="p">)</span>
+
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">af_dict</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">openvsp.utilities</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

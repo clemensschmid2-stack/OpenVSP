@@ -1,0 +1,59 @@
+Sub-Surface Functions
+=====================
+
+Functions related to Sub-Surfaces are defined in this group.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AddSubSurf
+    GetSubSurf
+    DeleteSubSurf
+    ReorderSubSurf
+    SetSubSurfName
+    GetSubSurfName
+    GetSubSurfIndex
+    GetSubSurfIDVec
+    GetAllSubSurfIDs
+    GetNumSubSurf
+    GetSubSurfType
+    GetSubSurfParmIDs
+    IntersectSubSurf
+    GetIntersectSubSurfGeomID
+    SetIntersectSubSurfGeomID
+
+
+Details
+-------
+
+.. autofunction:: AddSubSurf
+
+.. autofunction:: GetSubSurf
+
+.. autofunction:: DeleteSubSurf
+
+.. autofunction:: ReorderSubSurf
+
+.. autofunction:: SetSubSurfName
+
+.. autofunction:: GetSubSurfName
+
+.. autofunction:: GetSubSurfIndex
+
+.. autofunction:: GetSubSurfIDVec
+
+.. autofunction:: GetAllSubSurfIDs
+
+.. autofunction:: GetNumSubSurf
+
+.. autofunction:: GetSubSurfType
+
+.. autofunction:: GetSubSurfParmIDs
+
+.. autofunction:: IntersectSubSurf
+
+.. autofunction:: GetIntersectSubSurfGeomID
+
+.. autofunction:: SetIntersectSubSurfGeomID
+

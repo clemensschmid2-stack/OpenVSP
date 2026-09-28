@@ -1,0 +1,86 @@
+Measure Tool Functions
+======================
+
+This group of API functions can be used to control the Ruler Tool through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    ShowAllRulers
+    HideAllRulers
+    ShowAllProbes
+    HideAllProbes
+    ShowAllProtractors
+    HideAllProtractors
+    ShowAllRSTProbes
+    HideAllRSTProbes
+    AddProtractor
+    GetAllProtractors
+    DelProtractor
+    DeleteAllProtractors
+    AddRSTProbe
+    GetAllRSTProbes
+    DelRSTProbe
+    DeleteAllRSTProbes
+    AddRuler
+    GetAllRulers
+    DelRuler
+    DeleteAllRulers
+    AddProbe
+    GetAllProbes
+    DelProbe
+    DeleteAllProbes
+
+
+Details
+-------
+
+.. autofunction:: ShowAllRulers
+
+.. autofunction:: HideAllRulers
+
+.. autofunction:: ShowAllProbes
+
+.. autofunction:: HideAllProbes
+
+.. autofunction:: ShowAllProtractors
+
+.. autofunction:: HideAllProtractors
+
+.. autofunction:: ShowAllRSTProbes
+
+.. autofunction:: HideAllRSTProbes
+
+.. autofunction:: AddProtractor
+
+.. autofunction:: GetAllProtractors
+
+.. autofunction:: DelProtractor
+
+.. autofunction:: DeleteAllProtractors
+
+.. autofunction:: AddRSTProbe
+
+.. autofunction:: GetAllRSTProbes
+
+.. autofunction:: DelRSTProbe
+
+.. autofunction:: DeleteAllRSTProbes
+
+.. autofunction:: AddRuler
+
+.. autofunction:: GetAllRulers
+
+.. autofunction:: DelRuler
+
+.. autofunction:: DeleteAllRulers
+
+.. autofunction:: AddProbe
+
+.. autofunction:: GetAllProbes
+
+.. autofunction:: DelProbe
+
+.. autofunction:: DeleteAllProbes
+

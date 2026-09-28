@@ -1,0 +1,56 @@
+RoutingGeom Functions
+=====================
+
+This group of API functions is used to create and manipulate RoutingGeom objects, which define wire routing paths between points in the model.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    GetNumRoutingPts
+    AddRoutingPt
+    InsertRoutingPt
+    DelRoutingPt
+    DelAllRoutingPt
+    MoveRoutingPt
+    GetRoutingPtID
+    GetAllRoutingPtIds
+    GetRoutingPtParentID
+    SetRoutingPtParentID
+    GetMainRoutingPtCoord
+    GetRoutingPtCoord
+    GetAllRoutingPtCoords
+    GetRoutingCurve
+
+
+Details
+-------
+
+.. autofunction:: GetNumRoutingPts
+
+.. autofunction:: AddRoutingPt
+
+.. autofunction:: InsertRoutingPt
+
+.. autofunction:: DelRoutingPt
+
+.. autofunction:: DelAllRoutingPt
+
+.. autofunction:: MoveRoutingPt
+
+.. autofunction:: GetRoutingPtID
+
+.. autofunction:: GetAllRoutingPtIds
+
+.. autofunction:: GetRoutingPtParentID
+
+.. autofunction:: SetRoutingPtParentID
+
+.. autofunction:: GetMainRoutingPtCoord
+
+.. autofunction:: GetRoutingPtCoord
+
+.. autofunction:: GetAllRoutingPtCoords
+
+.. autofunction:: GetRoutingCurve
+

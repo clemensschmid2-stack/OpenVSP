@@ -1,0 +1,62 @@
+Point Cloud Functions
+=====================
+
+This group of functions works with clouds of points -- imported, or made from a MeshGeom such as the one a planar slice produces -- and narrows them down to the points wanted.  In the GUI a cloud is whittled down by selecting and hiding points with the mouse, which projects a screen rectangle into three dimensions and is only as good as that projection.  Through the API the points are handed about as plain vectors of coordinates and filtered by where they actually are, which is both exact and repeatable.  Filters come in keep and remove pairs, so a selection is inverted by asking for the other one, and there are set operations for combining the results.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    CreatePtCloudGeomFromPts
+    KeepPtsInBBox
+    RemovePtsInBBox
+    KeepPtsInRange
+    RemovePtsInRange
+    KeepPtsAbove
+    KeepPtsBelow
+    KeepPtsNearPt
+    RemovePtsNearPt
+    KeepPtsNearGeom
+    RemovePtsNearGeom
+    UniquePts
+    UnionPts
+    IntersectPts
+    SubtractPts
+    CreatePtCloudGeom
+
+
+Details
+-------
+
+.. autofunction:: CreatePtCloudGeomFromPts
+
+.. autofunction:: KeepPtsInBBox
+
+.. autofunction:: RemovePtsInBBox
+
+.. autofunction:: KeepPtsInRange
+
+.. autofunction:: RemovePtsInRange
+
+.. autofunction:: KeepPtsAbove
+
+.. autofunction:: KeepPtsBelow
+
+.. autofunction:: KeepPtsNearPt
+
+.. autofunction:: RemovePtsNearPt
+
+.. autofunction:: KeepPtsNearGeom
+
+.. autofunction:: RemovePtsNearGeom
+
+.. autofunction:: UniquePts
+
+.. autofunction:: UnionPts
+
+.. autofunction:: IntersectPts
+
+.. autofunction:: SubtractPts
+
+.. autofunction:: CreatePtCloudGeom
+

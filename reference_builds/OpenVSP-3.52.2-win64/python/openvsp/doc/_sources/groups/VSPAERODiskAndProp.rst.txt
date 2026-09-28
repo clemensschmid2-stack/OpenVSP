@@ -1,0 +1,38 @@
+VSPAERO Actuator Disk and Propeller Functions
+=============================================
+
+The following group of functions provide API capability for setting up actuator disks (Disk tab of VSPAERO GUI) and propellers (Propeller tab of VSPAERO GUI) for VSPAERO analysis. If a propeller geometry is used to model the actuator disk, the "PropMode" must be set to PROP_DISK or PROP_BOTH. Alternatively, the "PropMode" but be set to PROP_BLADE or PROP_BOTH for unsteady analysis. must be set to PROP_DISK or PROP_BOTH.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    FindActuatorDisk
+    GetNumActuatorDisks
+    FindUnsteadyGroup
+    GetUnsteadyGroupName
+    GetUnsteadyGroupCompIDs
+    GetUnsteadyGroupSurfIndexes
+    GetNumUnsteadyGroups
+    GetNumUnsteadyRotorGroups
+
+
+Details
+-------
+
+.. autofunction:: FindActuatorDisk
+
+.. autofunction:: GetNumActuatorDisks
+
+.. autofunction:: FindUnsteadyGroup
+
+.. autofunction:: GetUnsteadyGroupName
+
+.. autofunction:: GetUnsteadyGroupCompIDs
+
+.. autofunction:: GetUnsteadyGroupSurfIndexes
+
+.. autofunction:: GetNumUnsteadyGroups
+
+.. autofunction:: GetNumUnsteadyRotorGroups
+

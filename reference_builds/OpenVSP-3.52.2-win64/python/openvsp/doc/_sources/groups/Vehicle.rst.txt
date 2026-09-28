@@ -1,0 +1,32 @@
+Vehicle Functions
+=================
+
+The Vehicle group of functions are high-level commands that pertain to the entire OpenVSP model.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    Update
+    VSPExit
+    VSPCrash
+    GetAndResetUpdateCount
+    GetVSPFileName
+    ClearVSPModel
+
+
+Details
+-------
+
+.. autofunction:: Update
+
+.. autofunction:: VSPExit
+
+.. autofunction:: VSPCrash
+
+.. autofunction:: GetAndResetUpdateCount
+
+.. autofunction:: GetVSPFileName
+
+.. autofunction:: ClearVSPModel
+

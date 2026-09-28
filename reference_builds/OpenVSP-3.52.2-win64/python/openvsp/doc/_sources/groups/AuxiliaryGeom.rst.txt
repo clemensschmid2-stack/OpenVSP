@@ -1,0 +1,23 @@
+AuxiliaryGeom Functions
+=======================
+
+This group of functions is available for interacting with an AuxiliaryGeom through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SetAuxiliaryGeomContactPtID
+    GetAuxiliaryGeomContactPtID
+    ReadAuxiliaryGeomCCEFile
+
+
+Details
+-------
+
+.. autofunction:: SetAuxiliaryGeomContactPtID
+
+.. autofunction:: GetAuxiliaryGeomContactPtID
+
+.. autofunction:: ReadAuxiliaryGeomCCEFile
+

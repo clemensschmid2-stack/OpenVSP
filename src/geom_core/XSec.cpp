@@ -7,12 +7,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#define _USE_MATH_DEFINES
+#include <algorithm>
 #include <cmath>
 
 #include "XSec.h"
 #include "Geom.h"
 #include "ParmMgr.h"
+#include "IDMgr.h"
 #include "StlHelper.h"
 #include <float.h>
 
@@ -60,9 +61,13 @@ void XSec::ChangeID( const string &newid )
     string oldid = m_ID;
     ParmContainer::ChangeID( newid );
 
+    // The XSec kept as the copy buffer has no XSecSurf holding it.
     XSecSurf* xssurf = ( XSecSurf* ) GetParentContainerPtr();
 
-    xssurf->ChangeXSecID( oldid, newid );
+    if ( xssurf )
+    {
+        xssurf->ChangeXSecID( oldid, newid );
+    }
 
     if ( m_XSCurve  )
     {
@@ -196,11 +201,12 @@ Matrix4d* XSec::GetTransform()
 //==== Copy From XSec ====//
 void XSec::CopyFrom( XSec* xs )
 {
-    string lastreset = ParmMgr.ResetRemapID();
+    string lastreset = IDMgr.ResetRemapID();
     xmlNodePtr root = xmlNewNode( nullptr, ( const xmlChar * )"Vsp_Geometry" );
     if ( xs->GetType() == GetType() && xs->GetXSecCurve()->GetType() == GetXSecCurve()->GetType() )
     {
         xs->EncodeXml( root );
+        IDMgr.PreRegisterIDs( root );
         DecodeXml( root );
     }
     else
@@ -211,7 +217,7 @@ void XSec::CopyFrom( XSec* xs )
         m_XSCurve->SetWidthHeight( xs->GetXSecCurve()->GetWidth(), xs->GetXSecCurve()->GetHeight() );
     }
     xmlFreeNode( root );
-    ParmMgr.ResetRemapID( lastreset );
+    IDMgr.ResetRemapID( lastreset );
 }
 
 //==== Encode XML ====//

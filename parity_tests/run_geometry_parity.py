@@ -9,14 +9,14 @@ from pathlib import Path
 import subprocess
 import sys
 from run_geometry_case import CASES
-from run_parity_tests import DEFAULT_OFFICIAL, DEFAULT_CUSTOM, HERE, flatten, compare, python_package
+from run_parity_tests import DEFAULT_OFFICIAL, DEFAULT_CUSTOM, HERE, flatten, compare, python_package, python_path
 
 
 def run(distribution, case, output, timeout):
     output.mkdir(parents=True)
     command = [sys.executable, str(HERE / 'run_geometry_case.py'), '--distribution', str(distribution),
                '--case', case, '--output', str(output / 'results.json')]
-    env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', PYTHONPATH=str(python_package(distribution)), OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1')
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', PYTHONPATH=python_path(distribution), OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1')
     with (output / 'run.log').open('w') as log:
         subprocess.run(command, cwd=output, env=env, stdout=log, stderr=subprocess.STDOUT,
                        check=True, timeout=timeout)
@@ -73,7 +73,7 @@ def run_suite(custom, work, timeout=180, rtol=1e-6, atol=1e-8):
     report = dict(status='RUNNING', official=str(DEFAULT_OFFICIAL.resolve()), custom=str(custom.resolve()),
                   rtol=rtol, atol=atol, cases=[], failures=0, strict_failures=0,
                   accepted_shell_differences=0,
-                  shell_policy_sha256=hashlib.sha256((HERE / 'shell_inertia_exception.json').read_bytes()).hexdigest())
+                  shell_policy='strict 3.52.2 parity; historical 3.51.2 exception inactive')
     for label, distribution in [('official', DEFAULT_OFFICIAL), ('custom', custom)]:
         extension = python_package(distribution) / 'openvsp/_vsp.pyd'
         report[label + '_sha256'] = hashlib.sha256(extension.read_bytes()).hexdigest()
@@ -93,8 +93,8 @@ def run_suite(custom, work, timeout=180, rtol=1e-6, atol=1e-8):
             else:
                 differences, failures = compare_geometry(reference, candidate, rtol, atol)
             report['strict_failures'] += failures
-            differences, failures, accepted = apply_shell_policy(case, differences)
-            report['accepted_shell_differences'] += accepted
+            # Upstream now includes the shell correction. The retained 3.51.2
+            # exception is historical evidence and must not waive new failures.
             report['cases'].append(dict(name=case, status='FAIL' if failures else 'PASS',
                 compared=len(differences), failures=failures,
                 differences=[d for d in differences if d['status'] != 'pass']))

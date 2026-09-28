@@ -1,0 +1,122 @@
+Geom Surface Query Functions
+============================
+
+This group of API functions pertains to general surface queries for Geom surfaces, such as computing 3D location from surface coordinates, identifying curvature, and performing point projections.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    CompPnt01
+    CompNorm01
+    CompTanU01
+    CompTanW01
+    CompCurvature01
+    ProjPnt01
+    ProjPnt01I
+    ProjPnt01Guess
+    AxisProjPnt01
+    AxisProjPnt01I
+    AxisProjPnt01Guess
+    InsideSurf
+    CompPntRST
+    FindRST
+    FindRSTGuess
+    ConvertRSTtoLMN
+    ConvertRtoL
+    ConvertLMNtoRST
+    ConvertLtoR
+    ConvertUtoEta
+    ConvertEtatoU
+    CompVecPnt01
+    CompVecDegenPnt01
+    CompVecNorm01
+    CompVecCurvature01
+    ProjVecPnt01
+    ProjVecPnt01Guess
+    AxisProjVecPnt01
+    AxisProjVecPnt01Guess
+    VecInsideSurf
+    CompVecPntRST
+    FindRSTVec
+    FindRSTVecGuess
+    ConvertRSTtoLMNVec
+    ConvertLMNtoRSTVec
+    GetUWTess01
+
+
+Details
+-------
+
+.. autofunction:: CompPnt01
+
+.. autofunction:: CompNorm01
+
+.. autofunction:: CompTanU01
+
+.. autofunction:: CompTanW01
+
+.. autofunction:: CompCurvature01
+
+.. autofunction:: ProjPnt01
+
+.. autofunction:: ProjPnt01I
+
+.. autofunction:: ProjPnt01Guess
+
+.. autofunction:: AxisProjPnt01
+
+.. autofunction:: AxisProjPnt01I
+
+.. autofunction:: AxisProjPnt01Guess
+
+.. autofunction:: InsideSurf
+
+.. autofunction:: CompPntRST
+
+.. autofunction:: FindRST
+
+.. autofunction:: FindRSTGuess
+
+.. autofunction:: ConvertRSTtoLMN
+
+.. autofunction:: ConvertRtoL
+
+.. autofunction:: ConvertLMNtoRST
+
+.. autofunction:: ConvertLtoR
+
+.. autofunction:: ConvertUtoEta
+
+.. autofunction:: ConvertEtatoU
+
+.. autofunction:: CompVecPnt01
+
+.. autofunction:: CompVecDegenPnt01
+
+.. autofunction:: CompVecNorm01
+
+.. autofunction:: CompVecCurvature01
+
+.. autofunction:: ProjVecPnt01
+
+.. autofunction:: ProjVecPnt01Guess
+
+.. autofunction:: AxisProjVecPnt01
+
+.. autofunction:: AxisProjVecPnt01Guess
+
+.. autofunction:: VecInsideSurf
+
+.. autofunction:: CompVecPntRST
+
+.. autofunction:: FindRSTVec
+
+.. autofunction:: FindRSTVecGuess
+
+.. autofunction:: ConvertRSTtoLMNVec
+
+.. autofunction:: ConvertLMNtoRSTVec
+
+.. autofunction:: GetUWTess01
+

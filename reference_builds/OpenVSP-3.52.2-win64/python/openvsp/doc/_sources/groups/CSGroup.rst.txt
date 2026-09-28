@@ -1,0 +1,71 @@
+VSPAERO Control Surface Group Functions
+=======================================
+
+This group of functions is available for manipulating VSPAERO control surface groups through the API. Note, VSPAERO also includes rectangle type sub-surfaces as possible control surfaces.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    AutoGroupVSPAEROControlSurfaces
+    AddCpSlice
+    GetNumCpSlices
+    GetCpSliceID
+    DelCpSlice
+    DeleteAllCpSlices
+    DeleteVSPAEROControlSurfaceGroup
+    CreateVSPAEROControlSurfaceGroup
+    AddAllToVSPAEROControlSurfaceGroup
+    RemoveAllFromVSPAEROControlSurfaceGroup
+    GetActiveCSNameVec
+    GetCompleteCSNameVec
+    GetAvailableCSNameVec
+    SetVSPAEROControlGroupName
+    GetVSPAEROControlGroupName
+    AddSelectedToCSGroup
+    RemoveSelectedFromCSGroup
+    GetNumControlSurfaceGroups
+    FindControlSurfaceGroup
+
+
+Details
+-------
+
+.. autofunction:: AutoGroupVSPAEROControlSurfaces
+
+.. autofunction:: AddCpSlice
+
+.. autofunction:: GetNumCpSlices
+
+.. autofunction:: GetCpSliceID
+
+.. autofunction:: DelCpSlice
+
+.. autofunction:: DeleteAllCpSlices
+
+.. autofunction:: DeleteVSPAEROControlSurfaceGroup
+
+.. autofunction:: CreateVSPAEROControlSurfaceGroup
+
+.. autofunction:: AddAllToVSPAEROControlSurfaceGroup
+
+.. autofunction:: RemoveAllFromVSPAEROControlSurfaceGroup
+
+.. autofunction:: GetActiveCSNameVec
+
+.. autofunction:: GetCompleteCSNameVec
+
+.. autofunction:: GetAvailableCSNameVec
+
+.. autofunction:: SetVSPAEROControlGroupName
+
+.. autofunction:: GetVSPAEROControlGroupName
+
+.. autofunction:: AddSelectedToCSGroup
+
+.. autofunction:: RemoveSelectedFromCSGroup
+
+.. autofunction:: GetNumControlSurfaceGroups
+
+.. autofunction:: FindControlSurfaceGroup
+

@@ -637,8 +637,8 @@ GeomScreen::GeomScreen( ScreenMgr* mgr, int w, int h, const string & title, cons
     // init AttachLayout and AttachLayoutSub; hierarchy permits leaving none buttons active on orphaned attach geoms
     int labelw = 74;
     int buttonw = ( m_XFormLayout.GetW() - labelw ) / 6;
-    m_XFormLayout.AddSubGroupLayout( m_AttachLayout, m_XFormLayout.GetW(), 11 * m_AttachLayout.GetStdHeight() + 5 * m_AttachLayout.GetGapHeight() );
-    m_AttachLayout.AddSubGroupLayout( m_AttachLayoutSelections, m_AttachLayout.GetW(), 11 * m_AttachLayout.GetStdHeight() + 5 * m_AttachLayout.GetGapHeight() );
+    m_XFormLayout.AddSubGroupLayout( m_AttachLayout, m_XFormLayout.GetW(), 12 * m_AttachLayout.GetStdHeight() + 5 * m_AttachLayout.GetGapHeight() );
+    m_AttachLayout.AddSubGroupLayout( m_AttachLayoutSelections, m_AttachLayout.GetW(), 12 * m_AttachLayout.GetStdHeight() + 5 * m_AttachLayout.GetGapHeight() );
     m_AttachLayout.AddSubGroupLayout( m_AttachLayoutTransHeader, buttonw + labelw, m_AttachLayout.GetStdHeight() );
     m_AttachLayout.ForceNewLine();
     m_AttachLayout.AddYGap();
@@ -2149,7 +2149,7 @@ bool GeomScreen::Update()
                 Fl_Group* sstab = GetTab( m_SubSurfTab_ind );
                 if ( xsscreen && sstab && tabs && tabs->value() == sstab)
                 {
-                    xsscreen->SetXSecCurve( xsc );
+                    xsscreen->SetXSecCurve( xsc->GetID() );
                 }
 
                 empty_coll_ids.push_back( xsc->GetAttrCollection()->GetID() );
@@ -2511,7 +2511,7 @@ bool GeomScreen::Update()
 
                     if ( ceditcreen )
                     {
-                        ceditcreen->SetXSecCurve( xsc );
+                        ceditcreen->SetXSecCurve( xsc->GetID() );
                     }
 
                     m_SSXSCEditCEDITGroup.Show();
@@ -2800,6 +2800,7 @@ void GeomScreen::GuiDeviceCallBack( GuiDevice* device )
     else if ( device == &m_NameInput )
     {
         geom_ptr->SetName( m_NameInput.GetString() );
+        geom_ptr->Update();
     }
     else if ( device == &m_AddSubSurfButton )
     {
@@ -2876,7 +2877,7 @@ void GeomScreen::GuiDeviceCallBack( GuiDevice* device )
 
                 if ( ceditcreen && edit_xsec )
                 {
-                    ceditcreen->SetXSecCurve( edit_xsec );
+                    ceditcreen->SetXSecCurve( edit_xsec->GetID() );
                 }
 
                 m_ScreenMgr->ShowScreen( vsp::VSP_CURVE_EDIT_SCREEN );
@@ -2887,7 +2888,7 @@ void GeomScreen::GuiDeviceCallBack( GuiDevice* device )
 
                 if ( ceditcreen )
                 {
-                    ceditcreen->SetXSecCurve( nullptr );
+                    ceditcreen->SetXSecCurve( string() );
                 }
             }
         }
@@ -2925,7 +2926,7 @@ void GeomScreen::GuiDeviceCallBack( GuiDevice* device )
 
                 if ( ceditcreen )
                 {
-                    ceditcreen->SetXSecCurve( edit_xsec );
+                    ceditcreen->SetXSecCurve( edit_xsec->GetID() );
                 }
 
                 m_ScreenMgr->ShowScreen( vsp::VSP_CURVE_EDIT_SCREEN );
@@ -3132,7 +3133,7 @@ void GeomScreen::GuiDeviceCallBack( GuiDevice* device )
 
                 if ( ceditcreen && edit_xsec )
                 {
-                    ceditcreen->SetXSecCurve( edit_xsec );
+                    ceditcreen->SetXSecCurve( edit_xsec->GetID() );
                 }
 
                 m_ScreenMgr->ShowScreen( vsp::VSP_CURVE_EDIT_SCREEN );
@@ -4188,7 +4189,7 @@ bool XSecScreen::Update()
 
             if ( xsscreen )
             {
-                xsscreen->SetXSecCurve( xsc );
+                xsscreen->SetXSecCurve( xsc->GetID() );
             }
 
             m_XSecCurveNameInput.Update( xsc->GetGroupAlias() );
@@ -4632,7 +4633,7 @@ bool XSecScreen::Update()
 
                 if ( ceditcreen )
                 {
-                    ceditcreen->SetXSecCurve( xsc );
+                    ceditcreen->SetXSecCurve( xsc->GetID() );
                 }
 
                 m_EditCEDITButtonGroup.Show();
@@ -4783,7 +4784,7 @@ void XSecScreen::GuiDeviceCallBack( GuiDevice* gui_device )
 
                     if ( ceditcreen && edit_xsec )
                     {
-                        ceditcreen->SetXSecCurve( edit_xsec );
+                        ceditcreen->SetXSecCurve( edit_xsec->GetID() );
                     }
                 }
             }
@@ -4796,7 +4797,7 @@ void XSecScreen::GuiDeviceCallBack( GuiDevice* gui_device )
 
             if ( ceditcreen )
             {
-                ceditcreen->SetXSecCurve( nullptr );
+                ceditcreen->SetXSecCurve( string() );
             }
         }
     }
@@ -4818,7 +4819,7 @@ void XSecScreen::GuiDeviceCallBack( GuiDevice* gui_device )
 
                 if ( ceditcreen )
                 {
-                    ceditcreen->SetXSecCurve( edit_xsec );
+                    ceditcreen->SetXSecCurve( edit_xsec->GetID() );
                 }
 
                 m_ScreenMgr->ShowScreen( vsp::VSP_CURVE_EDIT_SCREEN );
@@ -6629,7 +6630,13 @@ XSecViewScreen::XSecViewScreen( ScreenMgr* mgr ) : BasicScreen( mgr, 310, 600, "
     m_Image.GetFlButton()->value( 0 );
     m_PreserveAspect.GetFlButton()->value( 1 );
 
-    m_XSecCurve = nullptr;
+    m_XSecCurveID = string();
+}
+
+//==== Get the Active XSec Curve ====//
+XSecCurve* XSecViewScreen::GetXSecCurve()
+{
+    return dynamic_cast< XSecCurve* >( ParmMgr.FindParmContainer( m_XSecCurveID ) );
 }
 
 bool XSecViewScreen::Update()
@@ -6640,7 +6647,7 @@ bool XSecViewScreen::Update()
 
     BasicScreen::Update();
 
-    XSecCurve* xsc = m_XSecCurve;
+    XSecCurve* xsc = GetXSecCurve();
 
     if( !xsc )
     {
@@ -6732,7 +6739,7 @@ void XSecViewScreen::GuiDeviceCallBack( GuiDevice* device )
     assert( m_ScreenMgr );
     Vehicle* veh = m_ScreenMgr->GetVehiclePtr();
 
-    XSecCurve* xsc = m_XSecCurve;
+    XSecCurve* xsc = GetXSecCurve();
 
     if( !xsc )
     {
@@ -6800,7 +6807,7 @@ void XSecViewScreen::GuiDeviceCallBack( GuiDevice* device )
 
 void XSecViewScreen::UpdateDrawObj()
 {
-    XSecCurve* xsc = m_XSecCurve;
+    XSecCurve* xsc = GetXSecCurve();
     Vehicle* veh = m_ScreenMgr->GetVehiclePtr();
 
     if( xsc && veh )

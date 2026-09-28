@@ -1,0 +1,51 @@
+Matrix4d Functions
+==================
+
+API functions that utilize the Matrix4d class are grouped here. For details of the class, including member functions, see Matrix4d.
+
+.. currentmodule:: openvsp
+
+Matrix4d
+--------
+
+.. autosummary::
+
+    Matrix4d.loadIdentity
+    Matrix4d.translatef
+    Matrix4d.translatev
+    Matrix4d.rotateX
+    Matrix4d.rotateY
+    Matrix4d.rotateZ
+    Matrix4d.rotate
+    Matrix4d.rotatealongX
+    Matrix4d.zeroTranslations
+    Matrix4d.affineInverse
+    Matrix4d.scale
+    Matrix4d.scalex
+    Matrix4d.scaley
+    Matrix4d.scalez
+    Matrix4d.flipx
+    Matrix4d.loadXZRef
+    Matrix4d.loadXYRef
+    Matrix4d.loadYZRef
+    Matrix4d.mirrory
+    Matrix4d.xform
+    Matrix4d.xformvec
+    Matrix4d.xformmat
+    Matrix4d.xformnorm
+    Matrix4d.xformnormvec
+    Matrix4d.xformnormmat
+    Matrix4d.getAngles
+    Matrix4d.getArcballAngles
+    Matrix4d.getTranslation
+    Matrix4d.buildXForm
+    Matrix4d.getBasis
+    Matrix4d.setBasis
+    Matrix4d.getRotationAxis
+    Matrix4d.toQuat
+
+.. autoclass:: Matrix4d
+    :members:
+    :undoc-members:
+    :special-members: __rmul__, __neg__, __setitem__, __len__, __repr__
+

@@ -1,0 +1,173 @@
+Attributes Manager Functions
+============================
+
+This group is for functions included in the Attributes Manager. The Attributes Manager stores Attributes and provides methods to add, delete, get and set them.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    SummarizeAttributes
+    SummarizeAttributesAsTree
+    FindAllAttributes
+    FindAttributesByName
+    FindAttributeByName
+    FindAttributeInCollection
+    FindAttributeNamesInCollection
+    FindAttributesInCollection
+    FindAttributedObjects
+    GetObjectType
+    GetObjectTypeName
+    GetObjectName
+    GetObjectParent
+    GetChildCollection
+    GetGeomSetCollection
+    GetAttributeName
+    GetAttributeID
+    GetAttributeDoc
+    GetAttributeType
+    GetAttributeTypeName
+    GetAttributeBoolVal
+    GetAttributeIntVal
+    GetAttributeDoubleVal
+    GetAttributeStringVal
+    GetAttributeParmID
+    GetAttributeParmVal
+    GetAttributeParmName
+    GetAttributeVec3dVal
+    GetAttributeIntMatrixVal
+    GetAttributeDoubleMatrixVal
+    SetAttributeName
+    SetAttributeDoc
+    SetAttributeBool
+    SetAttributeInt
+    SetAttributeDouble
+    SetAttributeString
+    SetAttributeParmID
+    SetAttributeVec3d
+    SetAttributeIntMatrix
+    SetAttributeDoubleMatrix
+    DeleteAttribute
+    AddAttributeBool
+    AddAttributeInt
+    AddAttributeDouble
+    AddAttributeString
+    AddAttributeParm
+    AddAttributeVec3d
+    AddAttributeIntMatrix
+    AddAttributeDoubleMatrix
+    AddAttributeGroup
+    CopyAttribute
+    CutAttribute
+    PasteAttribute
+
+
+Details
+-------
+
+.. autofunction:: SummarizeAttributes
+
+.. autofunction:: SummarizeAttributesAsTree
+
+.. autofunction:: FindAllAttributes
+
+.. autofunction:: FindAttributesByName
+
+.. autofunction:: FindAttributeByName
+
+.. autofunction:: FindAttributeInCollection
+
+.. autofunction:: FindAttributeNamesInCollection
+
+.. autofunction:: FindAttributesInCollection
+
+.. autofunction:: FindAttributedObjects
+
+.. autofunction:: GetObjectType
+
+.. autofunction:: GetObjectTypeName
+
+.. autofunction:: GetObjectName
+
+.. autofunction:: GetObjectParent
+
+.. autofunction:: GetChildCollection
+
+.. autofunction:: GetGeomSetCollection
+
+.. autofunction:: GetAttributeName
+
+.. autofunction:: GetAttributeID
+
+.. autofunction:: GetAttributeDoc
+
+.. autofunction:: GetAttributeType
+
+.. autofunction:: GetAttributeTypeName
+
+.. autofunction:: GetAttributeBoolVal
+
+.. autofunction:: GetAttributeIntVal
+
+.. autofunction:: GetAttributeDoubleVal
+
+.. autofunction:: GetAttributeStringVal
+
+.. autofunction:: GetAttributeParmID
+
+.. autofunction:: GetAttributeParmVal
+
+.. autofunction:: GetAttributeParmName
+
+.. autofunction:: GetAttributeVec3dVal
+
+.. autofunction:: GetAttributeIntMatrixVal
+
+.. autofunction:: GetAttributeDoubleMatrixVal
+
+.. autofunction:: SetAttributeName
+
+.. autofunction:: SetAttributeDoc
+
+.. autofunction:: SetAttributeBool
+
+.. autofunction:: SetAttributeInt
+
+.. autofunction:: SetAttributeDouble
+
+.. autofunction:: SetAttributeString
+
+.. autofunction:: SetAttributeParmID
+
+.. autofunction:: SetAttributeVec3d
+
+.. autofunction:: SetAttributeIntMatrix
+
+.. autofunction:: SetAttributeDoubleMatrix
+
+.. autofunction:: DeleteAttribute
+
+.. autofunction:: AddAttributeBool
+
+.. autofunction:: AddAttributeInt
+
+.. autofunction:: AddAttributeDouble
+
+.. autofunction:: AddAttributeString
+
+.. autofunction:: AddAttributeParm
+
+.. autofunction:: AddAttributeVec3d
+
+.. autofunction:: AddAttributeIntMatrix
+
+.. autofunction:: AddAttributeDoubleMatrix
+
+.. autofunction:: AddAttributeGroup
+
+.. autofunction:: CopyAttribute
+
+.. autofunction:: CutAttribute
+
+.. autofunction:: PasteAttribute
+

@@ -1,0 +1,29 @@
+GearGeom Functions
+==================
+
+This group of functions is available for interacting with the Bogie list of a GearGeom through the API.
+
+.. currentmodule:: openvsp
+
+.. autosummary::
+
+    CreateAndAddBogie
+    GetNumBogies
+    GetAllBogies
+    DelBogie
+    DelAllBogies
+
+
+Details
+-------
+
+.. autofunction:: CreateAndAddBogie
+
+.. autofunction:: GetNumBogies
+
+.. autofunction:: GetAllBogies
+
+.. autofunction:: DelBogie
+
+.. autofunction:: DelAllBogies
+

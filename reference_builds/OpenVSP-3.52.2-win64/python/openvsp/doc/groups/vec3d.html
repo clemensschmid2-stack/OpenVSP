@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vec3D Functions &#8212; OpenVSP Python API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Vehicle Functions" href="Vehicle.html" />
+    <link rel="prev" title="Vec2D Functions" href="vec2d.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Vehicle.html" title="Vehicle Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="vec2d.html" title="Vec2D Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" accesskey="U">API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Vec3D Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="vec3d-functions">
+<h1>Vec3D Functions<a class="headerlink" href="#vec3d-functions" title="Link to this heading">¶</a></h1>
+<p>API functions that utilize the vec3d class are grouped here. For details of the class, including member functions, see vec3d.</p>
+<section id="vec3d">
+<h2>vec3d<a class="headerlink" href="#vec3d" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.set_xyz" title="openvsp.vec3d.set_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_xyz</span></code></a>(vec3d self, double xx, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.set_vec" title="openvsp.vec3d.set_vec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_vec</span></code></a>(vec3d self, DoubleVector a)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.set_x" title="openvsp.vec3d.set_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_x</span></code></a>(vec3d self, double xx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.set_y" title="openvsp.vec3d.set_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_y</span></code></a>(vec3d self, double yy)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.set_z" title="openvsp.vec3d.set_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_z</span></code></a>(vec3d self, double zz)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.set_refx" title="openvsp.vec3d.set_refx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_refx</span></code></a>(vec3d self, vec3d a)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.set_refy" title="openvsp.vec3d.set_refy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_refy</span></code></a>(vec3d self, vec3d a)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.set_refz" title="openvsp.vec3d.set_refz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.set_refz</span></code></a>(vec3d self, vec3d a)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.x" title="openvsp.vec3d.x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.x</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.y" title="openvsp.vec3d.y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.y</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.z" title="openvsp.vec3d.z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.z</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.rotate_x" title="openvsp.vec3d.rotate_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.rotate_x</span></code></a>(vec3d self, double theta)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.rotate_y" title="openvsp.vec3d.rotate_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.rotate_y</span></code></a>(vec3d self, double theta)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.rotate_z" title="openvsp.vec3d.rotate_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.rotate_z</span></code></a>(vec3d self, double theta)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.scale_x" title="openvsp.vec3d.scale_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.scale_x</span></code></a>(vec3d self, double scale)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.scale_y" title="openvsp.vec3d.scale_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.scale_y</span></code></a>(vec3d self, double scale)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.scale_z" title="openvsp.vec3d.scale_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.scale_z</span></code></a>(vec3d self, double scale)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.offset_x" title="openvsp.vec3d.offset_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.offset_x</span></code></a>(vec3d self, double offset)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.offset_y" title="openvsp.vec3d.offset_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.offset_y</span></code></a>(vec3d self, double offset)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.offset_z" title="openvsp.vec3d.offset_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.offset_z</span></code></a>(vec3d self, double offset)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.offset_i" title="openvsp.vec3d.offset_i"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.offset_i</span></code></a>(vec3d self, double offset, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.reflect_xy" title="openvsp.vec3d.reflect_xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.reflect_xy</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.reflect_xz" title="openvsp.vec3d.reflect_xz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.reflect_xz</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.reflect_yz" title="openvsp.vec3d.reflect_yz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.reflect_yz</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.mag" title="openvsp.vec3d.mag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.mag</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.magsq" title="openvsp.vec3d.magsq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.magsq</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.normalize" title="openvsp.vec3d.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.normalize</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.major_comp" title="openvsp.vec3d.major_comp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.major_comp</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.minor_comp" title="openvsp.vec3d.minor_comp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.minor_comp</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.isnan" title="openvsp.vec3d.isnan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.isnan</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.vec3d.isinf" title="openvsp.vec3d.isinf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.isinf</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.vec3d.isfinite" title="openvsp.vec3d.isfinite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vec3d.isfinite</span></code></a>(vec3d self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="openvsp.vec3d">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">vec3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d" title="Link to this definition">¶</a></dt>
+<dd><p>Proxy of C++ vec3d class.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.vec3d.thisown">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openvsp.vec3d.thisown" title="Link to this definition">¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="openvsp.vec3d.v">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">v</span></span><a class="headerlink" href="#openvsp.vec3d.v" title="Link to this definition">¶</a></dt>
+<dd><p>v : a(3).double</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.as_vec2d_xy">
+<span class="sig-name descname"><span class="pre">as_vec2d_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="vec2d.html#openvsp.vec2d" title="openvsp.vec2d"><span class="pre">vec2d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.as_vec2d_xy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.as_vec2d_xy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_xyz">
+<span class="sig-name descname"><span class="pre">set_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">zz</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_xyz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_vec">
+<span class="sig-name descname"><span class="pre">set_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DoubleVector</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_vec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_vec" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_arr">
+<span class="sig-name descname"><span class="pre">set_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">const</span> <span class="pre">[]</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_arr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_arr" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">set_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span> <span class="pre">const</span> <span class="pre">[]</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_x">
+<span class="sig-name descname"><span class="pre">set_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">xx</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_y">
+<span class="sig-name descname"><span class="pre">set_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">yy</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_z">
+<span class="sig-name descname"><span class="pre">set_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">zz</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_refx">
+<span class="sig-name descname"><span class="pre">set_refx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_refx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_refx" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_refy">
+<span class="sig-name descname"><span class="pre">set_refy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_refy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_refy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.set_refz">
+<span class="sig-name descname"><span class="pre">set_refz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.set_refz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.set_refz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.get_pnt">
+<span class="sig-name descname"><span class="pre">get_pnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">[3]</span> <span class="pre">pnt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.get_pnt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.get_pnt" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_pnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float</span> <span class="pre">[3]</span> <span class="pre">pnt</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_pnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threed_point_type</span> <span class="pre">&amp;</span> <span class="pre">pnt</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.x">
+<span class="sig-name descname"><span class="pre">x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.y">
+<span class="sig-name descname"><span class="pre">y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span> <span class="pre">*</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.Transform">
+<span class="sig-name descname"><span class="pre">Transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Matrix4d</span> <span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.Transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.Transform" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.FlipNormal">
+<span class="sig-name descname"><span class="pre">FlipNormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.FlipNormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.FlipNormal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.rotate_x">
+<span class="sig-name descname"><span class="pre">rotate_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.rotate_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.rotate_x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.rotate_y">
+<span class="sig-name descname"><span class="pre">rotate_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.rotate_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.rotate_y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.rotate_z">
+<span class="sig-name descname"><span class="pre">rotate_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.rotate_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.rotate_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.scale_x">
+<span class="sig-name descname"><span class="pre">scale_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.scale_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.scale_x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.scale_y">
+<span class="sig-name descname"><span class="pre">scale_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.scale_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.scale_y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.scale_z">
+<span class="sig-name descname"><span class="pre">scale_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.scale_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.scale_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.offset_x">
+<span class="sig-name descname"><span class="pre">offset_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.offset_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.offset_x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.offset_y">
+<span class="sig-name descname"><span class="pre">offset_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.offset_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.offset_y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.offset_z">
+<span class="sig-name descname"><span class="pre">offset_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.offset_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.offset_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.offset_i">
+<span class="sig-name descname"><span class="pre">offset_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.offset_i"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.offset_i" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.reflect_xy">
+<span class="sig-name descname"><span class="pre">reflect_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.reflect_xy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.reflect_xy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.reflect_xz">
+<span class="sig-name descname"><span class="pre">reflect_xz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.reflect_xz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.reflect_xz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.reflect_yz">
+<span class="sig-name descname"><span class="pre">reflect_yz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.reflect_yz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.reflect_yz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.swap_xy">
+<span class="sig-name descname"><span class="pre">swap_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.swap_xy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.swap_xy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.swap_xz">
+<span class="sig-name descname"><span class="pre">swap_xz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.swap_xz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.swap_xz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.swap_yz">
+<span class="sig-name descname"><span class="pre">swap_yz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.swap_yz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.swap_yz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.mag">
+<span class="sig-name descname"><span class="pre">mag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.mag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.mag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.magsq">
+<span class="sig-name descname"><span class="pre">magsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.magsq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.magsq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.normalize" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.major_comp">
+<span class="sig-name descname"><span class="pre">major_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.major_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.major_comp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.minor_comp">
+<span class="sig-name descname"><span class="pre">minor_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.minor_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.minor_comp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.isnan">
+<span class="sig-name descname"><span class="pre">isnan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.isnan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.isnan" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.isinf">
+<span class="sig-name descname"><span class="pre">isinf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.isinf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.isinf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.isfinite">
+<span class="sig-name descname"><span class="pre">isfinite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.isfinite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.isfinite" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.as_numpy">
+<span class="sig-name descname"><span class="pre">as_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.as_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.as_numpy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">b</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__rmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__rmul__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__neg__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__neg__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__setitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__repr__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<section id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__add__">
+<span class="sig-prename descclassname"><span class="pre">vec3d.</span></span><span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__add__" title="Link to this definition">¶</a></dt>
+<dd><p>Addition operator for two vec3d objects, performed by the addition of each corresponding component</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>                                <span class="c1"># Default Constructor</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span> <span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span> <span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="s2">"a + b = "</span><span class="p">,</span> <span class="kc">False</span> <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="n">c</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__sub__">
+<span class="sig-prename descclassname"><span class="pre">vec3d.</span></span><span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__sub__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__sub__" title="Link to this definition">¶</a></dt>
+<dd><p>Subtraction operator for two vec3d objects, performed by the subtraction of each corresponding component</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>                                <span class="c1"># Default Constructor</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span> <span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span> <span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="s2">"a - b = "</span><span class="p">,</span> <span class="kc">False</span> <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="n">c</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__mul__">
+<span class="sig-prename descclassname"><span class="pre">vec3d.</span></span><span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__mul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__mul__" title="Link to this definition">¶</a></dt>
+<dd><p>Scalar multiplication operator for a vec3d, performed by the multiplication of each vec3d component and the scalar</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>                                <span class="c1"># Default Constructor</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span> <span class="p">)</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="mf">1.5</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="s2">"a * b = "</span><span class="p">,</span> <span class="kc">False</span> <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="n">c</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__truediv__">
+<span class="sig-prename descclassname"><span class="pre">vec3d.</span></span><span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__truediv__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__truediv__" title="Link to this definition">¶</a></dt>
+<dd><p>Scalar division operator for a vec3d, performed by the division of of each vec3d component by the scalar</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">vec3d</span><span class="p">()</span>                                <span class="c1"># Default Constructor</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">set_xyz</span><span class="p">(</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span> <span class="p">)</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="mf">1.5</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="s2">"a / b = "</span><span class="p">,</span> <span class="kc">False</span> <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span> <span class="n">c</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="openvsp.vec3d.__getitem__">
+<span class="sig-prename descclassname"><span class="pre">vec3d.</span></span><span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#vec3d.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.vec3d.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="vec2d.html#openvsp.dist" title="openvsp.dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist</span></code></a>(-&gt; double)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="vec2d.html#openvsp.dist_squared" title="openvsp.dist_squared"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_squared</span></code></a>(-&gt; double)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="vec2d.html#openvsp.dot" title="openvsp.dot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></a>(-&gt; double)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="vec2d.html#openvsp.cross" title="openvsp.cross"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cross</span></code></a>(-&gt; vec3d)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="vec2d.html#openvsp.angle" title="openvsp.angle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angle</span></code></a>(-&gt; double)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.signed_angle" title="openvsp.signed_angle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signed_angle</span></code></a>(vec3d a, vec3d b, vec3d ref)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="vec2d.html#openvsp.cos_angle" title="openvsp.cos_angle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cos_angle</span></code></a>(-&gt; double)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.RotateArbAxis" title="openvsp.RotateArbAxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RotateArbAxis</span></code></a>(vec3d p, double theta, vec3d r)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.to_string" title="openvsp.to_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_string</span></code></a>(vec3d v)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openvsp.FitPlane" title="openvsp.FitPlane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitPlane</span></code></a>(Vec3dVec pts, vec3d cen, vec3d norm)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openvsp.compsum" title="openvsp.compsum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compsum</span></code></a>(Vec3dVec x)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="details">
+<h2>Details<a class="headerlink" href="#details" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.signed_angle">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">signed_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">ref</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">double</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#signed_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.signed_angle" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.RotateArbAxis">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">RotateArbAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">r</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#RotateArbAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.RotateArbAxis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.to_string">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">v</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">std::string</span></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.to_string" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.FitPlane">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">FitPlane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">cen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec3d</span> <span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openvsp/vsp.html#FitPlane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.FitPlane" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="openvsp.compsum">
+<span class="sig-prename descclassname"><span class="pre">openvsp.</span></span><span class="sig-name descname"><span class="pre">compsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Vec3dVec</span> <span class="pre">x</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#openvsp.vec3d" title="openvsp.vec3d"><span class="pre">vec3d</span></a></span></span><a class="reference internal" href="../_modules/openvsp/vsp.html#compsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openvsp.compsum" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Vec3D Functions</a><ul>
+<li><a class="reference internal" href="#vec3d">vec3d</a><ul>
+<li><a class="reference internal" href="#openvsp.vec3d"><code class="docutils literal notranslate"><span class="pre">vec3d</span></code></a><ul>
+<li><a class="reference internal" href="#openvsp.vec3d.thisown"><code class="docutils literal notranslate"><span class="pre">vec3d.thisown</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.v"><code class="docutils literal notranslate"><span class="pre">vec3d.v</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.as_vec2d_xy"><code class="docutils literal notranslate"><span class="pre">vec3d.as_vec2d_xy()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_xyz"><code class="docutils literal notranslate"><span class="pre">vec3d.set_xyz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_vec"><code class="docutils literal notranslate"><span class="pre">vec3d.set_vec()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_arr"><code class="docutils literal notranslate"><span class="pre">vec3d.set_arr()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_x"><code class="docutils literal notranslate"><span class="pre">vec3d.set_x()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_y"><code class="docutils literal notranslate"><span class="pre">vec3d.set_y()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_z"><code class="docutils literal notranslate"><span class="pre">vec3d.set_z()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_refx"><code class="docutils literal notranslate"><span class="pre">vec3d.set_refx()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_refy"><code class="docutils literal notranslate"><span class="pre">vec3d.set_refy()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.set_refz"><code class="docutils literal notranslate"><span class="pre">vec3d.set_refz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.get_pnt"><code class="docutils literal notranslate"><span class="pre">vec3d.get_pnt()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.x"><code class="docutils literal notranslate"><span class="pre">vec3d.x()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.y"><code class="docutils literal notranslate"><span class="pre">vec3d.y()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.z"><code class="docutils literal notranslate"><span class="pre">vec3d.z()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.data"><code class="docutils literal notranslate"><span class="pre">vec3d.data()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.Transform"><code class="docutils literal notranslate"><span class="pre">vec3d.Transform()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.FlipNormal"><code class="docutils literal notranslate"><span class="pre">vec3d.FlipNormal()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.rotate_x"><code class="docutils literal notranslate"><span class="pre">vec3d.rotate_x()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.rotate_y"><code class="docutils literal notranslate"><span class="pre">vec3d.rotate_y()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.rotate_z"><code class="docutils literal notranslate"><span class="pre">vec3d.rotate_z()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.scale_x"><code class="docutils literal notranslate"><span class="pre">vec3d.scale_x()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.scale_y"><code class="docutils literal notranslate"><span class="pre">vec3d.scale_y()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.scale_z"><code class="docutils literal notranslate"><span class="pre">vec3d.scale_z()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.offset_x"><code class="docutils literal notranslate"><span class="pre">vec3d.offset_x()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.offset_y"><code class="docutils literal notranslate"><span class="pre">vec3d.offset_y()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.offset_z"><code class="docutils literal notranslate"><span class="pre">vec3d.offset_z()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.offset_i"><code class="docutils literal notranslate"><span class="pre">vec3d.offset_i()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.reflect_xy"><code class="docutils literal notranslate"><span class="pre">vec3d.reflect_xy()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.reflect_xz"><code class="docutils literal notranslate"><span class="pre">vec3d.reflect_xz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.reflect_yz"><code class="docutils literal notranslate"><span class="pre">vec3d.reflect_yz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.swap_xy"><code class="docutils literal notranslate"><span class="pre">vec3d.swap_xy()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.swap_xz"><code class="docutils literal notranslate"><span class="pre">vec3d.swap_xz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.swap_yz"><code class="docutils literal notranslate"><span class="pre">vec3d.swap_yz()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.mag"><code class="docutils literal notranslate"><span class="pre">vec3d.mag()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.magsq"><code class="docutils literal notranslate"><span class="pre">vec3d.magsq()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.normalize"><code class="docutils literal notranslate"><span class="pre">vec3d.normalize()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.major_comp"><code class="docutils literal notranslate"><span class="pre">vec3d.major_comp()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.minor_comp"><code class="docutils literal notranslate"><span class="pre">vec3d.minor_comp()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.isnan"><code class="docutils literal notranslate"><span class="pre">vec3d.isnan()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.isinf"><code class="docutils literal notranslate"><span class="pre">vec3d.isinf()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.isfinite"><code class="docutils literal notranslate"><span class="pre">vec3d.isfinite()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.as_numpy"><code class="docutils literal notranslate"><span class="pre">vec3d.as_numpy()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__rmul__"><code class="docutils literal notranslate"><span class="pre">vec3d.__rmul__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__neg__"><code class="docutils literal notranslate"><span class="pre">vec3d.__neg__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__len__"><code class="docutils literal notranslate"><span class="pre">vec3d.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__setitem__"><code class="docutils literal notranslate"><span class="pre">vec3d.__setitem__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__repr__"><code class="docutils literal notranslate"><span class="pre">vec3d.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#openvsp.vec3d.__add__"><code class="docutils literal notranslate"><span class="pre">vec3d.__add__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__sub__"><code class="docutils literal notranslate"><span class="pre">vec3d.__sub__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__mul__"><code class="docutils literal notranslate"><span class="pre">vec3d.__mul__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__truediv__"><code class="docutils literal notranslate"><span class="pre">vec3d.__truediv__()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.vec3d.__getitem__"><code class="docutils literal notranslate"><span class="pre">vec3d.__getitem__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#details">Details</a><ul>
+<li><a class="reference internal" href="#openvsp.signed_angle"><code class="docutils literal notranslate"><span class="pre">signed_angle()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.RotateArbAxis"><code class="docutils literal notranslate"><span class="pre">RotateArbAxis()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.to_string"><code class="docutils literal notranslate"><span class="pre">to_string()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.FitPlane"><code class="docutils literal notranslate"><span class="pre">FitPlane()</span></code></a></li>
+<li><a class="reference internal" href="#openvsp.compsum"><code class="docutils literal notranslate"><span class="pre">compsum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="vec2d.html"
+                          title="previous chapter">Vec2D Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Vehicle.html"
+                          title="next chapter">Vehicle Functions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/groups/vec3d.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Vehicle.html" title="Vehicle Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="vec2d.html" title="Vec2D Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OpenVSP Python API  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api_groups.html" >API Functions by Group</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Vec3D Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright NASA Open Source Agreement (NOSA) version 1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>
