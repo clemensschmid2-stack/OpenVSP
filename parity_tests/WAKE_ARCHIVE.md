@@ -19,7 +19,9 @@ previous snapshots, not sweep size.
 Geometry starts with vertex, triangle and control-polyline uint64 counts. It
 contains float64 xyz vertices, uint64 zero-based triangle indices, then a uint64
 count and float64 xyz points per deflected control outline. SurfaceID-zero wake
-panels are excluded. Polygons are triangulated as fans. Wake payloads contain a
+panels are excluded. Polygons are triangulated as fans. Control outlines use
+boundary edges of tagged panels, since current VSPGEOM control surfaces need not
+provide polygon nodes. Wake payloads contain a
 uint64 trailing-line count, then each line's uint64 node count and float64 xyz
 points. As in native ADB output, concave trailing regions emit one point.
 

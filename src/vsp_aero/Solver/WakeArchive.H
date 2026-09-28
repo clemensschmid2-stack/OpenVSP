@@ -4,6 +4,7 @@
 #define VDS_WAKE_ARCHIVE_H
 #include <vector>
 #include <string>
+#include <map>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,8 +46,32 @@ public:
             for (int j=1;j<=loop.NumberOfNodes();++j) nodeMap[loop.Node(j)]=0;
         }
         for (int i=1;i<=grid.NumberOfNodes();++i) if (nodeMap[i]==0) nodeMap[i]=(int)nodes++;
-        integer(geometry,nodes); integer(geometry,triangles);
-        integer(geometry,geom.NumberOfControlSurfaces());
+        // Recent VSPGEOM versions supply tagged loops but no polygon nodes.
+        // Extract each boundary edge without changing the solver's mesh.
+        std::vector<unsigned char> controls;
+        uint64_t controlLines=0;
+        for (int i=1;i<=geom.NumberOfControlSurfaces();++i) {
+            auto& surface=geom.ControlSurface(i);
+            std::map<std::pair<int,int>,int> edges;
+            for (int j=1;j<=surface.NumberOfLoops();++j) {
+                auto& loop=grid.LoopList(surface.LoopList(j));
+                for (int k=1;k<=loop.NumberOfNodes();++k) {
+                    int a=loop.Node(k), b=loop.Node(k%loop.NumberOfNodes()+1);
+                    if (a>b) std::swap(a,b);
+                    edges[std::make_pair(a,b)]++;
+                }
+            }
+            for (const auto& edge: edges) if (edge.second==1) {
+                ++controlLines; integer(controls,2);
+                for (int node: {edge.first.first,edge.first.second}) {
+                    double xyz[3]={double(grid.NodeList(node).x()),
+                                   double(grid.NodeList(node).y()), double(grid.NodeList(node).z())};
+                    surface.RotateXYZPoint(xyz);
+                    for (int k=0;k<3;++k) real(controls,xyz[k]);
+                }
+            }
+        }
+        integer(geometry,nodes); integer(geometry,triangles); integer(geometry,controlLines);
         for (int i=1;i<=grid.NumberOfNodes();++i) if (nodeMap[i]>=0) {
             real(geometry,double(grid.NodeList(i).x()));
             real(geometry,double(grid.NodeList(i).y()));
@@ -61,17 +86,7 @@ public:
                 integer(geometry,nodeMap[loop.Node(j+1)]);
             }
         }
-        // As in the native viewer: retain the solver mesh and overlay the
-        // physically deflected control outlines (VLM uses normal rotation).
-        for (int i=1;i<=geom.NumberOfControlSurfaces();++i) {
-            auto& surface=geom.ControlSurface(i);
-            integer(geometry,surface.NumberOfNodes());
-            for (int j=1;j<=surface.NumberOfNodes();++j) {
-                double xyz[3]={surface.X(j),surface.Y(j),surface.Z(j)};
-                surface.RotateXYZPoint(xyz);
-                for (int k=0;k<3;++k) real(geometry,xyz[k]);
-            }
-        }
+        geometry.insert(geometry.end(),controls.begin(),controls.end());
         uint64_t lines=0;
         for (int k=1;k<=geom.NumberOfVortexSheets();++k)
             lines+=geom.VortexSheet(k).NumberOfTrailingVortices();
