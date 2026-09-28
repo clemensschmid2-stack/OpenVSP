@@ -46,7 +46,7 @@ and rejects OpenVSP silently falling back to a different solver directory.
 Use a short isolated Windows build path such as `C:/repos/vds/build/v3522`:
 
 ```powershell
-python build_openvsp.py --build-dir C:/repos/vds/build/v3522 --jobs 4 --python <Python313/python.exe>
+python build_openvsp.py --build-dir C:/repos/vds/build/v3522 --jobs 4 --python <venv/Scripts/python.exe>
 python parity_tests/run_parity_tests.py --custom C:/repos/vds/build/v3522/install --keep-work
 ```
 
@@ -56,6 +56,11 @@ by the 3.52.2 dependency archives. The CMake 4 migration belongs to upstream
 3.53.0 and is intentionally excluded here. A deeply nested worktree
 build exceeded MSBuild file-tracker path limits; the short path avoids that
 environment failure without changing application-control policy.
+
+The selected Python environment must contain NumPy. The launcher resolves the
+base installation's development files for virtual environments, checks NumPy
+before configuring, and requires both Python extension outputs. Otherwise CMake
+can silently omit the API while successfully building the executables.
 
 Fresh standalone solver compilation and its three CTests pass. Full runtime,
 strict reference and parent package gates are still pending. These results
