@@ -3136,7 +3136,7 @@ static uint64_t StateSweepConfigurationHash(void)
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);
     HASH_VALUE(Xcg_); HASH_VALUE(Ycg_); HASH_VALUE(Zcg_); HASH_VALUE(Vinf_);
     HASH_VALUE(StateSweepChunkSize_);
-    if (StateSweepSaveWakes_) Hash = StateSweepHashBytes(Hash,"wake-archive-v1",15);
+    if (StateSweepSaveWakes_) Hash = StateSweepHashBytes(Hash,"wake-archive-v2",15);
     // Within this physics version, omitted optional modes add no hash fields.
     if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
     if ( StateSweepContinuation_ ) {

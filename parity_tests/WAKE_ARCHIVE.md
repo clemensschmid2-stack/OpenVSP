@@ -8,10 +8,10 @@ included in checkpoint identity only when enabled. It does not enable the full
 ADB stream or change solve/continuation/force calculations. Capture happens after
 fallback/re-solves, after result validation, and before CSV/checkpoint publication.
 
-`WakeArchive.H` writes little-endian `VDSWAK01` journals. A row has three uint64
-fields (row ID, geometry payload bytes, wake payload bytes), the payloads and an
-`ENDW` footer. Zero lengths reuse the last geometry or wake in the same journal;
-the first record always carries both. Process-start row and CSV chunk identify
+`WakeArchive.H` writes little-endian `VDSWAK02` journals. A row has four uint64
+fields (row ID, geometry bytes, wake bytes, pressure bytes), the payloads and an
+`ENDW` footer. Zero lengths reuse the corresponding previous payload in the same
+journal; the first record always carries all three. Process-start row and CSV chunk identify
 each journal, so resumed processes preserve previous files. Writes/flush failures
 stop before advancing the CSV checkpoint. Memory use is bounded to current and
 previous snapshots, not sweep size.
@@ -24,6 +24,26 @@ boundary edges of tagged panels, since current VSPGEOM control surfaces need not
 provide polygon nodes. Wake payloads contain a
 uint64 trailing-line count, then each line's uint64 node count and float64 xyz
 points. As in native ADB output, concave trailing regions emit one point.
+
+Pressure payloads start with a uint64 triangle count, then a uint64 kind array
+(1 = thick-surface Cp, 2 = thin-surface ΔCp), then float64 values. Both arrays
+follow the displayed triangle order. Each fan triangle copies its source loop's
+`dCp()` and `SurfaceType()`. These are the final grid-0 values used by native ADB,
+with native signs and reference normalization; no new smoothing or solve is
+performed. Nonfinite values or unsupported surface types fail before checkpoint
+publication. Pressure deduplicates independently, so identical geometry does
+not imply identical loads. Added uncompressed payload is 8 + 16*N triangles,
+plus 8 bytes per record header.
+
+The parent reader supports legacy `VDSWAK01` geometry/wake archives without
+pressure. Recording-enabled fingerprints use `wake-archive-v2`, rejecting mixed
+v1/v2 resume; CSV-only fingerprints are unchanged. A new recorded run is required
+to obtain pressure data. Merging does not install the solver.
+
+Parent `scripts/verify_wake_pressure.py` compares thin, thick and mixed archives
+to independent ADB solutions, exactly at ADB float32 precision, and checks
+recording-on/off coefficient equality. The optional `--gui-smoke` exercises real
+Tk pressure controls. The parent release/reference gate remains mandatory.
 
 The parent Vehicle Design Suite archive reader owns result manifests, case/row
 selection and parallel-worker preservation. Its `scripts/verify_wake_archive.py`

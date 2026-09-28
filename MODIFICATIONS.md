@@ -4,6 +4,11 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Extend optional wake journals to v2 with per-triangle Cp (thick) or ΔCp (thin),
+  preserving native pressure signs and independent payload deduplication.
+  Recording-enabled checkpoints reject v1 resumes; CSV-only identity is unchanged.
+  See [format and validation](parity_tests/WAKE_ARCHIVE.md).
+
 - Add optional `-state-save-wakes` final visualization journals without altering
   the solve. See [format and lifecycle](parity_tests/WAKE_ARCHIVE.md).
 
