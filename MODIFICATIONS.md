@@ -4,6 +4,9 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Add optional `-state-save-wakes` final visualization journals without altering
+  the solve. See [format and lifecycle](parity_tests/WAKE_ARCHIVE.md).
+
 - Include both manifest-pinned official Python extensions in Git. The general
   Python-cache ignore pattern had omitted `.pyd` files from fresh checkouts;
   explicit reference-only exceptions preserve all 491 original distribution
