@@ -14,12 +14,12 @@
 class WakeArchive {
     FILE *file_ = NULL;
     uint64_t chunk_ = UINT64_MAX, start_;
-    std::vector<unsigned char> geometry_, wake_;
+    std::vector<unsigned char> geometry_, wake_, pressure_;
     static void integer(std::vector<unsigned char>& out, uint64_t n) {
         for (int i=0; i<8; ++i) out.push_back((unsigned char)(n >> (8*i)));
     }
     static void real(std::vector<unsigned char>& out, double value) {
-        if (!std::isfinite(value)) fail("Non-finite wake archive coordinate");
+        if (!std::isfinite(value)) fail("Non-finite wake archive value");
         uint64_t bits; memcpy(&bits, &value, 8); integer(out,bits);
     }
     static void fail(const char *message) { fprintf(stderr,"%s\n",message); exit(1); }
@@ -34,7 +34,7 @@ public:
                                      uint64_t row, uint64_t chunkSize) {
         auto& geom = solver.VSPGeom();
         auto& grid = geom.Grid();
-        std::vector<unsigned char> geometry, wake;
+        std::vector<unsigned char> geometry, wake, pressure, pressureValues;
         // Grid(0) also contains appended wake panels. Archive only the vehicle
         // surface here; trailing-vortex polylines are stored separately below.
         std::vector<int> nodeMap(grid.NumberOfNodes()+1,-1);
@@ -72,6 +72,7 @@ public:
             }
         }
         integer(geometry,nodes); integer(geometry,triangles); integer(geometry,controlLines);
+        integer(pressure,triangles);
         for (int i=1;i<=grid.NumberOfNodes();++i) if (nodeMap[i]>=0) {
             real(geometry,double(grid.NodeList(i).x()));
             real(geometry,double(grid.NodeList(i).y()));
@@ -84,9 +85,16 @@ public:
                 integer(geometry,nodeMap[loop.Node(1)]);
                 integer(geometry,nodeMap[loop.Node(j)]);
                 integer(geometry,nodeMap[loop.Node(j+1)]);
+                // Match the native ADB input-mesh pressure, with one value per
+                // displayed triangle. Never infer upper/lower Cp from delta Cp.
+                if (loop.SurfaceType()!=THICK_SURFACE && loop.SurfaceType()!=THIN_SURFACE)
+                    fail("Unsupported pressure surface type in wake archive");
+                integer(pressure,loop.SurfaceType()==THICK_SURFACE ? 1 : 2);
+                real(pressureValues,double(loop.dCp()));
             }
         }
         geometry.insert(geometry.end(),controls.begin(),controls.end());
+        pressure.insert(pressure.end(),pressureValues.begin(),pressureValues.end());
         uint64_t lines=0;
         for (int k=1;k<=geom.NumberOfVortexSheets();++k)
             lines+=geom.VortexSheet(k).NumberOfTrailingVortices();
@@ -111,20 +119,23 @@ public:
                      (unsigned long long)start_,(unsigned long long)(row/chunkSize));
             file_=fopen(path,"wb");
             if (!file_) fail("Could not open wake archive");
-            if (fwrite("VDSWAK01",1,8,file_) != 8) fail("Could not write wake archive header");
-            chunk_=row/chunkSize; geometry_.clear(); wake_.clear();
+            if (fwrite("VDSWAK02",1,8,file_) != 8) fail("Could not write wake archive header");
+            chunk_=row/chunkSize; geometry_.clear(); wake_.clear(); pressure_.clear();
         }
         bool newGeometry=geometry!=geometry_, newWake=wake!=wake_;
         std::vector<unsigned char> header;
         integer(header,row);
         integer(header,newGeometry ? geometry.size() : 0);
         integer(header,newWake ? wake.size() : 0);
+        bool newPressure=pressure!=pressure_;
+        integer(header,newPressure ? pressure.size() : 0);
         write(header);
         if (newGeometry) write(geometry);
         if (newWake) write(wake);
+        if (newPressure) write(pressure);
         if (fwrite("ENDW",1,4,file_) != 4 || fflush(file_) != 0)
             fail("Could not flush wake archive");
-        geometry_.swap(geometry); wake_.swap(wake);
+        geometry_.swap(geometry); wake_.swap(wake); pressure_.swap(pressure);
     }
 };
 #endif
