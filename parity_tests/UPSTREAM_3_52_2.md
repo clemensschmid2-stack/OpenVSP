@@ -62,7 +62,16 @@ base installation's development files for virtual environments, checks NumPy
 before configuring, and requires both Python extension outputs. Otherwise CMake
 can silently omit the API while successfully building the executables.
 
-Fresh standalone solver compilation and its three CTests pass. Full runtime,
-strict reference and parent package gates are still pending. These results
-do not claim that the source is published, merged or active in the installed
-application.
+The full GUI/API/optimizer build and ZIP packaging pass. Strict geometry parity
+passes all nine cases without an exception; both base-flow cases pass all 1,991
+values each. Stability parity fails 105 thin and 103 thick comparisons. A separate
+diagnostic source copy disabling only the three rotational-flow refresh additions
+matches all 2,550 stability values in each fixture. This isolates the existing
+fork difference but does not prove either rotational solution physically correct.
+The diagnostic is not the integrated candidate; no numerical rule is weakened.
+
+Parent release Python/native suites and GUI smoke pass. The full release gate
+stops at the failed stability comparison; current hosted checks and merging
+remain blocked. Parent `docs/openvsp-3.52.2-integration.md` records revisions,
+artifact hashes, counts and completion conditions. This is local WIP, unpublished,
+unmerged and not installed.
