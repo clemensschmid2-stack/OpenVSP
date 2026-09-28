@@ -4,6 +4,11 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Include both manifest-pinned official Python extensions in Git. The general
+  Python-cache ignore pattern had omitted `.pyd` files from fresh checkouts;
+  explicit reference-only exceptions preserve all 491 original distribution
+  files. These are immutable reference artifacts, not rebuilt runtime binaries;
+  the existing official archive and file hashes are unchanged.
 - Remove the three added rotational-flow refresh operations with explicit user
   approval; retain upstream refresh behavior and the separate wake-setup fixes.
   Advance the State Sweep physics epoch to reject mixed-physics resumes.

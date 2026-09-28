@@ -42,6 +42,13 @@ commit are recorded in the parent VDS repository. The 3.51.2 distribution and
 old reports remain historical evidence. References are never rebuilt or
 downloaded by a test, and active comparison tolerances remain unchanged.
 
+The reference includes both original `_vsp.pyd` and `_vsp_g.pyd` Python
+extensions. A post-integration packaging correction explicitly tracks them:
+the general `*.py[cod]` ignore pattern had omitted these two files even though
+they were present in the verified local distribution. Fresh checkouts must
+contain all 491 manifest-listed files. The manifest and archive are unchanged;
+both restored artifacts match their previously recorded SHA-256 hashes.
+
 The old shell-inertia exception is inactive against corrected upstream 3.52.2;
 strict geometry comparison and the analytical shell check remain required.
 The harness now supplies support Python packages from the selected distribution

@@ -17,6 +17,8 @@ inst/
 .idea/
 __pycache__/
 *.py[cod]
+!reference_builds/OpenVSP-3.52.2-win64/python/openvsp/openvsp/_vsp.pyd
+!reference_builds/OpenVSP-3.52.2-win64/python/openvsp/openvsp/_vsp_g.pyd
 .pytest_cache/
 *.egg-info
 *.vscode
