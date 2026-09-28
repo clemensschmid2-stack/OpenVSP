@@ -35,6 +35,7 @@
 
 #include "VSP_Solver.H"
 #include "StateSweepCheckpoint.H"
+#include "WakeArchive.H"
 #include "CaseValidity.H"
 #include "ControlSurfaceGroup.H"
 #include "OptimizationParameterData.H"
@@ -341,6 +342,7 @@ int TrimNumberOfIterations_          = 10;
 int StateSweep_                      = 0;
 int StateSweepResume_                = 0;
 int StateSweepProfile_               = 0;
+int StateSweepSaveWakes_             = 0;
 int StateSweepFastOrder_             = 0;
 int StateSweepContinuation_          = 0;
 int SteadyOptimization_              = 0;
@@ -935,6 +937,7 @@ void PrintUsageHelp()
        printf(" -state-range <start> <count>       Solve a bounded global aerodynamic-case range.\n");
        printf(" -state-output-dir <path>           Write State Sweep files to an isolated directory.\n");
        printf(" -state-resume                      Continue from the state-sweep checkpoint.\n");
+       printf(" -state-save-wakes                  Archive final vehicle/wake snapshots for accepted rows.\n");
        printf(" -state-profile                     Write aggregated State Sweep phase timings.\n");
        printf(" -state-fast-order                  Group Mach/control states and reuse invariant setup.\n");
        printf(" -state-continuation                Warm-start circulation/wake and stop after convergence.\n");
@@ -1067,6 +1070,10 @@ void ParseInput(int argc, char *argv[])
 
           StateSweepResume_ = 1;
 
+       }
+
+       else if ( strcmp(argv[i],"-state-save-wakes") == 0 ) {
+          StateSweepSaveWakes_ = 1;
        }
 
        else if ( strcmp(argv[i],"-state-profile") == 0 ) {
@@ -3129,6 +3136,7 @@ static uint64_t StateSweepConfigurationHash(void)
     HASH_VALUE(Sref_); HASH_VALUE(Cref_); HASH_VALUE(Bref_);
     HASH_VALUE(Xcg_); HASH_VALUE(Ycg_); HASH_VALUE(Zcg_); HASH_VALUE(Vinf_);
     HASH_VALUE(StateSweepChunkSize_);
+    if (StateSweepSaveWakes_) Hash = StateSweepHashBytes(Hash,"wake-archive-v1",15);
     // Within this physics version, omitted optional modes add no hash fields.
     if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
     if ( StateSweepContinuation_ ) {
@@ -3818,6 +3826,7 @@ void StateSweepSolve(void)
     // solution stream while preserving the legacy output behavior of other modes.
     VSPAERO().NoADBFile() = 1;
 
+    WakeArchive WakeOutput(NextRow);
     FILE *Csv = NULL;
     uint64_t OpenChunk = UINT64_MAX;
     uint64_t StartAerodynamicCase = NextRow / (uint64_t)NumberOfReCrefs_;
@@ -3983,6 +3992,7 @@ void StateSweepSolve(void)
           // rejected case must not leave an appendable partial CSV row.
           const std::vector<double> OptionalLoads = StateSweepValidatedOptionalLoads();
           if ( StateSweepProfile_ ) ProfileStart = StateSweepProfileClock();
+          if (StateSweepSaveWakes_) WakeOutput.save(VSPAERO(),Directory,Row,StateSweepChunkSize_);
           uint64_t Chunk = Row / StateSweepChunkSize_;
           if ( Csv == NULL || Chunk != OpenChunk ) {
              if ( Csv != NULL ) fclose(Csv);
