@@ -4,6 +4,11 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Embed the Windows long-path opt-in in MSVC `vspaero` and `vspaero_opt`
+  executables, allowing nested worker wake recordings beyond 260 characters
+  when Windows long paths are enabled. No solver equations or archive formats
+  change. See [requirements and validation](parity_tests/WAKE_ARCHIVE.md).
+
 - Extend optional wake journals to v2 with per-triangle Cp (thick) or ΔCp (thin),
   preserving native pressure signs and independent payload deduplication.
   Recording-enabled checkpoints reject v1 resumes; CSV-only identity is unchanged.

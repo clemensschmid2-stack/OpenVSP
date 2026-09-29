@@ -2,6 +2,19 @@
 
 Status: Unreleased
 
+MSVC Windows builds embed `longPathAware` in both solver executables. Windows
+10 version 1607 or later must also have `LongPathsEnabled=1` (the **Enable Win32
+long paths** policy); the solver does not change this system setting. See
+[Microsoft's requirements](https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation).
+This removes the legacy 260-character restriction for supported runtime file
+operations, including deeply nested State Sweep wake files. Existing native
+buffer and filesystem component limits still apply; this is not a guarantee of
+arbitrary-length or Unicode-path support. Rebuild and install the executable to
+activate the manifest; an existing installation does not change on source merge.
+The parent VDS `scripts/verify_wake_archive.py` exercises solving, recording,
+checkpoint resume and archive decoding beyond 260 characters, comparing the
+coefficients exactly with the same short-path run on Windows.
+
 `vspaero -state-sweep -state-save-wakes MODEL` records accepted final vehicle/wake
 snapshots alongside State Sweep CSV chunks. The flag is off by default and is
 included in checkpoint identity only when enabled. It does not enable the full
