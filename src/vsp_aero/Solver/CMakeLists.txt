@@ -128,6 +128,11 @@ ADD_EXECUTABLE( vspaero
 
 TARGET_LINK_LIBRARIES( vspaero PUBLIC vspaero_lib )
 
+if(MSVC)
+  # Opt into Windows long paths for nested State Sweep worker outputs.
+  target_sources(vspaero PRIVATE windows-long-paths.manifest)
+endif()
+
 if( NOT WIN32 )
   # Memory debug option, linux/osx only.
   TARGET_COMPILE_DEFINITIONS( vspaero PRIVATE -DMYMEMORY )
@@ -139,6 +144,10 @@ IF( NOT VSP_NO_VSPAERO_OPT )
   )
 
   TARGET_LINK_LIBRARIES( vspaero_opt PUBLIC vspaero_lib )
+
+  if(MSVC)
+    target_sources(vspaero_opt PRIVATE windows-long-paths.manifest)
+  endif()
 
   TARGET_LINK_LIBRARIES( vspaero_opt PUBLIC ${VSP_LIBRARIES_API_FIRST} )
 
