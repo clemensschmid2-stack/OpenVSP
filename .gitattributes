@@ -3,3 +3,6 @@ reference_builds/** -text
 # Official archive bytes include upstream whitespace; validate by manifest,
 # never normalize the immutable reference to satisfy source-format checks.
 reference_builds/OpenVSP-3.52.2-win64/** -whitespace
+
+# Preserve the relocated immutable manifest including its original CRLF bytes.
+reference_builds/openvsp-3.52.2-manifest.json whitespace=cr-at-eol
