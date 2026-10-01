@@ -4,6 +4,11 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Own the standalone VSPAERO native validation entry point, its harness tests,
+  and the official reference manifest in this repository. VDS retains application
+  boundary checks. Reference bytes, numerical comparisons and tolerances are
+  unchanged. See [standalone validation](parity_tests/native/README.md).
+
 - Embed the Windows long-path opt-in in MSVC `vspaero` and `vspaero_opt`
   executables, allowing nested worker wake recordings beyond 260 characters
   when Windows long paths are enabled. No solver equations or archive formats
