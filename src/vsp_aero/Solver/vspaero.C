@@ -345,6 +345,7 @@ int StateSweepProfile_               = 0;
 int StateSweepSaveWakes_             = 0;
 int StateSweepFastOrder_             = 0;
 int StateSweepContinuation_          = 0;
+int StateSweepEarlyConvergence_      = 0;
 int SteadyOptimization_              = 0;
 int StabilityOptimization_           = 0;
 int StabilityMapCsv_                 = 0;
@@ -940,7 +941,9 @@ void PrintUsageHelp()
        printf(" -state-save-wakes                  Archive final vehicle/wake snapshots for accepted rows.\n");
        printf(" -state-profile                     Write aggregated State Sweep phase timings.\n");
        printf(" -state-fast-order                  Group Mach/control states and reuse invariant setup.\n");
-       printf(" -state-continuation                Warm-start circulation/wake and stop after convergence.\n");
+       printf(" -state-continuation                Legacy: enable warm starts and early convergence together.\n");
+       printf(" -state-warm-start                  Warm-start compatible circulation/wake only.\n");
+       printf(" -state-early-convergence           Enable tolerance-controlled early wake convergence.\n");
        printf(" -state-continuation-min-wake-iters <N>  Require at least N wake iterations.\n");
        printf(" -state-continuation-circulation-tol <value>  Relative circulation-change tolerance.\n");
        printf(" -state-continuation-wake-tol <value>  Wake-displacement tolerance.\n");
@@ -1091,6 +1094,19 @@ void ParseInput(int argc, char *argv[])
        else if ( strcmp(argv[i],"-state-continuation") == 0 ) {
 
           StateSweepContinuation_ = 1;
+          StateSweepEarlyConvergence_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-warm-start") == 0 ) {
+
+          StateSweepContinuation_ = 1;
+
+       }
+
+       else if ( strcmp(argv[i],"-state-early-convergence") == 0 ) {
+
+          StateSweepEarlyConvergence_ = 1;
 
        }
 
@@ -3139,12 +3155,24 @@ static uint64_t StateSweepConfigurationHash(void)
     if (StateSweepSaveWakes_) Hash = StateSweepHashBytes(Hash,"wake-archive-v2",15);
     // Within this physics version, omitted optional modes add no hash fields.
     if ( StateSweepFastOrder_ ) HASH_VALUE(StateSweepFastOrder_);
-    if ( StateSweepContinuation_ ) {
+    if ( StateSweepContinuation_ && StateSweepEarlyConvergence_ ) {
        HASH_VALUE(StateSweepContinuation_);
        HASH_VALUE(StateSweepContinuationMinWakeIterations_);
        HASH_VALUE(StateSweepContinuationCirculationTolerance_);
        HASH_VALUE(StateSweepContinuationWakeTolerance_);
        HASH_VALUE(StateSweepContinuationLoadTolerance_);
+    }
+    else if ( StateSweepContinuation_ || StateSweepEarlyConvergence_ ) {
+       const char *SplitControls = "split-state-controls-v1";
+       Hash = StateSweepHashBytes(Hash,SplitControls,strlen(SplitControls));
+       HASH_VALUE(StateSweepContinuation_);
+       HASH_VALUE(StateSweepEarlyConvergence_);
+       if ( StateSweepEarlyConvergence_ ) {
+          HASH_VALUE(StateSweepContinuationMinWakeIterations_);
+          HASH_VALUE(StateSweepContinuationCirculationTolerance_);
+          HASH_VALUE(StateSweepContinuationWakeTolerance_);
+          HASH_VALUE(StateSweepContinuationLoadTolerance_);
+       }
     }
     HASH_VALUE(NumberOfMachs_); HASH_VALUE(NumberOfAoAs_);
     HASH_VALUE(NumberOfBetas_); HASH_VALUE(NumberOfReCrefs_);
@@ -3756,6 +3784,7 @@ void StateSweepSolve(void)
     fprintf(Manifest,"  \"configuration_hash\": \"%016llx\",\n",(unsigned long long)Hash);
     fprintf(Manifest,"  \"base_configuration_hash\": \"%016llx\",\n",(unsigned long long)BaseHash);
     fprintf(Manifest,"  \"case_order\": \"%s\",\n",StateSweepFastOrder_ ? "mach_control_grouped" : "canonical");
+    fprintf(Manifest,"  \"early_wake_convergence\": %s,\n",StateSweepEarlyConvergence_ ? "true" : "false");
     fprintf(Manifest,"  \"continuation\": {\"enabled\": %s, \"minimum_wake_iterations\": %d, "
                      "\"circulation_tolerance\": %.17g, \"wake_tolerance\": %.17g, \"load_tolerance\": %.17g},\n",
             StateSweepContinuation_ ? "true" : "false",StateSweepContinuationMinWakeIterations_,
@@ -3923,6 +3952,7 @@ void StateSweepSolve(void)
                                    PreviousControlIndex == ControlIndex &&
                                    NearbyFlowDirection;
        VSPAERO().StateSweepContinuationEnabled() = UseContinuation;
+       VSPAERO().StateSweepEarlyConvergenceEnabled() = StateSweepEarlyConvergence_;
        VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
        VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
        VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
@@ -3954,8 +3984,8 @@ void StateSweepSolve(void)
        if ( !UseContinuation && !PolarReSolves && AeroCase + 1 == EndAerodynamicCase && RunCase > 1 ) SolverCase = -SolverCase;
        double ProfileStart = StateSweepProfile_ ? StateSweepProfileClock() : 0.;
        VSPAERO().Solve(SolverCase);
+       ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
        if ( UseContinuation ) {
-          ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
           if ( ContinuePreviousState && VSPAERO().StateSweepContinuationFailedThisSolve() ) {
              printf("State Sweep continuation failed for case %llu; retrying cold.\n",
                     (unsigned long long)AeroCase);
@@ -3981,6 +4011,7 @@ void StateSweepSolve(void)
                 if (AeroCase + 1 == EndAerodynamicCase && ReynoldsIndex == NumberOfReCrefs_)
                    ReSolverCase = -ReSolverCase;
                 VSPAERO().Solve(ReSolverCase);
+                ContinuationWakeIterations += (uint64_t)VSPAERO().StateSweepContinuationWakeIterationsThisSolve();
              } else VSPAERO().ReCalculateForces();
              if ( StateSweepProfile_ ) ProfileReynoldsSeconds += StateSweepProfileClock() - ProfileStart;
           }
@@ -4092,6 +4123,7 @@ void Solve(void)
        VSPAERO().ResetStateSweepProfile();
        VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
        VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepEarlyConvergenceEnabled() = 1;
        VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
        VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
        VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;
@@ -4600,6 +4632,7 @@ void FiniteDifference_StabilityAndControlSolve(void)
        VSPAERO().ResetStateSweepProfile();
        VSPAERO().StateSweepProfiling() = SolverOptimizationProfile_;
        VSPAERO().StateSweepContinuationEnabled() = 1;
+       VSPAERO().StateSweepEarlyConvergenceEnabled() = 1;
        VSPAERO().StateSweepContinuationMinWakeIterations() = StateSweepContinuationMinWakeIterations_;
        VSPAERO().StateSweepContinuationCirculationTolerance() = StateSweepContinuationCirculationTolerance_;
        VSPAERO().StateSweepContinuationWakeTolerance() = StateSweepContinuationWakeTolerance_;

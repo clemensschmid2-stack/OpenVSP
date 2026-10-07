@@ -14,7 +14,9 @@ python parity_tests/run_native_checks.py
 Use Python 3.13, CMake 3.24+, and a C++17/OpenMP compiler. Windows also runs the
 bounded lookup-point checks using the pinned official geometry API; Linux runs
 the portable native checks. `--build-dir` and `--reports` select isolated output
-locations. Existing evidence is never overwritten. The report retains source
+locations. Windows additionally tests all four independent State Sweep warm-start
+and early-convergence combinations, legacy equivalence and checkpoint mode guards.
+Existing evidence is never overwritten. The report retains source
 revision, dependency versions, test results and hashes of the tested/packaged
 solver and checkpoint probe. Missing or failed tests remain failures.
 
