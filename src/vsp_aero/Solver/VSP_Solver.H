@@ -92,6 +92,7 @@ private:
     int StateSweepReusePreconditioner_;
     int StateSweepReuseWakeInteractionLists_;
     int StateSweepContinuationEnabled_;
+    int StateSweepEarlyConvergenceEnabled_;
     int StateSweepContinuationMinWakeIterations_;
     int StateSweepContinuationWakeIterationsThisSolve_;
     int StateSweepContinuationFailedThisSolve_;
@@ -1256,6 +1257,7 @@ public:
     int &StateSweepReusePreconditioner(void) { return StateSweepReusePreconditioner_; };
     int &StateSweepReuseWakeInteractionLists(void) { return StateSweepReuseWakeInteractionLists_; };
     int &StateSweepContinuationEnabled(void) { return StateSweepContinuationEnabled_; };
+    int &StateSweepEarlyConvergenceEnabled(void) { return StateSweepEarlyConvergenceEnabled_; };
     int &StateSweepContinuationMinWakeIterations(void) { return StateSweepContinuationMinWakeIterations_; };
     int StateSweepContinuationWakeIterationsThisSolve(void) { return StateSweepContinuationWakeIterationsThisSolve_; };
     int StateSweepContinuationFailedThisSolve(void) { return StateSweepContinuationFailedThisSolve_; };

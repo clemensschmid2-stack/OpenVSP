@@ -83,6 +83,7 @@ void VSP_SOLVER::init(void)
     StateSweepReusePreconditioner_ = 0;
     StateSweepReuseWakeInteractionLists_ = 0;
     StateSweepContinuationEnabled_ = 0;
+    StateSweepEarlyConvergenceEnabled_ = 0;
     StateSweepContinuationMinWakeIterations_ = 4;
     StateSweepContinuationWakeIterationsThisSolve_ = 0;
     StateSweepContinuationFailedThisSolve_ = 0;
@@ -2748,7 +2749,7 @@ void VSP_SOLVER::Solve(int Case)
     StateSweepContinuationWakeIterationsThisSolve_ = 0;
     StateSweepContinuationFailedThisSolve_ = 0;
 
-    if ( StateSweepContinuationEnabled_ ) {
+    if ( StateSweepEarlyConvergenceEnabled_ ) {
        ContinuationPreviousGamma.resize(VSPGeom().Grid(MGLevel_).NumberOfSurfaceLoops() + 1,0.);
     }
     
@@ -3271,7 +3272,7 @@ void VSP_SOLVER::Solve(int Case)
        double ProfileIterationStart = StateSweepProfiling_ ? StateSweepProfileClock() : 0.;
        while ( CurrentWakeIteration_ <= WakeIterations_ && !Converged ) {
 
-          if ( StateSweepContinuationEnabled_ ) {
+          if ( StateSweepEarlyConvergenceEnabled_ ) {
              for ( i = 1 ; i <= VSPGeom().Grid(MGLevel_).NumberOfSurfaceLoops() ; i++ ) {
                 ContinuationPreviousGamma[i] = Gamma(i);
              }
@@ -3342,7 +3343,7 @@ void VSP_SOLVER::Solve(int Case)
 
           StateSweepContinuationWakeIterationsThisSolve_++;
 
-          if ( StateSweepContinuationEnabled_ ) {
+          if ( StateSweepEarlyConvergenceEnabled_ ) {
              double CirculationChange = 0.;
              double CurrentLoads[6] = {
                 CFox() + CFiwx(), CFoy() + CFiwy(), CFoz() + CFiwz(),
@@ -3389,7 +3390,7 @@ void VSP_SOLVER::Solve(int Case)
      
           if ( !TimeAccurate_ && !DumpGeom_ ) OutputForcesAndMomentsForGroup(0);   
 
-          if ( !StateSweepContinuationEnabled_ &&
+          if ( !StateSweepEarlyConvergenceEnabled_ &&
                ( log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) ||
                  ( TimeAccurate_ && log10(MaxResidual_) <= log10(0.001*NonLinearConvergenceFactor_) ) ) ) Converged = 1;
 

@@ -1,11 +1,11 @@
 # State Sweep continuation validation
 
-This document is the acceptance specification for the experimental State
-Sweep continuation mode. Continuation combines three optimizations:
+This document is the acceptance specification for experimental State Sweep
+warm starts and early wake convergence. The independent controls select:
 
 1. initialize circulation from a nearby converged state;
 2. initialize the relaxed wake from that state;
-3. stop wake relaxation after convergence, subject to minimum and maximum
+3. separately stop wake relaxation after convergence, subject to minimum and maximum
    iteration limits.
 
 The feature must remain opt-in until every mandatory test below passes. A
@@ -13,12 +13,14 @@ checkpoint stores completed aerodynamic results, not continuation cache state.
 The first solve after process start or resume must therefore be a valid cold
 start.
 
-## Proposed command-line contract
+## Implemented command-line contract
 
-The regression runner reserves these options:
+The solver accepts these options:
 
 ```text
--state-continuation
+-state-warm-start
+-state-early-convergence
+-state-continuation  (legacy alias: enables both)
 -state-continuation-min-wake-iters <count>
 -state-continuation-circulation-tol <value>
 -state-continuation-wake-tol <value>
@@ -28,6 +30,22 @@ The regression runner reserves these options:
 `WakeIters` remains the maximum. The implementation must publish continuation
 counters in `profile.json`: attempts, accepted warm starts, cold starts,
 fallbacks, and total wake iterations.
+
+Either independent option may be enabled alone; new invocations default both
+off. Tolerances and minimum iterations affect early convergence only. Warm
+starts alone retain the ordinary native residual stopping rule. Manifests
+record warm starts in `continuation.enabled` and the independent
+`early_wake_convergence` boolean. The both-off and legacy combined hashes
+are preserved; warm-only and early-only modes have distinct checkpoint hashes.
+Changing modes on resume is rejected, and inactive early-convergence tolerance
+edits do not change warm-only checkpoint identity.
+
+Run `run_split_state_controls.py --solver <candidate> --output <fresh-directory>`
+for thin/thick checks of all four modes, legacy equivalence, early-only stopping,
+inactive tolerances and incompatible resumes. Optional `--baseline <old-solver>`
+also verifies unchanged cold/combined coefficients and combined hashes against
+the prior installed binary. This historical custom comparison supplements the
+fixed official gate; it cannot replace that gate or its tolerances.
 
 The experimental defaults are 4 minimum iterations, `0.005` relative
 circulation change, `0.2` maximum wake residual, and `0.0005` absolute integrated
@@ -41,7 +59,7 @@ than 10 degrees; the difficult-state cases exercise this path-dependence guard.
 `run_state_continuation_regression.py` generates deterministic thin and thick
 wing cases and compares results by physical state rather than `case_id`. These
 are candidate cold-versus-continuation correctness comparisons, not parity.
-Parity always uses the official OpenVSP 3.51.2 reference distribution.
+Current parity uses the pinned official OpenVSP 3.52.2 reference distribution.
 
 - **Candidate cold control:** fixed maximum wake iterations, no continuation.
 - **Forward continuation:** normal P/Q/R/control traversal.
@@ -62,7 +80,7 @@ Parity always uses the official OpenVSP 3.51.2 reference distribution.
 
 ## Acceptance gates
 
-- Official OpenVSP 3.51.2 reference-build parity: zero failures.
+- Official OpenVSP 3.52.2 reference-build parity: zero failures.
 - No missing or duplicate physical states; all values finite.
 - Integrated and optional-load values satisfy
   `abs(candidate-reference) <= 5e-4 + 1e-4*abs(reference)`.
@@ -77,12 +95,11 @@ The detailed report is `state_continuation_regression_report.json`. Generated
 inputs, logs, CSV parts, and reports are reproducible ignored artifacts and are
 not committed.
 
-Use `--plan-only` before the native feature exists to validate paths, emit the
-machine-readable test matrix, and check that the candidate advertises the
-reserved CLI contract. Use `--require-feature` in mandatory gates so a missing
+Use `--plan-only` to emit the machine-readable test matrix before execution.
+Use `--require-feature` in mandatory gates so a missing
 or renamed feature fails rather than silently skipping tests.
 
-## 2026-08-27 acceptance result
+## Historical 2026-08-27 acceptance result
 
 All mandatory continuation scenarios and official OpenVSP 3.51.2 parity
 passed. The optional historical stable-main regression also passed but was not

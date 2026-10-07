@@ -4,6 +4,13 @@ This fork is derived from NASA's OpenVSP project.
 
 ## Unreleased - upstream OpenVSP 3.52.2
 
+- Split State Sweep circulation/wake warm starts (`-state-warm-start`) and
+  tolerance-controlled early wake convergence (`-state-early-convergence`).
+  Preserve the combined legacy alias, both-off/combined checkpoint identities,
+  ordinary stopping rules and existing steady/stability optimization behavior.
+  Profile total wake iterations for every solve; record the independent mode
+  in manifests. See [contract and validation](parity_tests/CONTINUATION_VALIDATION.md).
+
 - Own the standalone VSPAERO native validation entry point, its harness tests,
   and the official reference manifest in this repository. VDS retains application
   boundary checks. Reference bytes, numerical comparisons and tolerances are

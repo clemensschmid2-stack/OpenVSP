@@ -172,6 +172,15 @@ def main():
                 '--official', OPENVSP / 'reference_builds/OpenVSP-3.52.2-win64',
                 '--output', numerical], env=env, timeout=1800)
             report['checks']['lookup-review']['results'] = require_regression_pass(numerical / 'report.json')
+            split = REPORTS / 'split-state-controls'
+            run(report, 'split-state-controls', [sys.executable,
+                OPENVSP / 'parity_tests/run_split_state_controls.py', '--solver', solver,
+                '--official', OPENVSP / 'reference_builds/OpenVSP-3.52.2-win64',
+                '--output', split], env=env, timeout=1800)
+            split_result = json.loads((split / 'report.json').read_text(encoding='utf-8'))
+            if split_result.get('status') != 'PASS':
+                raise ValueError('Independent State Sweep controls failed')
+            report['checks']['split-state-controls']['results'] = split_result
             # Importing the geometry API must not modify the fixed distribution.
             verify_openvsp()
         run(report, 'install-artifact', ['cmake', '--install', BUILD, '--config', 'Release',
